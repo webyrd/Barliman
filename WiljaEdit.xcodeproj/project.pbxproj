@@ -1,0 +1,505 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		891E42F61CE6FD8D003C3333 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E42F51CE6FD8D003C3333 /* AppDelegate.swift */; };
+		891E42F81CE6FD8D003C3333 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 891E42F71CE6FD8D003C3333 /* Assets.xcassets */; };
+		891E42FB1CE6FD8D003C3333 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 891E42F91CE6FD8D003C3333 /* MainMenu.xib */; };
+		891E43061CE6FD8D003C3333 /* Smart_EditorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43051CE6FD8D003C3333 /* Smart_EditorTests.swift */; };
+		891E43111CE6FD8D003C3333 /* Smart_EditorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43101CE6FD8D003C3333 /* Smart_EditorUITests.swift */; };
+		891E43241CE7098D003C3333 /* EditorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43221CE7098D003C3333 /* EditorWindowController.swift */; };
+		891E43251CE7098D003C3333 /* EditorWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 891E43231CE7098D003C3333 /* EditorWindowController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		891E43021CE6FD8D003C3333 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 891E42EA1CE6FD8C003C3333 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 891E42F11CE6FD8C003C3333;
+			remoteInfo = "Smart Editor";
+		};
+		891E430D1CE6FD8D003C3333 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 891E42EA1CE6FD8C003C3333 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 891E42F11CE6FD8C003C3333;
+			remoteInfo = "Smart Editor";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		891E42F21CE6FD8C003C3333 /* WiljaEdit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WiljaEdit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		891E42F51CE6FD8D003C3333 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		891E42F71CE6FD8D003C3333 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		891E42FA1CE6FD8D003C3333 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		891E42FC1CE6FD8D003C3333 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		891E43011CE6FD8D003C3333 /* WiljaEdit.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WiljaEdit.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		891E43051CE6FD8D003C3333 /* Smart_EditorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Smart_EditorTests.swift; sourceTree = "<group>"; };
+		891E43071CE6FD8D003C3333 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		891E430C1CE6FD8D003C3333 /* WiljaEdit.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WiljaEdit.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		891E43101CE6FD8D003C3333 /* Smart_EditorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Smart_EditorUITests.swift; sourceTree = "<group>"; };
+		891E43121CE6FD8D003C3333 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		891E43221CE7098D003C3333 /* EditorWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
+		891E43231CE7098D003C3333 /* EditorWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorWindowController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		891E42EF1CE6FD8C003C3333 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		891E42FE1CE6FD8D003C3333 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		891E43091CE6FD8D003C3333 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		891E42E91CE6FD8C003C3333 = {
+			isa = PBXGroup;
+			children = (
+				891E42F41CE6FD8C003C3333 /* WiljaEdit */,
+				891E43041CE6FD8D003C3333 /* WiljaEditTests */,
+				891E430F1CE6FD8D003C3333 /* WiljaEditUITests */,
+				891E42F31CE6FD8C003C3333 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		891E42F31CE6FD8C003C3333 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				891E42F21CE6FD8C003C3333 /* WiljaEdit.app */,
+				891E43011CE6FD8D003C3333 /* WiljaEdit.xctest */,
+				891E430C1CE6FD8D003C3333 /* WiljaEdit.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		891E42F41CE6FD8C003C3333 /* WiljaEdit */ = {
+			isa = PBXGroup;
+			children = (
+				891E42F51CE6FD8D003C3333 /* AppDelegate.swift */,
+				891E42F71CE6FD8D003C3333 /* Assets.xcassets */,
+				891E42F91CE6FD8D003C3333 /* MainMenu.xib */,
+				891E42FC1CE6FD8D003C3333 /* Info.plist */,
+				891E43221CE7098D003C3333 /* EditorWindowController.swift */,
+				891E43231CE7098D003C3333 /* EditorWindowController.xib */,
+			);
+			path = WiljaEdit;
+			sourceTree = "<group>";
+		};
+		891E43041CE6FD8D003C3333 /* WiljaEditTests */ = {
+			isa = PBXGroup;
+			children = (
+				891E43051CE6FD8D003C3333 /* Smart_EditorTests.swift */,
+				891E43071CE6FD8D003C3333 /* Info.plist */,
+			);
+			path = WiljaEditTests;
+			sourceTree = "<group>";
+		};
+		891E430F1CE6FD8D003C3333 /* WiljaEditUITests */ = {
+			isa = PBXGroup;
+			children = (
+				891E43101CE6FD8D003C3333 /* Smart_EditorUITests.swift */,
+				891E43121CE6FD8D003C3333 /* Info.plist */,
+			);
+			path = WiljaEditUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		891E42F11CE6FD8C003C3333 /* WiljaEdit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 891E43151CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "WiljaEdit" */;
+			buildPhases = (
+				891E42EE1CE6FD8C003C3333 /* Sources */,
+				891E42EF1CE6FD8C003C3333 /* Frameworks */,
+				891E42F01CE6FD8C003C3333 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WiljaEdit;
+			productName = "Smart Editor";
+			productReference = 891E42F21CE6FD8C003C3333 /* WiljaEdit.app */;
+			productType = "com.apple.product-type.application";
+		};
+		891E43001CE6FD8D003C3333 /* WiljaEditTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 891E43181CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "WiljaEditTests" */;
+			buildPhases = (
+				891E42FD1CE6FD8D003C3333 /* Sources */,
+				891E42FE1CE6FD8D003C3333 /* Frameworks */,
+				891E42FF1CE6FD8D003C3333 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				891E43031CE6FD8D003C3333 /* PBXTargetDependency */,
+			);
+			name = WiljaEditTests;
+			productName = "Smart EditorTests";
+			productReference = 891E43011CE6FD8D003C3333 /* WiljaEdit.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		891E430B1CE6FD8D003C3333 /* WiljaEditUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 891E431B1CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "WiljaEditUITests" */;
+			buildPhases = (
+				891E43081CE6FD8D003C3333 /* Sources */,
+				891E43091CE6FD8D003C3333 /* Frameworks */,
+				891E430A1CE6FD8D003C3333 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				891E430E1CE6FD8D003C3333 /* PBXTargetDependency */,
+			);
+			name = WiljaEditUITests;
+			productName = "Smart EditorUITests";
+			productReference = 891E430C1CE6FD8D003C3333 /* WiljaEdit.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		891E42EA1CE6FD8C003C3333 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "William E. Byrd";
+				TargetAttributes = {
+					891E42F11CE6FD8C003C3333 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					891E43001CE6FD8D003C3333 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = 891E42F11CE6FD8C003C3333;
+					};
+					891E430B1CE6FD8D003C3333 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = 891E42F11CE6FD8C003C3333;
+					};
+				};
+			};
+			buildConfigurationList = 891E42ED1CE6FD8C003C3333 /* Build configuration list for PBXProject "WiljaEdit" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 891E42E91CE6FD8C003C3333;
+			productRefGroup = 891E42F31CE6FD8C003C3333 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				891E42F11CE6FD8C003C3333 /* WiljaEdit */,
+				891E43001CE6FD8D003C3333 /* WiljaEditTests */,
+				891E430B1CE6FD8D003C3333 /* WiljaEditUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		891E42F01CE6FD8C003C3333 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				891E42F81CE6FD8D003C3333 /* Assets.xcassets in Resources */,
+				891E42FB1CE6FD8D003C3333 /* MainMenu.xib in Resources */,
+				891E43251CE7098D003C3333 /* EditorWindowController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		891E42FF1CE6FD8D003C3333 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		891E430A1CE6FD8D003C3333 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		891E42EE1CE6FD8C003C3333 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				891E43241CE7098D003C3333 /* EditorWindowController.swift in Sources */,
+				891E42F61CE6FD8D003C3333 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		891E42FD1CE6FD8D003C3333 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				891E43061CE6FD8D003C3333 /* Smart_EditorTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		891E43081CE6FD8D003C3333 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				891E43111CE6FD8D003C3333 /* Smart_EditorUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		891E43031CE6FD8D003C3333 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 891E42F11CE6FD8C003C3333 /* WiljaEdit */;
+			targetProxy = 891E43021CE6FD8D003C3333 /* PBXContainerItemProxy */;
+		};
+		891E430E1CE6FD8D003C3333 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 891E42F11CE6FD8C003C3333 /* WiljaEdit */;
+			targetProxy = 891E430D1CE6FD8D003C3333 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		891E42F91CE6FD8D003C3333 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				891E42FA1CE6FD8D003C3333 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		891E43131CE6FD8D003C3333 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		891E43141CE6FD8D003C3333 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		891E43161CE6FD8D003C3333 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/WiljaEdit/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.webyrd.Smart-Editor";
+				PRODUCT_NAME = WiljaEdit;
+			};
+			name = Debug;
+		};
+		891E43171CE6FD8D003C3333 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/WiljaEdit/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.webyrd.Smart-Editor";
+				PRODUCT_NAME = WiljaEdit;
+			};
+			name = Release;
+		};
+		891E43191CE6FD8D003C3333 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Smart EditorTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.webyrd.Smart-EditorTests";
+				PRODUCT_NAME = WiljaEdit;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WiljaEdit.app/Contents/MacOS/WiljaEdit";
+			};
+			name = Debug;
+		};
+		891E431A1CE6FD8D003C3333 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Smart EditorTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.webyrd.Smart-EditorTests";
+				PRODUCT_NAME = WiljaEdit;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WiljaEdit.app/Contents/MacOS/WiljaEdit";
+			};
+			name = Release;
+		};
+		891E431C1CE6FD8D003C3333 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Smart EditorUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.webyrd.Smart-EditorUITests";
+				PRODUCT_NAME = WiljaEdit;
+				TEST_TARGET_NAME = "Smart Editor";
+			};
+			name = Debug;
+		};
+		891E431D1CE6FD8D003C3333 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Smart EditorUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.webyrd.Smart-EditorUITests";
+				PRODUCT_NAME = WiljaEdit;
+				TEST_TARGET_NAME = "Smart Editor";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		891E42ED1CE6FD8C003C3333 /* Build configuration list for PBXProject "WiljaEdit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				891E43131CE6FD8D003C3333 /* Debug */,
+				891E43141CE6FD8D003C3333 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		891E43151CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "WiljaEdit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				891E43161CE6FD8D003C3333 /* Debug */,
+				891E43171CE6FD8D003C3333 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		891E43181CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "WiljaEditTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				891E43191CE6FD8D003C3333 /* Debug */,
+				891E431A1CE6FD8D003C3333 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		891E431B1CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "WiljaEditUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				891E431C1CE6FD8D003C3333 /* Debug */,
+				891E431D1CE6FD8D003C3333 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 891E42EA1CE6FD8C003C3333 /* Project object */;
+}
