@@ -4,7 +4,7 @@ Prototype smart text editor
 
 ---
 
-"He thinks less than he talks, and slower; yet he can see through a brick wall in time as they say in Bree"
+"He thinks less than he talks, and slower; yet he can see through a brick wall in time (as they say in Bree)."
 
 --Gandolf the Grey, about Barliman Butterbur
 
