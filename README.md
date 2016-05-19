@@ -10,3 +10,22 @@ The editor is written in Swift, and has been tested under OS X 10.11.4 and XCode
 The editor calls out to Chez Scheme (https://github.com/cisco/ChezScheme), which must be installed separately, and which is assumed to reside in `/usr/local/bin/scheme`.
 
 Chez Scheme in turn uses the miniKanren implementation and relational interpreter implementation contained in the `mk-and-rel-interp` directory.
+
+
+
+TODO:
+
+* rename the application to something real!
+* get rid of the hardcoded paths to Will's lappy
+* kill all running Chez processes spawned by the editor each time the program changes (not just after each keystroke!).
+* add input/output examples
+* create process tree to try the examples
+* add ability to change the evaluator rules and perhaps an explicit grammar as well
+* add ability to save and load programs
+* add "accept suggested completion" button
+
+
+LONGER TERM
+
+* explore incremental computing with the editor
+* add type inferencer

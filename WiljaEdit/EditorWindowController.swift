@@ -48,12 +48,14 @@ class EditorWindowController: NSWindowController {
         processingQueue.cancelAllOperations()
         
         
-        // write Scheme code to the file
-        let file = "bar.scm" //this is the file. we will write to and read from it
+        let scheme_directory = "/Users/webyrd/github/WiljaEdit/mk-and-rel-interp"
         
-        let text = "(load \"/Users/webyrd/github/WiljaEdit/mk-and-rel-interp/mk/mk-vicare.scm\")" +
-            "(load \"/Users/webyrd/github/WiljaEdit/mk-and-rel-interp/mk/mk.scm\")" +
-            "(load \"/Users/webyrd/github/WiljaEdit/mk-and-rel-interp/interp.scm\")" +
+        // write Scheme code to the file
+        let query_file = "wilja-edit-query.scm" //this is the file. we will write to and read from it
+        
+        let text = "(load \"\( scheme_directory )/mk/mk-vicare.scm\")" +
+            "(load \"\( scheme_directory )/mk/mk.scm\")" +
+            "(load \"\( scheme_directory )/interp.scm\")" +
             "(write " + "(run 1 (q) (fresh (A B C D E F G) (evalo `" +
             editableSchemeField.stringValue +
         " q))) )"
@@ -62,14 +64,14 @@ class EditorWindowController: NSWindowController {
         path = NSURL()
         
         if let dir = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true).first {
-            path = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(file)
+            path = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file)
             
             //writing
             do {
                 try text.writeToURL(path, atomically: false, encoding: NSUTF8StringEncoding)
             }
             catch {
-                print("couldn't write to file")
+                print("couldn't write to query file")
             }
             
         }
