@@ -26,6 +26,7 @@ Chez Scheme in turn uses the miniKanren implementation and relational interprete
 
 TODO:
 
+* add documentation/tutorial
 * get rid of the hardcoded paths to Will's lappy
 * kill all running Chez processes spawned by the editor each time the program changes (not just after each keystroke!).
 * add input/output examples
@@ -37,5 +38,6 @@ TODO:
 
 LONGER TERM
 
+* add structured editing capability, with auto-addition of logic variables
 * explore incremental computing with the editor
 * add type inferencer
