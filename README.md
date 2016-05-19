@@ -1,4 +1,4 @@
-# WiljaEdit
+# Barliman
 
 Prototype smart text editor
 

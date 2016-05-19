@@ -10,8 +10,8 @@
 		891E42F61CE6FD8D003C3333 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E42F51CE6FD8D003C3333 /* AppDelegate.swift */; };
 		891E42F81CE6FD8D003C3333 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 891E42F71CE6FD8D003C3333 /* Assets.xcassets */; };
 		891E42FB1CE6FD8D003C3333 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 891E42F91CE6FD8D003C3333 /* MainMenu.xib */; };
-		891E43061CE6FD8D003C3333 /* Smart_EditorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43051CE6FD8D003C3333 /* Smart_EditorTests.swift */; };
-		891E43111CE6FD8D003C3333 /* Smart_EditorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43101CE6FD8D003C3333 /* Smart_EditorUITests.swift */; };
+		891E43061CE6FD8D003C3333 /* BarlimanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43051CE6FD8D003C3333 /* BarlimanTests.swift */; };
+		891E43111CE6FD8D003C3333 /* BarlimanUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43101CE6FD8D003C3333 /* BarlimanUITests.swift */; };
 		891E43241CE7098D003C3333 /* EditorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43221CE7098D003C3333 /* EditorWindowController.swift */; };
 		891E43251CE7098D003C3333 /* EditorWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 891E43231CE7098D003C3333 /* EditorWindowController.xib */; };
 /* End PBXBuildFile section */
@@ -22,28 +22,28 @@
 			containerPortal = 891E42EA1CE6FD8C003C3333 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 891E42F11CE6FD8C003C3333;
-			remoteInfo = "Smart Editor";
+			remoteInfo = Barliman;
 		};
 		891E430D1CE6FD8D003C3333 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 891E42EA1CE6FD8C003C3333 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 891E42F11CE6FD8C003C3333;
-			remoteInfo = "Smart Editor";
+			remoteInfo = Barliman;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		891E42F21CE6FD8C003C3333 /* WiljaEdit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WiljaEdit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		891E42F21CE6FD8C003C3333 /* Barliman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barliman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		891E42F51CE6FD8D003C3333 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		891E42F71CE6FD8D003C3333 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		891E42FA1CE6FD8D003C3333 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		891E42FC1CE6FD8D003C3333 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		891E43011CE6FD8D003C3333 /* WiljaEdit.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WiljaEdit.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		891E43051CE6FD8D003C3333 /* Smart_EditorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Smart_EditorTests.swift; sourceTree = "<group>"; };
+		891E43011CE6FD8D003C3333 /* Barliman.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Barliman.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		891E43051CE6FD8D003C3333 /* BarlimanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarlimanTests.swift; sourceTree = "<group>"; };
 		891E43071CE6FD8D003C3333 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		891E430C1CE6FD8D003C3333 /* WiljaEdit.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WiljaEdit.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		891E43101CE6FD8D003C3333 /* Smart_EditorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Smart_EditorUITests.swift; sourceTree = "<group>"; };
+		891E430C1CE6FD8D003C3333 /* Barliman.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Barliman.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		891E43101CE6FD8D003C3333 /* BarlimanUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarlimanUITests.swift; sourceTree = "<group>"; };
 		891E43121CE6FD8D003C3333 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		891E43221CE7098D003C3333 /* EditorWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
 		891E43231CE7098D003C3333 /* EditorWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorWindowController.xib; sourceTree = "<group>"; };
@@ -77,9 +77,9 @@
 		891E42E91CE6FD8C003C3333 = {
 			isa = PBXGroup;
 			children = (
-				891E42F41CE6FD8C003C3333 /* WiljaEdit */,
-				891E43041CE6FD8D003C3333 /* WiljaEditTests */,
-				891E430F1CE6FD8D003C3333 /* WiljaEditUITests */,
+				891E42F41CE6FD8C003C3333 /* Barliman */,
+				891E43041CE6FD8D003C3333 /* BarlimanTests */,
+				891E430F1CE6FD8D003C3333 /* BarlimanUITests */,
 				891E42F31CE6FD8C003C3333 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,14 +87,14 @@
 		891E42F31CE6FD8C003C3333 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				891E42F21CE6FD8C003C3333 /* WiljaEdit.app */,
-				891E43011CE6FD8D003C3333 /* WiljaEdit.xctest */,
-				891E430C1CE6FD8D003C3333 /* WiljaEdit.xctest */,
+				891E42F21CE6FD8C003C3333 /* Barliman.app */,
+				891E43011CE6FD8D003C3333 /* Barliman.xctest */,
+				891E430C1CE6FD8D003C3333 /* Barliman.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		891E42F41CE6FD8C003C3333 /* WiljaEdit */ = {
+		891E42F41CE6FD8C003C3333 /* Barliman */ = {
 			isa = PBXGroup;
 			children = (
 				891E42F51CE6FD8D003C3333 /* AppDelegate.swift */,
@@ -104,33 +104,33 @@
 				891E43221CE7098D003C3333 /* EditorWindowController.swift */,
 				891E43231CE7098D003C3333 /* EditorWindowController.xib */,
 			);
-			path = WiljaEdit;
+			path = Barliman;
 			sourceTree = "<group>";
 		};
-		891E43041CE6FD8D003C3333 /* WiljaEditTests */ = {
+		891E43041CE6FD8D003C3333 /* BarlimanTests */ = {
 			isa = PBXGroup;
 			children = (
-				891E43051CE6FD8D003C3333 /* Smart_EditorTests.swift */,
+				891E43051CE6FD8D003C3333 /* BarlimanTests.swift */,
 				891E43071CE6FD8D003C3333 /* Info.plist */,
 			);
-			path = WiljaEditTests;
+			path = BarlimanTests;
 			sourceTree = "<group>";
 		};
-		891E430F1CE6FD8D003C3333 /* WiljaEditUITests */ = {
+		891E430F1CE6FD8D003C3333 /* BarlimanUITests */ = {
 			isa = PBXGroup;
 			children = (
-				891E43101CE6FD8D003C3333 /* Smart_EditorUITests.swift */,
+				891E43101CE6FD8D003C3333 /* BarlimanUITests.swift */,
 				891E43121CE6FD8D003C3333 /* Info.plist */,
 			);
-			path = WiljaEditUITests;
+			path = BarlimanUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		891E42F11CE6FD8C003C3333 /* WiljaEdit */ = {
+		891E42F11CE6FD8C003C3333 /* Barliman */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 891E43151CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "WiljaEdit" */;
+			buildConfigurationList = 891E43151CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "Barliman" */;
 			buildPhases = (
 				891E42EE1CE6FD8C003C3333 /* Sources */,
 				891E42EF1CE6FD8C003C3333 /* Frameworks */,
@@ -140,14 +140,14 @@
 			);
 			dependencies = (
 			);
-			name = WiljaEdit;
-			productName = "Smart Editor";
-			productReference = 891E42F21CE6FD8C003C3333 /* WiljaEdit.app */;
+			name = Barliman;
+			productName = Barliman;
+			productReference = 891E42F21CE6FD8C003C3333 /* Barliman.app */;
 			productType = "com.apple.product-type.application";
 		};
-		891E43001CE6FD8D003C3333 /* WiljaEditTests */ = {
+		891E43001CE6FD8D003C3333 /* BarlimanTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 891E43181CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "WiljaEditTests" */;
+			buildConfigurationList = 891E43181CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "BarlimanTests" */;
 			buildPhases = (
 				891E42FD1CE6FD8D003C3333 /* Sources */,
 				891E42FE1CE6FD8D003C3333 /* Frameworks */,
@@ -158,14 +158,14 @@
 			dependencies = (
 				891E43031CE6FD8D003C3333 /* PBXTargetDependency */,
 			);
-			name = WiljaEditTests;
-			productName = "Smart EditorTests";
-			productReference = 891E43011CE6FD8D003C3333 /* WiljaEdit.xctest */;
+			name = BarlimanTests;
+			productName = BarlimanTests;
+			productReference = 891E43011CE6FD8D003C3333 /* Barliman.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		891E430B1CE6FD8D003C3333 /* WiljaEditUITests */ = {
+		891E430B1CE6FD8D003C3333 /* BarlimanUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 891E431B1CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "WiljaEditUITests" */;
+			buildConfigurationList = 891E431B1CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "BarlimanUITests" */;
 			buildPhases = (
 				891E43081CE6FD8D003C3333 /* Sources */,
 				891E43091CE6FD8D003C3333 /* Frameworks */,
@@ -176,9 +176,9 @@
 			dependencies = (
 				891E430E1CE6FD8D003C3333 /* PBXTargetDependency */,
 			);
-			name = WiljaEditUITests;
-			productName = "Smart EditorUITests";
-			productReference = 891E430C1CE6FD8D003C3333 /* WiljaEdit.xctest */;
+			name = BarlimanUITests;
+			productName = BarlimanUITests;
+			productReference = 891E430C1CE6FD8D003C3333 /* Barliman.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -204,7 +204,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 891E42ED1CE6FD8C003C3333 /* Build configuration list for PBXProject "WiljaEdit" */;
+			buildConfigurationList = 891E42ED1CE6FD8C003C3333 /* Build configuration list for PBXProject "Barliman" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -217,9 +217,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				891E42F11CE6FD8C003C3333 /* WiljaEdit */,
-				891E43001CE6FD8D003C3333 /* WiljaEditTests */,
-				891E430B1CE6FD8D003C3333 /* WiljaEditUITests */,
+				891E42F11CE6FD8C003C3333 /* Barliman */,
+				891E43001CE6FD8D003C3333 /* BarlimanTests */,
+				891E430B1CE6FD8D003C3333 /* BarlimanUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -265,7 +265,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				891E43061CE6FD8D003C3333 /* Smart_EditorTests.swift in Sources */,
+				891E43061CE6FD8D003C3333 /* BarlimanTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,7 +273,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				891E43111CE6FD8D003C3333 /* Smart_EditorUITests.swift in Sources */,
+				891E43111CE6FD8D003C3333 /* BarlimanUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,12 +282,12 @@
 /* Begin PBXTargetDependency section */
 		891E43031CE6FD8D003C3333 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 891E42F11CE6FD8C003C3333 /* WiljaEdit */;
+			target = 891E42F11CE6FD8C003C3333 /* Barliman */;
 			targetProxy = 891E43021CE6FD8D003C3333 /* PBXContainerItemProxy */;
 		};
 		891E430E1CE6FD8D003C3333 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 891E42F11CE6FD8C003C3333 /* WiljaEdit */;
+			target = 891E42F11CE6FD8C003C3333 /* Barliman */;
 			targetProxy = 891E430D1CE6FD8D003C3333 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -391,10 +391,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/WiljaEdit/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Barliman/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "net.webyrd.Smart-Editor";
-				PRODUCT_NAME = WiljaEdit;
+				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.Barliman;
+				PRODUCT_NAME = Barliman;
 			};
 			name = Debug;
 		};
@@ -403,10 +403,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/WiljaEdit/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Barliman/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "net.webyrd.Smart-Editor";
-				PRODUCT_NAME = WiljaEdit;
+				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.Barliman;
+				PRODUCT_NAME = Barliman;
 			};
 			name = Release;
 		};
@@ -415,11 +415,11 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "Smart EditorTests/Info.plist";
+				INFOPLIST_FILE = BarlimanTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "net.webyrd.Smart-EditorTests";
-				PRODUCT_NAME = WiljaEdit;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WiljaEdit.app/Contents/MacOS/WiljaEdit";
+				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.BarlimanTests;
+				PRODUCT_NAME = Barliman;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Barliman.app/Contents/MacOS/Barliman";
 			};
 			name = Debug;
 		};
@@ -428,11 +428,11 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "Smart EditorTests/Info.plist";
+				INFOPLIST_FILE = BarlimanTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "net.webyrd.Smart-EditorTests";
-				PRODUCT_NAME = WiljaEdit;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WiljaEdit.app/Contents/MacOS/WiljaEdit";
+				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.BarlimanTests;
+				PRODUCT_NAME = Barliman;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Barliman.app/Contents/MacOS/Barliman";
 			};
 			name = Release;
 		};
@@ -440,11 +440,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "Smart EditorUITests/Info.plist";
+				INFOPLIST_FILE = BarlimanUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "net.webyrd.Smart-EditorUITests";
-				PRODUCT_NAME = WiljaEdit;
-				TEST_TARGET_NAME = "Smart Editor";
+				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.BarlimanUITests;
+				PRODUCT_NAME = Barliman;
+				TEST_TARGET_NAME = Barliman;
 			};
 			name = Debug;
 		};
@@ -452,18 +452,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "Smart EditorUITests/Info.plist";
+				INFOPLIST_FILE = BarlimanUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "net.webyrd.Smart-EditorUITests";
-				PRODUCT_NAME = WiljaEdit;
-				TEST_TARGET_NAME = "Smart Editor";
+				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.BarlimanUITests;
+				PRODUCT_NAME = Barliman;
+				TEST_TARGET_NAME = Barliman;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		891E42ED1CE6FD8C003C3333 /* Build configuration list for PBXProject "WiljaEdit" */ = {
+		891E42ED1CE6FD8C003C3333 /* Build configuration list for PBXProject "Barliman" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				891E43131CE6FD8D003C3333 /* Debug */,
@@ -472,7 +472,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		891E43151CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "WiljaEdit" */ = {
+		891E43151CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "Barliman" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				891E43161CE6FD8D003C3333 /* Debug */,
@@ -481,7 +481,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		891E43181CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "WiljaEditTests" */ = {
+		891E43181CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "BarlimanTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				891E43191CE6FD8D003C3333 /* Debug */,
@@ -490,7 +490,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		891E431B1CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "WiljaEditUITests" */ = {
+		891E431B1CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "BarlimanUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				891E431C1CE6FD8D003C3333 /* Debug */,

@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "891E42F11CE6FD8C003C3333"
                BuildableName = "WiljaEdit.app"
-               BlueprintName = "WiljaEdit"
-               ReferencedContainer = "container:WiljaEdit.xcodeproj">
+               BlueprintName = "Prescience"
+               ReferencedContainer = "container:Prescience.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "891E43001CE6FD8D003C3333"
-               BuildableName = "WiljaEdit.xctest"
-               BlueprintName = "WiljaEditTests"
-               ReferencedContainer = "container:WiljaEdit.xcodeproj">
+               BuildableName = "Prescience.xctest"
+               BlueprintName = "PrescienceTests"
+               ReferencedContainer = "container:Prescience.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "891E430B1CE6FD8D003C3333"
-               BuildableName = "WiljaEdit.xctest"
-               BlueprintName = "WiljaEditUITests"
-               ReferencedContainer = "container:WiljaEdit.xcodeproj">
+               BuildableName = "Prescience.xctest"
+               BlueprintName = "PrescienceUITests"
+               ReferencedContainer = "container:Prescience.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -54,8 +54,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "891E42F11CE6FD8C003C3333"
             BuildableName = "WiljaEdit.app"
-            BlueprintName = "WiljaEdit"
-            ReferencedContainer = "container:WiljaEdit.xcodeproj">
+            BlueprintName = "Prescience"
+            ReferencedContainer = "container:Prescience.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -77,8 +77,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "891E42F11CE6FD8C003C3333"
             BuildableName = "WiljaEdit.app"
-            BlueprintName = "WiljaEdit"
-            ReferencedContainer = "container:WiljaEdit.xcodeproj">
+            BlueprintName = "Prescience"
+            ReferencedContainer = "container:Prescience.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -96,8 +96,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "891E42F11CE6FD8C003C3333"
             BuildableName = "WiljaEdit.app"
-            BlueprintName = "WiljaEdit"
-            ReferencedContainer = "container:WiljaEdit.xcodeproj">
+            BlueprintName = "Prescience"
+            ReferencedContainer = "container:Prescience.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
