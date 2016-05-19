@@ -28,7 +28,7 @@ TODO:
 
 * get rid of the hardcoded paths to Will's lappy, so the program can be compiled and used by other people
 * add documentation/tutorial
-* kill all running Chez processes spawned by the editor each time the program changes (not just after each keystroke!).
+* kill all running Chez processes spawned by the editor each time the program text changes
 * add input/output examples
 * create process tree to try the examples
 * add ability to change the evaluator rules and perhaps an explicit grammar as well
