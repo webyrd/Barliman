@@ -48,7 +48,7 @@ class EditorWindowController: NSWindowController {
         processingQueue.cancelAllOperations()
         
         
-        let scheme_directory = "/Users/webyrd/github/WiljaEdit/mk-and-rel-interp"
+        let scheme_directory = "/Users/webyrd/github/Barliman/mk-and-rel-interp"
         
         // write Scheme code to the file
         let query_file = "barliman-query.scm" //this is the file. we will write to and read from it

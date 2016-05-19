@@ -2,6 +2,17 @@
 
 Prototype smart text editor
 
+---
+
+"He thinks less than he talks, and slower; yet he can see through a brick wall in time as they say in Bree"
+
+--Gandolf the Grey, about Barliman Butterbur
+
+The Lord of the Rings: The Fellowship of the Ring
+
+J. R. R. Tolkien
+
+---
 
 This editor uses miniKanren (http://minikanren.org/), and a relational Scheme interpreter written in miniKanren (Byrd, Holk, and Friedman, 2012, http://dl.acm.org/citation.cfm?id=2661105 or http://webyrd.net/quines/quines.pdf), to provide real-time feedback to the code editor using program synthesis.
 
@@ -15,7 +26,6 @@ Chez Scheme in turn uses the miniKanren implementation and relational interprete
 
 TODO:
 
-* rename the application to something real!
 * get rid of the hardcoded paths to Will's lappy
 * kill all running Chez processes spawned by the editor each time the program changes (not just after each keystroke!).
 * add input/output examples
