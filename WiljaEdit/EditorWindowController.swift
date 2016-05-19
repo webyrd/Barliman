@@ -3,8 +3,7 @@
 //  Smart Editor
 //
 //  Created by William Byrd on 5/14/16.
-//  Copyright © 2016 William E. Byrd. All rights reserved.
-//
+
 
 import Cocoa
 
@@ -52,9 +51,9 @@ class EditorWindowController: NSWindowController {
         // write Scheme code to the file
         let file = "bar.scm" //this is the file. we will write to and read from it
         
-        let text = "(load \"/Users/webyrd/Documents/mk/mk-vicare.scm\")" +
-            "(load \"/Users/webyrd/Documents/mk/mk.scm\")" +
-            "(load \"/Users/webyrd/Documents/interp.scm\")" +
+        let text = "(load \"/Users/webyrd/github/WiljaEdit/mk-and-rel-interp/mk/mk-vicare.scm\")" +
+            "(load \"/Users/webyrd/github/WiljaEdit/mk-and-rel-interp/mk/mk.scm\")" +
+            "(load \"/Users/webyrd/github/WiljaEdit/mk-and-rel-interp/interp.scm\")" +
             "(write " + "(run 1 (q) (fresh (A B C D E F G) (evalo `" +
             editableSchemeField.stringValue +
         " q))) )"

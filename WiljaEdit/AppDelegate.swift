@@ -3,7 +3,6 @@
 //  Smart Editor
 //
 //  Created by William Byrd on 5/14/16.
-//  Copyright © 2016 William E. Byrd. All rights reserved.
 //
 
 import Cocoa
