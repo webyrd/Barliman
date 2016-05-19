@@ -26,8 +26,8 @@ Chez Scheme in turn uses the miniKanren implementation and relational interprete
 
 TODO:
 
+* get rid of the hardcoded paths to Will's lappy, so the program can be compiled and used by other people
 * add documentation/tutorial
-* get rid of the hardcoded paths to Will's lappy
 * kill all running Chez processes spawned by the editor each time the program changes (not just after each keystroke!).
 * add input/output examples
 * create process tree to try the examples
