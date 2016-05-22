@@ -16,11 +16,20 @@ J. R. R. Tolkien
 
 This editor uses miniKanren (http://minikanren.org/), and a relational Scheme interpreter written in miniKanren (Byrd, Holk, and Friedman, 2012, http://dl.acm.org/citation.cfm?id=2661105 or http://webyrd.net/quines/quines.pdf), to provide real-time feedback to the code editor using program synthesis.
 
-The editor is written in Swift, and has been tested under OS X 10.11.4 and XCode 7.3.1.
-
 The editor calls out to Chez Scheme (https://github.com/cisco/ChezScheme), which must be installed separately, and which is assumed to reside in `/usr/local/bin/scheme`.
 
 Chez Scheme in turn uses the miniKanren implementation and relational interpreter implementation contained in the `mk-and-rel-interp` directory.
+
+
+
+
+The cocoa version of the editor is written in Swift, and has been tested under OS X 10.11.4 and XCode 7.3.1.  Eventually the editor will be crossplatform.  I'm starting with cocoa since I'm developing on a Mac, and I want to make sure I don't box myself into a corner with the user interface/performance as I experiment with the design and the interface.
+
+
+
+Thanks to Michael Ballantyne, Kenichi Asai, Alan Borning, Nada Amin, Guannan Wei, Pierce Darragh, Alex Warth, Michael Adams, Tim Johnson, Matt Might, participants of my 2016 PEPM tutorial, and particants in the 'As We May Thunk' group (http://webyrd.net/thunk.html), for suggestions and encouragement.
+
+
 
 
 
@@ -38,6 +47,7 @@ TODO:
 
 LONGER TERM
 
+* make the editor cross-platform
 * add structured editing capability, with auto-addition of logic variables
 * explore incremental computing with the editor
 * add type inferencer
