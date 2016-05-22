@@ -46,18 +46,32 @@ class EditorWindowController: NSWindowController {
         // it is the responsibility of the operations to check for the cancel signal
         processingQueue.cancelAllOperations()
         
+                    
+        let bundle = NSBundle.mainBundle()
         
-        let scheme_directory = "/Users/webyrd/github/Barliman/mk-and-rel-interp"
+        let mk_vicare_path: NSString? = bundle.pathForResource("mk-vicare", ofType: "scm", inDirectory: "mk-and-rel-interp/mk")
+        let mk_path: NSString? = bundle.pathForResource("mk", ofType: "scm", inDirectory: "mk-and-rel-interp/mk")
+        let interp_path: NSString? = bundle.pathForResource("interp", ofType: "scm", inDirectory: "mk-and-rel-interp")
         
         // write Scheme code to the file
         let query_file = "barliman-query.scm" //this is the file. we will write to and read from it
         
-        let text = "(load \"\( scheme_directory )/mk/mk-vicare.scm\")" +
-            "(load \"\( scheme_directory )/mk/mk.scm\")" +
-            "(load \"\( scheme_directory )/interp.scm\")" +
+        let mk_vicare_path_string = mk_vicare_path as! String
+        let mk_path_string = mk_path as! String
+        let interp_path_string = interp_path as! String
+
+        let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
+        let load_mk_string: String = "(load \"\( mk_path_string )\")"
+        let load_interp_string: String = "(load \"\( interp_path_string )\")"
+
+        let text: String = load_mk_vicare_string +
+                           load_mk_string +
+                           load_interp_string +
             "(write " + "(run 1 (q) (fresh (A B C D E F G) (evalo `" +
             editableSchemeField.stringValue +
-        " q))) )"
+            " q))) )"
+        
+        print("text = \n\( text )\n")
         
         var path: NSURL
         path = NSURL()
