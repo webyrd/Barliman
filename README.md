@@ -34,9 +34,10 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
-* get rid of hardcoded path to Chez executable
 * kill all running Chez processes spawned by the editor each time the program text changes
 * add documentation/tutorial
+* add paper prototype for desired features
+* get rid of hardcoded path to Chez executable
 * add input/output examples
 * find a cleaner and more flexible way to construct the program sent to Chez
 * create process tree to try the examples
