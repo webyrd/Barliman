@@ -36,9 +36,10 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 TODO:
 
 * get rid of the hardcoded paths to Will's lappy, so the program can be compiled and used by other people
-* add documentation/tutorial
 * kill all running Chez processes spawned by the editor each time the program text changes
+* add documentation/tutorial
 * add input/output examples
+* find a cleaner and more flexible way to construct the program sent to Chez
 * create process tree to try the examples
 * add ability to change the evaluator rules and perhaps an explicit grammar as well
 * add ability to save and load programs
@@ -47,7 +48,7 @@ TODO:
 
 LONGER TERM
 
-* make the editor cross-platform
+* make the editor cross-platform; Clojure and JavaScript versions could be especially nice
 * add structured editing capability, with auto-addition of logic variables
 * explore incremental computing with the editor
 * add type inferencer
