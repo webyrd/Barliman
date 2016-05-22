@@ -28,7 +28,6 @@ class EditorWindowController: NSWindowController {
     override func controlTextDidChange(aNotification: NSNotification) {
         // called whenever the text in editableSchemeField changes
         
-        // too expensive!  should be run asynchronously, perhaps using GCD
         runCodeFromEditPane()
     }
     
