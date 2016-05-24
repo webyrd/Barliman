@@ -102,24 +102,20 @@ class EditorWindowController: NSWindowController {
             
             task.arguments = ["--script", myPathString]
             
-            let pipe = NSPipe()
+            let outputPipe = NSPipe()
             let errorPipe = NSPipe()
-            task.standardOutput = pipe
             
+            task.standardOutput = outputPipe
             task.standardError = errorPipe
-            
-            
             
             task.launch()
             
-            let fileHandle = pipe.fileHandleForReading
+            let outputFileHandle = outputPipe.fileHandleForReading
             let errorFileHandle = errorPipe.fileHandleForReading
             
-            let data = fileHandle.readDataToEndOfFile()
+            let data = outputFileHandle.readDataToEndOfFile()
             let errorData = errorFileHandle.readDataToEndOfFile()
-            
-            
-            
+
             task.waitUntilExit()
             
             let status = task.terminationStatus
