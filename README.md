@@ -35,6 +35,7 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
+* remove possible race condition with respect to 'barliman-query.scm' temp file
 * add documentation/tutorial
 * add paper prototype for desired features
 * move 'barliman-query.scm' temporary file to a more suitable location than 'Documents' directory, or get rid of the temp file entirely
