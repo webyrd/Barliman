@@ -37,6 +37,7 @@ TODO:
 * kill all running Chez processes spawned by the editor each time the program text changes
 * add documentation/tutorial
 * add paper prototype for desired features
+* move 'barliman-query.scm' temporary file to a more suitable location than 'Documents' directory, or get rid of the temp file entirely
 * get rid of hardcoded path to Chez executable
 * add input/output examples
 * find a cleaner and more flexible way to construct the program sent to Chez
