@@ -48,9 +48,9 @@ TODO:
 * add "accept suggested completion" button
 
 
-LONGER TERM
+LONGER TERM:
 
-* make the editor cross-platform; Clojure and JavaScript versions could be especially nice
+* make the editor cross-platform; Clojure/Clojurescript/core.logic and JavaScript versions could be especially nice
 * add structured editing capability, with auto-addition of logic variables
 * explore incremental computing with the editor
 * add type inferencer
