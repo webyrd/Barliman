@@ -15,6 +15,7 @@
 		891E43241CE7098D003C3333 /* EditorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43221CE7098D003C3333 /* EditorWindowController.swift */; };
 		891E43251CE7098D003C3333 /* EditorWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 891E43231CE7098D003C3333 /* EditorWindowController.xib */; };
 		89B081521CF195F5007E6ABA /* mk-and-rel-interp in Resources */ = {isa = PBXBuildFile; fileRef = 89B081511CF195F5007E6ABA /* mk-and-rel-interp */; };
+		89C405A61CF426BE009970A7 /* RunSchemeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C405A51CF426BE009970A7 /* RunSchemeOperation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		891E43221CE7098D003C3333 /* EditorWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
 		891E43231CE7098D003C3333 /* EditorWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorWindowController.xib; sourceTree = "<group>"; };
 		89B081511CF195F5007E6ABA /* mk-and-rel-interp */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "mk-and-rel-interp"; sourceTree = "<group>"; };
+		89C405A51CF426BE009970A7 /* RunSchemeOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunSchemeOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				891E43221CE7098D003C3333 /* EditorWindowController.swift */,
 				891E43231CE7098D003C3333 /* EditorWindowController.xib */,
 				89B081511CF195F5007E6ABA /* mk-and-rel-interp */,
+				89C405A51CF426BE009970A7 /* RunSchemeOperation.swift */,
 			);
 			path = Barliman;
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 			files = (
 				891E43241CE7098D003C3333 /* EditorWindowController.swift in Sources */,
 				891E42F61CE6FD8D003C3333 /* AppDelegate.swift in Sources */,
+				89C405A61CF426BE009970A7 /* RunSchemeOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

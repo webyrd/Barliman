@@ -23,7 +23,14 @@ class EditorWindowController: NSWindowController {
 
         // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
     }
-    
+
+    func cleanup() {
+        print("cleaning up!")
+        print("prior operation count: \(processingQueue.operationCount)")
+        processingQueue.cancelAllOperations()
+        processingQueue.waitUntilAllOperationsAreFinished()
+        print("subsequent operation count: \(processingQueue.operationCount)")
+    }
     
     override func controlTextDidChange(aNotification: NSNotification) {
         // called whenever the text in editableSchemeField changes
@@ -88,60 +95,14 @@ class EditorWindowController: NSWindowController {
             }
             
         }
-
         
-        // spawn a new operation to run the Scheme task
-        processingQueue.addOperationWithBlock() {
-            
-            let task = NSTask()
-            task.launchPath = "/usr/local/bin/scheme"
-            
-            var myPathString: String
-            myPathString = ""
-            myPathString = path.path!
-            
-            task.arguments = ["--script", myPathString]
-            
-            let outputPipe = NSPipe()
-            let errorPipe = NSPipe()
-            
-            task.standardOutput = outputPipe
-            task.standardError = errorPipe
-            
-            task.launch()
-            
-            let outputFileHandle = outputPipe.fileHandleForReading
-            let errorFileHandle = errorPipe.fileHandleForReading
-            
-            let data = outputFileHandle.readDataToEndOfFile()
-            let errorData = errorFileHandle.readDataToEndOfFile()
-
-            task.waitUntilExit()
-            
-            let status = task.terminationStatus
-            
-            
-            NSOperationQueue.mainQueue().addOperationWithBlock {
-                
-                if status == 0 {
-                    self.editableSchemeField.textColor = NSColor.blackColor()
-                } else {
-                    self.editableSchemeField.textColor = NSColor.redColor()
-                    self.evaluatedEditableSchemeField.stringValue = ""
-                }
-                
-                
-                let datastring = NSString(data: data, encoding: NSUTF8StringEncoding) as! String
-                
-                if status == 0 {
-                    self.evaluatedEditableSchemeField.stringValue = datastring
-                }
+        var schemeScriptPathString: String
+        schemeScriptPathString = ""
+        schemeScriptPathString = path.path!
         
-                let errorDatastring = NSString(data: errorData, encoding: NSUTF8StringEncoding) as! String
-                print("error datastring: \(errorDatastring)")
-            }
-            
-        }
+        let runSchemeOp: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathString)
+        processingQueue.addOperation(runSchemeOp)
+        
         
         let duration : UInt64 = mach_absolute_time() - start
         
