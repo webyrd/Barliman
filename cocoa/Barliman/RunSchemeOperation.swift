@@ -72,25 +72,7 @@ class RunSchemeOperation: NSOperation {
         let data = outputFileHandle.readDataToEndOfFile()
         let errorData = errorFileHandle.readDataToEndOfFile()
         
-        var loopCount = 0
-        
-        print("*** entering loop for process \( task.processIdentifier )")
-        while true {
-            if cancelled == true {
-                print("*** cancelled process \( task.processIdentifier )")
-                print("*** loopCount \( loopCount ) for process \( task.processIdentifier )")
-                task.terminate()
-                return
-            } else if schemeTerminated == true {
-                print("??? schemeTerminated")
-                break
-            } else {
-                loopCount += 1
-            }
-        }
-        
-        print("*** out of loop for process \( task.processIdentifier );  schemeTerminated = \( schemeTerminated )")
-        
+        task.waitUntilExit()
         
         let status = task.terminationStatus
         
