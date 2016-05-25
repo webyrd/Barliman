@@ -51,17 +51,7 @@ class RunSchemeOperation: NSOperation {
         
         task.standardOutput = outputPipe
         task.standardError = errorPipe
-        
-        
-        var schemeTerminated = false
-        
-        // adapted from https://www.raywenderlich.com/125071/nstask-tutorial-os-x
-        task.terminationHandler = {
-            task in
-            print("*** terminationHander called for process \( task.processIdentifier )")
-            schemeTerminated = true
-        }
-        
+                
         task.launch()
         print("*** launched process \( task.processIdentifier )")
 
