@@ -13,7 +13,6 @@ class RunSchemeOperation: NSOperation {
 
     var editorWindowController: EditorWindowController
     var schemeScriptPathString: String
-    var cancelIt = false
     var task: NSTask
     
     init(editorWindowController: EditorWindowController, schemeScriptPathString: String) {
@@ -25,7 +24,6 @@ class RunSchemeOperation: NSOperation {
     override func cancel() {
         print("!!! cancel called!")
         super.cancel()
-        cancelIt = true
         print("&&& killing process \( task.processIdentifier )")
         task.terminate()
         print("&&& killed process")
@@ -37,19 +35,6 @@ class RunSchemeOperation: NSOperation {
             print("*** cancelled immediately! ***\n")
             return
         }
-        
-        
-        // lauch scheme task
-        
-        // either sign up for the task's NSTaskDidTerminateNotification, or setup the terminationHandler for the task
-        
-        // loop
-        
-          // check if self.cancelled is true
-          // if so, send terminate() to the task
-        
-        
-        // based on how the task finishes, tell the main thread how to update the UI
         
         runSchemeCode()
         
@@ -96,11 +81,6 @@ class RunSchemeOperation: NSOperation {
                 print("*** loopCount \( loopCount ) for process \( task.processIdentifier )")
                 task.terminate()
                 return
-            } else if cancelIt == true {
-                print("!!! cancelled process \( task.processIdentifier )")
-                print("!!! loopCount \( loopCount ) for process \( task.processIdentifier )")
-                task.terminate()
-                return
             } else if schemeTerminated == true {
                 print("??? schemeTerminated")
                 break
@@ -111,10 +91,8 @@ class RunSchemeOperation: NSOperation {
         
         print("*** out of loop for process \( task.processIdentifier );  schemeTerminated = \( schemeTerminated )")
         
-//        task.waitUntilExit()
         
         let status = task.terminationStatus
-        
         
         NSOperationQueue.mainQueue().addOperationWithBlock {
             
