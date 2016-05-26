@@ -15,6 +15,12 @@
                 <outlet property="test2InputField" destination="9Hs-2O-MgY" id="kYE-1G-sBP"/>
                 <outlet property="test3ExpectedOutputField" destination="uC6-hK-TjE" id="Dt3-nU-fkw"/>
                 <outlet property="test3InputField" destination="1TB-3X-WG3" id="CAo-OH-Mm4"/>
+                <outlet property="test4ExpectedOutputField" destination="7fA-eR-jIs" id="pAZ-yp-aTH"/>
+                <outlet property="test4InputField" destination="kNb-tv-ss4" id="XkP-EB-52h"/>
+                <outlet property="test5ExpectedOutputField" destination="MAc-DN-iAe" id="eWy-e4-e6L"/>
+                <outlet property="test5InputField" destination="boC-4Q-D8B" id="Tc9-qY-MIO"/>
+                <outlet property="test6ExpectedOutputField" destination="bd0-aO-clQ" id="qJP-qJ-q0Q"/>
+                <outlet property="test6InputField" destination="U3e-fx-c8F" id="Uro-HT-2jZ"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -23,14 +29,14 @@
         <window title="Barliman" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5" userLabel="Barliman ">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="480" height="683"/>
+            <rect key="contentRect" x="196" y="240" width="939" height="545"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="683"/>
+                <rect key="frame" x="0.0" y="0.0" width="939" height="545"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box fixedFrame="YES" title="Scheme Definition" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="wt0-sc-FFV">
-                        <rect key="frame" x="17" y="473" width="446" height="190"/>
+                        <rect key="frame" x="17" y="335" width="446" height="190"/>
                         <view key="contentView" id="Ae3-aa-c0f">
                             <rect key="frame" x="1" y="1" width="444" height="174"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -52,13 +58,13 @@
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </box>
                     <box fixedFrame="YES" title="Test 1" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="bnB-F2-bht" userLabel="Test 1">
-                        <rect key="frame" x="17" y="320" width="446" height="141"/>
+                        <rect key="frame" x="476" y="450" width="446" height="75"/>
                         <view key="contentView" id="Rz3-f1-pbp">
-                            <rect key="frame" x="1" y="1" width="444" height="125"/>
+                            <rect key="frame" x="1" y="1" width="444" height="59"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dfp-gE-e7y" userLabel="Test 1 Input">
-                                    <rect key="frame" x="0.0" y="63" width="440" height="62"/>
+                                    <rect key="frame" x="4" y="37" width="440" height="22"/>
                                     <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="NPE-z4-TYw">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -69,7 +75,7 @@
                                     </connections>
                                 </textField>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zi0-kV-0Zv" userLabel="Test 1 Expected Output">
-                                    <rect key="frame" x="0.0" y="0.0" width="440" height="58"/>
+                                    <rect key="frame" x="4" y="0.0" width="440" height="22"/>
                                     <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bMe-If-e1j">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -85,13 +91,13 @@
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </box>
                     <box fixedFrame="YES" title="Test 2" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="5ae-CU-xak" userLabel="Test 2">
-                        <rect key="frame" x="17" y="168" width="446" height="141"/>
+                        <rect key="frame" x="476" y="366" width="446" height="75"/>
                         <view key="contentView" id="le3-bP-nN0">
-                            <rect key="frame" x="1" y="1" width="444" height="125"/>
+                            <rect key="frame" x="1" y="1" width="444" height="59"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Hs-2O-MgY" userLabel="Test 2 Input">
-                                    <rect key="frame" x="0.0" y="63" width="440" height="62"/>
+                                    <rect key="frame" x="4" y="37" width="440" height="22"/>
                                     <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Sau-rO-VkU">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -102,7 +108,7 @@
                                     </connections>
                                 </textField>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QEw-0g-Vn0" userLabel="Test 2 Expected Output">
-                                    <rect key="frame" x="0.0" y="0.0" width="440" height="58"/>
+                                    <rect key="frame" x="4" y="0.0" width="440" height="22"/>
                                     <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="sQF-8S-eaX">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -118,13 +124,13 @@
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </box>
                     <box fixedFrame="YES" title="Test 3" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="9QG-Ds-qrp" userLabel="Test 3">
-                        <rect key="frame" x="17" y="16" width="446" height="141"/>
+                        <rect key="frame" x="476" y="279" width="446" height="75"/>
                         <view key="contentView" id="Frv-E0-7vv">
-                            <rect key="frame" x="1" y="1" width="444" height="125"/>
+                            <rect key="frame" x="1" y="1" width="444" height="59"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1TB-3X-WG3" userLabel="Test 3 Input">
-                                    <rect key="frame" x="0.0" y="63" width="440" height="62"/>
+                                    <rect key="frame" x="4" y="37" width="440" height="22"/>
                                     <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="S1g-hR-6i7">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -135,7 +141,7 @@
                                     </connections>
                                 </textField>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uC6-hK-TjE" userLabel="Test 3 Expected Output">
-                                    <rect key="frame" x="0.0" y="0.0" width="440" height="58"/>
+                                    <rect key="frame" x="4" y="0.0" width="440" height="22"/>
                                     <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="e1Z-ko-Zzd">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -150,12 +156,111 @@
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </box>
+                    <box fixedFrame="YES" title="Test 4" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="4cE-jZ-Dxo" userLabel="Test 4">
+                        <rect key="frame" x="476" y="192" width="446" height="75"/>
+                        <view key="contentView" id="HLY-1U-C6u">
+                            <rect key="frame" x="1" y="1" width="444" height="59"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kNb-tv-ss4" userLabel="Test 4 Input">
+                                    <rect key="frame" x="4" y="37" width="440" height="22"/>
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="2PA-Ge-KlS">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <outlet property="delegate" destination="-2" id="HcQ-Fi-FnW"/>
+                                    </connections>
+                                </textField>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7fA-eR-jIs" userLabel="Test 4 Expected Output">
+                                    <rect key="frame" x="4" y="0.0" width="440" height="22"/>
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="OdJ-Sn-G37">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <outlet property="delegate" destination="-2" id="1x5-uS-M7Y"/>
+                                    </connections>
+                                </textField>
+                            </subviews>
+                        </view>
+                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </box>
+                    <box fixedFrame="YES" title="Test 5" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="IHN-f7-wfW" userLabel="Test 5">
+                        <rect key="frame" x="476" y="105" width="446" height="75"/>
+                        <view key="contentView" id="WgF-UA-g8I">
+                            <rect key="frame" x="1" y="1" width="444" height="59"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="boC-4Q-D8B" userLabel="Test 5 Input">
+                                    <rect key="frame" x="4" y="37" width="440" height="22"/>
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="fTo-Ul-DO5">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <outlet property="delegate" destination="-2" id="Ui0-ft-h1R"/>
+                                    </connections>
+                                </textField>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MAc-DN-iAe" userLabel="Test 5 Expected Output">
+                                    <rect key="frame" x="4" y="0.0" width="440" height="22"/>
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="49z-n9-M3i">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <outlet property="delegate" destination="-2" id="piZ-yM-fi3"/>
+                                    </connections>
+                                </textField>
+                            </subviews>
+                        </view>
+                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </box>
+                    <box fixedFrame="YES" title="Test 6" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="XAs-dB-Kkx" userLabel="Test 6">
+                        <rect key="frame" x="476" y="16" width="446" height="75"/>
+                        <view key="contentView" id="kMf-UE-GgF">
+                            <rect key="frame" x="1" y="1" width="444" height="59"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U3e-fx-c8F" userLabel="Test 6 Input">
+                                    <rect key="frame" x="4" y="37" width="440" height="22"/>
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="tvB-WU-G6w">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <outlet property="delegate" destination="-2" id="atJ-1J-hu7"/>
+                                    </connections>
+                                </textField>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bd0-aO-clQ" userLabel="Test 6 Expected Output">
+                                    <rect key="frame" x="4" y="0.0" width="440" height="22"/>
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="nfd-g8-s9u">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <outlet property="delegate" destination="-2" id="dLY-1P-2Qq"/>
+                                    </connections>
+                                </textField>
+                            </subviews>
+                        </view>
+                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </box>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="-178" y="2.5"/>
+            <point key="canvasLocation" x="-324.5" y="-67.5"/>
         </window>
     </objects>
 </document>

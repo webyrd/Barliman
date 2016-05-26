@@ -119,6 +119,33 @@ class RunSchemeOperation: NSOperation {
                         self.editorWindowController.test3ExpectedOutputField.textColor = NSColor.blackColor()
                     }
                 }
+                if self.taskType == "test4" {
+                    if datastring == "()" {
+                        self.editorWindowController.test4InputField.textColor = NSColor.redColor()
+                        self.editorWindowController.test4ExpectedOutputField.textColor = NSColor.redColor()
+                    } else {
+                        self.editorWindowController.test4InputField.textColor = NSColor.blackColor()
+                        self.editorWindowController.test4ExpectedOutputField.textColor = NSColor.blackColor()
+                    }
+                }
+                if self.taskType == "test5" {
+                    if datastring == "()" {
+                        self.editorWindowController.test5InputField.textColor = NSColor.redColor()
+                        self.editorWindowController.test5ExpectedOutputField.textColor = NSColor.redColor()
+                    } else {
+                        self.editorWindowController.test5InputField.textColor = NSColor.blackColor()
+                        self.editorWindowController.test5ExpectedOutputField.textColor = NSColor.blackColor()
+                    }
+                }
+                if self.taskType == "test6" {
+                    if datastring == "()" {
+                        self.editorWindowController.test6InputField.textColor = NSColor.redColor()
+                        self.editorWindowController.test6ExpectedOutputField.textColor = NSColor.redColor()
+                    } else {
+                        self.editorWindowController.test6InputField.textColor = NSColor.blackColor()
+                        self.editorWindowController.test6ExpectedOutputField.textColor = NSColor.blackColor()
+                    }
+                }
             } else if exitStatus == 15 {
                 // SIGTERM exitStatus -- ignore
                 print("SIGTERM !!!")
@@ -140,6 +167,18 @@ class RunSchemeOperation: NSOperation {
                 if self.taskType == "test3" {
                     self.editorWindowController.test3InputField.textColor = NSColor.greenColor()
                     self.editorWindowController.test3ExpectedOutputField.textColor = NSColor.greenColor()
+                }
+                if self.taskType == "test4" {
+                    self.editorWindowController.test4InputField.textColor = NSColor.greenColor()
+                    self.editorWindowController.test4ExpectedOutputField.textColor = NSColor.greenColor()
+                }
+                if self.taskType == "test5" {
+                    self.editorWindowController.test5InputField.textColor = NSColor.greenColor()
+                    self.editorWindowController.test5ExpectedOutputField.textColor = NSColor.greenColor()
+                }
+                if self.taskType == "test6" {
+                    self.editorWindowController.test6InputField.textColor = NSColor.greenColor()
+                    self.editorWindowController.test6ExpectedOutputField.textColor = NSColor.greenColor()
                 }
             }
             

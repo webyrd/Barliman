@@ -21,6 +21,15 @@ class EditorWindowController: NSWindowController {
     @IBOutlet weak var test3InputField: NSTextField!
     @IBOutlet weak var test3ExpectedOutputField: NSTextField!
 
+    @IBOutlet weak var test4InputField: NSTextField!
+    @IBOutlet weak var test4ExpectedOutputField: NSTextField!
+
+    @IBOutlet weak var test5InputField: NSTextField!
+    @IBOutlet weak var test5ExpectedOutputField: NSTextField!
+
+    @IBOutlet weak var test6InputField: NSTextField!
+    @IBOutlet weak var test6ExpectedOutputField: NSTextField!
+
     
     let processingQueue: NSOperationQueue = NSOperationQueue()
     
@@ -85,8 +94,10 @@ class EditorWindowController: NSWindowController {
         let query_file_test1 = "barliman-query-test1.scm"
         let query_file_test2 = "barliman-query-test2.scm"
         let query_file_test3 = "barliman-query-test3.scm"
+        let query_file_test4 = "barliman-query-test4.scm"
+        let query_file_test5 = "barliman-query-test5.scm"
+        let query_file_test6 = "barliman-query-test6.scm"
 
-        
         let mk_vicare_path_string = mk_vicare_path as! String
         let mk_path_string = mk_path as! String
         let interp_path_string = interp_path as! String
@@ -115,11 +126,30 @@ class EditorWindowController: NSWindowController {
             load_interp_string +
             "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + schemeDefinitionField.stringValue + " " + test3InputField.stringValue + ") " + test3ExpectedOutputField.stringValue + "))) )"
 
+        let queryTest4: String = load_mk_vicare_string +
+            load_mk_string +
+            load_interp_string +
+            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + schemeDefinitionField.stringValue + " " + test4InputField.stringValue + ") " + test4ExpectedOutputField.stringValue + "))) )"
+
+        let queryTest5: String = load_mk_vicare_string +
+            load_mk_string +
+            load_interp_string +
+            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + schemeDefinitionField.stringValue + " " + test5InputField.stringValue + ") " + test5ExpectedOutputField.stringValue + "))) )"
+
+        let queryTest6: String = load_mk_vicare_string +
+            load_mk_string +
+            load_interp_string +
+            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + schemeDefinitionField.stringValue + " " + test6InputField.stringValue + ") " + test6ExpectedOutputField.stringValue + "))) )"
+
         
         print("querySimple = \n\( querySimple )\n")
         print("queryTest1 = \n\( queryTest1 )\n")
         print("queryTest2 = \n\( queryTest2 )\n")
         print("queryTest3 = \n\( queryTest3 )\n")
+        print("queryTest4 = \n\( queryTest4 )\n")
+        print("queryTest5 = \n\( queryTest5 )\n")
+        print("queryTest6 = \n\( queryTest6 )\n")
+
 
         print("\ntest1InputField.stringValue = \( test1InputField.stringValue )\n")
         
@@ -136,6 +166,14 @@ class EditorWindowController: NSWindowController {
         var pathTest3: NSURL
         pathTest3 = NSURL()
 
+        var pathTest4: NSURL
+        pathTest4 = NSURL()
+
+        var pathTest5: NSURL
+        pathTest5 = NSURL()
+
+        var pathTest6: NSURL
+        pathTest6 = NSURL()
 
         
         // write the temporary file containing the query to the user's Document directory.  This seems a bit naughty.  Where is the right place to put this?  In ~/.barliman, perhaps?
@@ -145,6 +183,9 @@ class EditorWindowController: NSWindowController {
             pathTest1 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test1)
             pathTest2 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test2)
             pathTest3 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test3)
+            pathTest4 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test4)
+            pathTest5 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test5)
+            pathTest6 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test6)
             
             // write the query files
             do {
@@ -152,6 +193,9 @@ class EditorWindowController: NSWindowController {
                 try queryTest1.writeToURL(pathTest1, atomically: false, encoding: NSUTF8StringEncoding)
                 try queryTest2.writeToURL(pathTest2, atomically: false, encoding: NSUTF8StringEncoding)
                 try queryTest3.writeToURL(pathTest3, atomically: false, encoding: NSUTF8StringEncoding)
+                try queryTest4.writeToURL(pathTest4, atomically: false, encoding: NSUTF8StringEncoding)
+                try queryTest5.writeToURL(pathTest5, atomically: false, encoding: NSUTF8StringEncoding)
+                try queryTest6.writeToURL(pathTest6, atomically: false, encoding: NSUTF8StringEncoding)
             }
             catch {
                 // this error handling could be better!  :)
@@ -173,6 +217,15 @@ class EditorWindowController: NSWindowController {
         var schemeScriptPathStringTest3: String = ""
         schemeScriptPathStringTest3 = pathTest3.path!
 
+        var schemeScriptPathStringTest4: String = ""
+        schemeScriptPathStringTest4 = pathTest4.path!
+
+        var schemeScriptPathStringTest5: String = ""
+        schemeScriptPathStringTest5 = pathTest5.path!
+
+        var schemeScriptPathStringTest6: String = ""
+        schemeScriptPathStringTest6 = pathTest6.path!
+
         
         // create the operations that will be placed in the operation queue
         let runSchemeOpSimple: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringSimple, taskType: "simple")
@@ -182,6 +235,13 @@ class EditorWindowController: NSWindowController {
         let runSchemeOpTest2: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest2, taskType: "test2")
         
         let runSchemeOpTest3: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest3, taskType: "test3")
+        
+        let runSchemeOpTest4: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest4, taskType: "test4")
+
+        let runSchemeOpTest5: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest5, taskType: "test5")
+
+        let runSchemeOpTest6: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest6, taskType: "test6")
+
 
         
         // wait until the previous operations kill their tasks and finish, before adding the new operations
@@ -201,7 +261,17 @@ class EditorWindowController: NSWindowController {
             print("queuing test3")
             processingQueue.addOperation(runSchemeOpTest3)
         }
+        if !test4InputField.stringValue.isEmpty && !test4ExpectedOutputField.stringValue.isEmpty {
+            print("queuing test4")
+            processingQueue.addOperation(runSchemeOpTest4)
+        }
+        if !test5InputField.stringValue.isEmpty && !test5ExpectedOutputField.stringValue.isEmpty {
+            print("queuing test5")
+            processingQueue.addOperation(runSchemeOpTest5)
+        }
+        if !test6InputField.stringValue.isEmpty && !test6ExpectedOutputField.stringValue.isEmpty {
+            print("queuing test6")
+            processingQueue.addOperation(runSchemeOpTest6)
+        }
     }
-
-    
 }
