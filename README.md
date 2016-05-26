@@ -50,6 +50,10 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
+* create process tree to try all the examples simultaneously
+* add ability to change the evaluator rules and perhaps an explicit grammar as well
+* change green text to bold font instead
+* add structured editing capability, with automatic addition of right parens, auto-addition of logic variables, and perhaps something like paredit
 * remove possible race condition with respect to 'barliman-query.scm' temp file
 * add documentation/tutorial
 * add paper prototype for desired features
@@ -57,8 +61,6 @@ TODO:
 * get rid of hardcoded path to Chez executable
 * add input/output examples
 * find a cleaner and more flexible way to construct the program sent to Chez
-* create process tree to try the examples
-* add ability to change the evaluator rules and perhaps an explicit grammar as well
 * add ability to save and load programs
 * add "accept suggested completion" button
 
@@ -66,6 +68,5 @@ TODO:
 LONGER TERM:
 
 * make the editor cross-platform; Clojure/Clojurescript/core.logic and JavaScript versions could be especially nice
-* add structured editing capability, with auto-addition of logic variables
 * explore incremental computing with the editor
 * add type inferencer
