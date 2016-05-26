@@ -79,6 +79,14 @@
          ;; Multi-argument
          ((list-of-symbolso x)))
        (not-in-envo 'lambda env)))
+
+    ;; WEB 25 May 2016 -- This rather budget version of 'begin' is
+    ;; useful for separating 'define' from the expression 'e',
+    ;; specifically for purposes of Barliman.
+    ((fresh (defn args name body e)
+       (== `(begin ,defn ,e) expr)
+       (== `(define ,name (lambda ,args ,body)) defn)
+       (eval-expo `(letrec ((,name (lambda ,args ,body))) ,e) env val)))
     
     ((fresh (rator x rands body env^ a* res)
        (== `(,rator . ,rands) expr)
