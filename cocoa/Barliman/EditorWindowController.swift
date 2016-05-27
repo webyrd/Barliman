@@ -257,9 +257,12 @@ class EditorWindowController: NSWindowController {
         let runSchemeOpTest6: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest6, taskType: "test6")
 
 
-        
         // wait until the previous operations kill their tasks and finish, before adding the new operations
-        processingQueue.waitUntilAllOperationsAreFinished()
+        //
+        // This operation seems expensive.  Barliman seems to work okay without this call.  Need we worry about a race condition here?
+        //
+        // processingQueue.waitUntilAllOperationsAreFinished()
+        
         
         // now that the previous operations have completed, safe to add the new operations
         processingQueue.addOperation(runSchemeOpSimple)
