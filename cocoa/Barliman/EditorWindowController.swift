@@ -114,48 +114,46 @@ class EditorWindowController: NSWindowController {
         let load_mk_string: String = "(load \"\( mk_path_string )\")"
         let load_interp_string: String = "(load \"\( interp_path_string )\")"
 
+        let queryPrefix = "(write (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) (evalo `(begin "
+        let querySuffix = "))) )"
         let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
         
-//        let querySimple: String = load_mk_vicare_string +
-//                           load_mk_string +
-//                           load_interp_string +
-//            "(write (run 1 (q) (fresh (A B C D E F G Z) (evalo `(begin " + schemeDefinitionField.stringValue + " ,Z) q))) )"
         
         let querySimple: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G Z) (evalo `(begin " + definitionText + " ,Z) q))) )"
+            queryPrefix + definitionText + " ,Z) q" + querySuffix
 
         
         let queryTest1: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + definitionText + " " + test1InputField.stringValue + ") " + test1ExpectedOutputField.stringValue + "))) )"
+            queryPrefix + definitionText + " " + test1InputField.stringValue + ") " + test1ExpectedOutputField.stringValue + querySuffix
 
         let queryTest2: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + definitionText + " " + test2InputField.stringValue + ") " + test2ExpectedOutputField.stringValue + "))) )"
+            queryPrefix + definitionText + " " + test2InputField.stringValue + ") " + test2ExpectedOutputField.stringValue + querySuffix
 
         let queryTest3: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + definitionText + " " + test3InputField.stringValue + ") " + test3ExpectedOutputField.stringValue + "))) )"
+            queryPrefix + definitionText + " " + test3InputField.stringValue + ") " + test3ExpectedOutputField.stringValue + querySuffix
 
         let queryTest4: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + definitionText + " " + test4InputField.stringValue + ") " + test4ExpectedOutputField.stringValue + "))) )"
+            queryPrefix + definitionText + " " + test4InputField.stringValue + ") " + test4ExpectedOutputField.stringValue + querySuffix
 
         let queryTest5: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + definitionText + " " + test5InputField.stringValue + ") " + test5ExpectedOutputField.stringValue + "))) )"
+            queryPrefix + definitionText + " " + test5InputField.stringValue + ") " + test5ExpectedOutputField.stringValue + querySuffix
 
         let queryTest6: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + definitionText + " " + test6InputField.stringValue + ") " + test6ExpectedOutputField.stringValue + "))) )"
+            queryPrefix + definitionText + " " + test6InputField.stringValue + ") " + test6ExpectedOutputField.stringValue + querySuffix
 
         
         print("querySimple = \n\( querySimple )\n")
