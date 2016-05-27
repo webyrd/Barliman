@@ -86,10 +86,10 @@ class RunSchemeOperation: NSOperation {
                 if self.taskType == "simple" {
                     if datastring == "()" {
                         print("--- turning simple red")
-                        self.editorWindowController.schemeDefinitionField.textColor = NSColor.redColor()
+                        self.editorWindowController.schemeDefinitionView.textColor = NSColor.redColor()
                     } else {
                         print("--- turning simple black")
-                        self.editorWindowController.schemeDefinitionField.textColor = NSColor.blackColor()
+                        self.editorWindowController.schemeDefinitionView.textColor = NSColor.blackColor()
                     }
                 }
                 if self.taskType == "test1" {
@@ -154,7 +154,7 @@ class RunSchemeOperation: NSOperation {
                 if self.taskType == "simple" {
                     print("--- turning simple green")
                     print("exitStatus = \( exitStatus )")
-                    self.editorWindowController.schemeDefinitionField.textColor = NSColor.greenColor()
+                    self.editorWindowController.schemeDefinitionView.textColor = NSColor.greenColor()
                 }
                 if self.taskType == "test1" {
                     self.editorWindowController.test1InputField.textColor = NSColor.greenColor()

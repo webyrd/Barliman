@@ -10,8 +10,9 @@ import Cocoa
 
 class EditorWindowController: NSWindowController {
 
-    @IBOutlet weak var schemeDefinitionField: NSTextField!
-    
+    // Making this a weak reference seems to cause a runtime error.  Why?
+    @IBOutlet var schemeDefinitionView: NSTextView!
+
     @IBOutlet weak var test1InputField: NSTextField!
     @IBOutlet weak var test1ExpectedOutputField: NSTextField!
 
@@ -64,8 +65,15 @@ class EditorWindowController: NSWindowController {
         }
     }
     
+    func textDidChange(notification: NSNotification) {
+        // NSTextView text changed
+        print("@@@@@@@@@@@@@@@@@@@ textDidChange")
+        runCodeFromEditPane()
+    }
+    
     override func controlTextDidChange(aNotification: NSNotification) {
-        // called whenever the text in editableSchemeField changes
+        // NSTextField text changed
+        print("@@@@@@@@@@@@@@@@@@@ controlTextDidChange")
         runCodeFromEditPane()
     }
     
@@ -106,40 +114,48 @@ class EditorWindowController: NSWindowController {
         let load_mk_string: String = "(load \"\( mk_path_string )\")"
         let load_interp_string: String = "(load \"\( interp_path_string )\")"
 
+        let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
+        
+//        let querySimple: String = load_mk_vicare_string +
+//                           load_mk_string +
+//                           load_interp_string +
+//            "(write (run 1 (q) (fresh (A B C D E F G Z) (evalo `(begin " + schemeDefinitionField.stringValue + " ,Z) q))) )"
+        
         let querySimple: String = load_mk_vicare_string +
-                           load_mk_string +
-                           load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G Z) (evalo `(begin " + schemeDefinitionField.stringValue + " ,Z) q))) )"
+            load_mk_string +
+            load_interp_string +
+            "(write (run 1 (q) (fresh (A B C D E F G Z) (evalo `(begin " + definitionText + " ,Z) q))) )"
+
         
         let queryTest1: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + schemeDefinitionField.stringValue + " " + test1InputField.stringValue + ") " + test1ExpectedOutputField.stringValue + "))) )"
+            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + definitionText + " " + test1InputField.stringValue + ") " + test1ExpectedOutputField.stringValue + "))) )"
 
         let queryTest2: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + schemeDefinitionField.stringValue + " " + test2InputField.stringValue + ") " + test2ExpectedOutputField.stringValue + "))) )"
+            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + definitionText + " " + test2InputField.stringValue + ") " + test2ExpectedOutputField.stringValue + "))) )"
 
         let queryTest3: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + schemeDefinitionField.stringValue + " " + test3InputField.stringValue + ") " + test3ExpectedOutputField.stringValue + "))) )"
+            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + definitionText + " " + test3InputField.stringValue + ") " + test3ExpectedOutputField.stringValue + "))) )"
 
         let queryTest4: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + schemeDefinitionField.stringValue + " " + test4InputField.stringValue + ") " + test4ExpectedOutputField.stringValue + "))) )"
+            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + definitionText + " " + test4InputField.stringValue + ") " + test4ExpectedOutputField.stringValue + "))) )"
 
         let queryTest5: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + schemeDefinitionField.stringValue + " " + test5InputField.stringValue + ") " + test5ExpectedOutputField.stringValue + "))) )"
+            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + definitionText + " " + test5InputField.stringValue + ") " + test5ExpectedOutputField.stringValue + "))) )"
 
         let queryTest6: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + schemeDefinitionField.stringValue + " " + test6InputField.stringValue + ") " + test6ExpectedOutputField.stringValue + "))) )"
+            "(write (run 1 (q) (fresh (A B C D E F G) (evalo `(begin " + definitionText + " " + test6InputField.stringValue + ") " + test6ExpectedOutputField.stringValue + "))) )"
 
         
         print("querySimple = \n\( querySimple )\n")

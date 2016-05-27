@@ -7,7 +7,6 @@
 //  Released under MIT License (see LICENSE file)
 
 import XCTest
-@testable import Barliman
 
 class BarlimanTests: XCTestCase {
     

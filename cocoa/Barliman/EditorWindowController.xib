@@ -8,7 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="EditorWindowController" customModule="Barliman" customModuleProvider="target">
             <connections>
-                <outlet property="schemeDefinitionField" destination="0X2-jM-Tfp" id="Ich-91-YFF"/>
+                <outlet property="schemeDefinitionView" destination="4FU-au-vlw" id="Ka2-gL-bOM"/>
                 <outlet property="test1ExpectedOutputField" destination="Zi0-kV-0Zv" id="Umr-Mr-tI7"/>
                 <outlet property="test1InputField" destination="dfp-gE-e7y" id="nOz-Cv-ape"/>
                 <outlet property="test2ExpectedOutputField" destination="QEw-0g-Vn0" id="xRa-lC-vdH"/>
@@ -36,22 +36,42 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box fixedFrame="YES" title="Scheme Definition" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="wt0-sc-FFV">
-                        <rect key="frame" x="17" y="335" width="446" height="190"/>
+                        <rect key="frame" x="17" y="246" width="446" height="279"/>
                         <view key="contentView" id="Ae3-aa-c0f">
-                            <rect key="frame" x="1" y="1" width="444" height="174"/>
+                            <rect key="frame" x="1" y="1" width="444" height="263"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0X2-jM-Tfp" userLabel="Scheme Definition Field">
-                                    <rect key="frame" x="0.0" y="-6" width="440" height="180"/>
-                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="8SE-Of-yDA">
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                    <connections>
-                                        <outlet property="delegate" destination="-2" id="s7G-de-VpP"/>
-                                    </connections>
-                                </textField>
+                                <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OJ5-W3-rMK">
+                                    <rect key="frame" x="0.0" y="0.0" width="440" height="263"/>
+                                    <clipView key="contentView" ambiguous="YES" id="alQ-A2-iTh">
+                                        <rect key="frame" x="1" y="1" width="438" height="261"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <textView ambiguous="YES" importsGraphics="NO" findStyle="panel" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" id="4FU-au-vlw">
+                                                <rect key="frame" x="0.0" y="0.0" width="438" height="261"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <size key="minSize" width="438" height="261"/>
+                                                <size key="maxSize" width="463" height="10000000"/>
+                                                <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <size key="minSize" width="438" height="261"/>
+                                                <size key="maxSize" width="463" height="10000000"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="-2" id="QDB-it-N1T"/>
+                                                </connections>
+                                            </textView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </clipView>
+                                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="qS7-dr-MIE">
+                                        <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </scroller>
+                                    <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="r1s-hI-iMh">
+                                        <rect key="frame" x="423" y="1" width="16" height="261"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </scroller>
+                                </scrollView>
                             </subviews>
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
