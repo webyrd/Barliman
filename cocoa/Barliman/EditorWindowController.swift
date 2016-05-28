@@ -42,6 +42,9 @@ class EditorWindowController: NSWindowController {
         super.windowDidLoad()
 
         // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
+        
+        // from http://stackoverflow.com/questions/19801601/nstextview-with-smart-quotes-disabled-still-replaces-quotes
+        schemeDefinitionView.automaticQuoteSubstitutionEnabled = false
     }
 
     func cleanup() {
