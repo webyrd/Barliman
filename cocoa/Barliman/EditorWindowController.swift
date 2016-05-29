@@ -12,6 +12,7 @@ class EditorWindowController: NSWindowController {
 
     // Making this a weak reference seems to cause a runtime error.  Why?
     @IBOutlet var schemeDefinitionView: NSTextView!
+    @IBOutlet var bestGuessView: NSTextView!
 
     @IBOutlet weak var test1InputField: NSTextField!
     @IBOutlet weak var test1ExpectedOutputField: NSTextField!
@@ -45,6 +46,8 @@ class EditorWindowController: NSWindowController {
         
         // from http://stackoverflow.com/questions/19801601/nstextview-with-smart-quotes-disabled-still-replaces-quotes
         schemeDefinitionView.automaticQuoteSubstitutionEnabled = false
+        bestGuessView.automaticQuoteSubstitutionEnabled = false
+
     }
 
     func cleanup() {
