@@ -22,13 +22,13 @@
                 <outlet property="test5InputField" destination="boC-4Q-D8B" id="Tc9-qY-MIO"/>
                 <outlet property="test6ExpectedOutputField" destination="bd0-aO-clQ" id="qJP-qJ-q0Q"/>
                 <outlet property="test6InputField" destination="U3e-fx-c8F" id="Uro-HT-2jZ"/>
-                <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
+                <outlet property="window" destination="F0z-JX-Cv5" id="ERh-Rc-rRE"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Barliman" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5" userLabel="Barliman ">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="939" height="545"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
@@ -810,6 +810,7 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Test 1" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="bnB-F2-bht" userLabel="Test 1">
                         <rect key="frame" x="476" y="450" width="446" height="75"/>
@@ -843,6 +844,7 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Test 2" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="5ae-CU-xak" userLabel="Test 2">
                         <rect key="frame" x="476" y="366" width="446" height="75"/>
@@ -876,6 +878,7 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Test 3" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="9QG-Ds-qrp" userLabel="Test 3">
                         <rect key="frame" x="476" y="279" width="446" height="75"/>
@@ -909,6 +912,7 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Test 4" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="4cE-jZ-Dxo" userLabel="Test 4">
                         <rect key="frame" x="476" y="192" width="446" height="75"/>
@@ -942,6 +946,7 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Test 5" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="IHN-f7-wfW" userLabel="Test 5">
                         <rect key="frame" x="476" y="105" width="446" height="75"/>
@@ -975,6 +980,7 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Test 6" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="XAs-dB-Kkx" userLabel="Test 6">
                         <rect key="frame" x="476" y="16" width="446" height="75"/>
@@ -1008,6 +1014,7 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Best Guess" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="omS-co-OrV" userLabel="Best Guess">
                         <rect key="frame" x="17" y="16" width="446" height="251"/>
@@ -1041,7 +1048,7 @@
                                         <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
-                                    <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9ze-ya-0Tb">
+                                    <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="9ze-ya-0Tb">
                                         <rect key="frame" x="427" y="1" width="16" height="233"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
@@ -1050,13 +1057,14 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="-324.5" y="-67.5"/>
+            <point key="canvasLocation" x="-185.5" y="-145.5"/>
         </window>
     </objects>
 </document>

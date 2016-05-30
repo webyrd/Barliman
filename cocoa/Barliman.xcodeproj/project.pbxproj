@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		890FC1B01CFC071600D1FD73 /* SemanticsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890FC1AF1CFC071600D1FD73 /* SemanticsWindowController.swift */; };
+		890FC1B41CFC097200D1FD73 /* SemanticsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 890FC1B31CFC097200D1FD73 /* SemanticsWindowController.xib */; };
 		891E42F61CE6FD8D003C3333 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E42F51CE6FD8D003C3333 /* AppDelegate.swift */; };
 		891E42F81CE6FD8D003C3333 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 891E42F71CE6FD8D003C3333 /* Assets.xcassets */; };
 		891E42FB1CE6FD8D003C3333 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 891E42F91CE6FD8D003C3333 /* MainMenu.xib */; };
@@ -36,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		890FC1AF1CFC071600D1FD73 /* SemanticsWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SemanticsWindowController.swift; sourceTree = "<group>"; };
+		890FC1B31CFC097200D1FD73 /* SemanticsWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SemanticsWindowController.xib; path = ../SemanticsWindowController.xib; sourceTree = "<group>"; };
 		891E42F21CE6FD8C003C3333 /* Barliman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barliman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		891E42F51CE6FD8D003C3333 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		891E42F71CE6FD8D003C3333 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -107,6 +111,8 @@
 				891E42FC1CE6FD8D003C3333 /* Info.plist */,
 				891E43221CE7098D003C3333 /* EditorWindowController.swift */,
 				891E43231CE7098D003C3333 /* EditorWindowController.xib */,
+				890FC1AF1CFC071600D1FD73 /* SemanticsWindowController.swift */,
+				890FC1B31CFC097200D1FD73 /* SemanticsWindowController.xib */,
 				89B081511CF195F5007E6ABA /* mk-and-rel-interp */,
 				89C405A51CF426BE009970A7 /* RunSchemeOperation.swift */,
 			);
@@ -236,6 +242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89B081521CF195F5007E6ABA /* mk-and-rel-interp in Resources */,
+				890FC1B41CFC097200D1FD73 /* SemanticsWindowController.xib in Resources */,
 				891E42F81CE6FD8D003C3333 /* Assets.xcassets in Resources */,
 				891E42FB1CE6FD8D003C3333 /* MainMenu.xib in Resources */,
 				891E43251CE7098D003C3333 /* EditorWindowController.xib in Resources */,
@@ -264,6 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				891E43241CE7098D003C3333 /* EditorWindowController.swift in Sources */,
+				890FC1B01CFC071600D1FD73 /* SemanticsWindowController.swift in Sources */,
 				891E42F61CE6FD8D003C3333 /* AppDelegate.swift in Sources */,
 				89C405A61CF426BE009970A7 /* RunSchemeOperation.swift in Sources */,
 			);
