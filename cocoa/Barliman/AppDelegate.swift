@@ -11,22 +11,22 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    var editorWindowController: EditorWindowController?
     var semanticsWindowController: SemanticsWindowController?
-    
+    var editorWindowController: EditorWindowController?
+
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         
         // Create window controllers with XIB files of the same name
-        let editorWindowController = EditorWindowController()
         let semanticsWindowController = SemanticsWindowController()
+        let editorWindowController = EditorWindowController()
 
         // Put the windows of the controllers on screen
-        editorWindowController.showWindow(self)
         semanticsWindowController.showWindow(self)
+        editorWindowController.showWindow(self)
         
         // Set the property to point to the window controllers
-        self.editorWindowController = editorWindowController
         self.semanticsWindowController = semanticsWindowController
+        self.editorWindowController = editorWindowController
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
