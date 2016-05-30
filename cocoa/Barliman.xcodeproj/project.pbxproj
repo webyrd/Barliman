@@ -39,7 +39,7 @@
 
 /* Begin PBXFileReference section */
 		890FC1AF1CFC071600D1FD73 /* SemanticsWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SemanticsWindowController.swift; sourceTree = "<group>"; };
-		890FC1B31CFC097200D1FD73 /* SemanticsWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SemanticsWindowController.xib; path = ../SemanticsWindowController.xib; sourceTree = "<group>"; };
+		890FC1B31CFC097200D1FD73 /* SemanticsWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SemanticsWindowController.xib; sourceTree = "<group>"; };
 		891E42F21CE6FD8C003C3333 /* Barliman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barliman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		891E42F51CE6FD8D003C3333 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		891E42F71CE6FD8D003C3333 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };

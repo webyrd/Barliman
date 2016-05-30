@@ -810,7 +810,6 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Test 1" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="bnB-F2-bht" userLabel="Test 1">
                         <rect key="frame" x="476" y="450" width="446" height="75"/>
@@ -844,7 +843,6 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Test 2" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="5ae-CU-xak" userLabel="Test 2">
                         <rect key="frame" x="476" y="366" width="446" height="75"/>
@@ -878,7 +876,6 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Test 3" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="9QG-Ds-qrp" userLabel="Test 3">
                         <rect key="frame" x="476" y="279" width="446" height="75"/>
@@ -912,7 +909,6 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Test 4" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="4cE-jZ-Dxo" userLabel="Test 4">
                         <rect key="frame" x="476" y="192" width="446" height="75"/>
@@ -946,7 +942,6 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Test 5" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="IHN-f7-wfW" userLabel="Test 5">
                         <rect key="frame" x="476" y="105" width="446" height="75"/>
@@ -980,7 +975,6 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Test 6" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="XAs-dB-Kkx" userLabel="Test 6">
                         <rect key="frame" x="476" y="16" width="446" height="75"/>
@@ -1014,7 +1008,6 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                     <box fixedFrame="YES" title="Best Guess" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="omS-co-OrV" userLabel="Best Guess">
                         <rect key="frame" x="17" y="16" width="446" height="251"/>
@@ -1057,7 +1050,6 @@
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="message" size="11"/>
                     </box>
                 </subviews>
             </view>
