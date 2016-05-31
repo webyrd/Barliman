@@ -15,7 +15,7 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Semantics" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="KzR-wa-z7l" userLabel="Semantics">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="456" height="574"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
@@ -67,14 +67,14 @@
                     </box>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8s7-Cj-4pt" userLabel="Saved Evaluation Rules">
                         <rect key="frame" x="18" y="17" width="421" height="26"/>
-                        <popUpButtonCell key="cell" type="push" title="Full miniScheme with match" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="btl-x8-PE3" id="OYt-OA-eRt">
+                        <popUpButtonCell key="cell" type="push" title="Dynamically-scoped miniScheme with match" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Jyb-Gc-Oph" id="OYt-OA-eRt">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" id="Kby-b7-WQR">
                                 <items>
-                                    <menuItem title="Full miniScheme with match" state="on" id="btl-x8-PE3"/>
+                                    <menuItem title="Full miniScheme with match" id="btl-x8-PE3"/>
                                     <menuItem title="Call-by-value Lambda Calculus" id="u6v-Vi-PP9"/>
-                                    <menuItem title="Dynamically-scoped miniScheme with match" id="Jyb-Gc-Oph"/>
+                                    <menuItem title="Dynamically-scoped miniScheme with match" state="on" id="Jyb-Gc-Oph"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
