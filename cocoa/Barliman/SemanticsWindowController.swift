@@ -24,7 +24,11 @@ class SemanticsWindowController: NSWindowController {
         
         // from http://stackoverflow.com/questions/19801601/nstextview-with-smart-quotes-disabled-still-replaces-quotes
         evaluationRulesView.automaticQuoteSubstitutionEnabled = false
+        
+        evaluationRulesView.textStorage?.setAttributedString(NSAttributedString(string: "(foo)"))
+        
     }
+    
 
     func cleanup() {
         // application is about to quit -- clean up!
