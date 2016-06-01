@@ -87,6 +87,15 @@ class EditorWindowController: NSWindowController {
         
         // The text in the code pane changed!  Launch a new Scheme task to evaluate the new expression...
         
+        let processTest1 = !test1InputField.stringValue.isEmpty && !test1ExpectedOutputField.stringValue.isEmpty
+        let processTest2 = !test2InputField.stringValue.isEmpty && !test2ExpectedOutputField.stringValue.isEmpty
+        let processTest3 = !test3InputField.stringValue.isEmpty && !test3ExpectedOutputField.stringValue.isEmpty
+        let processTest4 = !test4InputField.stringValue.isEmpty && !test4ExpectedOutputField.stringValue.isEmpty
+        let processTest5 = !test5InputField.stringValue.isEmpty && !test5ExpectedOutputField.stringValue.isEmpty
+        let processTest6 = !test6InputField.stringValue.isEmpty && !test6ExpectedOutputField.stringValue.isEmpty
+
+        
+        
         // see how many operations are currently in the queue
         print("operation count: \(processingQueue.operationCount)")
         
@@ -272,27 +281,27 @@ class EditorWindowController: NSWindowController {
         
         // now that the previous operations have completed, safe to add the new operations
         processingQueue.addOperation(runSchemeOpSimple)
-        if !test1InputField.stringValue.isEmpty && !test1ExpectedOutputField.stringValue.isEmpty {
+        if processTest1 {
             print("queuing test1")
             processingQueue.addOperation(runSchemeOpTest1)
         }
-        if !test2InputField.stringValue.isEmpty && !test2ExpectedOutputField.stringValue.isEmpty {
+        if processTest2 {
             print("queuing test2")
             processingQueue.addOperation(runSchemeOpTest2)
         }
-        if !test3InputField.stringValue.isEmpty && !test3ExpectedOutputField.stringValue.isEmpty {
+        if processTest3 {
             print("queuing test3")
             processingQueue.addOperation(runSchemeOpTest3)
         }
-        if !test4InputField.stringValue.isEmpty && !test4ExpectedOutputField.stringValue.isEmpty {
+        if processTest4 {
             print("queuing test4")
             processingQueue.addOperation(runSchemeOpTest4)
         }
-        if !test5InputField.stringValue.isEmpty && !test5ExpectedOutputField.stringValue.isEmpty {
+        if processTest5 {
             print("queuing test5")
             processingQueue.addOperation(runSchemeOpTest5)
         }
-        if !test6InputField.stringValue.isEmpty && !test6ExpectedOutputField.stringValue.isEmpty {
+        if processTest6 {
             print("queuing test6")
             processingQueue.addOperation(runSchemeOpTest6)
         }
