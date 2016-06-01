@@ -146,6 +146,13 @@ class RunSchemeOperation: NSOperation {
                         self.editorWindowController.test6ExpectedOutputField.textColor = NSColor.blackColor()
                     }
                 }
+                if self.taskType == "allTests" {
+                    if datastring == "()" {
+                        self.editorWindowController.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "incompatible" as String))
+                    } else {
+                        self.editorWindowController.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "compatible!!" as String))
+                    }
+                }
             } else if exitStatus == 15 {
                 // SIGTERM exitStatus -- ignore
                 print("SIGTERM !!!")
@@ -179,6 +186,9 @@ class RunSchemeOperation: NSOperation {
                 if self.taskType == "test6" {
                     self.editorWindowController.test6InputField.textColor = NSColor.greenColor()
                     self.editorWindowController.test6ExpectedOutputField.textColor = NSColor.greenColor()
+                }
+                if self.taskType == "allTests" {
+                    self.editorWindowController.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "syntax error" as String))
                 }
             }
             

@@ -120,6 +120,7 @@ class EditorWindowController: NSWindowController {
         let query_file_test4 = "barliman-query-test4.scm"
         let query_file_test5 = "barliman-query-test5.scm"
         let query_file_test6 = "barliman-query-test6.scm"
+        let query_file_alltests = "barliman-query-alltests.scm"
 
         let mk_vicare_path_string = mk_vicare_path as! String
         let mk_path_string = mk_path as! String
@@ -169,7 +170,41 @@ class EditorWindowController: NSWindowController {
             load_mk_string +
             load_interp_string +
             queryPrefix + definitionText + " " + test6InputField.stringValue + ") " + test6ExpectedOutputField.stringValue + querySuffix
+        
+        
+        let in1 = (processTest1 ? test1InputField.stringValue : "")
+        let in2 = (processTest2 ? test2InputField.stringValue : "")
+        let in3 = (processTest3 ? test3InputField.stringValue : "")
+        let in4 = (processTest4 ? test4InputField.stringValue : "")
+        let in5 = (processTest5 ? test5InputField.stringValue : "")
+        let in6 = (processTest6 ? test6InputField.stringValue : "")
 
+        let out1 = (processTest1 ? test1ExpectedOutputField.stringValue : "")
+        let out2 = (processTest2 ? test2ExpectedOutputField.stringValue : "")
+        let out3 = (processTest3 ? test3ExpectedOutputField.stringValue : "")
+        let out4 = (processTest4 ? test4ExpectedOutputField.stringValue : "")
+        let out5 = (processTest5 ? test5ExpectedOutputField.stringValue : "")
+        let out6 = (processTest6 ? test6ExpectedOutputField.stringValue : "")
+        
+        let allTestInputs = in1 + " "
+                          + in2 + " "
+                          + in3 + " "
+                          + in4 + " "
+                          + in5 + " "
+                          + in6 + " "
+        let allTestOutputs = out1 + " "
+                           + out2 + " "
+                           + out3 + " "
+                           + out4 + " "
+                           + out5 + " "
+                           + out6 + " "
+        
+        let queryAllTests: String = load_mk_vicare_string +
+            load_mk_string +
+            load_interp_string +
+            queryPrefix + definitionText + " (list " + allTestInputs + ")) (list " +  allTestOutputs + ")" + querySuffix
+
+        
         
         print("querySimple = \n\( querySimple )\n")
         print("queryTest1 = \n\( queryTest1 )\n")
@@ -178,9 +213,8 @@ class EditorWindowController: NSWindowController {
         print("queryTest4 = \n\( queryTest4 )\n")
         print("queryTest5 = \n\( queryTest5 )\n")
         print("queryTest6 = \n\( queryTest6 )\n")
-
-
-        print("\ntest1InputField.stringValue = \( test1InputField.stringValue )\n")
+        print("queryAllTests = \n\( queryAllTests )\n")
+        
         
         
         var pathSimple: NSURL
@@ -203,6 +237,10 @@ class EditorWindowController: NSWindowController {
 
         var pathTest6: NSURL
         pathTest6 = NSURL()
+        
+        var pathAllTests: NSURL
+        pathAllTests = NSURL()
+
 
         
         // write the temporary file containing the query to the user's Document directory.  This seems a bit naughty.  Where is the right place to put this?  In ~/.barliman, perhaps?
@@ -215,6 +253,8 @@ class EditorWindowController: NSWindowController {
             pathTest4 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test4)
             pathTest5 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test5)
             pathTest6 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test6)
+            pathAllTests = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_alltests)
+
             
             // write the query files
             do {
@@ -225,6 +265,8 @@ class EditorWindowController: NSWindowController {
                 try queryTest4.writeToURL(pathTest4, atomically: false, encoding: NSUTF8StringEncoding)
                 try queryTest5.writeToURL(pathTest5, atomically: false, encoding: NSUTF8StringEncoding)
                 try queryTest6.writeToURL(pathTest6, atomically: false, encoding: NSUTF8StringEncoding)
+                try queryAllTests.writeToURL(pathAllTests, atomically: false, encoding: NSUTF8StringEncoding)
+
             }
             catch {
                 // this error handling could be better!  :)
@@ -254,6 +296,10 @@ class EditorWindowController: NSWindowController {
 
         var schemeScriptPathStringTest6: String = ""
         schemeScriptPathStringTest6 = pathTest6.path!
+        
+        var schemeScriptPathStringAllTests: String = ""
+        schemeScriptPathStringAllTests = pathAllTests.path!
+
 
         
         // create the operations that will be placed in the operation queue
@@ -270,6 +316,9 @@ class EditorWindowController: NSWindowController {
         let runSchemeOpTest5: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest5, taskType: "test5")
 
         let runSchemeOpTest6: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest6, taskType: "test6")
+        
+        let runSchemeOpAllTests: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringAllTests, taskType: "allTests")
+
 
 
         // wait until the previous operations kill their tasks and finish, before adding the new operations
@@ -284,26 +333,45 @@ class EditorWindowController: NSWindowController {
         if processTest1 {
             print("queuing test1")
             processingQueue.addOperation(runSchemeOpTest1)
+        } else {
+            test1InputField.textColor = NSColor.blackColor()
+            test1ExpectedOutputField.textColor = NSColor.blackColor()
         }
         if processTest2 {
             print("queuing test2")
             processingQueue.addOperation(runSchemeOpTest2)
+        } else {
+            test2InputField.textColor = NSColor.blackColor()
+            test2ExpectedOutputField.textColor = NSColor.blackColor()
         }
         if processTest3 {
             print("queuing test3")
             processingQueue.addOperation(runSchemeOpTest3)
+        } else {
+            test3InputField.textColor = NSColor.blackColor()
+            test3ExpectedOutputField.textColor = NSColor.blackColor()
         }
         if processTest4 {
             print("queuing test4")
             processingQueue.addOperation(runSchemeOpTest4)
+        } else {
+            test4InputField.textColor = NSColor.blackColor()
+            test4ExpectedOutputField.textColor = NSColor.blackColor()
         }
         if processTest5 {
             print("queuing test5")
             processingQueue.addOperation(runSchemeOpTest5)
+        } else {
+            test5InputField.textColor = NSColor.blackColor()
+            test5ExpectedOutputField.textColor = NSColor.blackColor()
         }
         if processTest6 {
             print("queuing test6")
             processingQueue.addOperation(runSchemeOpTest6)
+        } else {
+            test6InputField.textColor = NSColor.blackColor()
+            test6ExpectedOutputField.textColor = NSColor.blackColor()
         }
+        processingQueue.addOperation(runSchemeOpAllTests)
     }
 }
