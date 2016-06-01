@@ -41,6 +41,7 @@ class RunSchemeOperation: NSOperation {
         runSchemeCode()
     }
 
+    
     func runSchemeCode() {
     
         // Path to Chez Scheme
@@ -78,79 +79,61 @@ class RunSchemeOperation: NSOperation {
         // update the user interface, which *must* be done through the main thread
         NSOperationQueue.mainQueue().addOperationWithBlock {
             
+            func onTestCompletion(inputField: NSTextField, outputField: NSTextField, datastring: String) {
+                if datastring == "()" {
+                    inputField.textColor = NSColor.redColor()
+                    outputField.textColor = NSColor.redColor()
+                } else {
+                    inputField.textColor = NSColor.blackColor()
+                    outputField.textColor = NSColor.blackColor()
+                }
+            }
+            
+            func onTestSyntaxError(inputField: NSTextField, outputField: NSTextField) {
+                inputField.textColor = NSColor.greenColor()
+                outputField.textColor = NSColor.greenColor()
+            }
+
             let datastring = NSString(data: data, encoding: NSUTF8StringEncoding) as! String
             let errorDatastring = NSString(data: errorData, encoding: NSUTF8StringEncoding) as! String
+            let taskType = self.taskType
 
+            let ewc = self.editorWindowController
+            
             if exitStatus == 0 {
                 // at least Chez ran to completion!  The query could still have failed, of course
                 if self.taskType == "simple" {
                     if datastring == "()" {
                         print("--- turning simple red")
-                        self.editorWindowController.schemeDefinitionView.textColor = NSColor.redColor()
+                        ewc.schemeDefinitionView.textColor = NSColor.redColor()
                     } else {
                         print("--- turning simple black")
-                        self.editorWindowController.schemeDefinitionView.textColor = NSColor.blackColor()
+                        ewc.schemeDefinitionView.textColor = NSColor.blackColor()
                     }
                 }
-                if self.taskType == "test1" {
-                    if datastring == "()" {
-                        self.editorWindowController.test1InputField.textColor = NSColor.redColor()
-                        self.editorWindowController.test1ExpectedOutputField.textColor = NSColor.redColor()
-                    } else {
-                        self.editorWindowController.test1InputField.textColor = NSColor.blackColor()
-                        self.editorWindowController.test1ExpectedOutputField.textColor = NSColor.blackColor()
-                    }
+                if taskType == "test1" {
+                    onTestCompletion(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, datastring: datastring)
                 }
-                if self.taskType == "test2" {
-                    if datastring == "()" {
-                        self.editorWindowController.test2InputField.textColor = NSColor.redColor()
-                        self.editorWindowController.test2ExpectedOutputField.textColor = NSColor.redColor()
-                    } else {
-                        self.editorWindowController.test2InputField.textColor = NSColor.blackColor()
-                        self.editorWindowController.test2ExpectedOutputField.textColor = NSColor.blackColor()
-                    }
+                if taskType == "test2" {
+                    onTestCompletion(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, datastring: datastring)
                 }
-                if self.taskType == "test3" {
-                    if datastring == "()" {
-                        self.editorWindowController.test3InputField.textColor = NSColor.redColor()
-                        self.editorWindowController.test3ExpectedOutputField.textColor = NSColor.redColor()
-                    } else {
-                        self.editorWindowController.test3InputField.textColor = NSColor.blackColor()
-                        self.editorWindowController.test3ExpectedOutputField.textColor = NSColor.blackColor()
-                    }
+                if taskType == "test3" {
+                    onTestCompletion(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, datastring: datastring)
                 }
-                if self.taskType == "test4" {
-                    if datastring == "()" {
-                        self.editorWindowController.test4InputField.textColor = NSColor.redColor()
-                        self.editorWindowController.test4ExpectedOutputField.textColor = NSColor.redColor()
-                    } else {
-                        self.editorWindowController.test4InputField.textColor = NSColor.blackColor()
-                        self.editorWindowController.test4ExpectedOutputField.textColor = NSColor.blackColor()
-                    }
+                if taskType == "test4" {
+                    onTestCompletion(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, datastring: datastring)
                 }
-                if self.taskType == "test5" {
-                    if datastring == "()" {
-                        self.editorWindowController.test5InputField.textColor = NSColor.redColor()
-                        self.editorWindowController.test5ExpectedOutputField.textColor = NSColor.redColor()
-                    } else {
-                        self.editorWindowController.test5InputField.textColor = NSColor.blackColor()
-                        self.editorWindowController.test5ExpectedOutputField.textColor = NSColor.blackColor()
-                    }
+                if taskType == "test5" {
+                    onTestCompletion(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, datastring: datastring)
                 }
-                if self.taskType == "test6" {
-                    if datastring == "()" {
-                        self.editorWindowController.test6InputField.textColor = NSColor.redColor()
-                        self.editorWindowController.test6ExpectedOutputField.textColor = NSColor.redColor()
-                    } else {
-                        self.editorWindowController.test6InputField.textColor = NSColor.blackColor()
-                        self.editorWindowController.test6ExpectedOutputField.textColor = NSColor.blackColor()
-                    }
+                if taskType == "test6" {
+                    onTestCompletion(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, datastring: datastring)
                 }
                 if self.taskType == "allTests" {
                     if datastring == "()" {
-                        self.editorWindowController.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "incompatible" as String))
+                        ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "incompatible" as String))
                     } else {
-                        self.editorWindowController.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "compatible!!" as String))
+                        ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "compatible!!" as String))
                     }
                 }
             } else if exitStatus == 15 {
@@ -161,34 +144,29 @@ class RunSchemeOperation: NSOperation {
                 if self.taskType == "simple" {
                     print("--- turning simple green")
                     print("exitStatus = \( exitStatus )")
-                    self.editorWindowController.schemeDefinitionView.textColor = NSColor.greenColor()
+                    ewc.schemeDefinitionView.textColor = NSColor.greenColor()
                 }
-                if self.taskType == "test1" {
-                    self.editorWindowController.test1InputField.textColor = NSColor.greenColor()
-                    self.editorWindowController.test1ExpectedOutputField.textColor = NSColor.greenColor()
+                
+                if taskType == "test1" {
+                    onTestSyntaxError(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField)
                 }
-                if self.taskType == "test2" {
-                    self.editorWindowController.test2InputField.textColor = NSColor.greenColor()
-                    self.editorWindowController.test2ExpectedOutputField.textColor = NSColor.greenColor()
+                if taskType == "test2" {
+                    onTestSyntaxError(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField)
                 }
-                if self.taskType == "test3" {
-                    self.editorWindowController.test3InputField.textColor = NSColor.greenColor()
-                    self.editorWindowController.test3ExpectedOutputField.textColor = NSColor.greenColor()
+                if taskType == "test3" {
+                    onTestSyntaxError(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField)
                 }
-                if self.taskType == "test4" {
-                    self.editorWindowController.test4InputField.textColor = NSColor.greenColor()
-                    self.editorWindowController.test4ExpectedOutputField.textColor = NSColor.greenColor()
+                if taskType == "test4" {
+                    onTestSyntaxError(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField)
                 }
-                if self.taskType == "test5" {
-                    self.editorWindowController.test5InputField.textColor = NSColor.greenColor()
-                    self.editorWindowController.test5ExpectedOutputField.textColor = NSColor.greenColor()
+                if taskType == "test5" {
+                    onTestSyntaxError(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField)
                 }
-                if self.taskType == "test6" {
-                    self.editorWindowController.test6InputField.textColor = NSColor.greenColor()
-                    self.editorWindowController.test6ExpectedOutputField.textColor = NSColor.greenColor()
+                if taskType == "test6" {
+                    onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField)
                 }
-                if self.taskType == "allTests" {
-                    self.editorWindowController.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "syntax error" as String))
+                if taskType == "allTests" {
+                    ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "syntax error" as String))
                 }
             }
             
