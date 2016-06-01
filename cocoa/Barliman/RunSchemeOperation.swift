@@ -83,6 +83,7 @@ class RunSchemeOperation: NSOperation {
                 if datastring == "()" {
                     inputField.textColor = NSColor.redColor()
                     outputField.textColor = NSColor.redColor()
+                    // TODO - would be polite to cancel the allTests operation as well, since it cannot possibly succeed
                 } else {
                     inputField.textColor = NSColor.blackColor()
                     outputField.textColor = NSColor.blackColor()

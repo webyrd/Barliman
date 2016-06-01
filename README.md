@@ -51,6 +51,7 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 TODO:
 
 * create process tree to try all the examples simultaneously
+* would be polite to cancel the allTests operation as well, since it cannot possibly succeed
 * add ability to change the evaluator rules and perhaps an explicit grammar as well
 * change green text to bold font instead
 * add structured editing capability, with automatic addition of right parens, auto-addition of logic variables, and perhaps something like paredit
