@@ -171,8 +171,8 @@ class RunSchemeOperation: NSOperation {
                 }
             }
             
-//            print("datastring for process \( self.task.processIdentifier ): \(datastring)")
-//            print("error datastring for process \( self.task.processIdentifier ): \(errorDatastring)")
+            print("datastring for process \( self.task.processIdentifier ): \(datastring)")
+            print("error datastring for process \( self.task.processIdentifier ): \(errorDatastring)")
         }
     }
 }
