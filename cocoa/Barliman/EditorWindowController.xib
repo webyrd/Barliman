@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="EditorWindowController" customModule="Barliman" customModuleProvider="target">
             <connections>
+                <outlet property="bestGuessSpinner" destination="sDx-rk-wjy" id="YNC-U0-ajX"/>
                 <outlet property="bestGuessView" destination="udr-Wg-VyJ" id="CBV-q1-4Tp"/>
                 <outlet property="schemeDefinitionView" destination="4FU-au-vlw" id="Ka2-gL-bOM"/>
                 <outlet property="test1ExpectedOutputField" destination="Zi0-kV-0Zv" id="Umr-Mr-tI7"/>
@@ -1051,6 +1052,9 @@
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </box>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="sDx-rk-wjy">
+                        <rect key="frame" x="444" y="251" width="16" height="16"/>
+                    </progressIndicator>
                 </subviews>
             </view>
             <connections>

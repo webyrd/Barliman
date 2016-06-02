@@ -32,6 +32,8 @@ class EditorWindowController: NSWindowController {
     @IBOutlet weak var test6InputField: NSTextField!
     @IBOutlet weak var test6ExpectedOutputField: NSTextField!
 
+    @IBOutlet weak var bestGuessSpinner: NSProgressIndicator!
+    
     var semanticsWindowController: SemanticsWindowController?
         
     let processingQueue: NSOperationQueue = NSOperationQueue()
@@ -375,6 +377,8 @@ class EditorWindowController: NSWindowController {
             test6InputField.textColor = NSColor.blackColor()
             test6ExpectedOutputField.textColor = NSColor.blackColor()
         }
+        
+        bestGuessSpinner.startAnimation(self)
         processingQueue.addOperation(runSchemeOpAllTests)
     }
 }

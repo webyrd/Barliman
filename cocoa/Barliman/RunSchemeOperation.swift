@@ -131,6 +131,7 @@ class RunSchemeOperation: NSOperation {
                     onTestCompletion(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, datastring: datastring)
                 }
                 if self.taskType == "allTests" {
+                    ewc.bestGuessSpinner.stopAnimation(self)
                     if datastring == "fail" {
                         ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
                     } else {
@@ -167,6 +168,7 @@ class RunSchemeOperation: NSOperation {
                     onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField)
                 }
                 if taskType == "allTests" {
+                    ewc.bestGuessSpinner.stopAnimation(self)
                     ewc.bestGuessView.setTextColor(NSColor.blackColor(), range: NSMakeRange(0, (ewc.bestGuessView.textStorage?.length)!))
                     ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
                 }
