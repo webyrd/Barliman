@@ -67,14 +67,16 @@
                     </box>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8s7-Cj-4pt" userLabel="Saved Evaluation Rules">
                         <rect key="frame" x="18" y="17" width="421" height="26"/>
-                        <popUpButtonCell key="cell" type="push" title="Dynamically-scoped miniScheme with match" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Jyb-Gc-Oph" id="OYt-OA-eRt">
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="OYt-OA-eRt" userLabel="Evaluation Rules Popup">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" id="Kby-b7-WQR">
                                 <items>
-                                    <menuItem title="Full miniScheme with match" id="btl-x8-PE3"/>
+                                    <menuItem title="Full miniScheme with match" state="on" id="btl-x8-PE3">
+                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                    </menuItem>
                                     <menuItem title="Call-by-value Lambda Calculus" id="u6v-Vi-PP9"/>
-                                    <menuItem title="Dynamically-scoped miniScheme with match" state="on" id="Jyb-Gc-Oph"/>
+                                    <menuItem title="Dynamically-scoped miniScheme with match" id="Jyb-Gc-Oph"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
