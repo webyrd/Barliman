@@ -132,7 +132,7 @@ class RunSchemeOperation: NSOperation {
                 }
                 if self.taskType == "allTests" {
                     if datastring == "fail" {
-                        ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "incompatible" as String))
+                        ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
                     } else {
                         ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: datastring))
                     }
@@ -167,7 +167,7 @@ class RunSchemeOperation: NSOperation {
                     onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField)
                 }
                 if taskType == "allTests" {
-                    ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "syntax error" as String))
+                    ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
                 }
             }
             
