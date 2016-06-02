@@ -10,7 +10,7 @@ import Cocoa
 
 class EditorWindowController: NSWindowController {
 
-    // Making this a weak reference seems to cause a runtime error.  Why?
+    // Making these views weak references seems to cause a runtime error.  Why?
     @IBOutlet var schemeDefinitionView: NSTextView!
     @IBOutlet var bestGuessView: NSTextView!
 

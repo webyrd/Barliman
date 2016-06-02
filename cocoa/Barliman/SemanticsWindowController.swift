@@ -10,7 +10,7 @@ import Cocoa
 
 class SemanticsWindowController: NSWindowController {
 
-    // Making this a weak reference seems to cause a runtime error.  Why?
+    // Making evaluationRulesView a weak reference seems to cause a runtime error.  Why?
     @IBOutlet var evaluationRulesView: NSTextView!
 
     override var windowNibName: String? {

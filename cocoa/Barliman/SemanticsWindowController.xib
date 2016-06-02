@@ -65,7 +65,7 @@
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </box>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8s7-Cj-4pt" userLabel="Saved Evaluation Rules">
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8s7-Cj-4pt" userLabel="Evaluation Rules Popup Button">
                         <rect key="frame" x="18" y="17" width="421" height="26"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="OYt-OA-eRt" userLabel="Evaluation Rules Popup">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
