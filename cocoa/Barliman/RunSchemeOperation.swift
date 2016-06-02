@@ -167,6 +167,7 @@ class RunSchemeOperation: NSOperation {
                     onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField)
                 }
                 if taskType == "allTests" {
+                    ewc.bestGuessView.setTextColor(NSColor.blackColor(), range: NSMakeRange(0, (ewc.bestGuessView.textStorage?.length)!))
                     ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
                 }
             }
