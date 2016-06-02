@@ -131,10 +131,10 @@ class RunSchemeOperation: NSOperation {
                     onTestCompletion(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, datastring: datastring)
                 }
                 if self.taskType == "allTests" {
-                    if datastring == "()" {
+                    if datastring == "fail" {
                         ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "incompatible" as String))
                     } else {
-                        ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "compatible!!" as String))
+                        ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: datastring))
                     }
                 }
             } else if exitStatus == 15 {

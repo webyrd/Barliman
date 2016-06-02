@@ -202,7 +202,7 @@ class EditorWindowController: NSWindowController {
         let queryAllTests: String = load_mk_vicare_string +
             load_mk_string +
             load_interp_string +
-            queryPrefix + definitionText + " (list " + allTestInputs + ")) (list " +  allTestOutputs + ")" + querySuffix
+            "(write (let ((ans (run 1 (defn) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) (== `" + definitionText + " defn) (evalo `(begin ,defn (list " + allTestInputs + ")) (list " +  allTestOutputs + ")" + "))))) (if (null? ans) 'fail (car ans))) )"
 
         
         
