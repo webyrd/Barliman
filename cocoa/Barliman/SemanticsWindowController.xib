@@ -72,7 +72,7 @@
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" id="Kby-b7-WQR">
                                 <items>
-                                    <menuItem title="Full miniScheme with match" state="on" id="btl-x8-PE3">
+                                    <menuItem title="Full miniScheme with match" id="btl-x8-PE3">
                                         <modifierMask key="keyEquivalentModifierMask"/>
                                     </menuItem>
                                     <menuItem title="Call-by-value Lambda Calculus" id="u6v-Vi-PP9"/>

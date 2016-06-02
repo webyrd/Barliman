@@ -32,7 +32,8 @@ class EditorWindowController: NSWindowController {
     @IBOutlet weak var test6InputField: NSTextField!
     @IBOutlet weak var test6ExpectedOutputField: NSTextField!
 
-    
+    var semanticsWindowController: SemanticsWindowController?
+        
     let processingQueue: NSOperationQueue = NSOperationQueue()
     
     override var windowNibName: String? {
@@ -93,7 +94,6 @@ class EditorWindowController: NSWindowController {
         let processTest4 = !test4InputField.stringValue.isEmpty && !test4ExpectedOutputField.stringValue.isEmpty
         let processTest5 = !test5InputField.stringValue.isEmpty && !test5ExpectedOutputField.stringValue.isEmpty
         let processTest6 = !test6InputField.stringValue.isEmpty && !test6ExpectedOutputField.stringValue.isEmpty
-
         
         
         // see how many operations are currently in the queue
@@ -110,7 +110,8 @@ class EditorWindowController: NSWindowController {
         
         let mk_vicare_path: NSString? = bundle.pathForResource("mk-vicare", ofType: "scm", inDirectory: "mk-and-rel-interp/mk")
         let mk_path: NSString? = bundle.pathForResource("mk", ofType: "scm", inDirectory: "mk-and-rel-interp/mk")
-        let interp_path: NSString? = bundle.pathForResource("interp", ofType: "scm", inDirectory: "mk-and-rel-interp")
+        // let interp_path: NSString? = bundle.pathForResource("interp", ofType: "scm", inDirectory: "mk-and-rel-interp")
+        
         
         // write the Scheme code containing the miniKanren query to a temp file
         let query_file_simple = "barliman-query-simple.scm"
@@ -124,12 +125,14 @@ class EditorWindowController: NSWindowController {
 
         let mk_vicare_path_string = mk_vicare_path as! String
         let mk_path_string = mk_path as! String
-        let interp_path_string = interp_path as! String
+        // let interp_path_string = interp_path as! String
 
         let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
         let load_mk_string: String = "(load \"\( mk_path_string )\")"
-        let load_interp_string: String = "(load \"\( interp_path_string )\")"
+        // let load_interp_string: String = "(load \"\( interp_path_string )\")"
 
+        let interp_string: String = semanticsWindowController!.getInterpreterCode()
+        
         let queryPrefix = "(write (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) (evalo `(begin "
         let querySuffix = "))) )"
         let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
@@ -137,38 +140,38 @@ class EditorWindowController: NSWindowController {
         
         let querySimple: String = load_mk_vicare_string +
             load_mk_string +
-            load_interp_string +
+            interp_string +
             queryPrefix + definitionText + " ,Z) q" + querySuffix
 
         
         let queryTest1: String = load_mk_vicare_string +
             load_mk_string +
-            load_interp_string +
+            interp_string +
             queryPrefix + definitionText + " " + test1InputField.stringValue + ") " + test1ExpectedOutputField.stringValue + querySuffix
 
         let queryTest2: String = load_mk_vicare_string +
             load_mk_string +
-            load_interp_string +
+            interp_string +
             queryPrefix + definitionText + " " + test2InputField.stringValue + ") " + test2ExpectedOutputField.stringValue + querySuffix
 
         let queryTest3: String = load_mk_vicare_string +
             load_mk_string +
-            load_interp_string +
+            interp_string +
             queryPrefix + definitionText + " " + test3InputField.stringValue + ") " + test3ExpectedOutputField.stringValue + querySuffix
 
         let queryTest4: String = load_mk_vicare_string +
             load_mk_string +
-            load_interp_string +
+            interp_string +
             queryPrefix + definitionText + " " + test4InputField.stringValue + ") " + test4ExpectedOutputField.stringValue + querySuffix
 
         let queryTest5: String = load_mk_vicare_string +
             load_mk_string +
-            load_interp_string +
+            interp_string +
             queryPrefix + definitionText + " " + test5InputField.stringValue + ") " + test5ExpectedOutputField.stringValue + querySuffix
 
         let queryTest6: String = load_mk_vicare_string +
             load_mk_string +
-            load_interp_string +
+            interp_string +
             queryPrefix + definitionText + " " + test6InputField.stringValue + ") " + test6ExpectedOutputField.stringValue + querySuffix
         
         
@@ -201,19 +204,19 @@ class EditorWindowController: NSWindowController {
         
         let queryAllTests: String = load_mk_vicare_string +
             load_mk_string +
-            load_interp_string +
+            interp_string +
             "(write (let ((ans (run 1 (defn) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) (== `" + definitionText + " defn) (evalo `(begin ,defn (list " + allTestInputs + ")) (list " +  allTestOutputs + ")" + "))))) (if (null? ans) 'fail (car ans))) )"
 
         
         
-        print("querySimple = \n\( querySimple )\n")
-        print("queryTest1 = \n\( queryTest1 )\n")
-        print("queryTest2 = \n\( queryTest2 )\n")
-        print("queryTest3 = \n\( queryTest3 )\n")
-        print("queryTest4 = \n\( queryTest4 )\n")
-        print("queryTest5 = \n\( queryTest5 )\n")
-        print("queryTest6 = \n\( queryTest6 )\n")
-        print("queryAllTests = \n\( queryAllTests )\n")
+//        print("querySimple = \n\( querySimple )\n")
+//        print("queryTest1 = \n\( queryTest1 )\n")
+//        print("queryTest2 = \n\( queryTest2 )\n")
+//        print("queryTest3 = \n\( queryTest3 )\n")
+//        print("queryTest4 = \n\( queryTest4 )\n")
+//        print("queryTest5 = \n\( queryTest5 )\n")
+//        print("queryTest6 = \n\( queryTest6 )\n")
+//        print("queryAllTests = \n\( queryAllTests )\n")
         
         
         

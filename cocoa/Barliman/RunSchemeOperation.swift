@@ -24,17 +24,17 @@ class RunSchemeOperation: NSOperation {
     }
     
     override func cancel() {
-        print("!!! cancel called!")
+        //print("!!! cancel called!")
         super.cancel()
-        print("&&& killing process \( task.processIdentifier )")
+        // print("&&& killing process \( task.processIdentifier )")
         task.terminate()
-        print("&&& killed process")
+        // print("&&& killed process")
     }
     
     override func main() {
         
         if self.cancelled {
-            print("*** cancelled immediately! ***\n")
+            // print("*** cancelled immediately! ***\n")
             return
         }
         
@@ -59,7 +59,7 @@ class RunSchemeOperation: NSOperation {
         
         // Launch the Chez Scheme process, with the miniKanren query
         task.launch()
-        print("*** launched process \( task.processIdentifier )")
+        // print("*** launched process \( task.processIdentifier )")
 
         
         let outputFileHandle = outputPipe.fileHandleForReading
@@ -105,10 +105,10 @@ class RunSchemeOperation: NSOperation {
                 // at least Chez ran to completion!  The query could still have failed, of course
                 if self.taskType == "simple" {
                     if datastring == "()" {
-                        print("--- turning simple red")
+                        // print("--- turning simple red")
                         ewc.schemeDefinitionView.textColor = NSColor.redColor()
                     } else {
-                        print("--- turning simple black")
+                        // print("--- turning simple black")
                         ewc.schemeDefinitionView.textColor = NSColor.blackColor()
                     }
                 }
@@ -143,8 +143,8 @@ class RunSchemeOperation: NSOperation {
             } else {
                 // the query wasn't even a legal s-expression, according to Chez!
                 if self.taskType == "simple" {
-                    print("--- turning simple green")
-                    print("exitStatus = \( exitStatus )")
+                    // print("--- turning simple green")
+                    // print("exitStatus = \( exitStatus )")
                     ewc.schemeDefinitionView.textColor = NSColor.greenColor()
                 }
                 
@@ -171,8 +171,8 @@ class RunSchemeOperation: NSOperation {
                 }
             }
             
-            print("datastring for process \( self.task.processIdentifier ): \(datastring)")
-            print("error datastring for process \( self.task.processIdentifier ): \(errorDatastring)")
+//            print("datastring for process \( self.task.processIdentifier ): \(datastring)")
+//            print("error datastring for process \( self.task.processIdentifier ): \(errorDatastring)")
         }
     }
 }

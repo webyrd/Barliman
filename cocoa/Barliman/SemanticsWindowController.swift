@@ -12,7 +12,7 @@ class SemanticsWindowController: NSWindowController {
 
     // Making evaluationRulesView a weak reference seems to cause a runtime error.  Why?
     @IBOutlet var evaluationRulesView: NSTextView!
-
+    
     override var windowNibName: String? {
         return "SemanticsWindowController"
     }
@@ -40,9 +40,10 @@ class SemanticsWindowController: NSWindowController {
         catch {
             print("Oh noes!  Can't load interpreter for Semantics Window!")
         }
-
-        
-        
+    }
+    
+    func getInterpreterCode() -> String {
+        return (evaluationRulesView.textStorage?.string)!
     }
     
 
