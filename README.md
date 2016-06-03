@@ -53,6 +53,7 @@ TODO:
 * wait part of a second to see if there are more keystrokes before launching Scheme processes.  Sort of like XCode (I assume XCode is doing this).  Would be more resource friendly, less distracting, and would make typing quickly more responsive.  Could probably do this using an timer.
 * would be smart to only re-run Scheme processes when the Scheme code actually *changes* -- for example, white space characters outside of an S-expr shouldn't trigger re-evaluation.  One way would be to compare "before" and "after" S-exprs to see if anything has changed.  Could run a single Scheme instance and call `equal?` to see if the code has actually changed.  This could be a big win for expensive computations.
 * support multiple definitions and mutual recursion
+* show reified test inputs and outputs upon success, for all tests
 * add ability to save and load examples/tests/semantics, and include interesting examples, such as a tiny Scheme interpreter written in Scheme, state machine using mutual recursion, examples from pearls, etc.
 * add structured editor for semantics and for type inferencer (as an alternative to/in addition to the free-form editor)
 * add 'transpose S-expression' and other useful Emacs editing commands
@@ -75,6 +76,7 @@ TODO:
 * add ability to save and load programs
 * add "accept suggested completion" button
 * would be smarter/less resource intense to not launch all the tests again when the text in a single test changes.  Only that test and allTests need be re-run, in theory.  Getting the UI to display the state of everything properly may be a little subtle, though.
+* differential relational interpreters
 
 LONGER TERM:
 
@@ -85,6 +87,7 @@ LONGER TERM:
 * add type inferencer
 * test generation of typed test programs
 * partial evaluation of the interpreter to speed up evaluation
+* add support for macros
 
 POSSIBLE USE CASES:
 
