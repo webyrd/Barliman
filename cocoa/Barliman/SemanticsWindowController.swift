@@ -13,7 +13,6 @@ class SemanticsWindowController: NSWindowController {
     // Making evaluationRulesView a weak reference seems to cause a runtime error.  Why?
     @IBOutlet var evaluationRulesView: NSTextView!
     
-    
     var editorWindowController: EditorWindowController?
     
     
@@ -35,10 +34,14 @@ class SemanticsWindowController: NSWindowController {
         // from http://stackoverflow.com/questions/19801601/nstextview-with-smart-quotes-disabled-still-replaces-quotes
         evaluationRulesView.automaticQuoteSubstitutionEnabled = false
         
+        loadInterpreterCode("interp")
+    }
+    
+    func loadInterpreterCode(interpFileName: String) {
         // get the path to the application's bundle, so we can load the interpreter file
         let bundle = NSBundle.mainBundle()
         
-        let interp_path: NSString? = bundle.pathForResource("interp", ofType: "scm", inDirectory: "mk-and-rel-interp")
+        let interp_path: NSString? = bundle.pathForResource(interpFileName, ofType: "scm", inDirectory: "mk-and-rel-interp")
         
         let path = NSURL(fileURLWithPath: interp_path as! String)
         
@@ -51,6 +54,25 @@ class SemanticsWindowController: NSWindowController {
             print("Oh noes!  Can't load interpreter for Semantics Window!")
         }
     }
+    
+    @IBAction func loadFullMiniSchemeWithMatch(sender: NSMenuItem) {
+        loadInterpreterCode("interp")
+        print("@@@@ loaded FullMiniSchemeWithMatch interpreter from popup menu")
+        editorWindowController!.runCodeFromEditPane()
+    }
+    
+    @IBAction func loadCallByValueLambdaCalculus(sender: NSMenuItem) {
+        loadInterpreterCode("cbv-lc")
+        print("@@@@ loaded CallByValueLambdaCalculus interpreter from popup menu")
+        editorWindowController!.runCodeFromEditPane()
+    }
+
+    @IBAction func loadDynamicallyScopedMiniSchemeWithMatch(sender: NSMenuItem) {
+        loadInterpreterCode("interp-dynamic")
+        print("@@@@ loaded DynamicallyScopedMiniSchemeWithMatch interpreter from popup menu")
+        editorWindowController!.runCodeFromEditPane()
+    }
+
     
     func getInterpreterCode() -> String {
         return (evaluationRulesView.textStorage?.string)!

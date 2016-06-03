@@ -21,7 +21,7 @@
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="GdX-cG-JtY">
                 <rect key="frame" x="0.0" y="0.0" width="456" height="574"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <box fixedFrame="YES" title="Evaluation Rules" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="Fj0-G6-NLU">
                         <rect key="frame" x="17" y="45" width="422" height="509"/>
@@ -72,11 +72,22 @@
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" id="Kby-b7-WQR">
                                 <items>
-                                    <menuItem title="Full miniScheme with match" id="btl-x8-PE3">
+                                    <menuItem title="Full miniScheme with match" state="on" id="btl-x8-PE3">
                                         <modifierMask key="keyEquivalentModifierMask"/>
+                                        <connections>
+                                            <action selector="loadFullMiniSchemeWithMatch:" target="-2" id="3je-ty-Bfs"/>
+                                        </connections>
                                     </menuItem>
-                                    <menuItem title="Call-by-value Lambda Calculus" id="u6v-Vi-PP9"/>
-                                    <menuItem title="Dynamically-scoped miniScheme with match" id="Jyb-Gc-Oph"/>
+                                    <menuItem title="Call-by-value Lambda Calculus" id="u6v-Vi-PP9">
+                                        <connections>
+                                            <action selector="loadCallByValueLambdaCalculus:" target="-2" id="mFg-RS-gnC"/>
+                                        </connections>
+                                    </menuItem>
+                                    <menuItem title="Dynamically-scoped miniScheme with match" id="Jyb-Gc-Oph">
+                                        <connections>
+                                            <action selector="loadDynamicallyScopedMiniSchemeWithMatch:" target="-2" id="exL-om-Uoz"/>
+                                        </connections>
+                                    </menuItem>
                                 </items>
                             </menu>
                         </popUpButtonCell>

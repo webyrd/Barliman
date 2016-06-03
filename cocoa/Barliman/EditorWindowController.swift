@@ -120,7 +120,6 @@ class EditorWindowController: NSWindowController {
         
         let mk_vicare_path: NSString? = bundle.pathForResource("mk-vicare", ofType: "scm", inDirectory: "mk-and-rel-interp/mk")
         let mk_path: NSString? = bundle.pathForResource("mk", ofType: "scm", inDirectory: "mk-and-rel-interp/mk")
-        // let interp_path: NSString? = bundle.pathForResource("interp", ofType: "scm", inDirectory: "mk-and-rel-interp")
         
         
         // write the Scheme code containing the miniKanren query to a temp file
@@ -135,11 +134,9 @@ class EditorWindowController: NSWindowController {
 
         let mk_vicare_path_string = mk_vicare_path as! String
         let mk_path_string = mk_path as! String
-        // let interp_path_string = interp_path as! String
 
         let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
         let load_mk_string: String = "(load \"\( mk_path_string )\")"
-        // let load_interp_string: String = "(load \"\( interp_path_string )\")"
 
         let interp_string: String = semanticsWindowController!.getInterpreterCode()
         
