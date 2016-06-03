@@ -20,6 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let semanticsWindowController = SemanticsWindowController()
         let editorWindowController = EditorWindowController()
 
+        semanticsWindowController.editorWindowController = editorWindowController
         editorWindowController.semanticsWindowController = semanticsWindowController
         
         // Put the windows of the controllers on screen

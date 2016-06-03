@@ -13,10 +13,20 @@ class SemanticsWindowController: NSWindowController {
     // Making evaluationRulesView a weak reference seems to cause a runtime error.  Why?
     @IBOutlet var evaluationRulesView: NSTextView!
     
+    
+    var editorWindowController: EditorWindowController?
+    
+    
     override var windowNibName: String? {
         return "SemanticsWindowController"
     }
 
+    func textDidChange(notification: NSNotification) {
+        // NSTextView text changed
+        print("@@@@@@@@@@@@@@@@@@@ semantics textDidChange")
+        editorWindowController!.runCodeFromEditPane()
+    }
+    
     override func windowDidLoad() {
         super.windowDidLoad()
         
