@@ -53,18 +53,22 @@ TODO:
 * wait part of a second to see if there are more keystrokes before launching Scheme processes.  Sort of like XCode (I assume XCode is doing this).  Would be more resource friendly, less distracting, and would make typing quickly more responsive.  Could probably do this using an timer.
 * would be smart to only re-run Scheme processes when the Scheme code actually *changes* -- for example, white space characters outside of an S-expr shouldn't trigger re-evaluation.  One way would be to compare "before" and "after" S-exprs to see if anything has changed.  Could run a single Scheme instance and call `equal?` to see if the code has actually changed.  This could be a big win for expensive computations.
 * support multiple definitions and mutual recursion
-* add ability to save and load examples/tests/semantics, and include interesting examples, such as a tiny Scheme interpreter written in Scheme, state machine using mutual recursion, etc.
+* add ability to save and load examples/tests/semantics, and include interesting examples, such as a tiny Scheme interpreter written in Scheme, state machine using mutual recursion, examples from pearls, etc.
 * add structured editor for semantics and for type inferencer (as an alternative to/in addition to the free-form editor)
 * add 'transpose S-expression' and other useful Emacs editing commands
+* move as much work as possible into NATasks, such as loading files.
 * possibly add pairs of tests as processes, once individual tests complete successfully
 * would be polite to cancel the allTests operation if any single test fails, since in that case allTests cannot possibly succeed
 * add ability to change the evaluator rules and perhaps an explicit grammar as well
 * change green text to bold font instead
 * add structured editing capability, with automatic addition of right parens, auto-addition of logic variables, and perhaps something like paredit
+* add syntax-directed auto-indentation of code 
+* figure out how to do syntax-directed hilighlighting, and precise hilighting of syntax errors.  May not be as important if I go the structured editor route.  Although perhaps this should be an option, either way.
 * remove possible race condition with respect to 'barliman-query.scm' temp file
 * add documentation/tutorial
 * add paper prototype for desired features
 * move 'barliman-query.scm' temporary file to a more suitable location than 'Documents' directory, or get rid of the temp file entirely
+* experiment with store passing style and small step interpreters
 * get rid of hardcoded path to Chez executable
 * add input/output examples
 * find a cleaner and more flexible way to construct the program sent to Chez
@@ -80,3 +84,12 @@ LONGER TERM:
 * explore incremental computing with the editor
 * add type inferencer
 * test generation of typed test programs
+* partial evaluation of the interpreter to speed up evaluation
+
+POSSIBLE USE CASES:
+
+* write simple implementtation of a function, generate test from that function, then use those tests to guide the more sophisticated implementation.  Or more generally, continually test the partially-implemented function vs the fully implemented but perhaps less efficient function.
+
+SUSPECT IDEAS:
+
+* could just call out to Scheme one the program becomes grounded.  However, the semantics and even the grammar may not match that of the interpreter used by miniKanren, so this seems difficult or impossible to do properly.
