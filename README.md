@@ -50,8 +50,10 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
+* should probably wait part of a second to see if there are more keystrokes before launching Scheme processes.  Sort of like XCode (I assume XCode is doing this).  Would be more resource friendly, less distracting, and would make typing quickly more responsive.  Could probably do this using a timer.
+* would be smart to only re-run Scheme processes when the Scheme code actually *changes* -- for example, white space characters outside of an S-expr shouldn't trigger re-evaluation.  One way would be to compare "before" and "after" S-exprs to see if anything has changed.  Could run a single Scheme instance and call `equal?` to see if the code has actually changed.  This could be a big win for expensive computations.
 * create process tree to try all the examples simultaneously
-* would be polite to cancel the allTests operation as well, since it cannot possibly succeed
+* would be polite to cancel the allTests operation if any single test fails, since in that case allTests cannot possibly succeed
 * add ability to change the evaluator rules and perhaps an explicit grammar as well
 * change green text to bold font instead
 * add structured editing capability, with automatic addition of right parens, auto-addition of logic variables, and perhaps something like paredit
@@ -64,7 +66,7 @@ TODO:
 * find a cleaner and more flexible way to construct the program sent to Chez
 * add ability to save and load programs
 * add "accept suggested completion" button
-
+* would be smarter/less resource intense to not launch all the tests again when the text in a single test changes.  Only that test and allTests need be re-run, in theory.  Getting the UI to display the state of everything properly may be a little subtle, though.
 
 LONGER TERM:
 
