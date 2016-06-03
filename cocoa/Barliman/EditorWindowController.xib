@@ -13,16 +13,22 @@
                 <outlet property="schemeDefinitionView" destination="4FU-au-vlw" id="Ka2-gL-bOM"/>
                 <outlet property="test1ExpectedOutputField" destination="Zi0-kV-0Zv" id="Umr-Mr-tI7"/>
                 <outlet property="test1InputField" destination="dfp-gE-e7y" id="nOz-Cv-ape"/>
+                <outlet property="test1Spinner" destination="XLM-qT-jee" id="TqP-A1-Vq7"/>
                 <outlet property="test2ExpectedOutputField" destination="QEw-0g-Vn0" id="xRa-lC-vdH"/>
                 <outlet property="test2InputField" destination="9Hs-2O-MgY" id="kYE-1G-sBP"/>
+                <outlet property="test2Spinner" destination="aON-X4-lSn" id="afR-OW-Tda"/>
                 <outlet property="test3ExpectedOutputField" destination="uC6-hK-TjE" id="Dt3-nU-fkw"/>
                 <outlet property="test3InputField" destination="1TB-3X-WG3" id="CAo-OH-Mm4"/>
+                <outlet property="test3Spinner" destination="YHK-Mm-i1i" id="pKw-pz-4Ce"/>
                 <outlet property="test4ExpectedOutputField" destination="7fA-eR-jIs" id="pAZ-yp-aTH"/>
                 <outlet property="test4InputField" destination="kNb-tv-ss4" id="XkP-EB-52h"/>
+                <outlet property="test4Spinner" destination="1hg-5d-5YD" id="mCf-k9-V6M"/>
                 <outlet property="test5ExpectedOutputField" destination="MAc-DN-iAe" id="eWy-e4-e6L"/>
                 <outlet property="test5InputField" destination="boC-4Q-D8B" id="Tc9-qY-MIO"/>
+                <outlet property="test5Spinner" destination="LIB-sw-LCk" id="yi2-va-x0i"/>
                 <outlet property="test6ExpectedOutputField" destination="bd0-aO-clQ" id="qJP-qJ-q0Q"/>
                 <outlet property="test6InputField" destination="U3e-fx-c8F" id="Uro-HT-2jZ"/>
+                <outlet property="test6Spinner" destination="Mxm-SY-a4v" id="cbd-9L-TE8"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="ERh-Rc-rRE"/>
             </connections>
         </customObject>

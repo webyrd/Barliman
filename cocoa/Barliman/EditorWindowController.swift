@@ -33,6 +33,14 @@ class EditorWindowController: NSWindowController {
     @IBOutlet weak var test6ExpectedOutputField: NSTextField!
 
     @IBOutlet weak var bestGuessSpinner: NSProgressIndicator!
+    @IBOutlet weak var test1Spinner: NSProgressIndicator!
+    @IBOutlet weak var test2Spinner: NSProgressIndicator!
+    @IBOutlet weak var test3Spinner: NSProgressIndicator!
+    @IBOutlet weak var test4Spinner: NSProgressIndicator!
+    @IBOutlet weak var test5Spinner: NSProgressIndicator!
+    @IBOutlet weak var test6Spinner: NSProgressIndicator!
+
+
     
     var semanticsWindowController: SemanticsWindowController?
         
