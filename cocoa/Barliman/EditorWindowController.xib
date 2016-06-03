@@ -1055,6 +1055,24 @@
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="sDx-rk-wjy">
                         <rect key="frame" x="444" y="251" width="16" height="16"/>
                     </progressIndicator>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="XLM-qT-jee" userLabel="Test1 Spinner">
+                        <rect key="frame" x="903" y="509" width="16" height="16"/>
+                    </progressIndicator>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="aON-X4-lSn" userLabel="Test2 Spinner">
+                        <rect key="frame" x="903" y="425" width="16" height="16"/>
+                    </progressIndicator>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="YHK-Mm-i1i" userLabel="Test3 Spinner">
+                        <rect key="frame" x="903" y="338" width="16" height="16"/>
+                    </progressIndicator>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="1hg-5d-5YD" userLabel="Test4 Spinner">
+                        <rect key="frame" x="903" y="251" width="16" height="16"/>
+                    </progressIndicator>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="LIB-sw-LCk" userLabel="Test5 Spinner">
+                        <rect key="frame" x="903" y="164" width="16" height="16"/>
+                    </progressIndicator>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Mxm-SY-a4v" userLabel="Test6 Spinner">
+                        <rect key="frame" x="903" y="75" width="16" height="16"/>
+                    </progressIndicator>
                 </subviews>
             </view>
             <connections>
