@@ -345,43 +345,55 @@ class EditorWindowController: NSWindowController {
         processingQueue.addOperation(runSchemeOpSimple)
         if processTest1 {
             print("queuing test1")
+            test1Spinner.startAnimation(self)
             processingQueue.addOperation(runSchemeOpTest1)
         } else {
+            test1Spinner.stopAnimation(self)
             test1InputField.textColor = NSColor.blackColor()
             test1ExpectedOutputField.textColor = NSColor.blackColor()
         }
         if processTest2 {
             print("queuing test2")
+            test2Spinner.startAnimation(self)
             processingQueue.addOperation(runSchemeOpTest2)
         } else {
+            test2Spinner.stopAnimation(self)
             test2InputField.textColor = NSColor.blackColor()
             test2ExpectedOutputField.textColor = NSColor.blackColor()
         }
         if processTest3 {
             print("queuing test3")
+            test3Spinner.startAnimation(self)
             processingQueue.addOperation(runSchemeOpTest3)
         } else {
+            test3Spinner.stopAnimation(self)
             test3InputField.textColor = NSColor.blackColor()
             test3ExpectedOutputField.textColor = NSColor.blackColor()
         }
         if processTest4 {
             print("queuing test4")
+            test4Spinner.startAnimation(self)
             processingQueue.addOperation(runSchemeOpTest4)
         } else {
+            test4Spinner.stopAnimation(self)
             test4InputField.textColor = NSColor.blackColor()
             test4ExpectedOutputField.textColor = NSColor.blackColor()
         }
         if processTest5 {
             print("queuing test5")
+            test5Spinner.startAnimation(self)
             processingQueue.addOperation(runSchemeOpTest5)
         } else {
+            test5Spinner.stopAnimation(self)
             test5InputField.textColor = NSColor.blackColor()
             test5ExpectedOutputField.textColor = NSColor.blackColor()
         }
         if processTest6 {
             print("queuing test6")
+            test6Spinner.startAnimation(self)
             processingQueue.addOperation(runSchemeOpTest6)
         } else {
+            test6Spinner.stopAnimation(self)
             test6InputField.textColor = NSColor.blackColor()
             test6ExpectedOutputField.textColor = NSColor.blackColor()
         }

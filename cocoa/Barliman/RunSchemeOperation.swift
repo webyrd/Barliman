@@ -79,7 +79,9 @@ class RunSchemeOperation: NSOperation {
         // update the user interface, which *must* be done through the main thread
         NSOperationQueue.mainQueue().addOperationWithBlock {
             
-            func onTestCompletion(inputField: NSTextField, outputField: NSTextField, datastring: String) {
+            func onTestCompletion(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, datastring: String) {
+                spinner.stopAnimation(self)
+
                 if datastring == "()" {
                     inputField.textColor = NSColor.redColor()
                     outputField.textColor = NSColor.redColor()
@@ -90,7 +92,8 @@ class RunSchemeOperation: NSOperation {
                 }
             }
             
-            func onTestSyntaxError(inputField: NSTextField, outputField: NSTextField) {
+            func onTestSyntaxError(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator) {
+                spinner.stopAnimation(self)
                 inputField.textColor = NSColor.greenColor()
                 outputField.textColor = NSColor.greenColor()
             }
@@ -113,22 +116,22 @@ class RunSchemeOperation: NSOperation {
                     }
                 }
                 if taskType == "test1" {
-                    onTestCompletion(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, datastring: datastring)
+                    onTestCompletion(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, spinner: ewc.test1Spinner, datastring: datastring)
                 }
                 if taskType == "test2" {
-                    onTestCompletion(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, datastring: datastring)
+                    onTestCompletion(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, spinner: ewc.test2Spinner, datastring: datastring)
                 }
                 if taskType == "test3" {
-                    onTestCompletion(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, datastring: datastring)
+                    onTestCompletion(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, spinner: ewc.test3Spinner, datastring: datastring)
                 }
                 if taskType == "test4" {
-                    onTestCompletion(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, datastring: datastring)
+                    onTestCompletion(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, spinner: ewc.test4Spinner, datastring: datastring)
                 }
                 if taskType == "test5" {
-                    onTestCompletion(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, datastring: datastring)
+                    onTestCompletion(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, spinner: ewc.test5Spinner, datastring: datastring)
                 }
                 if taskType == "test6" {
-                    onTestCompletion(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, datastring: datastring)
+                    onTestCompletion(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test6Spinner, datastring: datastring)
                 }
                 if self.taskType == "allTests" {
                     ewc.bestGuessSpinner.stopAnimation(self)
@@ -150,22 +153,22 @@ class RunSchemeOperation: NSOperation {
                 }
                 
                 if taskType == "test1" {
-                    onTestSyntaxError(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField)
+                    onTestSyntaxError(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, spinner: ewc.test1Spinner)
                 }
                 if taskType == "test2" {
-                    onTestSyntaxError(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField)
+                    onTestSyntaxError(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, spinner: ewc.test1Spinner)
                 }
                 if taskType == "test3" {
-                    onTestSyntaxError(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField)
+                    onTestSyntaxError(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, spinner: ewc.test1Spinner)
                 }
                 if taskType == "test4" {
-                    onTestSyntaxError(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField)
+                    onTestSyntaxError(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, spinner: ewc.test1Spinner)
                 }
                 if taskType == "test5" {
-                    onTestSyntaxError(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField)
+                    onTestSyntaxError(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, spinner: ewc.test1Spinner)
                 }
                 if taskType == "test6" {
-                    onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField)
+                    onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test1Spinner)
                 }
                 if taskType == "allTests" {
                     ewc.bestGuessSpinner.stopAnimation(self)
