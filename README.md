@@ -55,6 +55,7 @@ TODO:
 * support multiple definitions and mutual recursion
 * add ability to save and load examples/tests/semantics, and include interesting examples, such as a tiny Scheme interpreter written in Scheme, state machine using mutual recursion, etc.
 * add structured editor for semantics and for type inferencer (as an alternative to/in addition to the free-form editor)
+* add 'transpose S-expression' and other useful Emacs editing commands
 * possibly add pairs of tests as processes, once individual tests complete successfully
 * would be polite to cancel the allTests operation if any single test fails, since in that case allTests cannot possibly succeed
 * add ability to change the evaluator rules and perhaps an explicit grammar as well
