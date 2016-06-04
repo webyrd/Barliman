@@ -107,3 +107,11 @@ POSSIBLE USE CASES:
 SUSPECT IDEAS:
 
 * could just call out to Scheme one the program becomes grounded.  However, the semantics and even the grammar may not match that of the interpreter used by miniKanren, so this seems difficult or impossible to do properly.
+
+KNOWN LIMITATIONS AND BUGS:
+
+* the system currently uses the evaluator/`evalo` to determine if a program is legal.  This means that syntactically illegal code will not be caught, provided that the code is not actually evaluated.  Should probably add separate grammar, and clearly display grammar errors separately from semantic errors.
+* the main interpreter's `letrec` form supports only a single lambda, which precludes writing mutually-recursive functions
+* the `begin` form allows for only one definition
+* the `lambda` form does not contain an implicit `begin`
+* closing one of the windows means the window cannot be reopened!  oops
