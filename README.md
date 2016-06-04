@@ -73,19 +73,35 @@ All the text in the editor window is black, indicating that all the information 
 
 The editor window displayed in this first screeenshot is similar in spirit to a modern integrated development environment (IDE) that runs tests whenever the code to be tested is modified.
 
-#### `append` screenshot 1: Fully instantiated code
+#### screenshot 1: Fully instantiated definition of append
 
 ![append example 1 -- fully instantiated code](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append01.jpg "append example 1 -- fully instantiated code")
 
-![append example 2 -- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append07.jpg "append example 2 -- partially instantiated code filled in")
+#### screenshot 2: 
 
-![append example 3 -- partially instantiated code incompatible with tests](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append08.jpg "append example 3 -- partially instantiated code incompatible with tests")
+![append example 2 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append09.jpg "append example 2 -- ")
+
+#### screenshot 3: 
+
+![append example 3 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append11.jpg "append example 3 -- ")
+
+#### screenshot 4: 
 
 ![append example 4 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append10.jpg "append example 4 -- ")
 
-![append example 5 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append11.jpg "append example 5 -- ")
+#### screenshot 5: 
 
-![append example 6 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append12.jpg "append example 6 -- ")
+![append example 5 -- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append07.jpg "append example 5 -- partially instantiated code filled in")
+
+#### screenshot 6: 
+
+![append example 6 -- partially instantiated code incompatible with tests](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append08.jpg "append example 6 -- partially instantiated code incompatible with tests")
+
+#### screenshot 7: 
+
+![append example 7 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append12.jpg "append example 7 -- ")
+
+
 
 ---------------------------------------
 
