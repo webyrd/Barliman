@@ -41,7 +41,7 @@ Here are a few screenshots of Barliman, using the Mac implementation as of June 
 
 The first screenshot shows the main editor window.  The `Scheme Definition` edit pane contains the complete (fully instantiated) and correct definition of `append`, the list concatenation function in Barliman's default "miniScheme" language.  `append` will be our simple running example in these screenshots.  The edit window also contains three tests; each test contains an input expression, and the expected value of that expression.  The `Best Guess` pane, which is not editable by the user, contains the same fully instantiated definition of `append` as in the `Scheme Definition` edit pane.
 
-All the text in the editor window is black, indicating that all the information in the editor is consistent and valid.  The definition of `append` is a valid symbolic expression (S-expression), and is indeed a syntactically valid miniScheme definition.  The test expressions and expected values are syntactically valid, and consistent with each other.
+All the text in the editor window is black, indicating that all the information in the editor is consistent and valid.  The definition of `append` is a valid symbolic expression (s-expression), and is indeed a syntactically valid miniScheme definition.  The test expressions and expected values are syntactically valid, and consistent with each other.
 
 The editor window displayed in this first screeenshot is similar in spirit to a modern integrated development environment (IDE) that runs tests whenever the code to be tested is modified.
 
@@ -72,7 +72,7 @@ The text for all three tests are red, indicating that none of the tests pass.  T
 
 
 
-Screenshot 4 shows the main editor window after we have begun defining `append` in the `Scheme Definition` edit pane.  Our parentheses are not balanced -- we haven't yet typed a closing parenthesis for the `define` form.  Because of the missing parenthesis, the definition is not a legal Scheme s-expression.  Barliman recognizes this, and turns the text in the `Scheme Definition` edit pane, and the text in the test edit fields, a sickly green color.
+Screenshot 4 shows the main editor window after we have begun defining `append` in the `Scheme Definition` edit pane.  Our parentheses are not balanced -- we haven't yet typed a closing parenthesis for the `define` form.  Because of the missing parenthesis, the definition is not a legal Scheme s-expression.  The tests cannot pass, of course, since `append` isn't even an s-expression.  Barliman recognizes this, and turns the text in the `Scheme Definition` edit pane, and the text in the test edit fields, a sickly green color.
 
 (Future versions of Barliman should include a structured editor that will automatically insert balanced parentheses.)
 
@@ -82,7 +82,7 @@ Screenshot 4 shows the main editor window after we have begun defining `append` 
 
 
 
-
+Screenshot 5 shows the main editor window after we have added the closing parenthesis in our partial definition of `append` in the `Scheme Definition` edit pane.  The partial definition of `append` is now a legal s-expression.  However, the definition of `append` is not syntactically valid according to the rules of miniScheme.  Of course, this invalid definition of `append` causes all the tests to fail as well.  Barliman recognizes this, and turns the text in the `Scheme Definition` edit pane, and the text in the test edit fields, red.
 
 #### screenshot 5: 
 
