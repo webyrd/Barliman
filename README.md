@@ -1,5 +1,7 @@
 # Barliman
 
+---------------------------------------
+
 "He thinks less than he talks, and slower; yet he can see through a brick wall in time (as they say in Bree)."
 
 --Gandalf the Grey, about Barliman Butterbur
@@ -52,6 +54,10 @@ Barliman
 Here are a few screenshots of Barliman, using the Mac implementation as of June 4, 2016.  Since Barliman is in active development, these screenshots will become out of date quickly.
 
 ![append example 1 -- fully instantiated code](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append1.jpg "append example 1 -- fully instantiated code")
+
+![append example 2 -- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append7.jpg "append example 2 -- partially instantiated code filled in")
+
+![append example 3 -- partially instantiated code incompatible with tests](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append7.jpg "append example 8 -- partially instantiated code incompatible with tests")
 
 ---------------------------------------
 
