@@ -1,18 +1,3 @@
-;; TODO
-;;
-;; * add quasiquote/unquote so we can easily and efficiently write
-;; 'lambda' and 'fold' as macros.
-;;
-;; Moved apply earlier so we can run (I love you) and quines queries
-;; inside of 'append' definition.
-
-
-;; supports variadic lambda: (lambda x x)
-
-
-;; letrec is based on Dan Friedman's code, using the "half-closure"
-;; approach from Reynold's definitional interpreters
-
 (define empty-env '())
 
 (define (lookupo x env t)
@@ -249,13 +234,6 @@
       ((=/= #f t) (eval-expo e2 env val))
       ((== #f t) (eval-expo e3 env val)))))
 
-
-;;; nop - just fail
-;;; handle-matcho is redefined in 'match-extension.scm'
-(define (handle-matcho expr env val)
-  (== #f #t))
-
-
 (define initial-env `((list . (val . (closure (lambda x x) ,empty-env)))
                       (not . (val . (prim . not)))
                       (equal? . (val . (prim . equal?)))
@@ -265,8 +243,8 @@
                       (car . (val . (prim . car)))
                       (cdr . (val . (prim . cdr)))
                       . ,empty-env))
-;; redefine handle-matcho from 'interp-no-match', which is a nop
-(set! handle-matcho
+
+(define handle-matcho
   (lambda  (expr env val)
     (fresh (against-expr mval clause clauses)
       (== `(match ,against-expr ,clause . ,clauses) expr)
