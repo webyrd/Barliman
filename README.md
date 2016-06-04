@@ -1,9 +1,5 @@
 # Barliman
 
-Prototype smart text editor
-
----
-
 "He thinks less than he talks, and slower; yet he can see through a brick wall in time (as they say in Bree)."
 
 --Gandalf the Grey, about Barliman Butterbur
@@ -11,9 +7,6 @@ Prototype smart text editor
 The Lord of the Rings: The Fellowship of the Ring
 
 J. R. R. Tolkien
-
----
-
 
 ---------------------------------------
 
