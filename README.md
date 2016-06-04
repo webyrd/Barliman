@@ -36,9 +36,9 @@ Barliman is general enough to handle multiple programming languages.  In fact, t
 
 ### Advantages of Barliman
 
-Barliman is flexible.  Barliman can handle operational semantics for various programming languges.  Users can add their own semantics, or modify the semantics for languages that are included with Barliman.  Barliman does not require the language be statically typed, or that the user has supplied enough tests to fully synthesize the function being defined. 
+Barliman is *flexible*.  Barliman can handle operational semantics for various programming languges.  Users can add their own semantics, or modify the semantics for languages that are included with Barliman.  Barliman does not require the language be statically typed, or that the user has supplied enough tests to fully synthesize the function being defined. 
 
-Barliman is interactive.  Any change to the definition of a function, the corresponding tests, or even the semantics immediately re-triggers the program synthesis solver.
+Barliman is *interactive*.  Any change to the definition of a function, the corresponding tests, or even the semantics immediately re-triggers the program synthesis solver.
 
 ### Limitations of Barliman
 
@@ -72,6 +72,8 @@ The first screenshot shows the main editor window.  The `Scheme Definition` edit
 All the text in the editor window is black, indicating that all the information in the editor is consistent and valid.  The definition of `append` is a valid symbolic expression (S-expression), and is indeed a syntactically valid miniScheme definition.  The test expressions and expected values are syntactically valid, and consistent with each other.
 
 The editor window displayed in this first screeenshot is similar in spirit to a modern integrated development environment (IDE) that runs tests whenever the code to be tested is modified.
+
+#### `append` screenshot 1: Fully instantiated code
 
 ![append example 1 -- fully instantiated code](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append01.jpg "append example 1 -- fully instantiated code")
 
