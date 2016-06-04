@@ -14,16 +14,69 @@ J. R. R. Tolkien
 
 ---
 
-This editor uses miniKanren (http://minikanren.org/), and a relational Scheme interpreter written in miniKanren (Byrd, Holk, and Friedman, 2012, http://dl.acm.org/citation.cfm?id=2661105 or http://webyrd.net/quines/quines.pdf), to provide real-time feedback to the code editor using program synthesis.
+
+---------------------------------------
+
+## Barliman overview
+
+Barliman is a prototype "smart editor" that performs real-time program synthesis to try to make the programmer's life a little easier.  Barliman has several unusual features:
+
+* given a set of tests for some function `foo`, Barliman tries to "guess" how to fill in an partially-specified definition of `foo` to make all of the tests pass;
+
+* given a set of tests for some function `foo`, Barliman tries to prove that a partially-specified definition of `foo` is inconsistent with one or more of the tests;
+
+* given a fully or mostly-specified definition of some function `foo`, Barliman will attempt to prove that a partially-specified test is consistent with, or inconsistent with, the definition of `foo`.
+
+Barliman is general enough to handle multiple programming languages.  In fact, the user can even specify their own programming language, or change the semantics or syntax of one of the default languages that come with Barliman.  The default language for Barliman is a small but Turing-complete subset of side-effect-free Scheme that supports recursion, list operations, higher-order functions, multi-argument and variadic functions, and a few other features.
+
+### Purpose of Barliman
+
+(test my hypothesis that even very modest or slow program synthesis can be useful, if it is part of an interactive conversation with a programmer)
+
+(explore utility of interactive synthesis)
+
+(explore design for such an interactive tool)
+
+(try to inspire others to build similar tools, perhaps using radically different implementation techniques)
+
+### Advantages of Barliman
+
+Barliman is flexible.  Barliman can handle operational semantics for various programming languges.  Users can add their own semantics, or modify the semantics for languages that are included with Barliman.  Barliman does not require the language be statically typed, or that the user has supplied enough tests to fully synthesize the function being defined. 
+
+Barliman is interactive.  Any change to the definition of a function, the corresponding tests, or even the semantics immediately re-triggers the program synthesis solver.
+
+### Limitations of Barliman
+
+Barliman works best for big-step operational semantics.  It is possible to implement small-step semantics in Barliman.  However, the synthesis features of Barliman are likely to work poorly compared with semantics written in a big-step style.
+
+Barliman can be resource hungry.  Given six example programs and a definition, Barliman will launch eight instances of Chez Scheme, all running in parallel.  Barliman tries to kill these processes when they are not needed, but it is possible for these processes to run for long periods of time (like, forever) and take up unbounded amounts of RAM.  
+
+Barliman 
+
+
+### Screenshots of Barliman in action
+
+Here are a few screenshots of Barliman, using the Mac implementation as of June 4, 2016.  Since Barliman is in active development, these screenshots will become out of date quickly.
+
+![append example 1 -- fully instantiated code](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append1.jpg "append example 1 -- fully instantiated code")
+
+---------------------------------------
+
+## How Barliman works
+
+Barliman uses miniKanren (http://minikanren.org/), and a relational Scheme interpreter written in miniKanren (Byrd, Holk, and Friedman, 2012, http://dl.acm.org/citation.cfm?id=2661105 or http://webyrd.net/quines/quines.pdf), to provide real-time feedback to the code editor using program synthesis.
 
 Chez Scheme in turn uses the miniKanren implementation and relational interpreter implementation contained in the `mk-and-rel-interp` directory.
 
+---------------------------------------
+
+## The default "miniScheme" language
+
+(give grammar and semantics for the default language)
 
 ---------------------------------------
 
-![append example 1](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append1.jpg "append example 1")
-
----------------------------------------
+## Barliman implementation details
 
 The cocoa version of the editor is written in Swift, and has been tested under OS X 10.11.4 and XCode 7.3.1.  Eventually the editor will be crossplatform.  I'm starting with cocoa since I'm developing on a Mac, and I want to make sure I don't box myself into a corner with the user interface/performance as I experiment with the design and the interface.  The cocoa version of Barliman calls out to Chez Scheme (https://github.com/cisco/ChezScheme), which must be installed separately, and which is assumed to reside in `/usr/local/bin/scheme`.
 
@@ -45,6 +98,7 @@ For more interesting answers, you can use the logic variables A through G, upper
 
 ---------------------------------------
 
+## Acknowledgements and thanks
 
 Thanks to Michael Ballantyne, Kenichi Asai, Alan Borning, Nada Amin, Guannan Wei, Pierce Darragh, Alex Warth, Michael Adams, Tim Johnson, Evan Czaplicki, Stephanie Weirich, Nehal Patel, Andrea Magnorsky, Reid McKenzie, Emina Torlak, Chas Emerick, Martin Clausen, Devon Zuegel, Daniel Selifonov, Greg Rosenblatt, Michael Nielsen, David Kahn, Brian Mastenbrook, Orchid Hybrid, Rob Zinkov, Margaret Staples, Matt Hammer, Dan Friedman, Ron Garcia, Rich Hickey, Phil Wadler, Matt Might, participants of my 2016 PEPM tutorial on miniKanren, and particants of the 'As We May Thunk' group (http://webyrd.net/thunk.html), for suggestions, encouragement, and inspiration.
 
@@ -54,9 +108,15 @@ The definition of `letrec` in the main interpreter is based based on Dan Friedma
 Barliman is intended to be an improved version of the very crude 'miniKanren playground' I showed at my 2016 PEPM tutorial on miniKanren: https://github.com/webyrd/minikanren-playground
 
 
+-------------------------------------
+
+## Barliman TODOs and limitations
+
 
 TODO:
 
+* consider using ulimit or some other capability for keeping the running Scheme processes under control/keep them from using all the RAM and CPU cycles
+* consider turning the background of the "guess" pane green, or otherwise indicting the user, when a guess can be made.  Could also potentially change the code in the main definition edit pane, although this may not be friendly.
 * add STLC as an example, complete with type inferencer
 * cancel the allTests operation if any single test fails, since in that case allTests cannot possibly succeed
 * wait part of a second to see if there are more keystrokes before launching Scheme processes.  Sort of like XCode (I assume XCode is doing this).  Would be more resource friendly, less distracting, and would make typing quickly more responsive.  Could probably do this using an timer.
@@ -103,6 +163,12 @@ LONGER TERM:
 * add support for macros
 * explore predicates/generators/QuickCheck-like functionality
 * add ability to fill in test input/outputs, given a fully or mostly specified definition
+* explore other synthesis techniques, model checking, etc., as alternatives or additions to the miniKanren-based program synthesis in Barliman
+* use stochastic/probabilistic extensions to miniKanren to improve synthesis capabilities.  For example, see:
+
+ Eric Schkufza, Rahul Sharma, and Alex Aiken. 2013. Stochastic superoptimization. In Proceedings of the eighteenth international conference on Architectural support for programming languages and operating systems (ASPLOS '13). ACM, New York, NY, USA, 305-316. DOI=http://dx.doi.org/10.1145/2451116.2451150 
+https://cs.stanford.edu/people/sharmar/pubs/asplos291-schkufza.pdf
+
 
 POSSIBLE USE CASES:
 
