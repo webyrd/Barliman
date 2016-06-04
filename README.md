@@ -50,16 +50,22 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
+* add STLC as an example, complete with type inferencer
+* cancel the allTests operation if any single test fails, since in that case allTests cannot possibly succeed
 * wait part of a second to see if there are more keystrokes before launching Scheme processes.  Sort of like XCode (I assume XCode is doing this).  Would be more resource friendly, less distracting, and would make typing quickly more responsive.  Could probably do this using an timer.
+* perhaps be able to drag and drop subexpressions from the best guess pane onto variables in the definition pane.  And also be able to replace an extort subexpression in the definition pane with a logic variable.
+* think about contextual menus/right click and also drag and shift-drag.  What should these do?
+* make sure Semantics and the main Barliman windows can be reopened if the user closes them!  Currently there doesn't seem to be a way to get the window back.  Perhaps allow the user to hide the windows, but not close them?  What is the preferred Mac way?
+* add paren hilighting/blinking when the parens match
+* for the case in which a simple function is being used to generate test inputs and answers for a more complex version of the same function, may need or want a grounder to make sure answers are fully ground.  May also want a grounder for code, esp for the best guess pane.  Although grounding code may not be necessary or ideal.
 * would be smart to only re-run Scheme processes when the Scheme code actually *changes* -- for example, white space characters outside of an S-expr shouldn't trigger re-evaluation.  One way would be to compare "before" and "after" S-exprs to see if anything has changed.  Could run a single Scheme instance and call `equal?` to see if the code has actually changed.  This could be a big win for expensive computations.
 * support multiple definitions and mutual recursion
 * show reified test inputs and outputs upon success, for all tests
 * add ability to save and load examples/tests/semantics, and include interesting examples, such as a tiny Scheme interpreter written in Scheme, state machine using mutual recursion, examples from pearls, etc.
 * add structured editor for semantics and for type inferencer (as an alternative to/in addition to the free-form editor)
 * add 'transpose S-expression' and other useful Emacs editing commands
-* move as much work as possible into NATasks, such as loading files.
+* move as much work as possible into NSTasks, such as loading files.
 * possibly add pairs of tests as processes, once individual tests complete successfully
-* would be polite to cancel the allTests operation if any single test fails, since in that case allTests cannot possibly succeed
 * add ability to change the evaluator rules and perhaps an explicit grammar as well
 * change green text to bold font instead
 * add structured editing capability, with automatic addition of right parens, auto-addition of logic variables, and perhaps something like paredit
@@ -88,6 +94,8 @@ LONGER TERM:
 * test generation of typed test programs
 * partial evaluation of the interpreter to speed up evaluation
 * add support for macros
+* explore predicates/generators/QuickCheck-like functionality
+* add ability to fill in test input/outputs, given a fully or mostly specified definition
 
 POSSIBLE USE CASES:
 
