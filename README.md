@@ -81,7 +81,7 @@ Let's see how we might have gotten to the final version of `append` using Barlim
 
 
 
-When we start Barliman, the main editor window is empty.  We know we want to define `append`, so in true test-drived development style we begin by writing our tests cases.
+Screenshot 2 shows the empty main editor window, immediatly after starting Barliman.  We know we want to define `append`, so in true test-drived development style we begin by writing our tests cases.
 
 
 #### screenshot 2: 
@@ -90,7 +90,7 @@ When we start Barliman, the main editor window is empty.  We know we want to def
 
 
 
-Here are our three tests.  The first test says that if we append the empty list to the empty list, we should get back the empty list.  You should be able to figure out the other two tests.
+Screenshot 3 shows the main editor window with our three tests.  The first test says that if we append the empty list to the empty list, we should get back the empty list.  You should be able to figure out the other two tests.
 
 The text for all three tests are red, indicating that none of the tests pass.  This isn't surprising, perhaps, since we haven't started to define the `append` function.
 
