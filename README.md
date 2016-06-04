@@ -57,7 +57,7 @@ Here are a few screenshots of Barliman, using the Mac implementation as of June 
 
 ![append example 2 -- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append7.jpg "append example 2 -- partially instantiated code filled in")
 
-![append example 3 -- partially instantiated code incompatible with tests](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append7.jpg "append example 8 -- partially instantiated code incompatible with tests")
+![append example 3 -- partially instantiated code incompatible with tests](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append8.jpg "append example 3 -- partially instantiated code incompatible with tests")
 
 ---------------------------------------
 
