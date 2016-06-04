@@ -71,6 +71,8 @@ The first screenshot shows the main editor window.  The `Scheme Definition` edit
 
 All the text in the editor window is black, indicating that all the information in the editor is consistent and valid.  The definition of `append` is a valid symbolic expression (S-expression), and is indeed a syntactically valid miniScheme definition.  The test expressions and expected values are syntactically valid, and consistent with each other.
 
+The editor window displayed in this first screeenshot is similar in spirit to a modern integrated development environment (IDE) that runs tests whenever the code to be tested is modified.
+
 ![append example 1 -- fully instantiated code](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append01.jpg "append example 1 -- fully instantiated code")
 
 ![append example 2 -- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append07.jpg "append example 2 -- partially instantiated code filled in")
