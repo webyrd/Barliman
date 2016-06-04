@@ -246,6 +246,7 @@ TODO:
 LONGER TERM:
 
 * try adding contracts/properties/specs. For example, for `append`, could add the property that the sum of `(length l)` and `(length s)` must be equal to `(length (append l s))`.  This could work with randomized testing, even for partially-instantiated definitions.  In the case of `length`, would either need to use Oleg numbers, or CLP(FD).
+* related to properties, might want generators, such as a `loso` that generates flat lists of symbols, for example, or `lovo`, that generates flat lists of values, or `treevo`, that generates trees of values.  Could use these generators for specifying and testing properties.  One simple, "type" property is that `append` should work on any two `lovo`s, and, in this case, return of `lovo`.  Could extend this to talk about the lengths of the `lovo`s, etc.  Could then either enumerate or randomly generate `lovo`s QuickCheck style to try to find counter-examples with respect to the current partial (or complete) definition, or perhaps to help with synthesizing the actual code.
 * automatic test generation/fuzzing
 * add arithmetic to the main interpreter 
 * make the editor cross-platform; Clojure/Clojurescript/core.logic and JavaScript versions could be especially nice
