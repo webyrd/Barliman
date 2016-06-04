@@ -66,6 +66,8 @@ Screenshot 3 shows the main editor window with our three tests.  The first test 
 
 The text for all three tests are red, indicating that none of the tests pass.  This isn't surprising, perhaps, since we haven't started to define the `append` function.
 
+(From an interface design standpoint, whether to use colors, which colors to use, which text fields to hilight, etc., are all open questions in my mind.  Over time I hope to make it much more clear exactly which part of the code is failing, and why.)
+
 #### screenshot 3: 
 
 ![append example 3 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append09.jpg "append example 3 -- ")
@@ -83,6 +85,8 @@ Screenshot 4 shows the main editor window after we have begun defining `append` 
 
 
 Screenshot 5 shows the main editor window after we have added the closing parenthesis in our partial definition of `append` in the `Scheme Definition` edit pane.  The partial definition of `append` is now a legal s-expression.  However, the definition of `append` is not syntactically valid according to the rules of miniScheme.  Of course, this invalid definition of `append` causes all the tests to fail as well.  Barliman recognizes this, and turns the text in the `Scheme Definition` edit pane, and the text in the test edit fields, red.
+
+(Currently Barliman doesn't actually check that definitions are grammatically correct.  Rather, Barliman uses evaluation of the tests to check whether code is *semantically* legal, rather than syntactically legal.  Future versions of Barliman will probably include explicit grammars that are checked, in addition to semantic rules.)
 
 #### screenshot 5: 
 
@@ -241,6 +245,7 @@ TODO:
 
 LONGER TERM:
 
+* try adding contracts/properties/specs. For example, for `append`, could add the property that the sum of `(length l)` and `(length s)` must be equal to `(length (append l s))`.  This could work with randomized testing, even for partially-instantiated definitions.  In the case of `length`, would either need to use Oleg numbers, or CLP(FD).
 * automatic test generation/fuzzing
 * add arithmetic to the main interpreter 
 * make the editor cross-platform; Clojure/Clojurescript/core.logic and JavaScript versions could be especially nice
