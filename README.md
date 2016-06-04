@@ -71,15 +71,17 @@ The first screenshot shows the main editor window.  The `Scheme Definition` edit
 
 All the text in the editor window is black, indicating that all the information in the editor is consistent and valid.  The definition of `append` is a valid symbolic expression (S-expression), and is indeed a syntactically valid miniScheme definition.  The test expressions and expected values are syntactically valid, and consistent with each other.
 
-The editor window displayed in this first screeenshot is similar in spirit to a modern integrated development environment (IDE) that runs tests whenever the code to be tested is modified.  The remaining screenshots will be more interesting...
+The editor window displayed in this first screeenshot is similar in spirit to a modern integrated development environment (IDE) that runs tests whenever the code to be tested is modified.
+
+Let's see how we might have gotten to the final version of `append` using Barliman.
 
 #### screenshot 1: Fully instantiated definition of append
 
 ![append example 1 -- fully instantiated code](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append01.jpg "append example 1 -- fully instantiated code")
 
 
-Let's see how we might have gotten to the final version of `append` shown in the first screenshot.
 
+When we start Barliman, the main editor window is empty.  We know we want to define `append`, so in true test-drived development style we begin by writing our tests cases.
 
 
 #### screenshot 2: 
@@ -88,7 +90,9 @@ Let's see how we might have gotten to the final version of `append` shown in the
 
 
 
+Here are our three tests.  The first test says that if we append the empty list to the empty list, we should get back the empty list.  You should be able to figure out the other two tests.
 
+The text for all three tests are red, indicating that none of the tests pass.  This isn't surprising, perhaps, since we haven't started to define the `append` function.
 
 #### screenshot 3: 
 
