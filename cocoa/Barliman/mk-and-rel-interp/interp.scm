@@ -404,3 +404,14 @@
          ((quasi-p-no-match a v1 penv penv^))
          ((quasi-p-match a v1 penv penv^)
           (quasi-p-no-match d v2 penv^ penv-out)))))))
+
+;; TODO
+;;
+;; add multi-function letrec
+;;
+;; make begin support multiple definitions
+;;
+;; enforce grammar
+;;
+;; add arithmetic operators using CLP(FD)
+
