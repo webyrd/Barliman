@@ -1,46 +1,3 @@
-(define empty-env '())
-
-(define (lookupo x env t)
-  (fresh (y b rest)
-    (== `((,y . ,b) . ,rest) env)
-    (conde
-      ((== x y)
-       (conde
-         ((== `(val . ,t) b))
-         ((fresh (lam-expr)
-            (== `(rec . ,lam-expr) b)
-            (== `(closure ,lam-expr ,env) t)))))
-      ((=/= x y)
-       (lookupo x rest t)))))
-
-(define (not-in-envo x env)
-  (conde
-    ((== empty-env env))
-    ((fresh (y b rest)
-       (== `((,y . ,b) . ,rest) env)
-       (=/= y x)
-       (not-in-envo x rest)))))
-
-(define (eval-listo expr env val)
-  (conde
-    ((== '() expr)
-     (== '() val))
-    ((fresh (a d v-a v-d)
-       (== `(,a . ,d) expr)
-       (== `(,v-a . ,v-d) val)
-       (eval-expo a env v-a)
-       (eval-listo d env v-d)))))
-
-;; need to make sure lambdas are well formed.
-;; grammar constraints would be useful here!!!
-(define (list-of-symbolso los)
-  (conde
-    ((== '() los))
-    ((fresh (a d)
-       (== `(,a . ,d) los)
-       (symbolo a)
-       (list-of-symbolso d)))))
-
 (define (evalo expr val)
   (eval-expo expr initial-env val))
 
@@ -116,6 +73,49 @@
     ((prim-expo expr env val))
     
     ))
+
+(define empty-env '())
+
+(define (lookupo x env t)
+  (fresh (y b rest)
+    (== `((,y . ,b) . ,rest) env)
+    (conde
+      ((== x y)
+       (conde
+         ((== `(val . ,t) b))
+         ((fresh (lam-expr)
+            (== `(rec . ,lam-expr) b)
+            (== `(closure ,lam-expr ,env) t)))))
+      ((=/= x y)
+       (lookupo x rest t)))))
+
+(define (not-in-envo x env)
+  (conde
+    ((== empty-env env))
+    ((fresh (y b rest)
+       (== `((,y . ,b) . ,rest) env)
+       (=/= y x)
+       (not-in-envo x rest)))))
+
+(define (eval-listo expr env val)
+  (conde
+    ((== '() expr)
+     (== '() val))
+    ((fresh (a d v-a v-d)
+       (== `(,a . ,d) expr)
+       (== `(,v-a . ,v-d) val)
+       (eval-expo a env v-a)
+       (eval-listo d env v-d)))))
+
+;; need to make sure lambdas are well formed.
+;; grammar constraints would be useful here!!!
+(define (list-of-symbolso los)
+  (conde
+    ((== '() los))
+    ((fresh (a d)
+       (== `(,a . ,d) los)
+       (symbolo a)
+       (list-of-symbolso d)))))
 
 (define (ext-env*o x* a* env out)
   (conde
