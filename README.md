@@ -63,43 +63,71 @@ Barliman currently doesn't support saving or loading files, definitions, tests, 
 Barliman is changing quickly, and definitely contains errors and interface quirks.  To the best of my knowledge none of these problems are inherent in the design of Barliman, or the technology being used for synthesis.  Still, since this is a rapidly evolving prototype, I expect I will be introducing errors about as quickly as I remove them, at least for a while.
 
 
-### Screenshots of Barliman in action
+### Barliman in action
 
 Here are a few screenshots of Barliman, using the Mac implementation as of June 4, 2016.
 
-The first screenshot shows the main editor window.  The `Scheme Definition` edit pane contains the complete (fully instantiated) and correct definition of `append`, the list concatenation function in Barliman's default "miniScheme" language.  The edit window also contains three tests; each test contains an input expression, and the expected value of that expression.  The `Best Guess` pane, which is not editable by the user, contains the same fully instantiated definition of `append` as in the `Scheme Definition` edit pane.
+The first screenshot shows the main editor window.  The `Scheme Definition` edit pane contains the complete (fully instantiated) and correct definition of `append`, the list concatenation function in Barliman's default "miniScheme" language.  `append` will be our simple running example in these screenshots.  The edit window also contains three tests; each test contains an input expression, and the expected value of that expression.  The `Best Guess` pane, which is not editable by the user, contains the same fully instantiated definition of `append` as in the `Scheme Definition` edit pane.
 
 All the text in the editor window is black, indicating that all the information in the editor is consistent and valid.  The definition of `append` is a valid symbolic expression (S-expression), and is indeed a syntactically valid miniScheme definition.  The test expressions and expected values are syntactically valid, and consistent with each other.
 
-The editor window displayed in this first screeenshot is similar in spirit to a modern integrated development environment (IDE) that runs tests whenever the code to be tested is modified.
+The editor window displayed in this first screeenshot is similar in spirit to a modern integrated development environment (IDE) that runs tests whenever the code to be tested is modified.  The remaining screenshots will be more interesting...
 
 #### screenshot 1: Fully instantiated definition of append
 
 ![append example 1 -- fully instantiated code](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append01.jpg "append example 1 -- fully instantiated code")
 
+
+Let's see how we might have gotten to the final version of `append` shown in the first screenshot.
+
+
+
 #### screenshot 2: 
 
-![append example 2 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append09.jpg "append example 2 -- ")
+![append example 2 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append13.jpg "append example 2 -- ")
+
+
+
+
 
 #### screenshot 3: 
 
-![append example 3 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append11.jpg "append example 3 -- ")
+![append example 3 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append09.jpg "append example 3 -- ")
+
+
+
 
 #### screenshot 4: 
 
-![append example 4 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append10.jpg "append example 4 -- ")
+![append example 4 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append11.jpg "append example 4 -- ")
+
+
+
 
 #### screenshot 5: 
 
-![append example 5 -- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append07.jpg "append example 5 -- partially instantiated code filled in")
+![append example 5 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append10.jpg "append example 5 -- ")
+
+
+
 
 #### screenshot 6: 
 
-![append example 6 -- partially instantiated code incompatible with tests](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append08.jpg "append example 6 -- partially instantiated code incompatible with tests")
+![append example 6 -- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append07.jpg "append example 6 -- partially instantiated code filled in")
+
+
+
 
 #### screenshot 7: 
 
-![append example 7 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append12.jpg "append example 7 -- ")
+![append example 7 -- partially instantiated code incompatible with tests](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append08.jpg "append example 7 -- partially instantiated code incompatible with tests")
+
+
+
+
+#### screenshot 8: 
+
+![append example 8 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append12.jpg "append example 8 -- ")
 
 
 
