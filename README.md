@@ -42,22 +42,38 @@ Barliman is interactive.  Any change to the definition of a function, the corres
 
 ### Limitations of Barliman
 
+Barliman can be extremely slow when it comes to program synthesis, and can easily get "stuck", possibly taking hours and tens of gigabytes of RAM to synthesize small fragments of code.  Sometimes Barliman will immediately figure out how to fill in the code corresponding to a variable.  Other times, Barliman will get stuck trying to synthesize a very small fragment of code.  Since the default "miniScheme" language is dynamically typed, Barliman cannot take advantage of types to limit the space of programs to be considered during synthesis.  There are other synthesis tools that can synthesize the complete definition of `append`, for example, given `append`'s type signature along with tests that properly cover the behavior of `append`.  (In fact, Michael Ballantyne has been able to synthesize `append` by integrating types into a tiny Scheme-like languge, which I'd like to explore in the context of Barliman.)  To me this is a tradeoff: Barliman can handle languages and synthesis problems that other synthesis tools seem to handle poorly, if at all.  At the same time, Barliman's synthesis is slow, which is why the tool is designed to work interactively with a programmer.  I think this is a reasonable tradoff to explore, since there are plenty of dynamically-typed languages in use (Javascript, Python, Ruby, Scheme/Racket/Clojure/Lisp, etc.).  Also, Barliman doesn't require that the user specify every test necessary to synthesize the complete definition of the function being considered, which reduces the burden on the programmer.  In short, Barliman is flexible, and can handle Turing-complete dynamically-typed higer-order languages, and under-specified synthesis problems, but the tradeoff is that Barliman's synthesis is slow.
+
 Barliman works best for big-step operational semantics.  It is possible to implement small-step semantics in Barliman.  However, the synthesis features of Barliman are likely to work poorly compared with semantics written in a big-step style.
+
+Similarly, Barliman works best for side-effect-free languages, such as a pure subset of Scheme.  Once again, Barliman can handle languages with side effects, such as variable mutation.  However, Barliman's synthesis abilities are likely to suffer as a result.
+
+I do not know how large a language, or how large a definition, Barliman can handle in practice.  I will be experimenting with this...
 
 Barliman can be resource hungry.  Given six example programs and a definition, Barliman will launch eight instances of Chez Scheme, all running in parallel.  Barliman tries to kill these processes when they are not needed, but it is possible for these processes to run for long periods of time (like, forever) and take up unbounded amounts of RAM.  
 
-Barliman 
+Barliman currently isn't a very good at standard text editing.  For example, anyone used to paredit or structured text editing will miss those features in Barliman, at least for now.  I do want to add these features to Barliman, especially since I expect they will make the synthesis aspects easier to explore.
+
+Barliman currently doesn't support saving or loading files, definitions, tests, or anything else.  I plan to add this feature soon.
+
+Barliman is changing quickly, and definitely contains errors and interface quirks.  To the best of my knowledge none of these problems are inherent in the design of Barliman, or the technology being used for synthesis.  Still, since this is a rapidly evolving prototype, I expect I will be introducing errors about as quickly as I remove them, at least for a while.
 
 
 ### Screenshots of Barliman in action
 
 Here are a few screenshots of Barliman, using the Mac implementation as of June 4, 2016.  Since Barliman is in active development, these screenshots will become out of date quickly.
 
-![append example 1 -- fully instantiated code](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append1.jpg "append example 1 -- fully instantiated code")
+![append example 1 -- fully instantiated code](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append01.jpg "append example 1 -- fully instantiated code")
 
-![append example 2 -- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append7.jpg "append example 2 -- partially instantiated code filled in")
+![append example 2 -- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append07.jpg "append example 2 -- partially instantiated code filled in")
 
-![append example 3 -- partially instantiated code incompatible with tests](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append8.jpg "append example 3 -- partially instantiated code incompatible with tests")
+![append example 3 -- partially instantiated code incompatible with tests](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append08.jpg "append example 3 -- partially instantiated code incompatible with tests")
+
+![append example 4 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append10.jpg "append example 4 -- ")
+
+![append example 5 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append11.jpg "append example 5 -- ")
+
+![append example 6 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append12.jpg "append example 6 -- ")
 
 ---------------------------------------
 
