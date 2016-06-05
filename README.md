@@ -93,7 +93,7 @@ Screenshot 5 shows the main editor window after we have added the closing parent
 ![append example 5 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append10.jpg "append example 5 -- ")
 
 
-In screenshot 6 we can see that the programmer has partially specified the defintion of `append`.  The definition is a syntactally-correct s-expression, and indeed is a syntactically correct use of miniScheme's `define` form.  Importantly, the definition of `append` is only partially specified, and contains four (logic) variables (the `,A` and `,B` and `,C` and `,D`) representing unknown subexpressions.
+In screenshot 6 we can see that the programmer has partially specified the defintion of `append`.  The definition is a syntactally-correct s-expression, and indeed is a syntactically correct use of miniScheme's `define` form.  Importantly, the definition of `append` is only partially specified, and contains four (logic) variables (`A`, `B`, `C`, and `D`) representing unknown subexpressions.  In Barliman variables representing unknown subexpressions are single-letter upper-case variables `A` through `Z`.  (Note to Schemers: The comma (`,`) that usually occurs before these letters is necessary because the code in the `Scheme Definition` edit pane is implicitly quasiqoted.)
 
 Given the partially-specified defintion of `append` in the `Scheme Definition` edit pane, along with the three tests, Barliman is able to correctly "guess" the code corresponding to these variables.  The correct and complete definition of `append` is displayed in the `Best Guess` pane.  Barliman guesses the correct code in this case in a second or less.  All of the text in the main editor window is black, indicating that all of the code is syntactically correct, and that all three tests pass given the completed definition of `append` shown in the `Best Guess` pane. 
 
@@ -103,7 +103,7 @@ Given the partially-specified defintion of `append` in the `Scheme Definition` e
 
 
 
-Screenshot 7 shows an *incorrect* partial definition of `append`.  As in the previous screenshot, the partial definition of `append` contains variables representing unknown subexpressions (the `,A` and `,B` and `,C`).
+Screenshot 7 shows an *incorrect* partial definition of `append`.  As in the previous screenshot, the partial definition of `append` contains variables representing unknown subexpressions (the `,A` and `,B` and `,C`).  However, in this case the first argument to `cons` is incorrect.  The first argument to `cons` should be `(car l)`, as shown in screenshot 1.  Alternatively, the first argument to `cons` could be an incomplete expression containing a variable representating an unknown subexpression, such as `(car ,B)` from screenshot 6.  Here, however, the first argument to `cons` is the expression `(cdr l)`.  The red text for tests 2 and 3 indicate that these tests are *incompatible* with the partial definition of `append` in the `Scheme Definition` edit pane.  That is, there are no possible values for the variables `A`, `B`, and `C` that would make tests 2 and 3 pass.
 
 #### screenshot 7:
 
