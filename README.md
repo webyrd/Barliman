@@ -114,7 +114,15 @@ The important thing about this example is that Barliman was able to prove that t
 ![append example 7 -- partially instantiated code incompatible with tests](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append08.jpg "append example 7 -- partially instantiated code incompatible with tests")
 
 
+Screenshot 8 shows a limitation of Barliman's program synthesis.  Here the partially-specified definition of `append` contains only a single variable, `A`, representing an unknown subexpression.  Ideally Barliman would quickly figure out that `A` should be the expression `(cdr l)`.  However, for this example Barliman seems to get "stuck" -- we can see the spinning progress indicators to the upper-right of the `Best Guess` pane and the `Test 2` and `Test 3` edit fields, indicating that Barliman is still "thinking".  I let Barliman run for a minute or two, but it didn't find a value for `A` in that time.
 
+We could allow Barliman to keep thinking -- perhaps it would find the answer in five minutes, or in an hour (provided our computer has enough RAM!).  However, in practice we would probably try filling in `A` manually.  If we were to type `(cdr ,B)` in place of `,A`, Barliman would immedialy guess in the correct, trivial subexpression `l` for the variable `B`.
+
+This example shows how program synthesis in Barliman can be much slower than we might hope in certain cases.  However, since Barliman is a text editor, and since multicore computers with lots of RAM are now ubiquitous, I see these examples from a "glass half full" perspective.  Sometimes Barliman can help you, either by guessing the rest of your incomplete definition, or by proving that there is no completion for your partially-specified definition that is consistent with your tests.  In this case you win.  Sometimes Barliman can't help you, in which case you use it like a regular text editor.  In this case you use more CPU cyles and RAM on your machine, but otherwise edit text normally.
+
+Of course, Barliman isn't currently a particularly *good* text editor, especially compared to Emacs with paredit mode, to take one example.  This problem is only a matter of engineering -- in fact, Barliman-like functionality could be added to Emacs, or to another editor.  Or Barliman could get more sophisticated editing abilities.
+
+A bigger drawback is that the semantics for the language you are writing in must be specified in miniKanren.  This is fine if you are writing in a minimal Scheme subset, such as miniScheme.  This isn't so great if you want to program in full Clojure or Racket or Javascript or Ruby.  Finding ways to scale this technology is an open problem.  The solution may not be miniKanren or constraint logic programming, but rather another synthesis approach.  I don't know.  I do hope, however, that Barliman will make people think about how synthesis capabilities can be integrated into editors, especially for dynamic languages.
 
 #### screenshot 8: 
 
