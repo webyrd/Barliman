@@ -93,7 +93,9 @@ Screenshot 5 shows the main editor window after we have added the closing parent
 ![append example 5 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append10.jpg "append example 5 -- ")
 
 
-Screenshot 6 shows (logic) variables (the `,A` and `,B` and `,C`) representing unknown subexpressions in `append`.  Given the partially-specified defintion of `append` in the `Scheme Definition` edit pane, along with the three tests, Barliman is able to correctly "guess" the code corresponding to these variables.  The correct and complete definition of `append` is displayed in the `Best Guess` pane.  Barliman guesses the correct code in this case in a second or less.
+In screenshot 6 we can see that the programmer has partially specified the defintion of `append`.  The definition is a syntactally-correct s-expression, and indeed is a syntactically correct use of miniScheme's `define` form.  Importantly, the definition of `append` is only partially specified, and contains three (logic) variables (the `,A` and `,B` and `,C`) representing unknown subexpressions.
+
+Given the partially-specified defintion of `append` in the `Scheme Definition` edit pane, along with the three tests, Barliman is able to correctly "guess" the code corresponding to these variables.  The correct and complete definition of `append` is displayed in the `Best Guess` pane.  Barliman guesses the correct code in this case in a second or less.  All of the text in the main editor window is black, indicating that all of the code is syntactically correct, and that all three tests pass given the completed definition of `append` shown in the `Best Guess` pane. 
 
 #### screenshot 6: 
 
