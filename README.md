@@ -93,7 +93,7 @@ Screenshot 5 shows the main editor window after we have added the closing parent
 ![append example 5 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append10.jpg "append example 5 -- ")
 
 
-Screenshot 6 shows (logic) variables (the `,A` and `,B` and `,C`) representing unknown subexpressions in `append`.  Given the partially-specified defintion of `append` in the `Scheme Definition`, along with the three tests, Barliman is able to correctly "guess" the code corresponding to these variables.  The correct and complete definition of `append` is displayed in the `Best Guess` pane.  Barliman guesses the correct code in this case in a second or less.
+Screenshot 6 shows (logic) variables (the `,A` and `,B` and `,C`) representing unknown subexpressions in `append`.  Given the partially-specified defintion of `append` in the `Scheme Definition` edit pane, along with the three tests, Barliman is able to correctly "guess" the code corresponding to these variables.  The correct and complete definition of `append` is displayed in the `Best Guess` pane.  Barliman guesses the correct code in this case in a second or less.
 
 #### screenshot 6: 
 
