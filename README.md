@@ -93,7 +93,7 @@ Screenshot 5 shows the main editor window after we have added the closing parent
 ![append example 5 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append10.jpg "append example 5 -- ")
 
 
-
+Screenshot 6 shows (logic) variables (the `,A` and `,B` and `,C`) representing unknown subexpressions in `append`.  Given the partially-specified defintion of `append` in the `Scheme Definition`, along with the three tests, Barliman is able to correctly "guess" the code corresponding to these variables.  The correct and complete definition of `append` is displayed in the `Best Guess` pane.  Barliman guesses the correct code in this case in a second or less.
 
 #### screenshot 6: 
 
@@ -207,6 +207,7 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
+* define grammar for microScheme (and the other languages) as a miniKanren relation, and use this grammar to separately check and report whether the definition is grammatically correct.
 * consider using ulimit or some other capability for keeping the running Scheme processes under control/keep them from using all the RAM and CPU cycles
 * consider turning the background of the "guess" pane green, or otherwise indicting the user, when a guess can be made.  Could also potentially change the code in the main definition edit pane, although this may not be friendly.
 * add STLC as an example, complete with type inferencer
@@ -258,6 +259,8 @@ LONGER TERM:
 * explore predicates/generators/QuickCheck-like functionality
 * add ability to fill in test input/outputs, given a fully or mostly specified definition
 * explore other synthesis techniques, model checking, etc., as alternatives or additions to the miniKanren-based program synthesis in Barliman
+* add tree automata support to support grammars
+* add abstract interpretation for miniKanren to speed up the synthesis
 * use stochastic/probabilistic extensions to miniKanren to improve synthesis capabilities.  For example, see:
 
  Eric Schkufza, Rahul Sharma, and Alex Aiken. 2013. Stochastic superoptimization. In Proceedings of the eighteenth international conference on Architectural support for programming languages and operating systems (ASPLOS '13). ACM, New York, NY, USA, 305-316. DOI=http://dx.doi.org/10.1145/2451116.2451150 
