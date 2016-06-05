@@ -25,10 +25,42 @@ class RunSchemeOperation: NSOperation {
     
     override func cancel() {
         //print("!!! cancel called!")
+        stopSpinner()
         super.cancel()
         // print("&&& killing process \( task.processIdentifier )")
         task.terminate()
         // print("&&& killed process")
+    }
+    
+    func stopSpinner() {
+        
+        // update the user interface, which *must* be done through the main thread
+        NSOperationQueue.mainQueue().addOperationWithBlock {
+
+            let ewc = self.editorWindowController
+
+            if self.taskType == "test1" {
+                ewc.test1Spinner.stopAnimation(self)
+            }
+            if self.taskType == "test2" {
+                ewc.test2Spinner.stopAnimation(self)
+            }
+            if self.taskType == "test3" {
+                ewc.test3Spinner.stopAnimation(self)
+            }
+            if self.taskType == "test4" {
+                ewc.test4Spinner.stopAnimation(self)
+            }
+            if self.taskType == "test5" {
+                ewc.test5Spinner.stopAnimation(self)
+            }
+            if self.taskType == "test6" {
+                ewc.test6Spinner.stopAnimation(self)
+            }
+            if self.taskType == "allTests" {
+                ewc.bestGuessSpinner.stopAnimation(self)
+            }
+        }
     }
     
     override func main() {
