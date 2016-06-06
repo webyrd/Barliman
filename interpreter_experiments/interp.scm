@@ -1,6 +1,87 @@
-;; might need 4 levels:  grammatically valid, parses (wrt initial env), type checks/infers, evaluates to correct value
+;; 2016 June 5 & 6
+
+;; Abstract: In this file I experimented with a grammar relation for 'miniScheme'.  I also experimented with adding a "term size" counter to the grammar relation, to keep miniKanren's  biased search from spending most of its time generating 'lambda' expressions with 50 arguments rather than on much simpler terms more likely to be the result of an actual synthesis problem.  I had partial success.  If I were to keep pushing this experiment, I would probably try passing a term-size counter through 'eval-expr' monadically, rather that using a separate grammar or parsing goal.  Or, try using true IDDFS for the search.
+
+;; Purpose:  I was hoping that adding an explicit grammar, especially one that enumerated terms in order of their size, could help with this simple synthesis problem that doesn't seem to come back, at least within several minutes:
+
+;; (time (run 1 (q A B)
+;;         (evalo `(begin
+;;                   (define append
+;;                     (lambda (l s)
+;;                       (if (null? l)
+;;                           s
+;;                           (cons (car l)
+;;                                 (append (,A ,B) s)))))
+;;                   (list
+;;                    (append '() '())
+;;                    (append '(foo) '(bar))
+;;                    (append '(a b c) '(d e))))
+;;                '(() (foo bar) (a b c d e)))))
+
+;; Similar looking problems, with A and B in other positions within 'append', often return within a few milliseconds.  Why is this problem so slow?  I suspect the slowness is due to A and B being within the "interesting" argument to the recursive call, athough I don't have a nuanced understanding of why this synthesis problem is so expensive.
+
+;; The bigger problem, I think, is that miniKanren's interleaving search strategy results in ridiculous terms being considered, such as 'lambda' terms with dozens of formal paramaters, none of which are actually used.  I was hoping a grammar predicate/goal could help avoid this problem by enforcing a 'parsimony' property that is often used in synthesis problems, by considering smaller terms before larger terms.
+
+;; Results:  I ended up inplementing a simple grammar goal with a size counter (represented as a Peano numeral) passed through monadically.  In hindsight, perhaps it would have been more useful to write a parser (which keeps tracks of variable binding and shadowing through an environment), onece again with a size counter passed through monadically.  This shouldn't be difficult, I think.  Even better, I think, might be passing the term-size counter through 'eval-expr' itself.  Or, try using true IDDFS for the search.
+
+;; The grammar-with-monadic-counter approached seemed like a partial success.  I was able to write a query that explicitly used the grammar and counter to generate the desired term in 35 ms, and which can prove there are no other solutions of that size in about the same time::
+
+;; > (time (run 1 (q A B)
+;;           (grammar-with-sizeo `(,A ,B) '(s (s (s z))))
+;;           (evalo `(begin
+;;                     (define append
+;;                       (lambda (l s)
+;;                         (if (null? l)
+;;                             s
+;;                             (cons (car l)
+;;                                   (append (,A ,B) s)))))
+;;                     (append '(foo baz) '(bar)))
+;;                  '(foo baz bar))))
+;; (time (run 1 ...))
+;;     3 collections
+;;     0.035167000s elapsed cpu time, including 0.000336000s collecting
+;;     0.035398000s elapsed real time, including 0.000353000s collecting
+;;     25983792 bytes allocated, including 25256192 bytes reclaimed
+;; ((_.0 cdr l))
+;; > (time (run* (q A B)
+;;           (grammar-with-sizeo `(,A ,B) '(s (s (s z))))
+;;           (evalo `(begin
+;;                     (define append
+;;                       (lambda (l s)
+;;                         (if (null? l)
+;;                             s
+;;                             (cons (car l)
+;;                                   (append (,A ,B) s)))))
+;;                     (append '(foo baz) '(bar)))
+;;                  '(foo baz bar))))
+;; (time (run* (q A ...) ...))
+;;     4 collections
+;;     0.037766000s elapsed cpu time, including 0.000397000s collecting
+;;     0.037938000s elapsed real time, including 0.000413000s collecting
+;;     27496656 bytes allocated, including 33834096 bytes reclaimed
+;; ((_.0 cdr l))
+
+;; There appear to be several issues with this approach.  First, I had to guess the term size, and supply it explicitly.  I think this problem is solveable using 'conda'/'condu' and recursion.  I also had to isolate the term in question, `(,A ,B), and feed that term to 'grammar-with-sizeo'.
+
+
+;; One thing I realized is that the first attempt at a 'grammar' I was writing was actually more like a parser, since it was keeping track of which variables were bound in the environment, whether built-in forms like 'lambda' were being shadowed, etc.  Whether a parser or a simpler grammar is better, I'm not sure.  Given that we allow shadowing of built-in forms, though, it seems like a parser that tracks bindings in the environment is probably more useful, since otherwise it is impossible to determine if a "'lambda' expression" is instead an application, with the keyword 'lambda' being overriden in the outer lexical scope of the expression.
+
+;; Anyway, the commented code, from the bottom of the file moving upwards, includes (if I recall correctly):
+; * a parser;
+; * a parser with a 'size' argument (represented as a Peano numeral: 'z, '(s z), '(s (s z)), etc.), with the 'size' argument passed through lexically;
+; * a grammar (without the environment);
+; * a grammar, with the 'size' argument passed through monadically.
+
+;; I didn't really try a parser with a 'size' argument passed through monadically.  This would probably be the most useful version, I suspect.
+
+
+
+
+
+;; We might need 4 levels of specification for Barliman, provided that we can get conjunction and search working decently:  grammatically valid, parses (wrt initial env), type checks/infers, evaluates to correct value
 
 ;; grammar
+
 ; number
 ; #t | #f
 ; symbol
