@@ -49,7 +49,7 @@ Let's see how we might have gotten to the final version of `append` using Barlim
 
 #### screenshot 1: Fully instantiated definition of append
 
-![append example 1 -- fully instantiated code](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append01.jpg "append example 1 -- fully instantiated code")
+![append example 1 -- fully instantiated code](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append01.jpg "append example 1 -- fully instantiated code")
 
 
 
@@ -58,7 +58,7 @@ Screenshot 2 shows the empty main editor window, immediatly after starting Barli
 
 #### screenshot 2: 
 
-![append example 2 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append13.jpg "append example 2 -- ")
+![append example 2 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append13.jpg "append example 2 -- ")
 
 
 
@@ -70,7 +70,7 @@ The text for all three tests are red, indicating that none of the tests pass.  T
 
 #### screenshot 3: 
 
-![append example 3 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append09.jpg "append example 3 -- ")
+![append example 3 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append09.jpg "append example 3 -- ")
 
 
 
@@ -80,7 +80,7 @@ Screenshot 4 shows the main editor window after we have begun defining `append` 
 
 #### screenshot 4: 
 
-![append example 4 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append11.jpg "append example 4 -- ")
+![append example 4 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append11.jpg "append example 4 -- ")
 
 
 
@@ -90,7 +90,7 @@ Screenshot 5 shows the main editor window after we have added the closing parent
 
 #### screenshot 5: 
 
-![append example 5 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append10.jpg "append example 5 -- ")
+![append example 5 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append10.jpg "append example 5 -- ")
 
 
 In screenshot 6 we can see that the programmer has partially specified the defintion of `append`.  The definition is a syntactally-correct s-expression, and indeed is a syntactically correct use of miniScheme's `define` form.  Importantly, the definition of `append` is only partially specified, and contains four (logic) variables (`A`, `B`, `C`, and `D`) representing unknown subexpressions.  In Barliman variables representing unknown subexpressions are single-letter upper-case variables `A` through `Z`.  (Note to Schemers: The comma (`,`) that usually occurs before these letters is necessary because the code in the `Scheme Definition` edit pane is implicitly quasiqoted.)
@@ -99,7 +99,7 @@ Given the partially-specified defintion of `append` in the `Scheme Definition` e
 
 #### screenshot 6: 
 
-![append example 6 -- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append07.jpg "append example 6 -- partially instantiated code filled in")
+![append example 6 -- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append07.jpg "append example 6 -- partially instantiated code filled in")
 
 
 
@@ -111,7 +111,7 @@ The important thing about this example is that Barliman was able to prove that t
 
 #### screenshot 7:
 
-![append example 7 -- partially instantiated code incompatible with tests](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append08.jpg "append example 7 -- partially instantiated code incompatible with tests")
+![append example 7 -- partially instantiated code incompatible with tests](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append08.jpg "append example 7 -- partially instantiated code incompatible with tests")
 
 
 Screenshot 8 shows a limitation of Barliman's program synthesis.  Here the partially-specified definition of `append` contains only a single variable, `A`, representing an unknown subexpression.  Ideally Barliman would quickly figure out that `A` should be the expression `(cdr l)`.  However, for this example Barliman seems to get "stuck" -- we can see the spinning progress indicators to the upper-right of the `Best Guess` pane and the `Test 2` and `Test 3` edit fields, indicating that Barliman is still "thinking".  I let Barliman run for a minute or two, but it didn't find a value for `A` in that time.  (Adding the notion of "parsimony" to Barliman, so it tries to generate the smallest terms first, might help with this example.)
@@ -126,7 +126,7 @@ A bigger drawback is that the semantics for the language you are writing in must
 
 #### screenshot 8: 
 
-![append example 8 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append/append12.jpg "append example 8 -- ")
+![append example 8 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append12.jpg "append example 8 -- ")
 
 
 
