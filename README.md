@@ -114,7 +114,32 @@ The important thing about this example is that Barliman was able to prove that t
 ![append example 7 -- partially instantiated code incompatible with tests](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append08.jpg "append example 7 -- partially instantiated code incompatible with tests")
 
 
-Screenshot 8 shows a limitation of Barliman's program synthesis.  Here the partially-specified definition of `append` contains only a single variable, `A`, representing an unknown subexpression.  Ideally Barliman would quickly figure out that `A` should be the expression `(cdr l)`.  However, for this example Barliman seems to get "stuck" -- we can see the spinning progress indicators to the upper-right of the `Best Guess` pane and the `Test 2` and `Test 3` edit fields, indicating that Barliman is still "thinking".  I let Barliman run for a minute or two, but it didn't find a value for `A` in that time.  (Adding the notion of "parsimony" to Barliman, so it tries to generate the smallest terms first, might help with this example.)
+
+
+
+
+Screenshot 8 shows another partially-instantiated, but incorrect, definition of `append`.  The base case of `append` should be `s` instead of `l`, yet all the text is in black, indicating that the individual tests are compatible with the definition so far.  The problem is that we don't have a test that exposes that this partial definition is wrong.
+
+#### screenshot 8:
+
+![append example 8 -- partially instantiated code missing a test](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_08/append19.jpg "append example 8 -- partially instantiated code missing a test")
+
+
+In screenshot we add a new test, test 4, that shows that the base case is incorrect. This is one danger of using tests for feedback, of course -- in general, no finite number of tests is sufficient to prove our definition is correct.  Of course tests often do show errors.
+
+I hope that future versions of Barliman will include other ways to specify the behavior of programs, which might include specifying program properties, or providing a "reference" implementation of a function that is being redefined to perform faster, etc.
+
+#### screenshot 9:
+
+![append example 9 -- partially instantiated code with the missing test](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_08/append20.jpg "append example 9 -- partially instantiated code with the missing test")
+
+
+
+
+
+
+
+Screenshot 10 shows a limitation of Barliman's program synthesis.  Here the partially-specified definition of `append` contains only a single variable, `A`, representing an unknown subexpression.  Ideally Barliman would quickly figure out that `A` should be the expression `(cdr l)`.  However, for this example Barliman seems to get "stuck" -- we can see the spinning progress indicators to the upper-right of the `Best Guess` pane and the `Test 2` and `Test 3` edit fields, indicating that Barliman is still "thinking".  I let Barliman run for a minute or two, but it didn't find a value for `A` in that time.  (Adding the notion of "parsimony" to Barliman, so it tries to generate the smallest terms first, might help with this example.)
 
 We could allow Barliman to keep thinking -- perhaps it would find the answer in five minutes, or in an hour (provided our computer has enough RAM!).  However, in practice we would probably try filling in `A` manually.  If we were to type `(cdr ,B)` in place of `,A`, Barliman would immedialy guess in the correct, trivial subexpression `l` for the variable `B`.
 
@@ -124,9 +149,9 @@ Of course, Barliman isn't currently a particularly *good* text editor, especiall
 
 A bigger drawback is that the semantics for the language you are writing in must be specified in miniKanren.  This is fine if you are writing in a minimal Scheme subset, such as miniScheme.  This isn't so great if you want to program in full Clojure or Racket or Javascript or Ruby.  Finding ways to scale this technology is an open problem.  The solution may not be miniKanren or constraint logic programming, but rather another synthesis approach.  I don't know.  I do hope, however, that Barliman will make people think about how synthesis capabilities can be integrated into editors, especially for dynamic languages.
 
-#### screenshot 8: 
+#### screenshot 10: 
 
-![append example 8 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append12.jpg "append example 8 -- ")
+![append example 10 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append12.jpg "append example 10 -- ")
 
 
 
