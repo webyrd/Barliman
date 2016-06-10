@@ -120,14 +120,15 @@ The important thing about this example is that Barliman was able to prove that t
 
 Screenshot 8 shows another partially-instantiated, but incorrect, definition of `append`.  The base case of `append` should be `s` instead of `l`, yet all the text is in black, indicating that the individual tests are compatible with the definition so far.  The problem is that we don't have a test that exposes that this partial definition is wrong.  We'll fix this in the next screenshot.
 
+This is one danger of using tests for feedback, of course -- in general, no finite number of tests is sufficient to prove our definition is correct.  I hope that future versions of Barliman will include other ways to specify the behavior of programs, which might include specifying program properties, or providing a "reference" implementation of a function that is being redefined to perform faster, etc.
+
+
 #### screenshot 8:
 
 ![append example 8 -- partially instantiated code missing a test](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_08/append19.jpg "append example 8 -- partially instantiated code missing a test")
 
 
-In screenshot we add a new test, test 4, that shows that the base case is incorrect. This is one danger of using tests for feedback, of course -- in general, no finite number of tests is sufficient to prove our definition is correct.  Of course tests often do show errors.
-
-I hope that future versions of Barliman will include other ways to specify the behavior of programs, which might include specifying program properties, or providing a "reference" implementation of a function that is being redefined to perform faster, etc.
+In screenshot 9 we add a new test, test 4, that shows that the base case of `append` is incorrect.  Sure enough, test 4's text immediately turns red, indicating it is incompatible with our partial definition.
 
 #### screenshot 9:
 
