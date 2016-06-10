@@ -118,7 +118,7 @@ The important thing about this example is that Barliman was able to prove that t
 
 
 
-Screenshot 8 shows another partially-instantiated, but incorrect, definition of `append`.  The base case of `append` should be `s` instead of `l`, yet all the text is in black, indicating that the individual tests are compatible with the definition so far.  The problem is that we don't have a test that exposes that this partial definition is wrong.
+Screenshot 8 shows another partially-instantiated, but incorrect, definition of `append`.  The base case of `append` should be `s` instead of `l`, yet all the text is in black, indicating that the individual tests are compatible with the definition so far.  The problem is that we don't have a test that exposes that this partial definition is wrong.  We'll fix this in the next screenshot.
 
 #### screenshot 8:
 
