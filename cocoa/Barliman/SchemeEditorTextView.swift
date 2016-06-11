@@ -16,9 +16,18 @@ class SchemeEditorTextView: NSTextView {
         // Drawing code here.
     }
     
-    override func keyDown(theEvent: NSEvent) {
-        super.keyDown(theEvent)
-        Swift.print("----------------   keyDown!!!")
+    override func keyDown(event: NSEvent) {
+        super.keyDown(event)
+        Swift.print("----------------   keyDown: \(event.keyCode) ")
+        
+        if event.keyCode == 25 {
+            // if a left-paren is entered, enter a right-paren as well, 
+            // and move the cursor between the parens
+            Swift.print("---------------- left paren")
+            self.textStorage?.insertAttributedString(NSAttributedString(string: ")"), atIndex: self.selectedRange.location)
+            self.selectedRange.location = self.selectedRange.location - 1
+        }
+        
     }
 
 }
