@@ -16,6 +16,7 @@
 		891E43111CE6FD8D003C3333 /* BarlimanUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43101CE6FD8D003C3333 /* BarlimanUITests.swift */; };
 		891E43241CE7098D003C3333 /* EditorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43221CE7098D003C3333 /* EditorWindowController.swift */; };
 		891E43251CE7098D003C3333 /* EditorWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 891E43231CE7098D003C3333 /* EditorWindowController.xib */; };
+		89393D371D0C1BB30067D19A /* SchemeEditorTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89393D361D0C1BB30067D19A /* SchemeEditorTextView.swift */; };
 		89B081521CF195F5007E6ABA /* mk-and-rel-interp in Resources */ = {isa = PBXBuildFile; fileRef = 89B081511CF195F5007E6ABA /* mk-and-rel-interp */; };
 		89C405A61CF426BE009970A7 /* RunSchemeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C405A51CF426BE009970A7 /* RunSchemeOperation.swift */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,7 @@
 		891E43121CE6FD8D003C3333 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		891E43221CE7098D003C3333 /* EditorWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
 		891E43231CE7098D003C3333 /* EditorWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorWindowController.xib; sourceTree = "<group>"; };
+		89393D361D0C1BB30067D19A /* SchemeEditorTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemeEditorTextView.swift; sourceTree = "<group>"; };
 		89B081511CF195F5007E6ABA /* mk-and-rel-interp */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "mk-and-rel-interp"; sourceTree = "<group>"; };
 		89C405A51CF426BE009970A7 /* RunSchemeOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunSchemeOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -110,6 +112,7 @@
 				891E42F91CE6FD8D003C3333 /* MainMenu.xib */,
 				891E42FC1CE6FD8D003C3333 /* Info.plist */,
 				891E43221CE7098D003C3333 /* EditorWindowController.swift */,
+				89393D361D0C1BB30067D19A /* SchemeEditorTextView.swift */,
 				891E43231CE7098D003C3333 /* EditorWindowController.xib */,
 				890FC1AF1CFC071600D1FD73 /* SemanticsWindowController.swift */,
 				890FC1B31CFC097200D1FD73 /* SemanticsWindowController.xib */,
@@ -274,6 +277,7 @@
 				890FC1B01CFC071600D1FD73 /* SemanticsWindowController.swift in Sources */,
 				891E42F61CE6FD8D003C3333 /* AppDelegate.swift in Sources */,
 				89C405A61CF426BE009970A7 /* RunSchemeOperation.swift in Sources */,
+				89393D371D0C1BB30067D19A /* SchemeEditorTextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

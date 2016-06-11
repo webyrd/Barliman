@@ -93,7 +93,7 @@ class EditorWindowController: NSWindowController {
         print("@@@@@@@@@@@@@@@@@@@ controlTextDidChange")
         runCodeFromEditPane()
     }
-    
+        
     func runCodeFromEditPane() {
         
         // The text in the code pane changed!  Launch a new Scheme task to evaluate the new expression...
