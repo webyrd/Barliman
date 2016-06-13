@@ -33,36 +33,19 @@ class SchemeEditorTextView: NSTextView {
         return results.map({ nsString.substringWithRange($0.range)})
     }
     
-    override func keyDown(event: NSEvent) {
-        super.keyDown(event)
-        Swift.print("----------------   keyDown: \(event.keyCode) ")
-        
-        if event.keyCode == 25 {
-            // left-paren was entered
-            Swift.print("---------------- left paren")
-            
-            self.textStorage?.insertAttributedString(NSAttributedString(string: ")"), atIndex: self.selectedRange.location)
-            self.selectedRange.location = self.selectedRange.location - 1
-
-            // POSSIBLE TODO -- use matchesForRegexInText to find all ,A style expressions in the code
-            // representing logic variables, and insert the next twp available variable names
-            //
-            // ideally, would act differently within quote or quasiquote
-            //
-            //self.textStorage?.insertAttributedString(NSAttributedString(string: ",A . ,B)"), atIndex: self.selectedRange.location)
-           // self.selectedRange.location = self.selectedRange.location - 8
-        }
-        
-        // TODO -- check for command-option-f and command-option-b
-        
-        // TODO -- check for control-option-k
-        
-        // TODO -- check for control-option-t
-        
-        // TODO -- check for left/right arrow key or right paren key
-        
-        // TODO -- check for delete key -- refuse to delete right parens, or left paren other than immediately followed by right paren
-        
-    }
+// For now, don't worry about structured editing, since it is messing up undo.
+//
+//    override func keyDown(event: NSEvent) {
+//        super.keyDown(event)
+//        Swift.print("----------------   keyDown: \(event.keyCode) ")
+//        
+//        if event.keyCode == 25 {
+//            // left-paren was entered
+//            Swift.print("---------------- left paren")
+//            
+//            self.textStorage?.insertAttributedString(NSAttributedString(string: ")"), atIndex: self.selectedRange.location)
+//            self.selectedRange.location = self.selectedRange.location - 1
+//        }
+//    }
 
 }
