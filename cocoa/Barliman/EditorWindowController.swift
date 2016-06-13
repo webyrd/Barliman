@@ -58,6 +58,9 @@ class EditorWindowController: NSWindowController {
         // from http://stackoverflow.com/questions/19801601/nstextview-with-smart-quotes-disabled-still-replaces-quotes
         schemeDefinitionView.automaticQuoteSubstitutionEnabled = false
         bestGuessView.automaticQuoteSubstitutionEnabled = false
+        
+        // For whatever reason, the tabbing from Test 3 Expected Output doesn't got to Test 4 Input
+        test3ExpectedOutputField.nextKeyView = test4InputField
 
     }
 
