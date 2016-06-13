@@ -37,8 +37,6 @@ class SchemeEditorTextView: NSTextView {
         super.keyDown(event)
         Swift.print("----------------   keyDown: \(event.keyCode) ")
         
-        // TOSO -- check for delete key -- refuse to delete right parens, or left paren other than immediately followed by right paren
-        
         if event.keyCode == 25 {
             // left-paren was entered
             Swift.print("---------------- left paren")
@@ -46,8 +44,7 @@ class SchemeEditorTextView: NSTextView {
             self.textStorage?.insertAttributedString(NSAttributedString(string: ")"), atIndex: self.selectedRange.location)
             self.selectedRange.location = self.selectedRange.location - 1
 
-            
-            // TODO -- use matchesForRegexInText to find all ,A style expressions in the code
+            // POSSIBLE TODO -- use matchesForRegexInText to find all ,A style expressions in the code
             // representing logic variables, and insert the next twp available variable names
             //
             // ideally, would act differently within quote or quasiquote
@@ -55,6 +52,16 @@ class SchemeEditorTextView: NSTextView {
             //self.textStorage?.insertAttributedString(NSAttributedString(string: ",A . ,B)"), atIndex: self.selectedRange.location)
            // self.selectedRange.location = self.selectedRange.location - 8
         }
+        
+        // TODO -- check for command-option-f and command-option-b
+        
+        // TODO -- check for control-option-k
+        
+        // TODO -- check for control-option-t
+        
+        // TODO -- check for left/right arrow key or right paren key
+        
+        // TODO -- check for delete key -- refuse to delete right parens, or left paren other than immediately followed by right paren
         
     }
 
