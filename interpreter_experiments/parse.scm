@@ -14,12 +14,16 @@
 ;; (_.0)
 ;; > (run 1 (q) (parseo '(begin (define append (lambda (x) con)) (list list))))
 
-;; should be able to check the definition is legal with queries like:
+;;; should be able to check the definition is legal with queries like:
 ;;
 ;; > (run 1 (q) (parseo `(begin (define append (lambda (x) cons)) . ,q)))
 ;; (((_.0) (num _.0)))
 ;; > (run 1 (q) (parseo `(begin (define append (lambda (x) con)) . ,q)))
 ;; ()
+
+;;; should be able to avoid duplicating the definitions at the bottom
+;;; of the file by just adding the parsing code to the evaluator code
+;;; in Barliman.
 
 (define (parseo expr)
   (parse-expo expr initial-env))
