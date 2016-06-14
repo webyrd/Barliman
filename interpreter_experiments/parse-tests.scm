@@ -102,6 +102,62 @@
                               (append '(a b c) '(d e))))))
   '())
 
+(test "parse-17"
+  (run 1 (q) (parseo '(begin
+                        (define foo
+                          (lambda (x)
+                            bar))
+                        5)))
+  '(_.0))
+
+(test "parse-18"
+  (run 1 (q) (parseo '(begin
+                        (define foo
+                          (lambda (x)
+                            and))
+                        5)))
+  '())
+
+(test "parse-19"
+  (run 1 (q) (parseo '(begin
+                        (define foo
+                          (lambda (x)
+                            or))
+                        5)))
+  '())
+
+(test "parse-20"
+  (run 1 (q) (parseo '(begin
+                        (define foo
+                          (lambda (x)
+                            if))
+                        5)))
+  '())
+
+(test "parse-21"
+  (run 1 (q) (parseo '(begin
+                        (define foo
+                          (lambda (x)
+                            begin))
+                        5)))
+  '())
+
+(test "parse-22"
+  (run 1 (q) (parseo '(begin
+                        (define foo
+                          (lambda (x)
+                            define))
+                        5)))
+  '())
+
+(test "parse-23"
+  (run 1 (q) (parseo '(begin
+                        (define foo
+                          (lambda (x)
+                            letrec))
+                        5)))
+  '())
+
 
 ;;; should be able to check the definition is legal with queries like:
 
