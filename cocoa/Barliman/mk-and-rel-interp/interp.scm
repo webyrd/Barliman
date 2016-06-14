@@ -629,4 +629,3 @@
 ;; enforce grammar
 ;;
 ;; add arithmetic operators using CLP(FD)
-

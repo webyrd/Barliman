@@ -109,6 +109,30 @@ class EditorWindowController: NSWindowController {
         runCodeFromEditPaneTimer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: #selector(EditorWindowController.runCodeFromEditPane), userInfo: nil, repeats: false)
     }
     
+    func makeQueryFileString(defn: String,
+                             body: String,
+                             expectedOut: String,
+                             interp_string: String,
+                             mk_vicare_path_string: String,
+                             mk_path_string: String) -> String {
+        
+        let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
+        let load_mk_string: String = "(load \"\( mk_path_string )\")"
+        let parse_ans_string: String = "(define parse-ans (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (parseo `(begin \( defn ) \( body))))))"
+        let eval_string: String = "(run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (evalo `(begin \( defn ) \( body)) \( expectedOut ))))"
+        let write_ans_string: String = "(write (if (null? parse-ans) 'parse-error \( eval_string )))"
+        
+        let full_string: String = load_mk_vicare_string + "\n" +
+                                  load_mk_string + "\n" +
+                                  interp_string + "\n" +
+                                  parse_ans_string + "\n" +
+                                  write_ans_string
+      
+        print("query string:\n \(full_string)\n")
+        
+        return full_string
+    }
+    
     func runCodeFromEditPane() {
         
         // The text in the code pane changed!  Launch a new Scheme task to evaluate the new expression...
@@ -155,46 +179,77 @@ class EditorWindowController: NSWindowController {
 
         let interp_string: String = semanticsWindowController!.getInterpreterCode()
         
-        let queryPrefix = "(write (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) (evalo `(begin "
-        let querySuffix = "))) )"
         let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
         
         
-        let querySimple: String = load_mk_vicare_string +
-            load_mk_string +
-            interp_string +
-            queryPrefix + definitionText + " ,Z) q" + querySuffix
-
+        let querySimple: String =
+            makeQueryFileString(definitionText,
+                                body: ",_",
+                                expectedOut: "q",
+                                interp_string: interp_string,
+                                mk_vicare_path_string: mk_vicare_path_string,
+                                mk_path_string: mk_path_string)
         
-        let queryTest1: String = load_mk_vicare_string +
-            load_mk_string +
-            interp_string +
-            queryPrefix + definitionText + " " + test1InputField.stringValue + ") " + test1ExpectedOutputField.stringValue + querySuffix
+        let queryTest1: String =
+            (processTest1 ?
+                makeQueryFileString(definitionText,
+                    body: test1InputField.stringValue,
+                    expectedOut: test1ExpectedOutputField.stringValue,
+                    interp_string: interp_string,
+                    mk_vicare_path_string: mk_vicare_path_string,
+                    mk_path_string: mk_path_string)
+                : "")
 
-        let queryTest2: String = load_mk_vicare_string +
-            load_mk_string +
-            interp_string +
-            queryPrefix + definitionText + " " + test2InputField.stringValue + ") " + test2ExpectedOutputField.stringValue + querySuffix
+        let queryTest2: String =
+            (processTest2 ?
+                makeQueryFileString(definitionText,
+                    body: test2InputField.stringValue,
+                    expectedOut: test2ExpectedOutputField.stringValue,
+                    interp_string: interp_string,
+                    mk_vicare_path_string: mk_vicare_path_string,
+                    mk_path_string: mk_path_string)
+                : "")
 
-        let queryTest3: String = load_mk_vicare_string +
-            load_mk_string +
-            interp_string +
-            queryPrefix + definitionText + " " + test3InputField.stringValue + ") " + test3ExpectedOutputField.stringValue + querySuffix
+        let queryTest3: String =
+            (processTest3 ?
+                makeQueryFileString(definitionText,
+                    body: test3InputField.stringValue,
+                    expectedOut: test3ExpectedOutputField.stringValue,
+                    interp_string: interp_string,
+                    mk_vicare_path_string: mk_vicare_path_string,
+                    mk_path_string: mk_path_string)
+                : "")
+        
+        let queryTest4: String =
+            (processTest4 ?
+                makeQueryFileString(definitionText,
+                    body: test4InputField.stringValue,
+                    expectedOut: test4ExpectedOutputField.stringValue,
+                    interp_string: interp_string,
+                    mk_vicare_path_string: mk_vicare_path_string,
+                    mk_path_string: mk_path_string)
+                : "")
 
-        let queryTest4: String = load_mk_vicare_string +
-            load_mk_string +
-            interp_string +
-            queryPrefix + definitionText + " " + test4InputField.stringValue + ") " + test4ExpectedOutputField.stringValue + querySuffix
+        let queryTest5: String =
+            (processTest5 ?
+                makeQueryFileString(definitionText,
+                    body: test5InputField.stringValue,
+                    expectedOut: test5ExpectedOutputField.stringValue,
+                    interp_string: interp_string,
+                    mk_vicare_path_string: mk_vicare_path_string,
+                    mk_path_string: mk_path_string)
+                : "")
+        
+        let queryTest6: String =
+            (processTest6 ?
+                makeQueryFileString(definitionText,
+                    body: test6InputField.stringValue,
+                    expectedOut: test6ExpectedOutputField.stringValue,
+                    interp_string: interp_string,
+                    mk_vicare_path_string: mk_vicare_path_string,
+                    mk_path_string: mk_path_string)
+                : "")
 
-        let queryTest5: String = load_mk_vicare_string +
-            load_mk_string +
-            interp_string +
-            queryPrefix + definitionText + " " + test5InputField.stringValue + ") " + test5ExpectedOutputField.stringValue + querySuffix
-
-        let queryTest6: String = load_mk_vicare_string +
-            load_mk_string +
-            interp_string +
-            queryPrefix + definitionText + " " + test6InputField.stringValue + ") " + test6ExpectedOutputField.stringValue + querySuffix
         
         
         let in1 = (processTest1 ? test1InputField.stringValue : "")
@@ -228,17 +283,6 @@ class EditorWindowController: NSWindowController {
             load_mk_string +
             interp_string +
             "(write (let ((ans (run 1 (defn) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) (== `" + definitionText + " defn) (evalo `(begin ,defn (list " + allTestInputs + ")) (list " +  allTestOutputs + ")" + "))))) (if (null? ans) 'fail (car ans))) )"
-
-        
-        
-//        print("querySimple = \n\( querySimple )\n")
-//        print("queryTest1 = \n\( queryTest1 )\n")
-//        print("queryTest2 = \n\( queryTest2 )\n")
-//        print("queryTest3 = \n\( queryTest3 )\n")
-//        print("queryTest4 = \n\( queryTest4 )\n")
-//        print("queryTest5 = \n\( queryTest5 )\n")
-//        print("queryTest6 = \n\( queryTest6 )\n")
-//        print("queryAllTests = \n\( queryAllTests )\n")
         
         
         

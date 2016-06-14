@@ -114,7 +114,10 @@ class RunSchemeOperation: NSOperation {
             func onTestCompletion(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, datastring: String) {
                 spinner.stopAnimation(self)
 
-                if datastring == "()" {
+                if datastring == "parse-error" {
+                    inputField.textColor = NSColor.magentaColor()
+                    outputField.textColor = NSColor.magentaColor()
+                } else if datastring == "()" {
                     inputField.textColor = NSColor.redColor()
                     outputField.textColor = NSColor.redColor()
                     // TODO - would be polite to cancel the allTests operation as well, since it cannot possibly succeed
@@ -139,7 +142,9 @@ class RunSchemeOperation: NSOperation {
             if exitStatus == 0 {
                 // at least Chez ran to completion!  The query could still have failed, of course
                 if self.taskType == "simple" {
-                    if datastring == "()" {
+                    if datastring == "parse-error" {
+                        ewc.schemeDefinitionView.textColor = NSColor.magentaColor()
+                    } else if datastring == "()" {
                         // print("--- turning simple red")
                         ewc.schemeDefinitionView.textColor = NSColor.redColor()
                     } else {
