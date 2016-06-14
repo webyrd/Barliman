@@ -50,6 +50,57 @@
   (run 1 (q) (parseo '(begin (define append (lambda (x) con)) (list list))))
   '(_.0))
 
+(test "parse-13"
+  (run 1 (q) (parseo '(begin
+                        (define append
+                          (lambda (l s)
+                            (if (null? l)
+                                s
+                                (cons (car l)
+                                      (append (cdr l) s)))))
+                        (list (append '() '())
+                              (append '(foo) '(bar))
+                              (append '(a b c) '(d e))))))
+  '(_.0))
+
+(test "parse-14"
+  (run 1 (q) (parseo '(begin
+                        (define append
+                          (lambda (l s)
+                            (if (null? l)
+                                
+                                (cons (car l)
+                                      (append (cdr l) s)))))
+                        (list (append '() '())
+                              (append '(foo) '(bar))
+                              (append '(a b c) '(d e))))))
+  '())
+
+(test "parse-15"
+  (run 1 (q) (parseo '(begin
+                        (define append
+                          (lambda 
+                            (if (null? l)
+                                s
+                                (cons (car l)
+                                      (append (cdr l) s)))))
+                        (list (append '() '())
+                              (append '(foo) '(bar))
+                              (append '(a b c) '(d e))))))
+  '())
+
+(test "parse-16"
+  (run 1 (q) (parseo '(begin
+                        (define                          
+                          (lambda (l s)
+                            (if (null? l)
+                                s
+                                (cons (car l)
+                                      (append (cdr l) s)))))
+                        (list (append '() '())
+                              (append '(foo) '(bar))
+                              (append '(a b c) '(d e))))))
+  '())
 
 
 ;;; should be able to check the definition is legal with queries like:
