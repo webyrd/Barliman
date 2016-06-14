@@ -10,6 +10,16 @@
 ;; (_.0)
 ;; > (run 1000 (q) (parseo '(begin (defin append (lambda (x) x)) (append 5))))
 ;; ()
+;; > (run 1 (q) (parseo '(begin (define append (lambda (x) cons)) (list list))))
+;; (_.0)
+;; > (run 1 (q) (parseo '(begin (define append (lambda (x) con)) (list list))))
+
+;; should be able to check the definition is legal with queries like:
+;;
+;; > (run 1 (q) (parseo `(begin (define append (lambda (x) cons)) . ,q)))
+;; (((_.0) (num _.0)))
+;; > (run 1 (q) (parseo `(begin (define append (lambda (x) con)) . ,q)))
+;; ()
 
 (define (parseo expr)
   (parse-expo expr initial-env))
