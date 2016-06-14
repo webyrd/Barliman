@@ -56,7 +56,7 @@
        ;;
        (conde
          ((keywordo expr)
-          ;; if expr is a keyword ('lambda', 'begin', 'define', 'letrec', 'and', 'or', 'if', or whatever)
+          ;; if expr is a keyword ('lambda', 'begin', 'define', 'letrec', 'and', 'or', 'if', 'match', or whatever)
           ;; *and* expr is shadowed in the environment, succeed.  Otherwuse, it is a syntax violation.
           (fresh (val)
             (lookupo expr env val)))
@@ -91,8 +91,7 @@
        ;; application
        (parse-listo `(,rator . ,rands) env)))
 
-;; TODO
-;;    ((parse-matcho expr env))
+    ((parse-matcho expr env))
 
     ((fresh (p-name x body letrec-body)
        ;; single-function variadic letrec version
@@ -167,7 +166,10 @@
       ((== 'letrec x))
       ((== 'and x))
       ((== 'or x))
-      ((== 'if x)))))
+      ((== 'if x))
+      ((== 'match x))
+      ((== 'quasiquote x))
+      ((== 'unquote x)))))
 
 (define not-keywordo
   (lambda (x)
@@ -179,7 +181,70 @@
       (=/= 'letrec x)
       (=/= 'and x)
       (=/= 'or x)
-      (=/= 'if x))))
+      (=/= 'if x)
+      (=/= 'match x)
+      (=/= 'quasiquote x)
+      (=/= 'unquote x))))
+
+
+;;; handle 'match'
+
+(define parse-matcho
+  (lambda  (expr env)
+    (fresh (against-expr clause clauses)
+      (== `(match ,against-expr ,clause . ,clauses) expr)
+      (not-in-envo 'match env)
+      (parse-expo against-expr env)
+      (parse-clauses `(,clause . ,clauses) env))))
+
+(define (parse-clauses clauses env)
+  (conde
+    ((== '() clauses))
+    ((fresh (pat result-expr d)
+       (== `((,pat ,result-expr) . ,d) clauses)
+       (fresh (penv env^)
+         (parse-pattern pat '() penv)
+         (regular-env-appendo penv env env^)
+         (parse-expo result-expr env^))
+       (parse-clauses d env)))))
+
+(define (parse-pattern pat penv penv-out)
+  (conde
+    ((self-eval-literalo pat)
+     (== penv penv-out))
+    ((parse-var-pat-match pat penv penv-out))
+    ((fresh (var pred)
+      (== `(? ,pred ,var) pat)
+      (conde
+        ((== 'symbol? pred))
+        ((== 'number? pred)))
+      (parse-var-pat-match var penv penv-out)))
+    ((fresh (quasi-pat)
+      (== (list 'quasiquote quasi-pat) pat)
+      (parse-quasiquote-pattern quasi-pat penv penv-out)))))
+
+(define (parse-var-pat-match var penv penv-out)
+  (fresh (_)
+    (symbolo var)
+    (conde
+      ((== penv penv-out)
+       (lookupo var penv _))
+      ((== `((,var . (val . ,_)) . ,penv) penv-out)
+       (not-in-envo var penv)))))
+
+(define (parse-quasiquote-pattern quasi-pat penv penv-out)
+  (conde
+    ((== penv penv-out)
+     (literalo quasi-pat))
+    ((fresh (pat)
+      (== (list 'unquote pat) quasi-pat)
+      (parse-pattern pat penv penv-out)))
+    ((fresh (a d penv^)
+       (== `(,a . ,d) quasi-pat)
+       (=/= 'unquote a)
+       (parse-quasiquote-pattern a penv penv^)
+       (parse-quasiquote-pattern d penv^ penv-out)))))
+
 
 
 
@@ -223,6 +288,31 @@
        (== `(,a . ,d) los)
        (symbolo a)
        (list-of-symbolso d)))))
+
+(define (regular-env-appendo env1 env2 env-out)
+  (conde
+    ((== empty-env env1) (== env2 env-out))
+    ((fresh (y v rest res)
+       (== `((,y . (val . ,v)) . ,rest) env1)
+       (== `((,y . (val . ,v)) . ,res) env-out)
+       (regular-env-appendo rest env2 res)))))
+
+(define (self-eval-literalo t)
+  (conde
+    ((numbero t))
+    ((booleano t))))
+
+(define (literalo t)
+  (conde
+    ((numbero t))
+    ((symbolo t) (=/= 'closure t))
+    ((booleano t))
+    ((== '() t))))
+
+(define (booleano t)
+  (conde
+    ((== #f t))
+    ((== #t t))))
 
 (define empty-env '())
 

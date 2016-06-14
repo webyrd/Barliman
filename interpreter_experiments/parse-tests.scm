@@ -184,3 +184,219 @@
 (test "parse-defn-no-tests-6"
   (run 1 (q) (parseo `(begin (define append (lambda (x) (if 3))) . ,q)))
   '())
+
+
+
+(test "proof?-1"
+  (run 1 (q)
+    (fresh (prf)
+      (fresh (rule assms ants)
+        ;; We want to prove that C holds...
+        (== `(,rule ,assms ,ants C) prf)
+        ;; ...given the assumptions A, A => B, and B => C.
+        (== `(A (if A B) (if B C)) assms)
+        (parseo `(letrec ((member? (lambda (x ls)
+                                     (if (null? ls)
+                                         #f
+                                         (if (equal? (car ls) x)
+                                             #t
+                                             (member? x (cdr ls)))))))
+                   (letrec ((proof? (lambda (proof)
+                                      (match proof
+                                        [`(assumption ,assms () ,A)
+                                         (member? A assms)]
+                                        [`(modus-ponens
+                                           ,assms
+                                           ((,r1 ,assms ,ants1 (if ,A ,B))
+                                            (,r2 ,assms ,ants2 ,A))
+                                           ,B)
+                                         (and (proof? (list r1 assms ants1 (list 'if A B)))
+                                              (proof? (list r2 assms ants2 A)))]))))
+                     (proof? ',prf)))))))
+  '(_.0))
+
+(test "proof?-2"
+  (run 1 (q)
+    (fresh (prf)
+      (fresh (rule assms ants)
+        ;; We want to prove that C holds...
+        (== `(,rule ,assms ,ants C) prf)
+        ;; ...given the assumptions A, A => B, and B => C.
+        (== `(A (if A B) (if B C)) assms)
+        (parseo `(letrec ((member? (lambda (x ls)
+                                     (if (null? ls)
+                                         #f
+                                         (if (equal? (car ls) x)
+                                             #t
+                                             (member? x (cdr ls)))))))
+                   (letrec ((proof? (lambda (proof)
+                                      (match ; removed expression to match against
+                                        [`(assumption ,assms () ,A)
+                                         (member? A assms)]
+                                        [`(modus-ponens
+                                           ,assms
+                                           ((,r1 ,assms ,ants1 (if ,A ,B))
+                                            (,r2 ,assms ,ants2 ,A))
+                                           ,B)
+                                         (and (proof? (list r1 assms ants1 (list 'if A B)))
+                                              (proof? (list r2 assms ants2 A)))]))))
+                     (proof? ',prf)))))))
+  '())
+
+(test "proof?-3"
+  (run 1 (q)
+    (fresh (prf)
+      (fresh (rule assms ants)
+        ;; We want to prove that C holds...
+        (== `(,rule ,assms ,ants C) prf)
+        ;; ...given the assumptions A, A => B, and B => C.
+        (== `(A (if A B) (if B C)) assms)
+        (parseo `(letrec ((member? (lambda (x ls)
+                                     (if (null? ls)
+                                         #f
+                                         (if (equal? (car ls) x)
+                                             #t
+                                             (member? x (cdr ls)))))))
+                   (letrec ((proof? (lambda (proof)
+                                      (match proof
+                                        [`(assumption ,assms () ,A)
+                                         ;; incorrect use of lambda
+                                         (lambda)]
+                                        [`(modus-ponens
+                                           ,assms
+                                           ((,r1 ,assms ,ants1 (if ,A ,B))
+                                            (,r2 ,assms ,ants2 ,A))
+                                           ,B)
+                                         (and (proof? (list r1 assms ants1 (list 'if A B)))
+                                              (proof? (list r2 assms ants2 A)))]))))
+                     (proof? ',prf)))))))
+  '())
+
+(test "proof?-4"
+  (run 1 (q)
+    (fresh (prf)
+      (fresh (rule assms ants)
+        ;; We want to prove that C holds...
+        (== `(,rule ,assms ,ants C) prf)
+        ;; ...given the assumptions A, A => B, and B => C.
+        (== `(A (if A B) (if B C)) assms)
+        (parseo `(letrec ((member? (lambda (x ls)
+                                     (if (null? ls)
+                                         #f
+                                         (if (equal? (car ls) x)
+                                             #t
+                                             (member? x (cdr ls)))))))
+                   (letrec ((proof? (lambda (proof)
+                                      (match proof
+                                        [`(assumption ,lambda () ,A)
+                                         ;; legal shadowing of lambda
+                                         (lambda)]
+                                        [`(modus-ponens
+                                           ,assms
+                                           ((,r1 ,assms ,ants1 (if ,A ,B))
+                                            (,r2 ,assms ,ants2 ,A))
+                                           ,B)
+                                         (and (proof? (list r1 assms ants1 (list 'if A B)))
+                                              (proof? (list r2 assms ants2 A)))]))))
+                     (proof? ',prf)))))))
+  '(_.0))
+
+(test "check-quine-1"
+  (run 1 (q)
+    (fresh (quine)
+      (== '((lambda (x) `(,x ',x)) '(lambda (x) `(,x ',x))) quine)
+      (parseo `(letrec ((eval-quasi (lambda (q eval)
+                                      (match q
+                                        [(? symbol? x) x]
+                                        [`() '()]
+                                        [`(,`unquote ,exp) (eval exp)]
+                                        [`(quasiquote ,datum) ('error)]
+                                        [`(,a . ,d)
+                                         (cons (eval-quasi a eval) (eval-quasi d eval))]))))
+                 (letrec ((eval-expr
+                           (lambda (expr env)
+                             (match expr
+                               [`(quote ,datum) datum]
+                               [`(lambda (,(? symbol? x)) ,body)
+                                (lambda (a)
+                                  (eval-expr body (lambda (y)
+                                                    (if (equal? x y)
+                                                        a
+                                                        (env y)))))]
+                               [(? symbol? x) (env x)]
+                               [`(quasiquote ,datum)
+                                (eval-quasi datum (lambda (exp) (eval-expr exp env)))]
+                               [`(,rator ,rand)
+                                ((eval-expr rator env) (eval-expr rand env))]
+                               ))))
+                   (eval-expr ',quine
+                              'initial-env))))))
+  '(_.0))
+
+(test "check-quine-2"
+  (run 1 (q)
+    (fresh (quine)
+      (== '((lambda (x) `(,x ',x)) '(lambda (x) `(,x ',x))) quine)
+      (parseo `(letrec ((eval-quasi (lambda (q eval)
+                                      (match q
+                                        [(? symbol? x) x]
+                                        [`() '()]
+                                        [`(,`unquote ,exp) (eval exp)]
+                                        [`(quasiquote ,datum) ('error)]
+                                        [`(,a . ,d)
+                                         (cons (eval-quasi a eval) (eval-quasi d eval))]))))
+                 (letrec ((eval-expr
+                           (lambda (expr env)
+                             (match expr
+                               [`(quote ,datum) datum]
+                               [`(lambda (,(? symbol? x)) ,body)
+                                (lambda (a)
+                                  (eval-expr body (lambda (y)
+                                                    (if (equal? x y)
+                                                        a
+                                                        (env y)))))]
+                               [(? symbol? x)
+                                ;; illegal match
+                                (match x)]
+                               [`(quasiquote ,datum)
+                                (eval-quasi datum (lambda (exp) (eval-expr exp env)))]
+                               [`(,rator ,rand)
+                                ((eval-expr rator env) (eval-expr rand env))]
+                               ))))
+                   (eval-expr ',quine
+                              'initial-env))))))
+  '())
+
+(test "check-quine-3"
+  (run 1 (q)
+    (fresh (quine)
+      (== '((lambda (x) `(,x ',x)) '(lambda (x) `(,x ',x))) quine)
+      (parseo `(letrec ((eval-quasi (lambda (q eval)
+                                      (match q
+                                        [(? symbol? x) x]
+                                        [`() '()]
+                                        [`(,`unquote ,exp) (eval exp)]
+                                        [`(quasiquote ,datum) ('error)]
+                                        [`(,a . ,d)
+                                         (cons (eval-quasi a eval) (eval-quasi d eval))]))))
+                 (letrec ((eval-expr
+                           (lambda (expr env)
+                             (match expr
+                               [`(quote ,datum) datum]
+                               [`(lambda (,(? symbol? x)) ,body)
+                                (lambda (a)
+                                  (eval-expr body (lambda (y)
+                                                    (if (equal? x y)
+                                                        a
+                                                        (env y)))))]
+                               [(? foo? x)
+                                ;; illegal predicate name
+                                (env x)]
+                               [`(quasiquote ,datum)
+                                (eval-quasi datum (lambda (exp) (eval-expr exp env)))]
+                               [`(,rator ,rand)
+                                ((eval-expr rator env) (eval-expr rand env))]
+                               ))))
+                   (eval-expr ',quine
+                              'initial-env))))))
+  '())
