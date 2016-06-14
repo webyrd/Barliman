@@ -106,7 +106,7 @@ class EditorWindowController: NSWindowController {
     func setupRunCodeFromEditPaneTimer() {
         runCodeFromEditPaneTimer?.invalidate()
 
-        runCodeFromEditPaneTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target:self, selector: #selector(EditorWindowController.runCodeFromEditPane), userInfo: nil, repeats: false)
+        runCodeFromEditPaneTimer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: #selector(EditorWindowController.runCodeFromEditPane), userInfo: nil, repeats: false)
     }
     
     func runCodeFromEditPane() {
