@@ -2,24 +2,77 @@
 ;;;
 ;;; relational parser for 'miniScheme' with 'match'
 
-;; > (run 1000 (q) (parseo '(begin (define append (lambda (x) x)) (append 5))))
+;;; Important!
+;;;
+;;; Chez Scheme is happy to accept 'lambda' bodies containing unbound
+;;; variables, so long as the variables aren't referenced:
+;;;
+;;; > (begin (define append (lambda (x) con)) (list list))
+;;; (#<procedure list>)
+;;;
+;;; Basically, the bodies of 'lambdas' need to be grammatically
+;;; correct, but should be allowed to contain references to unbound
+;;; variables.
+;;;
+;;; In contrast, this grammatically incorrect definition causes an
+;;; error in Chez:
+;;;
+;;; > (begin (define append (lambda (x) lambda)) (list list))
+;;;
+;;; Exception: invalid syntax lambda
+;;; Type (debug) to enter the debugger.
+;;;
+;;; whereas this version is legal in Chez, since 'lambda' is shadowed:
+;;;
+;;; > (begin (define append (lambda (x) (lambda (lambda) lambda))) (list list))
+;;; (#<procedure list>)
+;;;
+;;; The parser should handle these cases correctly.
+;;;
+;;; Parser should be applid to the examples + definition, in addition
+;;; to the definition by itself.
+
+;; > (run 1 (q) (parseo '(begin (define append (lambda (x) cons)) (list list))))
 ;; (_.0)
-;; > (run 1000 (q) (parseo '(begin (define append (lambda (x) x)) (appen 5))))
+;; > (run 1 (q) (parseo '(begin (define append (lambda (x) con)) (list list))))
+;; (_.0)
+;; > (run 1 (q) (parseo '(begin (define append (lambda (x) lambda)) (list list))))
 ;; ()
-;; > (run 1000 (q) (parseo '(begin (define append (lambda (x) x)) (append 5))))
+;; > (run 1 (q) (parseo '(begin (define append (lambda (x) (lambda (lambda) lambda))) (list list))))
 ;; (_.0)
-;; > (run 1000 (q) (parseo '(begin (defin append (lambda (x) x)) (append 5))))
+;; > (run 1 (q) (parseo '(begin (define append (lambda (x) x)) (append 5))))
+;; (_.0)
+;; > (run 1 (q) (parseo '(begin (define append (lambda (x) x)) (appen 5))))
+;; (_.0)
+;; > (run 1 (q) (parseo '(begin (define append (lambda x x)) (append 5))))
+;; (_.0)
+;; > (run 1 (q) (parseo '(begin (define append (lambda x)) (append 5))))
+;; ()
+;; > (run 1 (q) (parseo '(begin (defyn append (lambda (x) x)) (append 5))))
+;; ()
+;; > (run 1 (q) (parseo '(begin (define append (lambda (x) x)))))
 ;; ()
 ;; > (run 1 (q) (parseo '(begin (define append (lambda (x) cons)) (list list))))
 ;; (_.0)
 ;; > (run 1 (q) (parseo '(begin (define append (lambda (x) con)) (list list))))
+;; (_.0)
+
 
 ;;; should be able to check the definition is legal with queries like:
 ;;
 ;; > (run 1 (q) (parseo `(begin (define append (lambda (x) cons)) . ,q)))
 ;; (((_.0) (num _.0)))
 ;; > (run 1 (q) (parseo `(begin (define append (lambda (x) con)) . ,q)))
+;; (((_.0) (num _.0)))
+;; > (run 1 (q) (parseo `(begin (define append (lambda cons)) . ,q)))
 ;; ()
+;; > (run 1 (q) (parseo `(begin (define append (lambda (x) (if))) . ,q)))
+;; ()
+;; > (run 1 (q) (parseo `(begin (define append (lambda (x) (if 3 4 5))) . ,q)))
+;; (((_.0) (num _.0)))
+;; > (run 1 (q) (parseo `(begin (define append (lambda (x) (if 3))) . ,q)))
+;; ()
+
 
 ;;; should be able to avoid duplicating the definitions at the bottom
 ;;; of the file by just adding the parsing code to the evaluator code
@@ -40,7 +93,18 @@
 
     ((symbolo expr)
      (fresh (val)
-       (lookupo expr env val)))
+       ;;
+       (conde
+         ((keywordo expr)
+          ;; if expr is a keyword ('lambda', 'begin', 'define', 'letrec', 'and', 'or', 'if', or whatever)
+          ;; *and* expr is shadowed in the environment, succeed.  Otherwuse, it is a syntax violation.
+          (fresh (val)
+            (lookupo expr env val)))
+         ((not-keywordo expr)
+          ;; Otherwise, succeed, since it doesn't matter if the symbol
+          ;; is bound or not -- the expression is still grammatically
+          ;; correct.
+          ))))
 
     ((fresh (x body)
        (== `(lambda ,x ,body) expr)
@@ -134,9 +198,28 @@
     (parse-expo e2 env)
     (parse-expo e3 env)))
 
+(define keywordo
+  (lambda (x)
+    (conde
+      ((== 'lambda x))
+      ((== 'begin x))
+      ((== 'define x))
+      ((== 'letrec x))
+      ((== 'and x))
+      ((== 'or x))
+      ((== 'if x)))))
 
-
-
+(define not-keywordo
+  (lambda (x)
+    (fresh ()
+      (symbolo x)
+      (=/= 'lambda x)
+      (=/= 'begin x)
+      (=/= 'define x)
+      (=/= 'letrec x)
+      (=/= 'and x)
+      (=/= 'or x)
+      (=/= 'if x))))
 
 
 
