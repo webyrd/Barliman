@@ -41,10 +41,12 @@ class EditorWindowController: NSWindowController {
     @IBOutlet weak var test6Spinner: NSProgressIndicator!
 
 
+    var runCodeFromEditPaneTimer: NSTimer?
     
     var semanticsWindowController: SemanticsWindowController?
         
     let processingQueue: NSOperationQueue = NSOperationQueue()
+    
     
     override var windowNibName: String? {
         return "EditorWindowController"
@@ -69,6 +71,8 @@ class EditorWindowController: NSWindowController {
         
         print("cleaning up!")
         
+        runCodeFromEditPaneTimer?.invalidate()
+        
         // tell every operation to kill its Scheme task
         print("prior operation count: \(processingQueue.operationCount)")
         processingQueue.cancelAllOperations()
@@ -88,15 +92,23 @@ class EditorWindowController: NSWindowController {
     func textDidChange(notification: NSNotification) {
         // NSTextView text changed
         print("@@@@@@@@@@@@@@@@@@@ textDidChange")
-        runCodeFromEditPane()
+        
+        setupRunCodeFromEditPaneTimer()
     }
     
     override func controlTextDidChange(aNotification: NSNotification) {
         // NSTextField text changed
         print("@@@@@@@@@@@@@@@@@@@ controlTextDidChange")
-        runCodeFromEditPane()
-    }
         
+        setupRunCodeFromEditPaneTimer()
+    }
+    
+    func setupRunCodeFromEditPaneTimer() {
+        runCodeFromEditPaneTimer?.invalidate()
+
+        runCodeFromEditPaneTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target:self, selector: #selector(EditorWindowController.runCodeFromEditPane), userInfo: nil, repeats: false)
+    }
+    
     func runCodeFromEditPane() {
         
         // The text in the code pane changed!  Launch a new Scheme task to evaluate the new expression...

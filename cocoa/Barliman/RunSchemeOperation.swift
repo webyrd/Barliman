@@ -24,8 +24,8 @@ class RunSchemeOperation: NSOperation {
     }
     
     override func cancel() {
-        //print("!!! cancel called!")
-        stopSpinner()
+        print("!!! cancel called!")
+        // stopSpinner()
         super.cancel()
         // print("&&& killing process \( task.processIdentifier )")
         task.terminate()
@@ -175,7 +175,7 @@ class RunSchemeOperation: NSOperation {
                 }
             } else if exitStatus == 15 {
                 // SIGTERM exitStatus -- ignore
-                print("SIGTERM !!!")
+                print("SIGTERM !!!  taskType = \( self.taskType )")
             } else {
                 // the query wasn't even a legal s-expression, according to Chez!
                 if self.taskType == "simple" {

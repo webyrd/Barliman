@@ -23,7 +23,7 @@ class SemanticsWindowController: NSWindowController {
     func textDidChange(notification: NSNotification) {
         // NSTextView text changed
         print("@@@@@@@@@@@@@@@@@@@ semantics textDidChange")
-        editorWindowController!.runCodeFromEditPane()
+        editorWindowController!.setupRunCodeFromEditPaneTimer()
     }
     
     override func windowDidLoad() {
@@ -58,19 +58,19 @@ class SemanticsWindowController: NSWindowController {
     @IBAction func loadFullMiniSchemeWithMatch(sender: NSMenuItem) {
         loadInterpreterCode("interp")
         print("@@@@ loaded FullMiniSchemeWithMatch interpreter from popup menu")
-        editorWindowController!.runCodeFromEditPane()
+        editorWindowController!.setupRunCodeFromEditPaneTimer()
     }
     
     @IBAction func loadCallByValueLambdaCalculus(sender: NSMenuItem) {
         loadInterpreterCode("cbv-lc")
         print("@@@@ loaded CallByValueLambdaCalculus interpreter from popup menu")
-        editorWindowController!.runCodeFromEditPane()
+        editorWindowController!.setupRunCodeFromEditPaneTimer()
     }
 
     @IBAction func loadDynamicallyScopedMiniSchemeWithMatch(sender: NSMenuItem) {
         loadInterpreterCode("interp-dynamic")
         print("@@@@ loaded DynamicallyScopedMiniSchemeWithMatch interpreter from popup menu")
-        editorWindowController!.runCodeFromEditPane()
+        editorWindowController!.setupRunCodeFromEditPaneTimer()
     }
 
     
