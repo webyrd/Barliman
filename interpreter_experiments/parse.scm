@@ -51,9 +51,7 @@
     ((fresh (rator rands)
        (== `(,rator . ,rands) expr)
        ;; application
-       (parse-listo `(,rator . ,rands) env)
-       ;; TODO -- need to do anything special to handle prim application?
-       ))
+       (parse-listo `(,rator . ,rands) env)))
 
 ;; TODO
 ;;    ((parse-matcho expr env))
