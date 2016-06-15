@@ -25,11 +25,15 @@ class RunSchemeOperation: NSOperation {
     
     override func cancel() {
         print("!!! cancel called!")
-        // stopSpinner()
+
         super.cancel()
         // print("&&& killing process \( task.processIdentifier )")
         task.terminate()
         // print("&&& killed process")
+        
+        if self.taskType == "allTests" {
+            stopSpinner()
+        }
     }
     
     func stopSpinner() {
@@ -39,6 +43,9 @@ class RunSchemeOperation: NSOperation {
 
             let ewc = self.editorWindowController
 
+            if self.taskType == "simple" {
+                ewc.schemeDefinitionSpinner.stopAnimation(self)
+            }
             if self.taskType == "test1" {
                 ewc.test1Spinner.stopAnimation(self)
             }
@@ -117,10 +124,15 @@ class RunSchemeOperation: NSOperation {
                 if datastring == "parse-error" {
                     inputField.textColor = NSColor.magentaColor()
                     outputField.textColor = NSColor.magentaColor()
+                    
+                    // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
+                    self.editorWindowController.schemeOperationAllTests?.cancel()
                 } else if datastring == "()" {
                     inputField.textColor = NSColor.redColor()
                     outputField.textColor = NSColor.redColor()
-                    // TODO - would be polite to cancel the allTests operation as well, since it cannot possibly succeed
+                    
+                    // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
+                    self.editorWindowController.schemeOperationAllTests?.cancel()
                 } else {
                     inputField.textColor = NSColor.blackColor()
                     outputField.textColor = NSColor.blackColor()
@@ -145,9 +157,15 @@ class RunSchemeOperation: NSOperation {
                     ewc.schemeDefinitionSpinner.stopAnimation(self)
                     if datastring == "parse-error" {
                         ewc.schemeDefinitionView.textColor = NSColor.magentaColor()
+                        
+                        // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
+                        self.editorWindowController.schemeOperationAllTests?.cancel()
                     } else if datastring == "()" {
                         // print("--- turning simple red")
                         ewc.schemeDefinitionView.textColor = NSColor.redColor()
+                        
+                        // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
+                        self.editorWindowController.schemeOperationAllTests?.cancel()
                     } else {
                         // print("--- turning simple black")
                         ewc.schemeDefinitionView.textColor = NSColor.blackColor()

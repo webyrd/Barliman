@@ -45,7 +45,10 @@ class EditorWindowController: NSWindowController {
     var runCodeFromEditPaneTimer: NSTimer?
     
     var semanticsWindowController: SemanticsWindowController?
-        
+    
+    // keep track of the operation that runs all the tests together, in case we need to cancel it
+    var schemeOperationAllTests: RunSchemeOperation?
+    
     let processingQueue: NSOperationQueue = NSOperationQueue()
     
     
@@ -399,6 +402,8 @@ class EditorWindowController: NSWindowController {
         let runSchemeOpTest6: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest6, taskType: "test6")
         
         let runSchemeOpAllTests: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringAllTests, taskType: "allTests")
+        
+        schemeOperationAllTests = runSchemeOpAllTests
 
 
 
@@ -410,6 +415,9 @@ class EditorWindowController: NSWindowController {
         
         
         // now that the previous operations have completed, safe to add the new operations
+        bestGuessSpinner.startAnimation(self)
+        processingQueue.addOperation(runSchemeOpAllTests)
+        
         schemeDefinitionSpinner.startAnimation(self)
         processingQueue.addOperation(runSchemeOpSimple)
         
@@ -467,8 +475,5 @@ class EditorWindowController: NSWindowController {
             test6InputField.textColor = NSColor.blackColor()
             test6ExpectedOutputField.textColor = NSColor.blackColor()
         }
-        
-        bestGuessSpinner.startAnimation(self)
-        processingQueue.addOperation(runSchemeOpAllTests)
     }
 }
