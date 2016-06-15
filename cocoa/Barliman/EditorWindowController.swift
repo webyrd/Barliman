@@ -114,21 +114,25 @@ class EditorWindowController: NSWindowController {
                              expectedOut: String,
                              interp_string: String,
                              mk_vicare_path_string: String,
-                             mk_path_string: String) -> String {
+                             mk_path_string: String,
+                             simple: Bool) -> String {
         
         let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
         let load_mk_string: String = "(load \"\( mk_path_string )\")"
-        let parse_ans_string: String = "(define parse-ans (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (parseo `(begin \( defn ) \( body))))))"
-        let eval_string: String = "(run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (evalo `(begin \( defn ) \( body)) \( expectedOut ))))"
+        let parse_ans_string: String = "(define parse-ans (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (parseo `(begin \( defn ) \( body ))))))"
+        
+        let parse_with_fake_defn_ans_string: String = "(define parse-ans (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (fresh (fake-defn) (fresh (name dummy-body ignore-body) (== `(define ,name . ,dummy-body) fake-defn) (== `(\( defn )) (list `(define ,name . ,ignore-body)))) (parseo `(begin ,fake-defn \( body )))))))"
+
+        let eval_string: String = "(run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (evalo `(begin \( defn ) \( body )) \( expectedOut ))))"
         let write_ans_string: String = "(write (if (null? parse-ans) 'parse-error \( eval_string )))"
         
         let full_string: String = load_mk_vicare_string + "\n" +
                                   load_mk_string + "\n" +
                                   interp_string + "\n" +
-                                  parse_ans_string + "\n" +
+                                  (simple ? parse_ans_string : parse_with_fake_defn_ans_string) + "\n" +
                                   write_ans_string
       
-        print("query string:\n \(full_string)\n")
+        print("query string:\n \( full_string )\n")
         
         return full_string
     }
@@ -188,7 +192,8 @@ class EditorWindowController: NSWindowController {
                                 expectedOut: "q",
                                 interp_string: interp_string,
                                 mk_vicare_path_string: mk_vicare_path_string,
-                                mk_path_string: mk_path_string)
+                                mk_path_string: mk_path_string,
+                                simple: true)
         
         let queryTest1: String =
             (processTest1 ?
@@ -197,7 +202,8 @@ class EditorWindowController: NSWindowController {
                     expectedOut: test1ExpectedOutputField.stringValue,
                     interp_string: interp_string,
                     mk_vicare_path_string: mk_vicare_path_string,
-                    mk_path_string: mk_path_string)
+                    mk_path_string: mk_path_string,
+                    simple: false)
                 : "")
 
         let queryTest2: String =
@@ -207,7 +213,8 @@ class EditorWindowController: NSWindowController {
                     expectedOut: test2ExpectedOutputField.stringValue,
                     interp_string: interp_string,
                     mk_vicare_path_string: mk_vicare_path_string,
-                    mk_path_string: mk_path_string)
+                    mk_path_string: mk_path_string,
+                    simple: false)
                 : "")
 
         let queryTest3: String =
@@ -217,7 +224,8 @@ class EditorWindowController: NSWindowController {
                     expectedOut: test3ExpectedOutputField.stringValue,
                     interp_string: interp_string,
                     mk_vicare_path_string: mk_vicare_path_string,
-                    mk_path_string: mk_path_string)
+                    mk_path_string: mk_path_string,
+                    simple: false)
                 : "")
         
         let queryTest4: String =
@@ -227,7 +235,8 @@ class EditorWindowController: NSWindowController {
                     expectedOut: test4ExpectedOutputField.stringValue,
                     interp_string: interp_string,
                     mk_vicare_path_string: mk_vicare_path_string,
-                    mk_path_string: mk_path_string)
+                    mk_path_string: mk_path_string,
+                    simple: false)
                 : "")
 
         let queryTest5: String =
@@ -237,7 +246,8 @@ class EditorWindowController: NSWindowController {
                     expectedOut: test5ExpectedOutputField.stringValue,
                     interp_string: interp_string,
                     mk_vicare_path_string: mk_vicare_path_string,
-                    mk_path_string: mk_path_string)
+                    mk_path_string: mk_path_string,
+                    simple: false)
                 : "")
         
         let queryTest6: String =
@@ -247,7 +257,8 @@ class EditorWindowController: NSWindowController {
                     expectedOut: test6ExpectedOutputField.stringValue,
                     interp_string: interp_string,
                     mk_vicare_path_string: mk_vicare_path_string,
-                    mk_path_string: mk_path_string)
+                    mk_path_string: mk_path_string,
+                    simple: false)
                 : "")
 
         
