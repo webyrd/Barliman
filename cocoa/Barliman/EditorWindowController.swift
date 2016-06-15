@@ -121,7 +121,7 @@ class EditorWindowController: NSWindowController {
         let load_mk_string: String = "(load \"\( mk_path_string )\")"
         let parse_ans_string: String = "(define parse-ans (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (parseo `(begin \( defn ) \( body ))))))"
         
-        let parse_with_fake_defn_ans_string: String = "(define parse-ans (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (fresh (fake-defn) (fresh (name dummy-body ignore-body) (== `(define ,name . ,dummy-body) fake-defn) (== `(\( defn )) (list `(define ,name . ,ignore-body)))) (parseo `(begin ,fake-defn \( body )))))))"
+        let parse_with_fake_defn_ans_string: String = "(define parse-ans (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (fresh (name dummy-body dummy-expr ignore-body) (== `( \( defn ) ) (list `(define ,name . ,ignore-body))) (parseo `((lambda (,name) \( body )) ,dummy-expr))))))"
 
         let eval_string: String = "(run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (evalo `(begin \( defn ) \( body )) \( expectedOut ))))"
         let write_ans_string: String = "(write (if (null? parse-ans) 'parse-error \( eval_string )))"
