@@ -32,6 +32,7 @@ class EditorWindowController: NSWindowController {
     @IBOutlet weak var test6InputField: NSTextField!
     @IBOutlet weak var test6ExpectedOutputField: NSTextField!
 
+    @IBOutlet weak var schemeDefinitionSpinner: NSProgressIndicator!
     @IBOutlet weak var bestGuessSpinner: NSProgressIndicator!
     @IBOutlet weak var test1Spinner: NSProgressIndicator!
     @IBOutlet weak var test2Spinner: NSProgressIndicator!
@@ -409,7 +410,9 @@ class EditorWindowController: NSWindowController {
         
         
         // now that the previous operations have completed, safe to add the new operations
+        schemeDefinitionSpinner.startAnimation(self)
         processingQueue.addOperation(runSchemeOpSimple)
+        
         if processTest1 {
             print("queuing test1")
             test1Spinner.startAnimation(self)

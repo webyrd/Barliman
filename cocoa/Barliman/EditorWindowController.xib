@@ -10,6 +10,7 @@
             <connections>
                 <outlet property="bestGuessSpinner" destination="sDx-rk-wjy" id="YNC-U0-ajX"/>
                 <outlet property="bestGuessView" destination="udr-Wg-VyJ" id="CBV-q1-4Tp"/>
+                <outlet property="schemeDefinitionSpinner" destination="bki-fe-DmI" id="NKg-g5-BsN"/>
                 <outlet property="schemeDefinitionView" destination="4FU-au-vlw" id="Ka2-gL-bOM"/>
                 <outlet property="test1ExpectedOutputField" destination="Zi0-kV-0Zv" id="Umr-Mr-tI7"/>
                 <outlet property="test1InputField" destination="dfp-gE-e7y" id="nOz-Cv-ape"/>
@@ -1089,6 +1090,9 @@
                     </progressIndicator>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Mxm-SY-a4v" userLabel="Test6 Spinner">
                         <rect key="frame" x="903" y="75" width="16" height="16"/>
+                    </progressIndicator>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="bki-fe-DmI" userLabel="Scheme Definition Spinner">
+                        <rect key="frame" x="444" y="509" width="16" height="16"/>
                     </progressIndicator>
                 </subviews>
             </view>

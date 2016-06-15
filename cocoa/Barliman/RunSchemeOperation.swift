@@ -142,6 +142,7 @@ class RunSchemeOperation: NSOperation {
             if exitStatus == 0 {
                 // at least Chez ran to completion!  The query could still have failed, of course
                 if self.taskType == "simple" {
+                    ewc.schemeDefinitionSpinner.stopAnimation(self)
                     if datastring == "parse-error" {
                         ewc.schemeDefinitionView.textColor = NSColor.magentaColor()
                     } else if datastring == "()" {
@@ -186,6 +187,7 @@ class RunSchemeOperation: NSOperation {
                 if self.taskType == "simple" {
                     // print("--- turning simple green")
                     // print("exitStatus = \( exitStatus )")
+                    ewc.schemeDefinitionSpinner.stopAnimation(self)
                     ewc.schemeDefinitionView.textColor = NSColor.greenColor()
                 }
                 
