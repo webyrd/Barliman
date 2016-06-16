@@ -103,7 +103,7 @@
 	    (cons (cons v new-v) env))))))
     (cond
       ((symbol? e) `(var ,(cdr (assq e env)))); support alpha-renaming
-      ((number? e) `(intc ,e))
+      ((number? e) e)
       ((boolean? e) `(boolc ,e))
       (else 
 	(case (car e)
@@ -132,21 +132,23 @@
 
 (define (unparse e)
   (define (fmap e) (cons (car e) (map unparse (cdr e))))
-    (case (car e)
-      ((var) (cadr e))
-      ((intc) (cadr e))
-      ((boolc) (cadr e))
-      ((zero? sub1 + if cons car cdr inl inr fix) (fmap e))
-      ((lambda) `(lambda (,(car (cadr e))) ,(unparse (caddr e))))
-      ((let) 
-       `(let ((,(car (car (cadr e)))
-               ,(unparse (cadr (car (cadr e))))))
-          ,(unparse (caddr e))))
-      ((either) 
-       `(either (,(car (cadr e))
-		 ,(unparse (cadr (cadr e))))
-          ,(unparse (caddr e)) ,(unparse (cadddr e))))
-      ((app) (cdr (fmap e)))))
+  (cond
+    ((number? e) e)
+    (else
+      (case (car e)
+        ((var) (cadr e))
+        ((boolc) (cadr e))
+        ((zero? sub1 + if cons car cdr inl inr fix) (fmap e))
+        ((lambda) `(lambda (,(car (cadr e))) ,(unparse (caddr e))))
+        ((let) 
+         `(let ((,(car (car (cadr e)))
+                 ,(unparse (cadr (car (cadr e))))))
+            ,(unparse (caddr e))))
+        ((either) 
+         `(either (,(car (cadr e))
+                   ,(unparse (cadr (cadr e))))
+                  ,(unparse (caddr e)) ,(unparse (cadddr e))))
+        ((app) (cdr (fmap e)))))))
 
 
 ; We define a first-class (and recursive) relation !-
@@ -165,7 +167,7 @@
   (lambda (s!-)
     (lambda (e t)
       (fresh (x)
-	(== e `(intc ,x))
+	(numbero e)
 	(== t 'int)))))
 
 (define bool-rel
@@ -385,34 +387,34 @@
 
 
 (test-check 'test-!-1
-  (run* (q) (!- '(intc 17) 'int))
+  (run* (q) (!- '17 'int))
   '(_.0))
 
 (test-check 'test-!-2
-  (run* (q) (!- '(intc 17) q))
+  (run* (q) (!- '17 q))
   '(int))
 
 (test-check 'test-primitives
-  (run* (q) (!- '(zero? (intc 24)) q))
+  (run* (q) (!- '(zero? 24) q))
   '(bool))
 
 (test-check 'test-sub1
-  (run* (q) (!- '(zero? (sub1 (intc 24))) q))
+  (run* (q) (!- '(zero? (sub1 24)) q))
   '(bool))
 
 (test-check 'test-+
-  (run* (q) (!- '(zero? (sub1 (+ (intc 18) (+ (intc 24) (intc 50))))) q))
+  (run* (q) (!- '(zero? (sub1 (+ 18 (+ 24 50)))) q))
   '(bool))
 
 (test-check 'test-if
-  (run* (q) (!- '(if (zero? (intc 24)) (zero? (intc 3)) (zero? (intc 4))) q))
+  (run* (q) (!- '(if (zero? 24) (zero? 3) (zero? 4)) q))
   '(bool))
 
 (test-check 'test-if-2
   (run* (q) 
-    (!- '(if (if (zero? (intc 1)) (boolc #t) (boolc #f))
-                     (intc 0)
-                     (+ (intc 1) (intc 2)))
+    (!- '(if (if (zero? 1) (boolc #t) (boolc #f))
+                     0
+                     (+ 1 2))
       q))
   '(int))
 
@@ -422,7 +424,7 @@
 
 
 (test-check 'variables-4a
-  (run* (q) (!- '(lambda (x) (+ (var x) (intc 5))) q))
+  (run* (q) (!- '(lambda (x) (+ (var x) 5)) q))
   '((int -> . int)))
 
 
@@ -492,9 +494,9 @@
              (lambda (sum)
                (lambda (n)
                  (if (if (zero? (var n)) (boolc #t) (boolc #f))
-                     (intc 0)
+                     0
                      (+ (var n) (app (var sum) (sub1 (var n))))))))
-           (intc 10))
+           10)
       q))
   '(int))
 
@@ -511,24 +513,24 @@
 ; Generating a term for a type
 (test-check 'type-habitation-1
   (run 10 (q) (!- q 'int))
-  '((intc _.0)
-    (sub1 (intc _.0))
-    (sub1 (sub1 (intc _.0)))
-    (+ (intc _.0) (intc _.1))
-    (sub1 (sub1 (sub1 (intc _.0))))
-    (sub1 (+ (intc _.0) (intc _.1)))
-    (+ (intc _.0) (sub1 (intc _.1)))
-    (+ (sub1 (intc _.0)) (intc _.1))
-    (sub1 (sub1 (sub1 (sub1 (intc _.0)))))
-    (sub1 (sub1 (+ (intc _.0) (intc _.1)))))
+  '((_.0 (num _.0))
+    ((sub1 _.0) (num _.0))
+    ((sub1 (sub1 _.0)) (num _.0))
+    ((+ _.0 _.1) (num _.0 _.1))
+    ((sub1 (sub1 (sub1 _.0))) (num _.0))
+    ((sub1 (+ _.0 _.1)) (num _.0 _.1))
+    ((+ _.0 (sub1 _.1)) (num _.0 _.1))
+    ((+ (sub1 _.0) _.1) (num _.0 _.1))
+    ((sub1 (sub1 (sub1 (sub1 _.0)))) (num _.0))
+    ((sub1 (sub1 (+ _.0 _.1))) (num _.0 _.1)))
 )
 
 (test-check 'type-habitation-2
   (run 5 (q) (!- q '(int -> . int)))
   '((lambda (_.0) (var _.0))
-    (lambda (_.0) (intc _.1))
+    ((lambda (_.0) _.1) (num _.1))
     (lambda (_.0) (sub1 (var _.0)))
-    (car (cons (lambda (_.0) (var _.0)) (intc _.1)))
+    ((car (cons (lambda (_.0) (var _.0)) _.1)) (num _.1))
     (car (cons (lambda (_.0) (var _.0)) (boolc _.1))))
   )
 
@@ -538,37 +540,36 @@
 (test-check 'type-habitation-3
   (run 10 (q) (!- q `((a -> . a) -> . (a -> . a))))
   '((lambda (_.0) (var _.0))
-    (car (cons (lambda (_.0) (var _.0)) (intc _.1)))
+    ((car (cons (lambda (_.0) (var _.0)) _.1)) (num _.1))
     (car (cons (lambda (_.0) (var _.0)) (boolc _.1)))
-    (car (cons (lambda (_.0) (var _.0)) (zero? (intc _.1))))
-    (car (cons (lambda (_.0) (var _.0)) (sub1 (intc _.1))))
-    (car (cons
-          (lambda (_.0) (var _.0))
-          (zero? (sub1 (intc _.1)))))
-    (car (cons
-          (lambda (_.0) (var _.0))
-          (sub1 (sub1 (intc _.1)))))
-    (car (cons
-          (lambda (_.0) (var _.0))
-          (zero? (sub1 (sub1 (intc _.1))))))
-    (car (cons
-          (lambda (_.0) (var _.0))
-          (+ (intc _.1) (intc _.2))))
-    (car (cons
-          (lambda (_.0) (var _.0))
-          (zero? (+ (intc _.1) (intc _.2))))))
+    ((car (cons (lambda (_.0) (var _.0)) (zero? _.1)))
+     (num _.1))
+    ((car (cons (lambda (_.0) (var _.0)) (sub1 _.1))) (num _.1))
+    ((car (cons (lambda (_.0) (var _.0)) (zero? (sub1 _.1))))
+     (num _.1))
+    ((car (cons (lambda (_.0) (var _.0)) (sub1 (sub1 _.1))))
+     (num _.1))
+    ((car (cons
+           (lambda (_.0) (var _.0))
+           (zero? (sub1 (sub1 _.1)))))
+     (num _.1))
+    ((car (cons (lambda (_.0) (var _.0)) (+ _.1 _.2)))
+     (num _.1 _.2))
+    ((car (cons (lambda (_.0) (var _.0)) (zero? (+ _.1 _.2))))
+     (num _.1 _.2)))
   )
 
 (test-check 'type-habitation-4
   (run 10 (q) 
     (fresh (_) (== q `(lambda . ,_)) (!- q `((a -> . a) -> . (a -> . a)))))
   '((lambda (_.0) (var _.0)) (lambda (_.0) (car (cons (var _.0) (var _.0))))
-    (lambda (_.0) (car (cons (var _.0) (intc _.1))))
+    ((lambda (_.0) (car (cons (var _.0) _.1))) (num _.1))
     (lambda (_.0) (cdr (cons (var _.0) (var _.0))))
     (lambda (_.0) (car (cons (var _.0) (boolc _.1))))
     (lambda (_.0) (lambda (_.1) (var _.1)))
-    (lambda (_.0) (cdr (cons (intc _.1) (var _.0))))
-    (lambda (_.0) (car (cons (var _.0) (zero? (intc _.1)))))
+    ((lambda (_.0) (cdr (cons _.1 (var _.0)))) (num _.1))
+    ((lambda (_.0) (car (cons (var _.0) (zero? _.1))))
+     (num _.1))
     (lambda (_.0) (if (boolc _.1) (var _.0) (var _.0)))
     (lambda (_.0) (cdr (cons (boolc _.1) (var _.0)))))
   )
