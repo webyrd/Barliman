@@ -104,7 +104,7 @@
     (cond
       ((symbol? e) `(var ,(cdr (assq e env)))); support alpha-renaming
       ((number? e) e)
-      ((boolean? e) `(boolc ,e))
+      ((boolean? e) e)
       (else 
 	(case (car e)
 	  ((zero? sub1 + if cons car cdr inl inr fix)
@@ -134,10 +134,10 @@
   (define (fmap e) (cons (car e) (map unparse (cdr e))))
   (cond
     ((number? e) e)
+    ((boolean? e) e)
     (else
       (case (car e)
         ((var) (cadr e))
-        ((boolc) (cadr e))
         ((zero? sub1 + if cons car cdr inl inr fix) (fmap e))
         ((lambda) `(lambda (,(car (cadr e))) ,(unparse (caddr e))))
         ((let) 
@@ -173,8 +173,10 @@
 (define bool-rel
   (lambda (s!-)
     (lambda (e t)
-      (fresh (x)
-	(== e `(boolc ,x))
+      (fresh ()
+        (conde
+          ((== #f e))
+          ((== #t e)))
 	(== t 'bool)))))
 
 
@@ -412,7 +414,7 @@
 
 (test-check 'test-if-2
   (run* (q) 
-    (!- '(if (if (zero? 1) (boolc #t) (boolc #f))
+    (!- '(if (if (zero? 1) #t #f)
                      0
                      (+ 1 2))
       q))
@@ -493,7 +495,7 @@
            (fix
              (lambda (sum)
                (lambda (n)
-                 (if (if (zero? (var n)) (boolc #t) (boolc #f))
+                 (if (if (zero? (var n)) #t #f)
                      0
                      (+ (var n) (app (var sum) (sub1 (var n))))))))
            10)
@@ -529,9 +531,9 @@
   (run 5 (q) (!- q '(int -> . int)))
   '((lambda (_.0) (var _.0))
     ((lambda (_.0) _.1) (num _.1))
-    (lambda (_.0) (sub1 (var _.0)))
     ((car (cons (lambda (_.0) (var _.0)) _.1)) (num _.1))
-    (car (cons (lambda (_.0) (var _.0)) (boolc _.1))))
+    (lambda (_.0) (sub1 (var _.0)))
+    (car (cons (lambda (_.0) (var _.0)) #f)))
   )
 
 
@@ -541,7 +543,8 @@
   (run 10 (q) (!- q `((a -> . a) -> . (a -> . a))))
   '((lambda (_.0) (var _.0))
     ((car (cons (lambda (_.0) (var _.0)) _.1)) (num _.1))
-    (car (cons (lambda (_.0) (var _.0)) (boolc _.1)))
+    (car (cons (lambda (_.0) (var _.0)) #f))
+    (car (cons (lambda (_.0) (var _.0)) #t))
     ((car (cons (lambda (_.0) (var _.0)) (zero? _.1)))
      (num _.1))
     ((car (cons (lambda (_.0) (var _.0)) (sub1 _.1))) (num _.1))
@@ -554,24 +557,23 @@
            (zero? (sub1 (sub1 _.1)))))
      (num _.1))
     ((car (cons (lambda (_.0) (var _.0)) (+ _.1 _.2)))
-     (num _.1 _.2))
-    ((car (cons (lambda (_.0) (var _.0)) (zero? (+ _.1 _.2))))
      (num _.1 _.2)))
   )
 
 (test-check 'type-habitation-4
   (run 10 (q) 
     (fresh (_) (== q `(lambda . ,_)) (!- q `((a -> . a) -> . (a -> . a)))))
-  '((lambda (_.0) (var _.0)) (lambda (_.0) (car (cons (var _.0) (var _.0))))
+  '((lambda (_.0) (var _.0))
+    (lambda (_.0) (car (cons (var _.0) (var _.0))))
     ((lambda (_.0) (car (cons (var _.0) _.1))) (num _.1))
     (lambda (_.0) (cdr (cons (var _.0) (var _.0))))
-    (lambda (_.0) (car (cons (var _.0) (boolc _.1))))
     (lambda (_.0) (lambda (_.1) (var _.1)))
+    (lambda (_.0) (car (cons (var _.0) #f)))
+    (lambda (_.0) (car (cons (var _.0) #t)))
     ((lambda (_.0) (cdr (cons _.1 (var _.0)))) (num _.1))
     ((lambda (_.0) (car (cons (var _.0) (zero? _.1))))
      (num _.1))
-    (lambda (_.0) (if (boolc _.1) (var _.0) (var _.0)))
-    (lambda (_.0) (cdr (cons (boolc _.1) (var _.0)))))
+    (lambda (_.0) (if #f (var _.0) (var _.0))))
   )
 
 ; If we wish to find only combinators, we can tell the system what
@@ -738,7 +740,7 @@ monad\n")
            (fix
              (lambda (length)
                (lambda (l)
-                 (if (if (null? (var l)) (boolc #t) (boolc #f))
+                 (if (if (null? (var l)) #t #f)
                      (intc 0)
                      (+ 1 (app (var length) (cdr (var l))))))))
            (cons (intc 1) (cons (intc 2) (cons (intc 3)))))
