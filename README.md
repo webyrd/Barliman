@@ -86,7 +86,7 @@ Screenshot 4 shows the main editor window after we have begun defining `append` 
 
 Screenshot 5 shows the main editor window after we have added the closing parenthesis in our partial definition of `append` in the `Scheme Definition` edit pane.  The partial definition of `append` is now a legal s-expression.  However, the definition of `append` is not syntactically valid according to the rules of miniScheme.  Of course, this invalid definition of `append` causes all the tests to fail as well.  Barliman recognizes this, and turns the text in the `Scheme Definition` edit pane, and the text in the test edit fields, red.
 
-(Currently Barliman doesn't actually check that definitions are grammatically correct.  Rather, Barliman uses evaluation of the tests to check whether code is *semantically* legal, rather than syntactically legal.  Future versions of Barliman will probably include explicit grammars that are checked, in addition to semantic rules.)
+(Currently Barliman doesn't actually check that definitions are grammatically correct.  Rather, Barliman uses evaluation of the tests to check whether code is *semantically* legal, rather than syntactically legal.  Future versions of Barliman will probably include explicit grammars that are checked, in addition to semantic rules.)  (Update: Barliman now includes a relational parser for the miniScheme language, as is shown in the newer screenshots at the end.)
 
 #### screenshot 5: 
 
@@ -185,7 +185,7 @@ This example shows that the relational parser keeps track of the environment, va
 
 Screenshot 14 shows a syntactically legal partial definition of `append` in the `Scheme Definition` edit pane.  Three of the tests are syntactically legal, and are (individually) consistent with the partial definition of `append`; therefore, the text for these tests are shown in black.
 
-The third test, however, is syntactically incorrect.  This is because in miniScheme, as in Scheme, `and` is a special form rather than a function, and therefore cannot be passed into the call to `append` as a function.  Since the third test is syntactically illegal, it is shown in purple text.
+The third test, however, is syntactically incorrect.  This is because in miniScheme, as in Scheme, `and` is a special form rather than a function, and therefore cannot be passed into the call to `append`.  Since the third test is syntactically illegal, it is shown in purple text.
 
 #### screenshot 14:
 
@@ -283,12 +283,10 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
-* define grammar for microScheme (and the other languages) as a miniKanren relation, and use this grammar to separately check and report whether the definition is grammatically correct.
+* create a version of Barliman on an open platform (Electron, Clojurescript, Lighttable, whatever).  Any help would be appreciated!  :)
 * consider using ulimit or some other capability for keeping the running Scheme processes under control/keep them from using all the RAM and CPU cycles
 * consider turning the background of the "guess" pane green, or otherwise indicting the user, when a guess can be made.  Could also potentially change the code in the main definition edit pane, although this may not be friendly.
 * add STLC as an example, complete with type inferencer
-* cancel the allTests operation if any single test fails, since in that case allTests cannot possibly succeed
-* wait part of a second to see if there are more keystrokes before launching Scheme processes.  Sort of like XCode (I assume XCode is doing this).  Would be more resource friendly, less distracting, and would make typing quickly more responsive.  Could probably do this using an timer.
 * perhaps be able to drag and drop subexpressions from the best guess pane onto variables in the definition pane.  And also be able to replace an extort subexpression in the definition pane with a logic variable.
 * think about contextual menus/right click and also drag and shift-drag.  What should these do?
 * make sure Semantics and the main Barliman windows can be reopened if the user closes them!  Currently there doesn't seem to be a way to get the window back.  Perhaps allow the user to hide the windows, but not close them?  What is the preferred Mac way?
@@ -302,12 +300,10 @@ TODO:
 * add 'transpose S-expression' and other useful Emacs editing commands
 * move as much work as possible into NSTasks, such as loading files.
 * possibly add pairs of tests as processes, once individual tests complete successfully
-* add ability to change the evaluator rules and perhaps an explicit grammar as well
 * change green text to bold font instead
 * add structured editing capability, with automatic addition of right parens, auto-addition of logic variables, and perhaps something like paredit
 * add syntax-directed auto-indentation of code 
 * figure out how to do syntax-directed hilighlighting, and precise hilighting of syntax errors.  May not be as important if I go the structured editor route.  Although perhaps this should be an option, either way.
-* remove possible race condition with respect to 'barliman-query.scm' temp file
 * add documentation/tutorial
 * add paper prototype for desired features
 * move 'barliman-query.scm' temporary file to a more suitable location than 'Documents' directory, or get rid of the temp file entirely
@@ -315,7 +311,6 @@ TODO:
 * get rid of hardcoded path to Chez executable
 * add input/output examples
 * find a cleaner and more flexible way to construct the program sent to Chez
-* add ability to save and load programs
 * add "accept suggested completion" button
 * would be smarter/less resource intense to not launch all the tests again when the text in a single test changes.  Only that test and allTests need be re-run, in theory.  Getting the UI to display the state of everything properly may be a little subtle, though.
 * differential relational interpreters
@@ -326,8 +321,7 @@ LONGER TERM:
 * try adding contracts/properties/specs. For example, for `append`, could add the property that the sum of `(length l)` and `(length s)` must be equal to `(length (append l s))`.  This could work with randomized testing, even for partially-instantiated definitions.  In the case of `length`, would either need to use Oleg numbers, or CLP(FD).
 * related to properties, might want generators, such as a `loso` that generates flat lists of symbols, for example, or `lovo`, that generates flat lists of values, or `treevo`, that generates trees of values.  Could use these generators for specifying and testing properties.  One simple, "type" property is that `append` should work on any two `lovo`s, and, in this case, return of `lovo`.  Could extend this to talk about the lengths of the `lovo`s, etc.  Could then either enumerate or randomly generate `lovo`s QuickCheck style to try to find counter-examples with respect to the current partial (or complete) definition, or perhaps to help with synthesizing the actual code.
 * automatic test generation/fuzzing
-* add arithmetic to the main interpreter 
-* make the editor cross-platform; Clojure/Clojurescript/core.logic and JavaScript versions could be especially nice
+* add arithmetic to the main interpreter
 * explore incremental computing with the editor
 * add type inferencer
 * test generation of typed test programs
@@ -359,3 +353,11 @@ KNOWN LIMITATIONS AND BUGS:
 * the `begin` form allows for only one definition
 * the `lambda` form does not contain an implicit `begin`
 * closing one of the windows means the window cannot be reopened!  oops
+
+DONE (features on the TODO list implemented since the original release of Barliman)
+
+* define grammar for microScheme (and the other languages) as a miniKanren relation, and use this grammar to separately check and report whether the definition is grammatically correct.
+* cancel the allTests operation if any single test fails, since in that case allTests cannot possibly succeed
+* wait part of a second to see if there are more keystrokes before launching Scheme processes.  Sort of like XCode (I assume XCode is doing this).  Would be more resource friendly, less distracting, and would make typing quickly more responsive.  Could probably do this using an timer.
+* add ability to change the evaluator rules and perhaps an explicit grammar as well
+* remove possible race condition with respect to 'barliman-query.scm' temp file
