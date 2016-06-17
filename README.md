@@ -37,7 +37,7 @@ Barliman is general enough to handle multiple programming languages.  In fact, t
 
 ### Barliman in action
 
-Here are a few screenshots of Barliman, using the Mac implementation as of June 4, 2016.
+Here are a few screenshots of Barliman, using the Mac implementation as of June 4, 2016.  (Update:  I've added a few newer screenshots from June 16, 2016.  Once Barliman stops changing as rapidly I'll update all the screenshots.)
 
 The first screenshot shows the main editor window.  The `Scheme Definition` edit pane contains the complete (fully instantiated) and correct definition of `append`, the list concatenation function in Barliman's default "miniScheme" language.  `append` will be our simple running example in these screenshots.  The edit window also contains three tests; each test contains an input expression, and the expected value of that expression.  The `Best Guess` pane, which is not editable by the user, contains the same fully instantiated definition of `append` as in the `Scheme Definition` edit pane.
 
@@ -155,6 +155,39 @@ A bigger drawback is that the semantics for the language you are writing in must
 ![append example 10 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append12.jpg "append example 10 -- ")
 
 
+---------------------------------------
+
+Update: Here are a few newer screenshots, as of June 16, 2016, that show off the relational parser for miniScheme that I added a couple of days ago.
+
+Screenshot 11 is an updated version of screenshot 5, showing the new relational parser at work.  The definition of `append` is syntactically incorrect, which is represented by the purple text in the `Scheme Definition` edit pane.  The tests are syntactically correct, but fail, and are therefore shown in red text.
+
+#### screenshot 11:
+
+![append example 11 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_16/append23.jpg "append example 11 -- ")
+
+Screenshot 12, like screenshot 11, shows a syntactically incorrect definition of `append`.  In this case the keyword `lambda` appears as the body of the definition.  In miniScheme, as in Scheme, `lambda` is a special form rather than a function; the keyword `lambda` cannot appear outside of a legal `lambda` expression.  Hence the purple text in the `Scheme Definition` edit pane.
+
+Once again, the tests are syntactically valid, but fail, and so are shown in red text.
+
+#### screenshot 12: 
+
+![append example 12 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_16/append21.jpg "append example 12 -- ")
+
+Screenshot 13 is identical to screenshot 12, except that the formal parameter to the `lambda` expression in the `Scheme Definition` edit pane has been changed from `x` to `lambda`.  This formal parameter *shadows* the `lambda` keyword, allowing `lambda` to appear by itself in the body of the `lambda` expression.
+
+Once again, the tests are syntactically valid, but fail, and so are shown in red text.
+
+#### screenshot 13:
+
+![append example 13 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_16/append22.jpg "append example 13 -- ")
+
+Screenshot 14 shows a syntactically legal partial definition of `append` in the `Scheme Definition` edit pane.  Three of the tests are syntactically legal, and are (individually) consistent with the partial definition of `append`; therefore, the text for these tests are shown in black.
+
+The third test, however, is syntactically incorrect.  This is because in miniScheme, as in Scheme, `and` is a special form rather than a function, and therefore cannot be passed into the call to `append` as a function.  Since the third test is syntactically illegal, it is shown in purple text.
+
+#### screenshot 14:
+
+![append example 14 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_16/append24.jpg "append example 14 -- ")
 
 ---------------------------------------
 
