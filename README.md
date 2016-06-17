@@ -165,7 +165,7 @@ Screenshot 11 is an updated version of screenshot 5, showing the new relational 
 
 ![append example 11 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_16/append23.jpg "append example 11 -- ")
 
-Screenshot 12, like screenshot 11, shows a syntactically incorrect definition of `append`.  In this case the keyword `lambda` appears as the body of the definition.  In miniScheme, as in Scheme, `lambda` is a special form rather than a function; the keyword `lambda` cannot appear outside of a legal `lambda` expression.  Hence the purple text in the `Scheme Definition` edit pane.
+Screenshot 12, like screenshot 11, shows a syntactically incorrect definition of `append`.  In this case the keyword `lambda` appears as the body of the definition.  In miniScheme, as in Scheme, `lambda` is a special form rather than a function; the keyword `lambda` cannot appear "by itself".  Hence the purple text in the `Scheme Definition` edit pane.
 
 Once again, the tests are syntactically valid, but fail, and so are shown in red text.
 
