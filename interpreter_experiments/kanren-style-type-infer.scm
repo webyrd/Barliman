@@ -10,7 +10,12 @@
 
 
 
-;;; TODO FIXME -- use initial environment to hold primitive functions, just like in evaluator and parser
+;;; TODO FIXME -- use initial environment to hold primitive functions,
+;;; just like in evaluator and parser
+
+;;; TODO -- add 'letrec', 'begin', multi-argument application,
+;;; variadic and multi-argument lambda, lists, and the primitives from
+;;; the evaluator
 
 (define membero
   (lambda (x ls)
