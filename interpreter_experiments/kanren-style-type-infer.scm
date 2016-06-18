@@ -1,9 +1,16 @@
+;;; WEB -- 18 June 2016
+
 ;; Type inferencer in miniKanren, adapted from Oleg's Kanren polymorphic type inferencer
 ;;
 ;; http://kanren.cvs.sourceforge.net/viewvc/kanren/kanren/examples/type-inference.scm?view=markup
 ;;
 ;; Unlike the Kanren inferencer, this definition of !- is a pure
-;; relation, with no cuts and no uses of project.
+;; relation, with no cuts and no uses of project.  This inferencer
+;; also does not require a parser/unparser, and allows shadowing.
+
+
+
+;;; TODO FIXME -- use initial environment to hold primitive functions, just like in evaluator and parser
 
 (define membero
   (lambda (x ls)

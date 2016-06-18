@@ -1,3 +1,7 @@
+;;; (Obsolete -- instead, see 'kanren-type-type-inference.scm')
+
+
+
 ;;; WEB -- 16 June 2016
 ;;;
 ;;; This is a modified version of Oleg Kiselyov's type inferencer at
