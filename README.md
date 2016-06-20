@@ -244,6 +244,8 @@ As in Scheme, in miniScheme duplicate variable names of definitions at the same 
 
 The `lambda` and `letrec` forms do not contain an implicit `begin`.
 
+The `lambda` form supports multiple arguments, `(lambda (x y z) y)`, and a single "variadic" argument, `(lambda x x)`, but currently doesn't support the full Scheme variadic syntax, `(lambda (x y . z) x)`.
+
 ---------------------------------------
 
 ## Barliman implementation details
@@ -292,6 +294,8 @@ TODO:
 * parser should enforce that the variable names are distinct in `lambda` formals, `letrec` bindings and formals, and `define`'s within the same scope.
 * create a version of Barliman on an open platform (Electron, Clojurescript, Lighttable, whatever).  Any help would be appreciated!  :)
 * consider using ulimit or some other capability for keeping the running Scheme processes under control/keep them from using all the RAM and CPU cycles
+* consider adding fields for seeing the ground results of partially-instantiated test inputs/outputs
+* add full variadic syntax: `(lambda (x y . z) x)`
 * consider turning the background of the "guess" pane green, or otherwise indicting the user, when a guess can be made.  Could also potentially change the code in the main definition edit pane, although this may not be friendly.
 * add STLC as an example, complete with type inferencer
 * perhaps be able to drag and drop subexpressions from the best guess pane onto variables in the definition pane.  And also be able to replace an extort subexpression in the definition pane with a logic variable.
