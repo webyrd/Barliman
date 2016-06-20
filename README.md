@@ -381,4 +381,3 @@ DONE (features on the TODO list implemented since the original release of Barlim
 * cancel the allTests operation if any single test fails, since in that case allTests cannot possibly succeed
 * wait part of a second to see if there are more keystrokes before launching Scheme processes.  Sort of like XCode (I assume XCode is doing this).  Would be more resource friendly, less distracting, and would make typing quickly more responsive.  Could probably do this using an timer.
 * add ability to change the evaluator rules and perhaps an explicit grammar as well
-* remove possible race condition with respect to 'barliman-query.scm' temp file
