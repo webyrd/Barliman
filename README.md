@@ -240,6 +240,10 @@ Chez Scheme in turn uses the miniKanren implementation and relational interprete
 
 (give grammar and semantics for the default language)
 
+As in Scheme, in miniScheme duplicate variable names of definitions at the same scoping level, or duplicate `lambda` or `letrec` bindings, are illegal.  However, Barliman does not currently detect these violations.  For example, Barliman will not complain about the expression `((lambda (x x) x) 3 4)`, the behavior of which is unspecified.  Probably the parser should enforce that the variable names are distinct.
+
+The `lambda` and `letrec` forms do not contain an implicit `begin`.
+
 ---------------------------------------
 
 ## Barliman implementation details
@@ -283,6 +287,9 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
+* add `let` and `cond`.
+* add an implicit `begin` to `lambda`, `letrec`, and `let` forms.
+* parser should enforce that the variable names are distinct in `lambda` formals, `letrec` bindings and formals, and `define`'s within the same scope.
 * create a version of Barliman on an open platform (Electron, Clojurescript, Lighttable, whatever).  Any help would be appreciated!  :)
 * consider using ulimit or some other capability for keeping the running Scheme processes under control/keep them from using all the RAM and CPU cycles
 * consider turning the background of the "guess" pane green, or otherwise indicting the user, when a guess can be made.  Could also potentially change the code in the main definition edit pane, although this may not be friendly.
@@ -350,11 +357,18 @@ INTERESTING IDEAS:
 
 * perhaps use delayed goals to implement arithmetic over floating point numbers, and other tricky operations.  If the arguments do not become instantiated enough, Barliman should be non-commital (can't synthesize code, and can't prove tests are not consistent with the code until the code is more instantiated).
 
-KNOWN LIMITATIONS AND BUGS:
+KNOWN LIMITATIONS:
 
-* non-specific error indication (the color changes for the text, but does not show which part of the text caused the error)
-* the `lambda` form does not contain an implicit `begin`
-* closing one of the windows means the window cannot be reopened!  oops
+* Non-specific error indication (the color changes for the text, but does not show which part of the text caused the error)
+* Currently the UI only supports 6 tests.  Should allow more tests to be added.
+* Test inputs and outputs are `NSTextField`s rather than `NSTextView`s, which makes writing longer and more complicated tests awkward.
+
+KNOWN ERRORS:
+
+* There seems to be one or more race conditions -- for example, typing a bunch of characters quickly seems less reliable than pressing one chacter at a time more slowly.  Sometimes the progress spinners stop spinning but are still displayed.  Other times the Best Guess process doesn't seem to get started, or is killed prematurely.  Usually waiting a second and typing a space will clear things up, but I need to track down the underlying problem.
+* It is possible, rarely, to exit Barliman and still have a Scheme process running in the background.  Need a way to better track which processes have been started and make sure to kill them.  Or potentially use something like `ulimit` when launching a process.
+* The miniKanren queries constructed by Barliman expose several local variable names and a number of global variable names that could accidentally or intentionally be used by the programmer.  Need to tighten this up.
+* closing one of the windows means the window cannot be reopened!  Oops.  I'm not going to worry about this until I decide what to do with the Semantics window.
 
 DONE (features on the TODO list implemented since the original release of Barliman)
 
