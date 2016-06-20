@@ -113,7 +113,7 @@ class EditorWindowController: NSWindowController {
         runCodeFromEditPaneTimer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: #selector(EditorWindowController.runCodeFromEditPane), userInfo: nil, repeats: false)
     }
     
-    func makeQueryFileString(defn: String,
+    func makeQueryFileString(defns: String,
                              body: String,
                              expectedOut: String,
                              interp_string: String,
@@ -123,17 +123,18 @@ class EditorWindowController: NSWindowController {
         
         let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
         let load_mk_string: String = "(load \"\( mk_path_string )\")"
-        let parse_ans_string: String = "(define parse-ans (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (parseo `(begin \( defn ) \( body ))))))"
+        let parse_ans_string: String = "(define parse-ans (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (parseo `(begin \( defns ) \( body ))))))"
         
-        let parse_with_fake_defn_ans_string: String = "(define parse-ans (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (fresh (name dummy-body dummy-expr ignore-body) (== `( \( defn ) ) (list `(define ,name . ,ignore-body))) (parseo `((lambda (,name) \( body )) ,dummy-expr))))))"
+        let parse_with_fake_defns_ans_string: String = "(define parse-ans (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (fresh (names dummy-expr) (extract-nameso `( \( defns ) ) names) (parseo `((lambda ,names \( body )) ,dummy-expr))))))"
 
-        let eval_string: String = "(run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (evalo `(begin \( defn ) \( body )) \( expectedOut ))))"
+        let eval_string: String = "(run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (evalo `(begin \( defns ) \( body )) \( expectedOut ))))"
         let write_ans_string: String = "(write (if (null? parse-ans) 'parse-error \( eval_string )))"
         
         let full_string: String = load_mk_vicare_string + "\n" +
                                   load_mk_string + "\n" +
                                   interp_string + "\n" +
-                                  (simple ? parse_ans_string : parse_with_fake_defn_ans_string) + "\n" +
+                                  (simple ? ";; simple query" : ";; individual test query") + "\n" +
+                                  (simple ? parse_ans_string : parse_with_fake_defns_ans_string) + "\n" +
                                   write_ans_string
       
         print("query string:\n \( full_string )\n")
@@ -294,12 +295,23 @@ class EditorWindowController: NSWindowController {
                            + out5 + " "
                            + out6 + " "
         
+        let allTestWriteString = "(write (let ((ans (run 1 (defns) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body) (== `(" +
+            definitionText +
+            ") defns) (appendo defns `((list " +
+            allTestInputs +
+            ")) begin-body) (evalo `(begin . ,begin-body) (list " +
+            allTestOutputs +
+            ")" +
+        "))))) (if (null? ans) 'fail `(begin ,@(car ans) ...)) ))"
+        
         let queryAllTests: String = load_mk_vicare_string +
             load_mk_string +
-            interp_string +
-            "(write (let ((ans (run 1 (defn) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) (== `" + definitionText + " defn) (evalo `(begin ,defn (list " + allTestInputs + ")) (list " +  allTestOutputs + ")" + "))))) (if (null? ans) 'fail (car ans))) )"
+            interp_string + "\n" +
+            ";; allTestWriteString" + "\n" +
+            allTestWriteString
         
-        
+        print("queryAllTests string:\n \( queryAllTests )\n")
+
         
         var pathSimple: NSURL
         pathSimple = NSURL()

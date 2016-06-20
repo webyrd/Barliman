@@ -340,22 +340,25 @@ https://cs.stanford.edu/people/sharmar/pubs/asplos291-schkufza.pdf
 
 POSSIBLE USE CASES:
 
-* write simple implementtation of a function, generate test from that function, then use those tests to guide the more sophisticated implementation.  Or more generally, continually test the partially-implemented function vs the fully implemented but perhaps less efficient function.
+* write simple implementation of a function, generate test from that function, then use those tests to guide the more sophisticated implementation.  Or more generally, continually test the partially-implemented function vs the fully implemented but perhaps less efficient function.
 
 SUSPECT IDEAS:
 
 * could just call out to Scheme one the program becomes grounded.  However, the semantics and even the grammar may not match that of the interpreter used by miniKanren, so this seems difficult or impossible to do properly.
 
+INTERESTING IDEAS:
+
+* perhaps use delayed goals to implement arithmetic over floating point numbers, and other tricky operations.  If the arguments do not become instantiated enough, Barliman should be non-commital (can't synthesize code, and can't prove tests are not consistent with the code until the code is more instantiated).
+
 KNOWN LIMITATIONS AND BUGS:
 
-* the system currently uses the evaluator/`evalo` to determine if a program is legal.  This means that syntactically illegal code will not be caught, provided that the code is not actually evaluated.  Should probably add separate grammar, and clearly display grammar errors separately from semantic errors.
-* the main interpreter's `letrec` form supports only a single lambda, which precludes writing mutually-recursive functions
-* the `begin` form allows for only one definition
+* non-specific error indication (the color changes for the text, but does not show which part of the text caused the error)
 * the `lambda` form does not contain an implicit `begin`
 * closing one of the windows means the window cannot be reopened!  oops
 
 DONE (features on the TODO list implemented since the original release of Barliman)
 
+* updated `letrec` to allow for zero or more bindings, and updated `begin` to allow for zero or more definitions; this allows the creation of mutually-recursive functions.
 * define grammar for microScheme (and the other languages) as a miniKanren relation, and use this grammar to separately check and report whether the definition is grammatically correct.
 * cancel the allTests operation if any single test fails, since in that case allTests cannot possibly succeed
 * wait part of a second to see if there are more keystrokes before launching Scheme processes.  Sort of like XCode (I assume XCode is doing this).  Would be more resource friendly, less distracting, and would make typing quickly more responsive.  Could probably do this using an timer.
