@@ -354,7 +354,7 @@ POSSIBLE USE CASES:
 
 SUSPECT IDEAS:
 
-* could just call out to Scheme one the program becomes grounded.  However, the semantics and even the grammar may not match that of the interpreter used by miniKanren, so this seems difficult or impossible to do properly.
+* could just call out to Scheme one the program becomes grounded.  However, the semantics and even the grammar may not match that of the interpreter used by miniKanren, so this seems difficult or impossible to do properly.  However, could call a (non-relational) interpreter for miniScheme.
 
 INTERESTING IDEAS:
 
