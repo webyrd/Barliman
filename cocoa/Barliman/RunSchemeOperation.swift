@@ -27,13 +27,15 @@ class RunSchemeOperation: NSOperation {
         print("!!! cancel called!")
 
         super.cancel()
-        // print("&&& killing process \( task.processIdentifier )")
-        task.terminate()
-        // print("&&& killed process")
         
         if self.taskType == "allTests" {
             stopSpinner()
         }
+        
+        // print("&&& killing process \( task.processIdentifier )")
+        task.terminate()
+        // print("&&& killed process")
+        
     }
     
     func stopSpinner() {
@@ -213,19 +215,19 @@ class RunSchemeOperation: NSOperation {
                     onTestSyntaxError(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, spinner: ewc.test1Spinner)
                 }
                 if taskType == "test2" {
-                    onTestSyntaxError(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, spinner: ewc.test1Spinner)
+                    onTestSyntaxError(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, spinner: ewc.test2Spinner)
                 }
                 if taskType == "test3" {
-                    onTestSyntaxError(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, spinner: ewc.test1Spinner)
+                    onTestSyntaxError(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, spinner: ewc.test3Spinner)
                 }
                 if taskType == "test4" {
-                    onTestSyntaxError(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, spinner: ewc.test1Spinner)
+                    onTestSyntaxError(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, spinner: ewc.test4Spinner)
                 }
                 if taskType == "test5" {
-                    onTestSyntaxError(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, spinner: ewc.test1Spinner)
+                    onTestSyntaxError(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, spinner: ewc.test5Spinner)
                 }
                 if taskType == "test6" {
-                    onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test1Spinner)
+                    onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test6Spinner)
                 }
                 if taskType == "allTests" {
                     ewc.bestGuessSpinner.stopAnimation(self)
