@@ -28,14 +28,31 @@ class RunSchemeOperation: NSOperation {
 
         super.cancel()
         
-        if self.taskType == "allTests" {
-            stopSpinner()
-        }
-        
         // print("&&& killing process \( task.processIdentifier )")
         task.terminate()
         // print("&&& killed process")
         
+    }
+    
+    func startSpinner() {
+        
+        // update the user interface, which *must* be done through the main thread
+        NSOperationQueue.mainQueue().addOperationWithBlock {
+            
+            let ewc = self.editorWindowController
+            
+            switch self.taskType {
+            case "simple":   ewc.schemeDefinitionSpinner.startAnimation(self)
+            case "allTests": ewc.bestGuessSpinner.startAnimation(self)
+            case "test1":    ewc.test1Spinner.startAnimation(self)
+            case "test2":    ewc.test2Spinner.startAnimation(self)
+            case "test3":    ewc.test3Spinner.startAnimation(self)
+            case "test4":    ewc.test4Spinner.startAnimation(self)
+            case "test5":    ewc.test5Spinner.startAnimation(self)
+            case "test6":    ewc.test6Spinner.startAnimation(self)
+            default: print("!!!!!!!!!! SWITCHERROR in startSpinner: unknown taskType: \( self.taskType )\n")
+            }
+        }
     }
     
     func stopSpinner() {
@@ -45,29 +62,16 @@ class RunSchemeOperation: NSOperation {
 
             let ewc = self.editorWindowController
 
-            if self.taskType == "simple" {
-                ewc.schemeDefinitionSpinner.stopAnimation(self)
-            }
-            if self.taskType == "test1" {
-                ewc.test1Spinner.stopAnimation(self)
-            }
-            if self.taskType == "test2" {
-                ewc.test2Spinner.stopAnimation(self)
-            }
-            if self.taskType == "test3" {
-                ewc.test3Spinner.stopAnimation(self)
-            }
-            if self.taskType == "test4" {
-                ewc.test4Spinner.stopAnimation(self)
-            }
-            if self.taskType == "test5" {
-                ewc.test5Spinner.stopAnimation(self)
-            }
-            if self.taskType == "test6" {
-                ewc.test6Spinner.stopAnimation(self)
-            }
-            if self.taskType == "allTests" {
-                ewc.bestGuessSpinner.stopAnimation(self)
+            switch self.taskType {
+                case "simple":   ewc.schemeDefinitionSpinner.stopAnimation(self)
+                case "allTests": ewc.bestGuessSpinner.stopAnimation(self)
+                case "test1":    ewc.test1Spinner.stopAnimation(self)
+                case "test2":    ewc.test2Spinner.stopAnimation(self)
+                case "test3":    ewc.test3Spinner.stopAnimation(self)
+                case "test4":    ewc.test4Spinner.stopAnimation(self)
+                case "test5":    ewc.test5Spinner.stopAnimation(self)
+                case "test6":    ewc.test6Spinner.stopAnimation(self)
+                default: print("!!!!!!!!!! SWITCHERROR in stopSpinner: unknown taskType: \( self.taskType )\n")
             }
         }
     }
@@ -84,6 +88,8 @@ class RunSchemeOperation: NSOperation {
 
     
     func runSchemeCode() {
+        
+        startSpinner()
     
         // Path to Chez Scheme
         // Perhaps this should be settable in a preferences panel.
@@ -116,33 +122,32 @@ class RunSchemeOperation: NSOperation {
         // we need the exit status of the Scheme process to know if Chez choked because of a syntax error (for a malformed query), or whether Chez exited cleanly
         let exitStatus = task.terminationStatus
         
+        stopSpinner()
         
         // update the user interface, which *must* be done through the main thread
         NSOperationQueue.mainQueue().addOperationWithBlock {
             
             func onTestCompletion(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, datastring: String) {
-                spinner.stopAnimation(self)
 
-                if datastring == "parse-error" {
+                if datastring == "parse-error" { // failed to parse!
                     inputField.textColor = NSColor.magentaColor()
                     outputField.textColor = NSColor.magentaColor()
                     
                     // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                     self.editorWindowController.schemeOperationAllTests?.cancel()
-                } else if datastring == "()" {
+                } else if datastring == "()" { // parsed, but evaluator query failed!
                     inputField.textColor = NSColor.redColor()
                     outputField.textColor = NSColor.redColor()
                     
                     // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                     self.editorWindowController.schemeOperationAllTests?.cancel()
-                } else {
+                } else { // parsed, and evaluator query succeeded!
                     inputField.textColor = NSColor.blackColor()
                     outputField.textColor = NSColor.blackColor()
                 }
             }
             
             func onTestSyntaxError(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator) {
-                spinner.stopAnimation(self)
                 inputField.textColor = NSColor.greenColor()
                 outputField.textColor = NSColor.greenColor()
             }
@@ -156,7 +161,6 @@ class RunSchemeOperation: NSOperation {
             if exitStatus == 0 {
                 // at least Chez ran to completion!  The query could still have failed, of course
                 if self.taskType == "simple" {
-                    ewc.schemeDefinitionSpinner.stopAnimation(self)
                     if datastring == "parse-error" {
                         ewc.schemeDefinitionView.textColor = NSColor.magentaColor()
                         
@@ -192,7 +196,6 @@ class RunSchemeOperation: NSOperation {
                     onTestCompletion(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test6Spinner, datastring: datastring)
                 }
                 if self.taskType == "allTests" {
-                    ewc.bestGuessSpinner.stopAnimation(self)
                     if datastring == "fail" {
                         ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
                     } else {
@@ -207,7 +210,6 @@ class RunSchemeOperation: NSOperation {
                 if self.taskType == "simple" {
                     // print("--- turning simple green")
                     // print("exitStatus = \( exitStatus )")
-                    ewc.schemeDefinitionSpinner.stopAnimation(self)
                     ewc.schemeDefinitionView.textColor = NSColor.greenColor()
                 }
                 
@@ -230,7 +232,6 @@ class RunSchemeOperation: NSOperation {
                     onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test6Spinner)
                 }
                 if taskType == "allTests" {
-                    ewc.bestGuessSpinner.stopAnimation(self)
                     ewc.bestGuessView.setTextColor(NSColor.blackColor(), range: NSMakeRange(0, (ewc.bestGuessView.textStorage?.length)!))
                     ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
                 }

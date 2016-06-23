@@ -368,7 +368,6 @@ KNOWN LIMITATIONS:
 
 KNOWN ERRORS:
 
-* There seems to be one or more race conditions -- for example, typing a bunch of characters quickly seems less reliable than pressing one chacter at a time more slowly.  Sometimes the progress spinners stop spinning but are still displayed.  Other times the Best Guess process doesn't seem to get started, or is killed prematurely.  Usually waiting a second and typing a space will clear things up, but I need to track down the underlying problem.
 * It is possible, rarely, to exit Barliman and still have a Scheme process running in the background.  Need a way to better track which processes have been started and make sure to kill them.  Or potentially use something like `ulimit` when launching a process.
 * The miniKanren queries constructed by Barliman expose several local variable names and a number of global variable names that could accidentally or intentionally be used by the programmer.  Need to tighten this up.
 * closing one of the windows means the window cannot be reopened!  Oops.  I'm not going to worry about this until I decide what to do with the Semantics window.
