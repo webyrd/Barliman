@@ -14,8 +14,8 @@
 ;;; just like in evaluator and parser
 
 ;;; TODO -- add 'letrec', 'begin', multi-argument application,
-;;; variadic and multi-argument lambda, lists, and the primitives from
-;;; the evaluator
+;;; variadic and multi-argument lambda, lists, quote, match, and the
+;;; primitives from the evaluator
 
 (define membero
   (lambda (x ls)
@@ -33,61 +33,198 @@
         ((== `(non-generic ,t) tq))
         ((fresh (g^ rand^)
            (== `(generic ,g^ ,rand^) tq)
-           (!- g^ rand^ t)))))))
+           (!-auxo g^ rand^ t)))))))
 
 (define int 'int)
 (define bool 'bool)
 
 (define !-
+  (lambda (expr t)
+    (!-auxo initial-type-env expr t)))
+
+(define !-aux
   (lambda (g expr t)
     (conde
       ((symbolo expr) (type-lookupo g expr t))
       ((numbero expr) (== int t))
-      ((== #f expr) (== bool t))
-      ((== #t expr) (== bool t))
+
+      ;;; from Oleg's inferencer --
+      ;;; not needed for miniScheme
       ((fresh (e)
          (== `(zero? ,e) expr)
          (== bool t)
          (not-in-envo 'zero? g)
-         (!- g e int)))
+         (!-auxo g e int)))
       ((fresh (e)
          (== `(sub1 ,e) expr)
          (== int t)
          (not-in-envo 'sub1 g)
-         (!- g e int)))
+         (!-auxo g e int)))
       ((fresh (e1 e2)
          (== `(+ ,e1 ,e2) expr)
          (== int t)
          (not-in-envo '+ g)
-         (!- g e1 int)
-         (!- g e2 int)))
-      ((fresh (e1 e2 e3)
-         (== `(if ,e1 ,e2 ,e3) expr)
-         (not-in-envo 'if g)
-         (!- g e1 bool)
-         (!- g e2 t)
-         (!- g e3 t)))
+         (!-auxo g e1 int)
+         (!-auxo g e2 int)))
+
+#|
+      ;; TODO implement!
+      ;;
+      ;; I think I need to add lists to be able to handle variadic.
+      ((fresh (x body)
+         (== `(lambda ,x ,body) expr)
+         (conde
+           ;; Variadic
+           ((symbolo x))
+           ;; Multi-argument
+           ((list-of-symbolso x)))
+         (not-in-envo 'lambda env)))
+|#
+      
       ((fresh (x body t-x t-body)
          (== `(lambda (,x) ,body) expr)
          (symbolo x)
          (== `(-> ,t-x ,t-body) t)         
          (not-in-envo 'lambda g)
-         (!- `((,x non-generic ,t-x) . ,g) body t-body)))
+         (!-auxo `((,x non-generic ,t-x) . ,g) body t-body)))
+
+
+      
+      ;; TODO -- multi-arg application and prim app
       ((fresh (rator rand t-rand)
          (== `(,rator ,rand) expr)
-         (!- g rator `(-> ,t-rand ,t))
-         (!- g rand t-rand)))
+         (!-auxo g rator `(-> ,t-rand ,t))
+         (!-auxo g rand t-rand)))
+
+      ;; TODO -- replace with 'letrec'
       ((fresh (rand)
          (== `(fix ,rand) expr)
          (not-in-envo 'fix g)
-         (!- g rand `(-> ,t ,t))))
+         (!-auxo g rand `(-> ,t ,t))))
+      
       ((fresh (x rand body)
          ;; polylet
          (== `(let ((,x ,rand)) ,body) expr)
          (not-in-envo 'let g)
          (fresh (some-type)
-           (!- g rand some-type))
-         (!- `((,x generic ,g ,rand) . ,g) body t))))))
+           (!-auxo g rand some-type))
+         (!-auxo `((,x generic ,g ,rand) . ,g) body t)))
+      
+      ((!-primo g expr t)))))
+
+
+;; TODO -- update this to be prim-!o or whatever
+(define (eval-primo prim-id a* val)
+  (conde
+    [(== prim-id 'cons)
+     (fresh (a d)
+       (== `(,a ,d) a*)
+       (== `(,a . ,d) val))]
+    [(== prim-id 'car)
+     (fresh (d)
+       (== `((,val . ,d)) a*)
+       (=/= 'closure val))]
+    [(== prim-id 'cdr)
+     (fresh (a)
+       (== `((,a . ,val)) a*)
+       (=/= 'closure a))]
+    [(== prim-id 'not)
+     (fresh (b)
+       (== `(,b) a*)
+       (conde
+         ((=/= #f b) (== #f val))
+         ((== #f b) (== #t val))))]
+    [(== prim-id 'equal?)
+     (fresh (v1 v2)
+       (== `(,v1 ,v2) a*)
+       (conde
+         ((== v1 v2) (== #t val))
+         ((=/= v1 v2) (== #f val))))]
+    [(== prim-id 'symbol?)
+     (fresh (v)
+       (== `(,v) a*)
+       (conde
+         ((symbolo v) (== #t val))
+         ((numbero v) (== #f val))
+         ((fresh (a d)
+            (== `(,a . ,d) v)
+            (== #f val)))))]
+    [(== prim-id 'null?)
+     (fresh (v)
+       (== `(,v) a*)
+       (conde
+         ((== '() v) (== #t val))
+         ((=/= '() v) (== #f val))))]))
+
+
+
+(define (!-primo g expr t)
+  (conde
+    ((!-booleano g expr t))
+    ((!-ando g expr t))
+    ((!-oro g expr t))
+    ((!-ifo g expr t))))
+
+(define (!-booleano g expr t)
+  (fresh ()
+    (== bool t)
+    (conde
+      ((== #t expr))
+      ((== #f expr)))))
+
+(define (!-ando g expr t)
+  (fresh (e*)
+    (== `(and . ,e*) expr)
+    (== bool t)
+    (not-in-envo 'and env)
+    (!-and-auxo g e*)))
+
+(define (!-and-auxo g e*)
+  (conde
+    ((== '() e*))
+    ((fresh (e e-rest)
+       (== `(,e . ,e-rest) e*)
+       (!-auxo g e bool)
+       (!-and-auxo g e-rest)))))
+
+(define (!-oro g expr t)
+  (fresh (e*)
+    (== `(or . ,e*) expr)
+    (== bool t)
+    (not-in-envo 'or env)
+    (!-or-auxo g e*)))
+
+(define (!-or-auxo g e*)
+  (conde
+    ((== '() e*))
+    ((fresh (e e-rest)
+       (== `(,e . ,e-rest) e*)
+       (!-auxo g e bool)
+       (!-or-auxo g e-rest)))))
+
+(define (!-ifo g expr t)
+  (fresh (e1 e2 e3)
+    (== `(if ,e1 ,e2 ,e3) expr)
+    (not-in-envo 'if env)
+    (!-auxo g e1 bool)
+    (!-auxo g e2 t)
+    (!-auxo g e3 t)))
+
+;; TODO -- update to include types
+(define initial-type-env `((list . (val . (closure (lambda x x) ,empty-env)))
+                           (not . (val . (prim . not)))
+                           (equal? . (val . (prim . equal?)))
+                           (symbol? . (val . (prim . symbol?)))
+                           (cons . (val . (prim . cons)))
+                           (null? . (val . (prim . null?)))
+                           (car . (val . (prim . car)))
+                           (cdr . (val . (prim . cdr)))
+                           . ,empty-env))
+
+
+
+
+
 
 
 
@@ -106,50 +243,50 @@
 
 ;;; tests
 
-(test 'test-!-1
+(test 'test-!-aux1
   (and
     (equal?
-      (run* (q) (!- '() '17 int))
+      (run* (q) (!-auxo '() '17 int))
       '(_.0))
     (equal?
-      (run* (q) (!- '() '17 q))
+      (run* (q) (!-auxo '() '17 q))
       '(int)))
   #t)
 
 (test 'arithmetic-primitives
-  (run* (q) (!- '() '(zero? 24) q))
+  (run* (q) (!-auxo '() '(zero? 24) q))
   '(bool))
 
-(test 'test-!-sub1
-  (run* (q) (!- '() '(zero? (sub1 24)) q))
+(test 'test-!-auxsub1
+  (run* (q) (!-auxo '() '(zero? (sub1 24)) q))
   '(bool))
 
-(test 'test-!-+
+(test 'test-!-aux+
   (run* (q)
-    (!- '() '(zero? (sub1 (+ 18 (+ 24 50)))) q))
+    (!-auxo '() '(zero? (sub1 (+ 18 (+ 24 50)))) q))
   '(bool))
 
-(test 'test-!-2
+(test 'test-!-aux2
   (and
     (equal?
-      (run* (q) (!- '() '(zero? 24) q))
+      (run* (q) (!-auxo '() '(zero? 24) q))
       '(bool))
     (equal?
-      (run* (q) (!- '() '(zero? (+ 24 50)) q))
+      (run* (q) (!-auxo '() '(zero? (+ 24 50)) q))
       '(bool))
     (equal?
       (run* (q)
-	(!- '() '(zero? (sub1 (+ 18 (+ 24 50)))) q))
+	(!-auxo '() '(zero? (sub1 (+ 18 (+ 24 50)))) q))
       '(bool)))
   #t)
 
-(test 'test-!-3
-  (run* (q) (!- '() '(if (zero? 24) 3 4) q))
+(test 'test-!-aux3
+  (run* (q) (!-auxo '() '(if (zero? 24) 3 4) q))
   '(int))
 
 (test 'if-expressions
   (run* (q)
-    (!- '() '(if (zero? 24) (zero? 3) (zero? 4)) q))
+    (!-auxo '() '(if (zero? 24) (zero? 3) (zero? 4)) q))
   '(bool))
 
 (test 'variables
@@ -160,11 +297,11 @@
       '(bool))
     (equal?
       (run* (q)
-	(!- '((a non-generic int)) '(zero? a) q))
+	(!-auxo '((a non-generic int)) '(zero? a) q))
       '(bool))
     (equal?
       (run* (q)
-	(!- '((b non-generic bool) (a non-generic int))
+	(!-auxo '((b non-generic bool) (a non-generic int))
             '(zero? a)
             q))
       '(bool)))
@@ -172,26 +309,26 @@
 
 (test 'variables-4a
   (run* (q)
-    (!- '((b non-generic bool) (a non-generic int))
+    (!-auxo '((b non-generic bool) (a non-generic int))
         '(lambda (x) (+ x 5))
         q))
   '((-> int int)))
 
 (test 'variables-4b
   (run* (q)
-    (!- '((b non-generic bool) (a non-generic int))
+    (!-auxo '((b non-generic bool) (a non-generic int))
         '(lambda (x) (+ x a))
         q))
   '((-> int int)))
 
 (test 'variables-4c
   (run* (q)
-    (!- '() '(lambda (a) (lambda (x) (+ x a))) q))
+    (!-auxo '() '(lambda (a) (lambda (x) (+ x a))) q))
   '((-> int (-> int int))))
 
 (test 'everything-but-polymorphic-let
   (run* (q)
-    (!- '() '(lambda (f)
+    (!-auxo '() '(lambda (f)
                (lambda (x)
                  ((f x) x)))
         q))
@@ -201,7 +338,7 @@
 
 (test 'everything-but-polymorphic-let
   (run* (q)
-    (!- '()
+    (!-auxo '()
         '((fix (lambda (sum)
                  (lambda (n)
                    (if (zero? n)
@@ -213,7 +350,7 @@
 
 (test 'everything-but-polymorphic-let
   (run* (q)
-    (!- '()
+    (!-auxo '()
         '((fix (lambda (sum)
                  (lambda (n)
                    (+ n (sum (sub1 n))))))
@@ -223,7 +360,7 @@
 
 (test 'everything-but-polymorphic-let
   (run* (q)
-    (!- '()
+    (!-auxo '()
         '((lambda (f)
             (if (f (zero? 5))
                 (+ (f 4) 8)
@@ -234,7 +371,7 @@
 
 (test 'polymorphic-let
   (run* (q)
-    (!- '()
+    (!-auxo '()
         '(let ((f (lambda (x) x)))
            (if (f (zero? 5))
                (+ (f 4) 8)
@@ -244,7 +381,7 @@
 
 (test 'with-robust-syntax
   (run* (q)
-    (!- '()
+    (!-auxo '()
         '((fix
            (lambda (sum)
              (lambda (n)
@@ -257,7 +394,7 @@
 
 (test 'with-robust-syntax-but-long-jumps/poly-let
   (run* (q)
-    (!- '()
+    (!-auxo '()
         '(let ((f (lambda (x) x)))
            (if (f (zero? 5))
                (+ (f 4) 8)
@@ -267,12 +404,12 @@
 
 (test 'type-habitation-1
   (run 1 (g e)
-    (!- g e '(-> int int)))
+    (!-auxo g e '(-> int int)))
   '(((((_.0 non-generic (-> int int)) . _.1) _.0) (sym _.0))))
 
 (test 'type-habitation-2
   (run 1 (g h r q z y t)
-    (!- g `(,h ,r (,q ,z ,y)) t))
+    (!-auxo g `(,h ,r (,q ,z ,y)) t))
   '(((()
       +
       _.0
@@ -286,7 +423,7 @@
 (test 'type-habitation-2b
   (run 1 (g h r q z y t)
     (symbolo r)
-    (!- g `(,h ,r (,q ,z ,y)) t))
+    (!-auxo g `(,h ,r (,q ,z ,y)) t))
   '(((((_.0 non-generic int))
       +
       _.0
@@ -303,14 +440,14 @@
   (and
     (equal?
       (run 1 (la f b)
-	(!- '() `(,la (,f) ,b) '(-> int int)))
+	(!-auxo '() `(,la (,f) ,b) '(-> int int)))
       '(((lambda _.0 _.1) (num _.1) (sym _.0))))
     (equal?
      (run 1 (expr type)
        (fresh (h r q z y t u v)
          (== `(,h ,r (,q ,z ,y)) expr)
          (== `(,t ,u ,v) type)
-         (!- '() expr type)))
+         (!-auxo '() expr type)))
      '((((lambda (_.0) (+ _.1 _.2)) (-> _.3 int))
         (=/= ((_.0 +)))
         (num _.1 _.2)
@@ -330,7 +467,7 @@
 ;;; https://cs.uwaterloo.ca/~david/cs442/lect-TYPEINFERENCE.pdf
 (test 'w-let-poly-1
   (run* (q) 
-    (!- '()
+    (!-auxo '()
         '(let ((d (lambda (f) (lambda (x) (f (f x))))))
            (let ((a1 ((d (lambda (x) (sub1 x))) 2)))
              (let ((a2 ((d (lambda (x) (if x #t #f))) #t)))
@@ -340,7 +477,7 @@
 
 (test 'w-let-poly-2
   (run* (q) 
-    (!- '()
+    (!-auxo '()
         '(let ((d (lambda (f) (lambda (x) (f (f x))))))
            (let ((a1 ((d (lambda (x) (sub1 x))) 2)))
              (let ((a2 (d (lambda (x) (if x #t #f)))))
@@ -350,7 +487,7 @@
 
 (test 'w-let-poly-3
   (run* (q) 
-    (!- '()
+    (!-auxo '()
         '(let ((d (lambda (f) (lambda (x) (f (f x))))))
            (let ((a1 ((d (lambda (x) (sub1 x))) 2)))
              (let ((a2 (d (lambda (x) (if x #t #f)))))
@@ -360,7 +497,7 @@
 
 (test 'w-let-poly-4
   (run* (q) 
-    (!- '()
+    (!-auxo '()
         '(let ((d (lambda (f) (lambda (x) (f (f x))))))
            (let ((a1 ((d (lambda (x) (sub1 x))) 2)))
              (let ((a2 ((d (lambda (x) (if x #t #f))) #t)))
@@ -374,7 +511,7 @@
 
 (test 'w-length-1
   (run* (q) 
-    (!- '()
+    (!-auxo '()
         '((fix
            (lambda (length)
              (lambda (l)
@@ -386,9 +523,11 @@
   '(int))
 |#
 
-(test 'polymorphic-let-monomorphic-a
+
+
+(test 'polymorphic-let-monomorphic
   (run* (q)
-    (!- '()
+    (!-auxo '()
         '((lambda (g)
             (let ((f (lambda (x) (g x))))
               (if (f (zero? 5))
@@ -396,16 +535,4 @@
                   (+ (f 3) 7))))
           (lambda (y) y))
         q))
-  '())
-
-(test 'polymorphic-let-monomorphic-b
-  (run* (q)
-    (!- '()
-        '((lambda (g)
-            (let ((f (lambda (x) x)))
-              (if (f (zero? 5))
-                  (+ (f 4) 8)
-                  (+ (f 3) 7))))
-          (lambda (y) y))
-        q))
-  '(int))
+  '(???))
