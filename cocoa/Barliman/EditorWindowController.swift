@@ -123,11 +123,51 @@ class EditorWindowController: NSWindowController {
         
         let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
         let load_mk_string: String = "(load \"\( mk_path_string )\")"
-        let parse_ans_string: String = "(define parse-ans (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (parseo `(begin \( defns ) \( body ))))))"
+        let parse_ans_string: String = "(define parse-ans (run 1 (q)" + "\n" +
+        " (let ((g1 (gensym \"g1\")) (g2 (gensym \"g2\")) (g3 (gensym \"g3\")) (g4 (gensym \"g4\")) (g5 (gensym \"g5\")) (g6 (gensym \"g6\")) (g7 (gensym \"g7\")) (g8 (gensym \"g8\")) (g9 (gensym \"g9\")) (g10 (gensym \"g10\")) (g11 (gensym \"g11\")) (g12 (gensym \"g12\")) (g13 (gensym \"g13\")) (g14 (gensym \"g14\")) (g15 (gensym \"g15\")) (g16 (gensym \"g16\")) (g17 (gensym \"g17\")) (g18 (gensym \"g18\")) (g19 (gensym \"g19\")) (g20 (gensym \"g20\")))" + "\n" +
+        "(fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (parseo `(begin \( defns ) \( body )))))))"
         
-        let parse_with_fake_defns_ans_string: String = "(define parse-ans (run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (fresh (names dummy-expr) (extract-nameso `( \( defns ) ) names) (parseo `((lambda ,names \( body )) ,dummy-expr))))))"
+        let parse_with_fake_defns_ans_string: String = "(define parse-ans (run 1 (q)" + "\n" +
+            " (let ((g1 (gensym \"g1\")) (g2 (gensym \"g2\")) (g3 (gensym \"g3\")) (g4 (gensym \"g4\")) (g5 (gensym \"g5\")) (g6 (gensym \"g6\")) (g7 (gensym \"g7\")) (g8 (gensym \"g8\")) (g9 (gensym \"g9\")) (g10 (gensym \"g10\")) (g11 (gensym \"g11\")) (g12 (gensym \"g12\")) (g13 (gensym \"g13\")) (g14 (gensym \"g14\")) (g15 (gensym \"g15\")) (g16 (gensym \"g16\")) (g17 (gensym \"g17\")) (g18 (gensym \"g18\")) (g19 (gensym \"g19\")) (g20 (gensym \"g20\")))" + "\n" +
+            " (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (fresh (names dummy-expr) (extract-nameso `( \( defns ) ) names) (parseo `((lambda ,names \( body )) ,dummy-expr)))))))"
 
-        let eval_string: String = "(run 1 (q) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (evalo `(begin \( defns ) \( body )) \( expectedOut ))))"
+        
+        
+        // get the path to the application's bundle, so we can load the query string files
+        let bundle = NSBundle.mainBundle()
+        
+        // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
+        let interp_eval_query_string_part_1: String? = bundle.pathForResource("interp-eval-query-string-part-1", ofType: "swift", inDirectory: "mk-and-rel-interp")
+        let interp_eval_query_string_part_2: String? = bundle.pathForResource("interp-eval-query-string-part-2", ofType: "swift", inDirectory: "mk-and-rel-interp")
+
+        let eval_string_part_1 : String
+        do
+        {
+            eval_string_part_1 = try String(contentsOfFile: interp_eval_query_string_part_1!)
+        }
+        catch
+        {
+            print("!!!!!  LOAD_ERROR -- can't load eval_string_part_1\n")
+            eval_string_part_1 = ""
+        }
+        
+        let eval_string_part_2 : String
+        do
+        {
+            eval_string_part_2 = try String(contentsOfFile: interp_eval_query_string_part_2!)
+        }
+        catch
+        {
+            print("!!!!!  LOAD_ERROR -- can't load eval_string_part_2\n")
+            eval_string_part_2 = ""
+        }
+
+        let eval_string = eval_string_part_1 + "\n" +
+                          "        (== `( \( defns ) ) defn-list)" + "\n" +
+                          eval_string_part_2 + "\n" +
+                          " (evalo `(begin \( defns ) \( body )) \( expectedOut )))))"
+        
+        
         let write_ans_string: String = "(write (if (null? parse-ans) 'parse-error \( eval_string )))"
         
         let full_string: String = load_mk_vicare_string + "\n" +
@@ -295,14 +335,44 @@ class EditorWindowController: NSWindowController {
                            + out5 + " "
                            + out6 + " "
         
-        let allTestWriteString = "(write (let ((ans (run 1 (defns) (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body) (== `(" +
+        // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
+        let interp_alltests_query_string_part_1: String? = bundle.pathForResource("interp-alltests-query-string-part-1", ofType: "swift", inDirectory: "mk-and-rel-interp")
+        let interp_alltests_query_string_part_2: String? = bundle.pathForResource("interp-alltests-query-string-part-2", ofType: "swift", inDirectory: "mk-and-rel-interp")
+        
+        let alltests_string_part_1 : String
+        do
+        {
+            alltests_string_part_1 = try String(contentsOfFile: interp_alltests_query_string_part_1!)
+        }
+        catch
+        {
+            print("!!!!!  LOAD_ERROR -- can't load alltests_string_part_1\n")
+            alltests_string_part_1 = ""
+        }
+        
+        let alltests_string_part_2 : String
+        do
+        {
+            alltests_string_part_2 = try String(contentsOfFile: interp_alltests_query_string_part_2!)
+        }
+        catch
+        {
+            print("!!!!!  LOAD_ERROR -- can't load alltests_string_part_2\n")
+            alltests_string_part_2 = ""
+        }
+
+        
+        let allTestWriteString = alltests_string_part_1 + "\n" +
+        "        (== `( \( definitionText ) ) defn-list)" + "\n" + "\n" +
+            alltests_string_part_2 + "\n" +
+            "(== `(" +
             definitionText +
             ") defns) (appendo defns `((list " +
             allTestInputs +
             ")) begin-body) (evalo `(begin . ,begin-body) (list " +
             allTestOutputs +
             ")" +
-        "))))) (if (null? ans) 'fail `(begin ,@(car ans) ...)) ))"
+            ")))))) (if (null? ans) 'fail `(begin ,@(car ans) ...)) ))"
         
         let queryAllTests: String = load_mk_vicare_string +
             load_mk_string +
