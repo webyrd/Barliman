@@ -138,9 +138,9 @@
        ((== #t expr))
        ((== #f expr))
        ((symbolo expr))))
-    
-    ((fresh (size-2)  ; recursive cases       
-       (== `(s (s ,size-2)) size-in)  
+
+    ((fresh (size-2)  ; recursive cases
+       (== `(s (s ,size-2)) size-in)
        (conde
          ((fresh (datum size-1)
             (== `(quote ,datum) expr)
@@ -175,7 +175,7 @@
               ((fresh (size^ size^^)
                  (grammar-list-of-symbolso args size-1 size^)
                  (grammaro body size^ size^^)
-                 (grammaro letrec-body size^^ size-out))))))    
+                 (grammaro letrec-body size^^ size-out))))))
          ((fresh (e e* size-1)
             (== `(,e . ,e*) expr)
             (== `(s ,size-1) size-in) ;; is this necessary?
@@ -248,7 +248,7 @@
 ;;          ((symbolo args))
 ;;          ((list-of-symbolso args)))
 ;;        (grammaro body)
-;;        (grammaro letrec-body)))    
+;;        (grammaro letrec-body)))
 ;;     ((fresh (e e*)
 ;;        (== `(,e . ,e*) expr)
 ;;        (grammar-listo `(,e . ,e*))))))
@@ -300,7 +300,7 @@
 
 ;;        (conde
 
-;;          ((fresh (x body)       
+;;          ((fresh (x body)
 ;;             (== `(lambda ,x ,body) expr)
 ;;             (not-in-envo 'lambda env)
 ;;             (conde
@@ -319,7 +319,7 @@
 ;;             (== `(begin ,defn ,e) expr)
 ;;             (== `(define ,name (lambda ,args ,body)) defn)
 ;;             (grammar-expo `(letrec ((,name (lambda ,args ,body))) ,e) env size)))
-    
+
 ;;          ((fresh (rator rands)
 ;;             (== `(,rator . ,rands) expr)
 ;;             ;; application
@@ -351,7 +351,7 @@
 ;;                           `((,p-name . (rec . (lambda ,x ,body))) . ,env)
 ;;                           size-1)))
 ;;          )))
-    
+
 ;;     ))
 
 ;; ;; TODO probably need to pass size through monadically
@@ -396,7 +396,7 @@
 
 ;;        (conde
 
-;;          ((fresh (x body)       
+;;          ((fresh (x body)
 ;;             (== `(lambda ,x ,body) expr)
 ;;             (not-in-envo 'lambda env)
 ;;             (conde
@@ -415,7 +415,7 @@
 ;;             (== `(begin ,defn ,e) expr)
 ;;             (== `(define ,name (lambda ,args ,body)) defn)
 ;;             (grammar-expo `(letrec ((,name (lambda ,args ,body))) ,e) env size)))
-    
+
 ;;          ((fresh (rator rands)
 ;;             (== `(,rator . ,rands) expr)
 ;;             ;; application
@@ -447,7 +447,7 @@
 ;;                           `((,p-name . (rec . (lambda ,x ,body))) . ,env)
 ;;                           size-1)))
 ;;          )))
-    
+
 ;;     ))
 
 ;; ;; TODO probably need to pass size through monadically
@@ -508,13 +508,13 @@
 ;;        (== `(begin ,defn ,e) expr)
 ;;        (== `(define ,name (lambda ,args ,body)) defn)
 ;;        (grammar-expo `(letrec ((,name (lambda ,args ,body))) ,e) env)))
-    
+
 ;;     ((fresh (rator rands)
 ;;        (== `(,rator . ,rands) expr)
 ;;        ;; application
 ;;        (grammar-listo `(,rator . ,rands) env)))
 
-;; ;; TODO    
+;; ;; TODO
 ;; ;;    ((grammar-matcho expr env))
 
 ;;     ((fresh (p-name x body letrec-body)
@@ -561,7 +561,7 @@
      (not-in-envo 'quote env))
 
     ((numbero expr) (== expr val))
-    
+
     ((symbolo expr) (lookupo expr env val))
 
     ((fresh (x body)
@@ -573,7 +573,7 @@
          ((symbolo x))
          ;; Multi-argument
          ((list-of-symbolso x)))))
-    
+
     ;; WEB 25 May 2016 -- This rather budget version of 'begin' is
     ;; useful for separating 'define' from the expression 'e',
     ;; specifically for purposes of Barliman.
@@ -602,8 +602,8 @@
             ;; primitive
             (== `(closure prim . ,prim-id) proc)
             (eval-primo prim-id a* val)
-            (eval-listo rands env a*))))))    
-    
+            (eval-listo rands env a*))))))
+
     ;; ((fresh (rator x rands body env^ a* res)
     ;;    (== `(,rator . ,rands) expr)
     ;;    ;; variadic
@@ -626,7 +626,7 @@
     ;;    (eval-expo rator env `(prim . ,prim-id))
     ;;    (eval-primo prim-id a* val)
     ;;    (eval-listo rands env a*)))
-    
+
     ((handle-matcho expr env val))
 
     ((fresh (p-name x body letrec-body)
@@ -643,9 +643,9 @@
        (eval-expo letrec-body
                   `((,p-name . (rec . (lambda ,x ,body))) . ,env)
                   val)))
-    
+
     ((prim-expo expr env val))
-    
+
     ))
 
 (define empty-env '())
