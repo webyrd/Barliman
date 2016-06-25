@@ -272,7 +272,7 @@ For more interesting answers, you can use the logic variables A through G, upper
 
 ## Acknowledgements and thanks
 
-Thanks to Michael Ballantyne, Kenichi Asai, Alan Borning, Nada Amin, Guannan Wei, Pierce Darragh, Alex Warth, Michael Adams, Tim Johnson, Evan Czaplicki, Stephanie Weirich, Molly Feldman, Joe Osborn, Nehal Patel, Andrea Magnorsky, Reid McKenzie, Emina Torlak, Chas Emerick, Martin Clausen, Devon Zuegel, Daniel Selifonov, Greg Rosenblatt, Michael Nielsen, David Kahn, Brian Mastenbrook, Orchid Hybrid, Rob Zinkov, Margaret Staples, Matt Hammer, Hunter Hutchinson, Bryan Joseph, Cesar Marinho, Michael Bernstein, Bodil Stokke, Dan Friedman, Ron Garcia, Rich Hickey, Phil Wadler, Matt Might, participants of my 2016 PEPM tutorial on miniKanren, and particants of the 'As We May Thunk' group (http://webyrd.net/thunk.html), for suggestions, encouragement, and inspiration.
+Thanks to Michael Ballantyne, Kenichi Asai, Alan Borning, Nada Amin, Guannan Wei, Pierce Darragh, Alex Warth, Michael Adams, Tim Johnson, Evan Czaplicki, Stephanie Weirich, Molly Feldman, Joe Osborn, Nehal Patel, Andrea Magnorsky, Reid McKenzie, Emina Torlak, Chas Emerick, Martin Clausen, Devon Zuegel, Daniel Selifonov, Greg Rosenblatt, Michael Nielsen, David Kahn, Brian Mastenbrook, Orchid Hybrid, Rob Zinkov, Margaret Staples, Ziyao Wei, Matt Hammer, Hunter Hutchinson, Bryan Joseph, Cesar Marinho, Michael Bernstein, Bodil Stokke, Dan Friedman, Ron Garcia, Rich Hickey, Phil Wadler, Matt Might, participants of my 2016 PEPM tutorial on miniKanren, and particants of the 'As We May Thunk' group (http://webyrd.net/thunk.html), for suggestions, encouragement, and inspiration.
 
 Thanks to Kent Dybvig, Andy Keep, and Cisco Systems for releasing Chez Scheme under an open source license.
 
@@ -304,15 +304,14 @@ TODO:
 * add paren hilighting/blinking when the parens match.
 * for the case in which a simple function is being used to generate test inputs and answers for a more complex version of the same function, may need or want a grounder to make sure answers are fully ground.  May also want a grounder for code, esp for the best guess pane.  Although grounding code may not be necessary or ideal.
 * would be smart to only re-run Scheme processes when the Scheme code actually *changes* -- for example, white space characters outside of an S-expr shouldn't trigger re-evaluation.  One way would be to compare "before" and "after" S-exprs to see if anything has changed.  Could run a single Scheme instance and call `equal?` to see if the code has actually changed.  This could be a big win for expensive computations.
-* show reified test inputs and outputs upon success, for all tests
 * add ability to save and load examples/tests/semantics, and include interesting examples, such as a tiny Scheme interpreter written in Scheme, state machine using mutual recursion, examples from pearls, etc.
 * add structured editor for semantics and for type inferencer (as an alternative to/in addition to the free-form editor)
 * add 'transpose S-expression' and other useful Emacs editing commands
-* move as much work as possible into NSTasks, such as loading files.
+* possibly move as much work as possible into NSTasks, such as loading files.
 * possibly add pairs of tests as processes, once individual tests complete successfully
 * change green text to bold font instead
 * add structured editing capability, with automatic addition of right parens, auto-addition of logic variables, and perhaps something like paredit
-* add syntax-directed auto-indentation of code 
+* add syntax-directed auto-indentation of code (thanks Michael Ballantyne, Guannan Wei, Pierce Darragh, Michael Adams, for discussions on how this might work)
 * figure out how to do syntax-directed hilighlighting, and precise hilighting of syntax errors.  May not be as important if I go the structured editor route.  Although perhaps this should be an option, either way.
 * add documentation/tutorial
 * add paper prototype for desired features
@@ -324,7 +323,11 @@ TODO:
 * add "accept suggested completion" button
 * would be smarter/less resource intense to not launch all the tests again when the text in a single test changes.  Only that test and allTests need be re-run, in theory.  Getting the UI to display the state of everything properly may be a little subtle, though.
 * differential relational interpreters
-* use a meta-interpreter to let the programmer know the deepest part of the search path upon failure, to try to give a better hint as to what went wrong (halp, Nada! :))
+* use a meta-interpreter to let the programmer know the deepest part of the search path upon failure, to try to give a better hint as to what went wrong (thanks Nada! and halp! :))
+* show the definition guessed for each individual successful test
+* show reified test inputs and outputs upon success, for all tests
+* add ability to fill in test input/outputs, given a fully or mostly specified definition
+* have Barliman attempt to guess the result of a test, as the programmer types in the test (thanks Ziyao Wei!)
 
 LONGER TERM:
 
@@ -338,7 +341,6 @@ LONGER TERM:
 * partial evaluation of the interpreter to speed up evaluation
 * add support for macros
 * explore predicates/generators/QuickCheck-like functionality
-* add ability to fill in test input/outputs, given a fully or mostly specified definition
 * explore other synthesis techniques, model checking, etc., as alternatives or additions to the miniKanren-based program synthesis in Barliman
 * add tree automata support to support grammars
 * add abstract interpretation for miniKanren to speed up the synthesis
