@@ -289,6 +289,126 @@
                                  B))
                   C)))
 
+(test 'begin-append-1
+  (run* (q)
+    (evalo `(begin
+              (define append
+                (lambda (l s)
+                  (if (null? l)
+                      s
+                      (cons (car l)
+                            (append (cdr l) s)))))
+              (append '(1 2 3) '(4 5)))
+           q))
+  '((1 2 3 4 5)))
+
+(time (test 'begin-append-missing-first-recursive-arg-1
+        (run 1 (q)
+          (evalo `(begin
+                    (define append
+                      (lambda (l s)
+                        (if (null? l)
+                            s
+                            (cons (car l)
+                                  (append ,q s)))))
+                    (append '(1 2 3) '(4 5)))
+                 '(1 2 3 4 5)))
+        '((cdr l))))
+
+(time (test 'begin-append-missing-first-recursive-arg-gensym-1
+        (run 1 (q)
+          (let ((g1 (gensym "g1"))
+                (g2 (gensym "g2"))
+                (g3 (gensym "g3"))
+                (g4 (gensym "g4"))
+                (g5 (gensym "g5")))
+            (fresh (defn)
+              (absento g1 defn)
+              (absento g2 defn)
+              (absento g3 defn)
+              (absento g4 defn)
+              (absento g5 defn)
+              (== `(define append
+                     (lambda (l s)
+                       (if (null? l)
+                           s
+                           (cons (car l)
+                                 (append ,q s)))))
+                  defn)
+              (evalo `(begin
+                        ,defn
+                        (append '(,g1 ,g2 ,g3) '(,g4 ,g5)))
+                     `(,g1 ,g2 ,g3 ,g4 ,g5)))))
+        '((cdr l))))
+
+(time (test 'begin-append-missing-second-recursive-arg-1
+        (run 1 (q)
+          (evalo `(begin
+                    (define append
+                      (lambda (l s)
+                        (if (null? l)
+                            s
+                            (cons (car l)
+                                  (append (cdr l) ,q)))))
+                    (append '(1 2 3) '(4 5)))
+                 '(1 2 3 4 5)))
+        '(s)))
+
+(time (test 'begin-append-missing-second-recursive-arg-gensym-1
+        (run 1 (q)
+          (let ((g1 (gensym "g1"))
+                (g2 (gensym "g2"))
+                (g3 (gensym "g3"))
+                (g4 (gensym "g4"))
+                (g5 (gensym "g5")))
+            (fresh (defn)
+              (absento g1 defn)
+              (absento g2 defn)
+              (absento g3 defn)
+              (absento g4 defn)
+              (absento g5 defn)
+              (== `(define append
+                     (lambda (l s)
+                       (if (null? l)
+                           s
+                           (cons (car l)
+                                 (append (cdr l) ,q)))))
+                  defn)
+              (evalo `(begin
+                        ,defn
+                        (append '(,g1 ,g2 ,g3) '(,g4 ,g5)))
+                     `(,g1 ,g2 ,g3 ,g4 ,g5)))))
+        '(s)))
+
+#|
+;;; doesn't come back even after 25 minutes
+(time (test 'begin-append-missing-both-recursive-args-gensym-1
+        (run 1 (q r)
+          (let ((g1 (gensym "g1"))
+                (g2 (gensym "g2"))
+                (g3 (gensym "g3"))
+                (g4 (gensym "g4"))
+                (g5 (gensym "g5")))
+            (fresh (defn)
+              (absento g1 defn)
+              (absento g2 defn)
+              (absento g3 defn)
+              (absento g4 defn)
+              (absento g5 defn)
+              (== `(define append
+                     (lambda (l s)
+                       (if (null? l)
+                           s
+                           (cons (car l)
+                                 (append ,q ,r)))))
+                  defn)
+              (evalo `(begin
+                        ,defn
+                        (append '(,g1 ,g2 ,g3) '(,g4 ,g5)))
+                     `(,g1 ,g2 ,g3 ,g4 ,g5)))))
+        '(((cdr l) s))))
+|#
+
 (test "check quine"
   (run 1 (q)
        (== q '((lambda (x) `(,x ',x)) '(lambda (x) `(,x ',x))))
