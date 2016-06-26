@@ -291,6 +291,7 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
+* Replace 'list' call in the "best quess" query with nested 'cons' calls instead.  This can be an order of magnitude faster in some cases, according to my testing (variadic application is more expensive than 'cons' in the current miniScheme interpreter, apparently: see times for append-gensym-synthesis-with-cons-1 versus append-gensym-synthesis-with-list-1 tests in test-interp.scm).
 * Fix error: even if the "best guess" query terminates with success, individual test processes may still keep running, since those tests don't "know" that the best guess involving *all* the tests has succeed.  If the best guess query terminates with success, the individual test processes should be killed, and marked as successful (black text, stop the progress spinner).
 * add `let` and `cond`.
 * add an implicit `begin` to `lambda`, `letrec`, and `let` forms.

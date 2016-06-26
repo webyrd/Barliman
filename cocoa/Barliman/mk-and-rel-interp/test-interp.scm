@@ -380,6 +380,83 @@
                      `(,g1 ,g2 ,g3 ,g4 ,g5)))))
         '(s)))
 
+(time (test "append-gensym-synthesis-with-cons-1"
+        (run 1 (defn)
+          (let ((g1 (gensym "g1"))
+                (g2 (gensym "g2"))
+                (g3 (gensym "g3"))
+                (g4 (gensym "g4"))
+                (g5 (gensym "g5"))
+                (g6 (gensym "g6"))
+                (g7 (gensym "g7")))
+            (fresh (a b c d e f g)
+              (absento g1 defn)
+              (absento g2 defn)
+              (absento g3 defn)
+              (absento g4 defn)
+              (absento g5 defn)
+              (absento g6 defn)
+              (absento g7 defn)
+              (symbolo a)
+              (symbolo c)
+              (== `(define append
+                     (lambda (l s)
+                       (if (null? l)
+                           s
+                           (cons (car l)
+                                 (append (,a ,b) ,c)))))
+                  defn)
+              (evalo `(begin
+                        ,defn
+                        (cons (append '() '())
+                              (cons (append '(,g6) '(,g7))
+                                    (cons (append '(,g1 ,g2 ,g3) '(,g4 ,g5))
+                                          '()))))
+                     `(()
+                       (,g6 ,g7)
+                       (,g1 ,g2 ,g3 ,g4 ,g5))))))
+        '((define append
+            (lambda (l s)
+              (if (null? l) s (cons (car l) (append (cdr l) s))))))))
+
+(time (test "append-gensym-synthesis-with-list-1"
+        (run 1 (defn)
+          (let ((g1 (gensym "g1"))
+                (g2 (gensym "g2"))
+                (g3 (gensym "g3"))
+                (g4 (gensym "g4"))
+                (g5 (gensym "g5"))
+                (g6 (gensym "g6"))
+                (g7 (gensym "g7")))
+            (fresh (a b c d e f g)
+              (absento g1 defn)
+              (absento g2 defn)
+              (absento g3 defn)
+              (absento g4 defn)
+              (absento g5 defn)
+              (absento g6 defn)
+              (absento g7 defn)
+              (symbolo a)
+              (symbolo c)
+              (== `(define append
+                     (lambda (l s)
+                       (if (null? l)
+                           s
+                           (cons (car l)
+                                 (append (,a ,b) ,c)))))
+                  defn)
+              (evalo `(begin
+                        ,defn
+                        (list (append '() '())
+                              (append '(,g6) '(,g7))
+                              (append '(,g1 ,g2 ,g3) '(,g4 ,g5))))
+                     `(()
+                       (,g6 ,g7)
+                       (,g1 ,g2 ,g3 ,g4 ,g5))))))
+        '((define append
+            (lambda (l s)
+              (if (null? l) s (cons (car l) (append (cdr l) s))))))))
+
 #|
 ;;; doesn't come back even after 25 minutes
 (time (test 'begin-append-missing-both-recursive-args-gensym-1
