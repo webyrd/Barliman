@@ -5,7 +5,7 @@
 (test 'letrec-keyword-reference-1
   (run* (q) (evalo '(letrec ((quote (lambda x 5))) quote)
                    q))
-  '((closure (lambda x 5) ((letrec (rec quote lambda x 5)) (val list closure (lambda x x) ()) (val not prim . not) (val equal? prim . equal?) (val symbol? prim . symbol?) (val cons prim . cons) (val null? prim . null?) (val car prim . car) (val cdr prim . cdr)))))
+  '((closure (lambda x 5) ((letrec (rec quote lambda x 5)) (val cons prim . cons) (val car prim . car) (val cdr prim . cdr) (val null? prim . null?) (val symbol? prim . symbol?) (val not prim . not) (val equal? prim . equal?) (val list closure (lambda x x) ())))))
 
 (test 'letrec-keyword-reference-2
   (run* (q) (evalo '(letrec ((foo (lambda x 5))) quote)
@@ -44,7 +44,7 @@
 (test 'begin-keyword-reference-1
   (run* (q) (evalo '(begin (define quote (lambda x 5)) quote)
                    q))
-  '((closure (lambda x 5) ((letrec (rec quote lambda x 5)) (val list closure (lambda x x) ()) (val not prim . not) (val equal? prim . equal?) (val symbol? prim . symbol?) (val cons prim . cons) (val null? prim . null?) (val car prim . car) (val cdr prim . cdr)))))
+  '((closure (lambda x 5) ((letrec (rec quote lambda x 5)) (val cons prim . cons) (val car prim . car) (val cdr prim . cdr) (val null? prim . null?) (val symbol? prim . symbol?) (val not prim . not) (val equal? prim . equal?) (val list closure (lambda x x) ())))))
 
 (test 'begin-keyword-reference-2
   (run* (q) (evalo '(begin (define foo (lambda x 5)) quote)
@@ -322,7 +322,7 @@
          q))
   (list '((lambda (x) `(,x ',x)) '(lambda (x) `(,x ',x)))))
 
-(printf "*** 'generate non-trivial quine old-fashioned way' test takes ~~1.5 minutes to run under Chez! ***\n")
+(printf "*** 'generate non-trivial quine old-fashioned way' test takes ~~2 minutes to run under Chez! ***\n")
 (time
   (test "generate non-trivial quine old-fashioned way"
     (run 4 (q) (evalo q q))

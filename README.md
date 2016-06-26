@@ -278,6 +278,8 @@ Thanks to Kent Dybvig, Andy Keep, and Cisco Systems for releasing Chez Scheme un
 
 The definition of `letrec` in the main interpreter is based based on Dan Friedman's code, using the "half-closure" approach from Reynold's definitional interpreters.
 
+Greg Rosenblatt has been investigating other search approaches for Barliman, and figured out a better ordering of the primitives in the initial-env of the miniScheme interpreter that in some cases greatly speeds up synthesis.  (Essential built-ins like 'cons', 'car', and 'cdr' should come before built-ins like 'list' that could be implemented using variadic lambda.)
+
 
 Barliman is intended to be an improved version of the very crude 'miniKanren playground' I showed at my 2016 PEPM tutorial on miniKanren: https://github.com/webyrd/minikanren-playground
 
@@ -289,6 +291,7 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
+* Fix error: even if the "best guess" query terminates with success, individual test processes may still keep running, since those tests don't "know" that the best guess involving *all* the tests has succeed.  If the best guess query terminates with success, the individual test processes should be killed, and marked as successful (black text, stop the progress spinner).
 * add `let` and `cond`.
 * add an implicit `begin` to `lambda`, `letrec`, and `let` forms.
 * parser should enforce that the variable names are distinct in `lambda` formals, `letrec` bindings and formals, and `define`'s within the same scope.
@@ -370,6 +373,7 @@ KNOWN LIMITATIONS:
 
 KNOWN ERRORS:
 
+* Even if the "best guess" query terminates with success, individual test processes may still keep running, since those tests don't "know" that the best guess involving *all* the tests has succeed.  If the best guess query terminates with success, the individual test processes should be killed, and marked as successful (black text, stop the progress spinner).
 * It is possible, rarely, to exit Barliman and still have a Scheme process running in the background.  Need a way to better track which processes have been started and make sure to kill them.  Or potentially use something like `ulimit` when launching a process.
 * The miniKanren queries constructed by Barliman expose several local variable names and a number of global variable names that could accidentally or intentionally be used by the programmer.  Need to tighten this up.
 * closing one of the windows means the window cannot be reopened!  Oops.  I'm not going to worry about this until I decide what to do with the Semantics window.

@@ -514,14 +514,14 @@
       ((=/= #f t) (eval-expo e2 env val))
       ((== #f t) (eval-expo e3 env val)))))
 
-(define initial-env `((val . (list . (closure (lambda x x) ,empty-env)))
-                      (val . (not . (prim . not)))
-                      (val . (equal? . (prim . equal?)))
-                      (val . (symbol? . (prim . symbol?)))
-                      (val . (cons . (prim . cons)))
-                      (val . (null? . (prim . null?)))
+(define initial-env `((val . (cons . (prim . cons)))
                       (val . (car . (prim . car)))
                       (val . (cdr . (prim . cdr)))
+                      (val . (null? . (prim . null?)))
+                      (val . (symbol? . (prim . symbol?)))
+                      (val . (not . (prim . not)))
+                      (val . (equal? . (prim . equal?)))
+                      (val . (list . (closure (lambda x x) ,empty-env)))
                       . ,empty-env))
 
 (define handle-matcho
