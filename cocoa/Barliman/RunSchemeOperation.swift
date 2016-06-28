@@ -148,10 +148,14 @@ class RunSchemeOperation: NSOperation {
                     // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                     self.editorWindowController.schemeOperationAllTests?.cancel()
                 } else { // parsed, and evaluator query succeeded!
-                    inputField.textColor = NSColor.blackColor()
-                    outputField.textColor = NSColor.blackColor()
-                    label.stringValue = ""
+                    onTestSuccess(inputField, outputField: outputField, label: label)
                 }
+            }
+            
+            func onTestSuccess(inputField: NSTextField, outputField: NSTextField, label: NSTextField) {
+                inputField.textColor = NSColor.blackColor()
+                outputField.textColor = NSColor.blackColor()
+                label.stringValue = ""
             }
             
             func onTestSyntaxError(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField) {
@@ -211,15 +215,41 @@ class RunSchemeOperation: NSOperation {
                         ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
                     } else {
                         ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: datastring))
+                        
+                        // Be polite and cancel all the other tests, since they must succeed!
+                        ewc.processingQueue.cancelAllOperations()
                     }
                 }
             } else if exitStatus == 15 {
                 // SIGTERM exitStatus
                 print("SIGTERM !!!  taskType = \( self.taskType )")
                 
+                // allTests must have been cancelled by a failing test, meaning there is no way for allTests to succeed
                 if self.taskType == "allTests" {
                     ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
                 }
+                
+                // individual tests must have been cancelled by allTests succeeding, meaning that all the individual tests should succeed
+                if taskType == "test1" {
+                    onTestSuccess(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, label: ewc.test1StatusLabel)
+                }
+                if taskType == "test2" {
+                    onTestSuccess(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, label: ewc.test2StatusLabel)
+                }
+                if taskType == "test3" {
+                    onTestSuccess(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, label: ewc.test3StatusLabel)
+                }
+                if taskType == "test4" {
+                    onTestSuccess(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, label: ewc.test4StatusLabel)
+                }
+                if taskType == "test5" {
+                    onTestSuccess(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, label: ewc.test5StatusLabel)
+                }
+                if taskType == "test6" {
+                    onTestSuccess(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, label: ewc.test6StatusLabel)
+                }
+
+                
             } else {
                 // the query wasn't even a legal s-expression, according to Chez!
                 if self.taskType == "simple" {
