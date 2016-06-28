@@ -16,6 +16,10 @@ class RunSchemeOperation: NSOperation {
     var task: NSTask
     var taskType: String
     
+    let kIllegalSexprString = "Illegal sexpression"
+    let kSyntaxErrorString = "Syntax error"
+    let kEvaluationFailedString = "Evaluation failed"
+    
     init(editorWindowController: EditorWindowController, schemeScriptPathString: String, taskType: String) {
         self.editorWindowController = editorWindowController
         self.schemeScriptPathString = schemeScriptPathString
@@ -127,29 +131,33 @@ class RunSchemeOperation: NSOperation {
         // update the user interface, which *must* be done through the main thread
         NSOperationQueue.mainQueue().addOperationWithBlock {
             
-            func onTestCompletion(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, datastring: String) {
+            func onTestCompletion(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField, datastring: String) {
 
                 if datastring == "parse-error" { // failed to parse!
                     inputField.textColor = NSColor.magentaColor()
                     outputField.textColor = NSColor.magentaColor()
+                    label.stringValue = self.kSyntaxErrorString
                     
                     // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                     self.editorWindowController.schemeOperationAllTests?.cancel()
                 } else if datastring == "()" { // parsed, but evaluator query failed!
                     inputField.textColor = NSColor.redColor()
                     outputField.textColor = NSColor.redColor()
+                    label.stringValue = self.kEvaluationFailedString
                     
                     // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                     self.editorWindowController.schemeOperationAllTests?.cancel()
                 } else { // parsed, and evaluator query succeeded!
                     inputField.textColor = NSColor.blackColor()
                     outputField.textColor = NSColor.blackColor()
+                    label.stringValue = ""
                 }
             }
             
-            func onTestSyntaxError(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator) {
+            func onTestSyntaxError(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField) {
                 inputField.textColor = NSColor.greenColor()
                 outputField.textColor = NSColor.greenColor()
+                label.stringValue = self.kIllegalSexprString
             }
 
             let datastring = NSString(data: data, encoding: NSUTF8StringEncoding) as! String
@@ -163,37 +171,40 @@ class RunSchemeOperation: NSOperation {
                 if self.taskType == "simple" {
                     if datastring == "parse-error" {
                         ewc.schemeDefinitionView.textColor = NSColor.magentaColor()
+                        ewc.definitionStatusLabel.stringValue = self.kSyntaxErrorString
                         
                         // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                         self.editorWindowController.schemeOperationAllTests?.cancel()
                     } else if datastring == "()" {
                         // print("--- turning simple red")
                         ewc.schemeDefinitionView.textColor = NSColor.redColor()
+                        ewc.definitionStatusLabel.stringValue = self.kEvaluationFailedString
                         
                         // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                         self.editorWindowController.schemeOperationAllTests?.cancel()
                     } else {
                         // print("--- turning simple black")
                         ewc.schemeDefinitionView.textColor = NSColor.blackColor()
+                        ewc.definitionStatusLabel.stringValue = ""
                     }
                 }
                 if taskType == "test1" {
-                    onTestCompletion(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, spinner: ewc.test1Spinner, datastring: datastring)
+                    onTestCompletion(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, spinner: ewc.test1Spinner, label: ewc.test1StatusLabel, datastring: datastring)
                 }
                 if taskType == "test2" {
-                    onTestCompletion(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, spinner: ewc.test2Spinner, datastring: datastring)
+                    onTestCompletion(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, spinner: ewc.test2Spinner, label: ewc.test2StatusLabel,datastring: datastring)
                 }
                 if taskType == "test3" {
-                    onTestCompletion(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, spinner: ewc.test3Spinner, datastring: datastring)
+                    onTestCompletion(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, spinner: ewc.test3Spinner, label: ewc.test3StatusLabel,datastring: datastring)
                 }
                 if taskType == "test4" {
-                    onTestCompletion(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, spinner: ewc.test4Spinner, datastring: datastring)
+                    onTestCompletion(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, spinner: ewc.test4Spinner, label: ewc.test4StatusLabel,datastring: datastring)
                 }
                 if taskType == "test5" {
-                    onTestCompletion(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, spinner: ewc.test5Spinner, datastring: datastring)
+                    onTestCompletion(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, spinner: ewc.test5Spinner, label: ewc.test5StatusLabel,datastring: datastring)
                 }
                 if taskType == "test6" {
-                    onTestCompletion(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test6Spinner, datastring: datastring)
+                    onTestCompletion(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test6Spinner, label: ewc.test6StatusLabel,datastring: datastring)
                 }
                 if self.taskType == "allTests" {
                     if datastring == "fail" {
@@ -211,25 +222,26 @@ class RunSchemeOperation: NSOperation {
                     // print("--- turning simple green")
                     // print("exitStatus = \( exitStatus )")
                     ewc.schemeDefinitionView.textColor = NSColor.greenColor()
+                    ewc.definitionStatusLabel.stringValue = self.kIllegalSexprString
                 }
                 
                 if taskType == "test1" {
-                    onTestSyntaxError(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, spinner: ewc.test1Spinner)
+                    onTestSyntaxError(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, spinner: ewc.test1Spinner, label: ewc.test1StatusLabel)
                 }
                 if taskType == "test2" {
-                    onTestSyntaxError(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, spinner: ewc.test2Spinner)
+                    onTestSyntaxError(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, spinner: ewc.test2Spinner, label: ewc.test2StatusLabel)
                 }
                 if taskType == "test3" {
-                    onTestSyntaxError(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, spinner: ewc.test3Spinner)
+                    onTestSyntaxError(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, spinner: ewc.test3Spinner, label: ewc.test3StatusLabel)
                 }
                 if taskType == "test4" {
-                    onTestSyntaxError(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, spinner: ewc.test4Spinner)
+                    onTestSyntaxError(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, spinner: ewc.test4Spinner, label: ewc.test4StatusLabel)
                 }
                 if taskType == "test5" {
-                    onTestSyntaxError(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, spinner: ewc.test5Spinner)
+                    onTestSyntaxError(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, spinner: ewc.test5Spinner, label: ewc.test5StatusLabel)
                 }
                 if taskType == "test6" {
-                    onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test6Spinner)
+                    onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test6Spinner, label: ewc.test6StatusLabel)
                 }
                 if taskType == "allTests" {
                     ewc.bestGuessView.setTextColor(NSColor.blackColor(), range: NSMakeRange(0, (ewc.bestGuessView.textStorage?.length)!))

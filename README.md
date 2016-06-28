@@ -379,6 +379,7 @@ KNOWN ERRORS:
 * Even if the "best guess" query terminates with success, individual test processes may still keep running, since those tests don't "know" that the best guess involving *all* the tests has succeed.  If the best guess query terminates with success, the individual test processes should be killed, and marked as successful (black text, stop the progress spinner).
 * It is possible, rarely, to exit Barliman and still have a Scheme process running in the background.  Need a way to better track which processes have been started and make sure to kill them.  Or potentially use something like `ulimit` when launching a process.
 * The miniKanren queries constructed by Barliman expose several local variable names and a number of global variable names that could accidentally or intentionally be used by the programmer.  Need to tighten this up.
+* An illegal s-expression in the 'Definitions' edit pane will make test input/output expressions that are legal expressions appear to be illegal.
 * closing one of the windows means the window cannot be reopened!  Oops.  I'm not going to worry about this until I decide what to do with the Semantics window.
 
 DONE (features on the TODO list implemented since the original release of Barliman)

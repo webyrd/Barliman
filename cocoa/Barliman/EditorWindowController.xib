@@ -10,26 +10,33 @@
             <connections>
                 <outlet property="bestGuessSpinner" destination="sDx-rk-wjy" id="YNC-U0-ajX"/>
                 <outlet property="bestGuessView" destination="udr-Wg-VyJ" id="CBV-q1-4Tp"/>
+                <outlet property="definitionStatusLabel" destination="0d5-fa-ceP" id="Vc0-ao-H4k"/>
                 <outlet property="schemeDefinitionSpinner" destination="bki-fe-DmI" id="NKg-g5-BsN"/>
                 <outlet property="schemeDefinitionView" destination="4FU-au-vlw" id="Ka2-gL-bOM"/>
                 <outlet property="test1ExpectedOutputField" destination="Zi0-kV-0Zv" id="Umr-Mr-tI7"/>
                 <outlet property="test1InputField" destination="dfp-gE-e7y" id="nOz-Cv-ape"/>
                 <outlet property="test1Spinner" destination="XLM-qT-jee" id="TqP-A1-Vq7"/>
+                <outlet property="test1StatusLabel" destination="YAo-sB-usO" id="hhE-Zp-p36"/>
                 <outlet property="test2ExpectedOutputField" destination="QEw-0g-Vn0" id="xRa-lC-vdH"/>
                 <outlet property="test2InputField" destination="9Hs-2O-MgY" id="kYE-1G-sBP"/>
                 <outlet property="test2Spinner" destination="aON-X4-lSn" id="afR-OW-Tda"/>
+                <outlet property="test2StatusLabel" destination="40V-oL-GeG" id="rVc-1p-MSm"/>
                 <outlet property="test3ExpectedOutputField" destination="uC6-hK-TjE" id="Dt3-nU-fkw"/>
                 <outlet property="test3InputField" destination="1TB-3X-WG3" id="CAo-OH-Mm4"/>
                 <outlet property="test3Spinner" destination="YHK-Mm-i1i" id="pKw-pz-4Ce"/>
+                <outlet property="test3StatusLabel" destination="uHv-aF-lmY" id="v2C-2E-4uf"/>
                 <outlet property="test4ExpectedOutputField" destination="7fA-eR-jIs" id="pAZ-yp-aTH"/>
                 <outlet property="test4InputField" destination="kNb-tv-ss4" id="XkP-EB-52h"/>
                 <outlet property="test4Spinner" destination="1hg-5d-5YD" id="mCf-k9-V6M"/>
+                <outlet property="test4StatusLabel" destination="J2E-L7-t85" id="vkl-bb-DH7"/>
                 <outlet property="test5ExpectedOutputField" destination="MAc-DN-iAe" id="eWy-e4-e6L"/>
                 <outlet property="test5InputField" destination="boC-4Q-D8B" id="Tc9-qY-MIO"/>
                 <outlet property="test5Spinner" destination="LIB-sw-LCk" id="yi2-va-x0i"/>
+                <outlet property="test5StatusLabel" destination="xoG-a5-gqq" id="fQy-nN-hbe"/>
                 <outlet property="test6ExpectedOutputField" destination="bd0-aO-clQ" id="qJP-qJ-q0Q"/>
                 <outlet property="test6InputField" destination="U3e-fx-c8F" id="Uro-HT-2jZ"/>
                 <outlet property="test6Spinner" destination="Mxm-SY-a4v" id="cbd-9L-TE8"/>
+                <outlet property="test6StatusLabel" destination="yVL-ff-SSm" id="ZRt-MI-Ccb"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="ERh-Rc-rRE"/>
             </connections>
         </customObject>
@@ -1094,6 +1101,62 @@
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="bki-fe-DmI" userLabel="Scheme Definition Spinner">
                         <rect key="frame" x="444" y="509" width="16" height="16"/>
                     </progressIndicator>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0d5-fa-ceP" userLabel="Definitions Status Label">
+                        <rect key="frame" x="188" y="511" width="250" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="tRd-Vy-5v1">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YAo-sB-usO" userLabel="Test 1 Status Label">
+                        <rect key="frame" x="576" y="511" width="321" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="DIc-CI-rwc">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="40V-oL-GeG" userLabel="Test 2 Status Label">
+                        <rect key="frame" x="576" y="427" width="321" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="aOz-oB-Yxh">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uHv-aF-lmY" userLabel="Test 3 Status Label">
+                        <rect key="frame" x="576" y="340" width="321" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="UPI-X3-Ykn">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J2E-L7-t85" userLabel="Test 4 Status Label">
+                        <rect key="frame" x="576" y="253" width="321" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="DrF-JK-Vkv">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xoG-a5-gqq" userLabel="Test 5 Status Label">
+                        <rect key="frame" x="576" y="166" width="321" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="zyZ-uE-l2N">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yVL-ff-SSm" userLabel="Test 6 Status Label">
+                        <rect key="frame" x="576" y="77" width="321" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="AVF-MA-UNe">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <connections>

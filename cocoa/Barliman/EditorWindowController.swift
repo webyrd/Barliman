@@ -41,6 +41,15 @@ class EditorWindowController: NSWindowController {
     @IBOutlet weak var test5Spinner: NSProgressIndicator!
     @IBOutlet weak var test6Spinner: NSProgressIndicator!
 
+    @IBOutlet weak var definitionStatusLabel: NSTextField!
+    @IBOutlet weak var test1StatusLabel: NSTextField!
+    @IBOutlet weak var test2StatusLabel: NSTextField!
+    @IBOutlet weak var test3StatusLabel: NSTextField!
+    @IBOutlet weak var test4StatusLabel: NSTextField!
+    @IBOutlet weak var test5StatusLabel: NSTextField!
+    @IBOutlet weak var test6StatusLabel: NSTextField!
+
+    
 
     var runCodeFromEditPaneTimer: NSTimer?
     
