@@ -619,6 +619,19 @@
     (call-with-string-output-port
       (lambda (p) (display x p)))))
 
+;;; WEB -- 28 June 2016 -- return #t if u contains a gensym or a var
+;;; (Barliman hack to make the reified answers more readable.)
+(define anyvar?
+  (lambda (u r)
+    (cond
+      ((pair? u)
+       (or (anyvar? (car u) r)
+           (anyvar? (cdr u) r)))
+      (else
+       (let ((v (walk u r)))
+         (or (var? v) (gensym? v)))))))
+
+#|
 (define anyvar?
   (lambda (u r)
     (cond
@@ -626,6 +639,7 @@
        (or (anyvar? (car u) r)
            (anyvar? (cdr u) r)))
       (else (var? (walk u r))))))
+|#
 
 (define member*
   (lambda (u v)
