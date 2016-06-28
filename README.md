@@ -316,8 +316,8 @@ TODO:
 * possibly move as much work as possible into NSTasks, such as loading files.
 * possibly add pairs of tests as processes, once individual tests complete successfully
 * change green text to bold font instead
-* add structured editing capability, with automatic addition of right parens, auto-addition of logic variables, and perhaps something like paredit
-* add syntax-directed auto-indentation of code (thanks Michael Ballantyne, Guannan Wei, Pierce Darragh, Michael Adams, for discussions on how this might work)
+* add structured editing capability, with automatic addition of right parens, auto-addition of logic variables, and perhaps something like paredit (thanks Michael Ballantyne, Guannan Wei, Pierce Darragh, Michael Adams, for discussions on how this might work)
+* add syntax-directed auto-indentation of code
 * figure out how to do syntax-directed hilighlighting, and precise hilighting of syntax errors.  May not be as important if I go the structured editor route.  Although perhaps this should be an option, either way.
 * add documentation/tutorial
 * add paper prototype for desired features

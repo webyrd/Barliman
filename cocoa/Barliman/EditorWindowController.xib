@@ -44,7 +44,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="939" height="545"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <box fixedFrame="YES" title="Scheme Definition" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="wt0-sc-FFV">
+                    <box fixedFrame="YES" title="Definitions" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="wt0-sc-FFV">
                         <rect key="frame" x="17" y="279" width="446" height="246"/>
                         <view key="contentView" id="Ae3-aa-c0f">
                             <rect key="frame" x="1" y="1" width="444" height="230"/>
