@@ -214,8 +214,12 @@ class RunSchemeOperation: NSOperation {
                     }
                 }
             } else if exitStatus == 15 {
-                // SIGTERM exitStatus -- ignore
+                // SIGTERM exitStatus
                 print("SIGTERM !!!  taskType = \( self.taskType )")
+                
+                if self.taskType == "allTests" {
+                    ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
+                }
             } else {
                 // the query wasn't even a legal s-expression, according to Chez!
                 if self.taskType == "simple" {

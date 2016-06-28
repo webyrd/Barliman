@@ -619,19 +619,16 @@
     (call-with-string-output-port
       (lambda (p) (display x p)))))
 
-;;; WEB -- 28 June 2016 -- return #t if u contains a gensym or a var
+;;; WEB -- 28 June 2016 -- return #t if walk*'d term t contains a gensym
 ;;; (Barliman hack to make the reified answers more readable.)
-(define anyvar?
-  (lambda (u r)
+(define anygen?
+  (lambda (t)
     (cond
-      ((pair? u)
-       (or (anyvar? (car u) r)
-           (anyvar? (cdr u) r)))
-      (else
-       (let ((v (walk u r)))
-         (or (var? v) (gensym? v)))))))
+      ((pair? t)
+       (or (anygen? (car t))
+           (anygen? (cdr t))))
+      (else (gensym? t)))))
 
-#|
 (define anyvar?
   (lambda (u r)
     (cond
@@ -639,7 +636,6 @@
        (or (anyvar? (car u) r)
            (anyvar? (cdr u) r)))
       (else (var? (walk u r))))))
-|#
 
 (define member*
   (lambda (u v)
@@ -960,6 +956,33 @@
           (walk* N R)
           (rem-subsumed-T (walk* T R)))))
 
+;;; WEB -- 28 June 2016 -- ensure reified value is always a list of
+;;; term followed by (potentially empty) list of constraints
+(define form
+  (lambda (v D Y N T)
+    (let ((fd (sort-D D))
+          (fy (sorter Y))
+          (fn (sorter N))
+          (ft (sorter T)))
+      (let ((fd (if (null? fd) fd
+                    (let ((fd (drop-dot-D fd)))
+                      `((=/= . ,fd)))))
+            (fy (if (null? fy) fy `((sym . ,fy))))
+            (fn (if (null? fn) fn `((num . ,fn))))
+            (ft (if (null? ft) ft
+                    (let ((ft (drop-dot ft)))
+                      `((absento . ,ft))))))
+        (append `(,v) (filter-gensyms (append fd fn fy ft)))))))
+
+;;; WEB -- 28 June 2016 -- remove constraints containing gensyms
+(define filter-gensyms
+  (lambda (loc)
+    (cond
+      ((null? loc) '())
+      ((anygen? (car loc)) (filter-gensyms (cdr loc)))
+      (else (cons (car loc) (filter-gensyms (cdr loc)))))))
+
+#|
 (define form
   (lambda (v D Y N T)
     (let ((fd (sort-D D))
@@ -979,6 +1002,7 @@
                 (null? fn) (null? ft))
            v)
           (else (append `(,v) fd fn fy ft)))))))
+|#
 
 (define sort-D
   (lambda (D)

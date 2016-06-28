@@ -328,6 +328,11 @@
                 ((fresh (p-name x body rest)
                    (== `((,p-name (lambda ,x ,body)) . ,rest) binding*)
                    (symbolo p-name)
+                   (conde
+                     ;; Variadic
+                     ((symbolo x))
+                     ;; Multi-argument
+                     ((list-of-symbolso x)))
                    (eval-letreco rest letrec-body env val `((rec . (,p-name . (lambda ,x ,body))) . ,env-binding*))))))))
     (eval-letreco binding* letrec-body env val '())))
 

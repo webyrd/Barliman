@@ -381,7 +381,7 @@ class EditorWindowController: NSWindowController {
             ")) begin-body) (evalo `(begin . ,begin-body) (list " +
             allTestOutputs +
             ")" +
-            ")))))) (if (null? ans) 'fail `(begin ,@(car ans) ...)) ))"
+            ")))))) (if (null? ans) (write 'fail) (begin (for-each (lambda (a) (write a) (newline) (newline)) (caar ans)) (unless (null? (cdar ans)) (newline) (display \"Side conditions:\") (newline) (for-each (lambda (a) (write a) (newline)) (cdar ans)) )) ) )"
         
         let queryAllTests: String = load_mk_vicare_string +
             load_mk_string +
