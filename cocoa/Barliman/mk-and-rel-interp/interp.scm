@@ -51,7 +51,7 @@
        (== `(begin . ,defn*/body) expr)
        (not-in-envo 'begin env)
        (parse-begino defn*/body env)))
-    
+
     ((fresh (rator rands)
        (== `(,rator . ,rands) expr)
        ;; application
@@ -64,9 +64,9 @@
        (== `(letrec ,binding* ,letrec-body) expr)
        (not-in-envo 'letrec env)
        (parse-letreco binding* letrec-body env)))
-    
+
     ((prim-parseo expr env))
-    
+
     ))
 
 (define (parse-begino defn*/body env)
@@ -95,7 +95,7 @@
                    (parse-expo letrec-body env^)))
                 ((fresh (p-name x body rest)
                    (== `((,p-name (lambda ,x ,body)) . ,rest) binding*)
-                   (symbolo p-name)                   
+                   (symbolo p-name)
                    (parse-letreco rest letrec-body env `((rec . (,p-name . (lambda ,x ,body))) . ,env-binding*))))))))
     (parse-letreco binding* letrec-body env '())))
 
@@ -244,6 +244,8 @@
   (eval-expo expr initial-env val))
 
 (define (eval-expo expr env val)
+  (try-lookupo expr env val (eval-expo-rest expr env val)))
+(define (eval-expo-rest expr env val)
   (conde
     ((== `(quote ,val) expr)
      (absento 'closure val)
@@ -251,8 +253,6 @@
      (not-in-envo 'quote env))
 
     ((numbero expr) (== expr val))
-
-    ((symbolo expr) (lookupo expr env val))
 
     ((fresh (x body)
        (== `(lambda ,x ,body) expr)
@@ -265,11 +265,11 @@
        (not-in-envo 'lambda env)))
 
     ((fresh (defn*/body)
-       ;; 'begin' supporting multiple, mutually-recursive definitions       
+       ;; 'begin' supporting multiple, mutually-recursive definitions
        (== `(begin . ,defn*/body) expr)
        (not-in-envo 'begin env)
        (eval-begino defn*/body env val)))
-    
+
     ((fresh (rator x rands body env^ a* res)
        (== `(,rator . ,rands) expr)
        ;; variadic
@@ -292,7 +292,7 @@
        (eval-expo rator env `(prim . ,prim-id))
        (eval-primo prim-id a* val)
        (eval-listo rands env a*)))
-    
+
     ((handle-matcho expr env val))
 
     ((fresh (binding* letrec-body)
@@ -300,9 +300,9 @@
        (== `(letrec ,binding* ,letrec-body) expr)
        (not-in-envo 'letrec env)
        (eval-letreco binding* letrec-body env val)))
-    
+
     ((prim-expo expr env val))
-    
+
     ))
 
 (define (eval-begino defn*/body env val)
@@ -361,6 +361,29 @@
           (== `(closure ,lam-expr ,env) v))
          ((=/= p-name x)
           (lookup-in-letrec-envo x env-binding-rest rest env v)))))))
+
+; disjunction-passing style, for improving lookupo scheduling
+(define (try-lookupo x env v alts)
+  (define (try-lookup-in-letrec-envo x env-binding* rest env v alts)
+    (conde
+      ((== '() env-binding*) (try-lookupo x rest v alts))
+      ((fresh (p-name lam-expr env-binding-rest)
+         (== `((rec . (,p-name . ,lam-expr)) . ,env-binding-rest) env-binding*)
+         (conde
+           ((symbolo x) (== p-name x) (== `(closure ,lam-expr ,env) v))
+           ((=/= p-name x)
+            (try-lookup-in-letrec-envo
+              x env-binding-rest rest env v alts)))))))
+  (conde
+    ((fresh (y b rest)
+       (== `((val . (,y . ,b)) . ,rest) env)
+       (conde
+         ((symbolo x) (== x y) (== b v))
+         ((=/= x y) (try-lookupo x rest v alts)))))
+    ((fresh (env-binding* rest)
+       (== `((letrec . ,env-binding*) . ,rest) env)
+       (try-lookup-in-letrec-envo x env-binding* rest env v alts)))
+    ((== '() env) alts)))
 
 (define (not-in-envo x env)
   (conde
