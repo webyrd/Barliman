@@ -244,6 +244,8 @@
   (eval-expo expr initial-env val))
 
 (define (eval-expo expr env val)
+  (try-lookupo expr env val (eval-expo-rest expr env val)))
+(define (eval-expo-rest expr env val)
   (conde
     ((== `(quote ,val) expr)
      (absento 'closure val)
@@ -251,8 +253,6 @@
      (not-in-envo 'quote env))
 
     ((numbero expr) (== expr val))
-
-    ((symbolo expr) (lookupo expr env val))
 
     ((fresh (x body)
        (== `(lambda ,x ,body) expr)
@@ -361,6 +361,29 @@
           (== `(closure ,lam-expr ,env) v))
          ((=/= p-name x)
           (lookup-in-letrec-envo x env-binding-rest rest env v)))))))
+
+; disjunction-passing style, for improving lookupo scheduling
+(define (try-lookupo x env v alts)
+  (define (try-lookup-in-letrec-envo x env-binding* rest env v alts)
+    (conde
+      ((== '() env-binding*) (try-lookupo x rest v alts))
+      ((fresh (p-name lam-expr env-binding-rest)
+         (== `((rec . (,p-name . ,lam-expr)) . ,env-binding-rest) env-binding*)
+         (conde
+           ((symbolo x) (== p-name x) (== `(closure ,lam-expr ,env) v))
+           ((=/= p-name x)
+            (try-lookup-in-letrec-envo
+              x env-binding-rest rest env v alts)))))))
+  (conde
+    ((fresh (y b rest)
+       (== `((val . (,y . ,b)) . ,rest) env)
+       (conde
+         ((symbolo x) (== x y) (== b v))
+         ((=/= x y) (try-lookupo x rest v alts)))))
+    ((fresh (env-binding* rest)
+       (== `((letrec . ,env-binding*) . ,rest) env)
+       (try-lookup-in-letrec-envo x env-binding* rest env v alts)))
+    ((== '() env) alts)))
 
 (define (not-in-envo x env)
   (conde
