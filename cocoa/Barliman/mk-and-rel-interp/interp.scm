@@ -247,6 +247,28 @@
   (try-lookupo expr env val (eval-expo-rest expr env val)))
 (define (eval-expo-rest expr env val)
   (conde
+    ((fresh (rator x* rands a* prim-id)
+       (== `(,rator . ,rands) expr)
+       (eval-expo rator env `(prim . ,prim-id))
+       (eval-primo prim-id a* val)
+       (eval-listo rands env a*)))
+
+    ((fresh (rator x rands body env^ a* res)
+       (== `(,rator . ,rands) expr)
+       ;; variadic
+       (symbolo x)
+       (== `((val . (,x . ,a*)) . ,env^) res)
+       (eval-expo rator env `(closure (lambda ,x ,body) ,env^))
+       (eval-expo body res val)
+       (eval-listo rands env a*)))
+
+    ((fresh (rator x* rands body env^ a* res)
+       (== `(,rator . ,rands) expr)
+       ;; Multi-argument
+       (eval-expo rator env `(closure (lambda ,x* ,body) ,env^))
+       (ext-env*o x* a* env^ res)
+       (eval-application rands env a* (eval-expo body res val))))
+
     ((== `(quote ,val) expr)
      (absento 'closure val)
      (absento 'prim val)
@@ -269,28 +291,6 @@
        (== `(begin . ,defn*/body) expr)
        (not-in-envo 'begin env)
        (eval-begino defn*/body env val)))
-
-    ((fresh (rator x rands body env^ a* res)
-       (== `(,rator . ,rands) expr)
-       ;; variadic
-       (symbolo x)
-       (== `((val . (,x . ,a*)) . ,env^) res)
-       (eval-expo rator env `(closure (lambda ,x ,body) ,env^))
-       (eval-expo body res val)
-       (eval-listo rands env a*)))
-
-    ((fresh (rator x* rands body env^ a* res)
-       (== `(,rator . ,rands) expr)
-       ;; Multi-argument
-       (eval-expo rator env `(closure (lambda ,x* ,body) ,env^))
-       (ext-env*o x* a* env^ res)
-       (eval-application rands env a* (eval-expo body res val))))
-
-    ((fresh (rator x* rands a* prim-id)
-       (== `(,rator . ,rands) expr)
-       (eval-expo rator env `(prim . ,prim-id))
-       (eval-primo prim-id a* val)
-       (eval-listo rands env a*)))
 
     ((handle-matcho expr env val))
 
@@ -469,10 +469,6 @@
 
 (define (eval-primo prim-id a* val)
   (conde
-    [(== prim-id 'cons)
-     (fresh (a d)
-       (== `(,a ,d) a*)
-       (== `(,a . ,d) val))]
     [(== prim-id 'car)
      (fresh (d)
        (== `((,val . ,d)) a*)
@@ -507,7 +503,11 @@
        (== `(,v) a*)
        (conde
          ((== '() v) (== #t val))
-         ((=/= '() v) (== #f val))))]))
+         ((=/= '() v) (== #f val))))]
+    [(== prim-id 'cons)
+     (fresh (a d)
+       (== `(,a ,d) a*)
+       (== `(,a . ,d) val))]))
 
 (define (prim-expo expr env val)
   (conde
@@ -574,11 +574,11 @@
       ((=/= #f t) (eval-expo e2 env val))
       ((== #f t) (eval-expo e3 env val)))))
 
-(define initial-env `((val . (cons . (prim . cons)))
-                      (val . (car . (prim . car)))
+(define initial-env `((val . (car . (prim . car)))
                       (val . (cdr . (prim . cdr)))
                       (val . (null? . (prim . null?)))
                       (val . (symbol? . (prim . symbol?)))
+                      (val . (cons . (prim . cons)))
                       (val . (not . (prim . not)))
                       (val . (equal? . (prim . equal?)))
                       (val . (list . (closure (lambda x x) ,empty-env)))
