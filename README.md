@@ -278,8 +278,7 @@ Thanks to Kent Dybvig, Andy Keep, and Cisco Systems for releasing Chez Scheme un
 
 The definition of `letrec` in the main interpreter is based based on Dan Friedman's code, using the "half-closure" approach from Reynold's definitional interpreters.
 
-Greg Rosenblatt has been investigating other search approaches for Barliman, and figured out a better ordering of the primitives in the initial-env of the miniScheme interpreter that in some cases greatly speeds up synthesis.  (Essential built-ins like 'cons', 'car', and 'cdr' should come before built-ins like 'list' that could be implemented using variadic lambda.)
-
+Greg Rosenblatt has been improving the search and the miniScheme interpreter to improve synthesis performance, greatly improving performance on many of the synthesis problems.
 
 Barliman is intended to be an improved version of the very crude 'miniKanren playground' I showed at my 2016 PEPM tutorial on miniKanren: https://github.com/webyrd/minikanren-playground
 
@@ -291,7 +290,8 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
-* Replace 'list' call in the "best quess" query with nested 'cons' calls instead.  This can be an order of magnitude faster in some cases, according to my testing (variadic application is more expensive than 'cons' in the current miniScheme interpreter, apparently: see times for append-gensym-synthesis-with-cons-1 versus append-gensym-synthesis-with-list-1 tests in test-interp.scm).
+* add smart editing/auto insert of gensyms in the test edit panes, similar to how smart editing/auto insert of logic variables works in the Definitions edit pane
+* Possibly replace 'list' call in the "best quess" query with nested 'cons' calls instead.  (Need to time this again with Greg's new improvements to the search.)  This can be an order of magnitude faster in some cases, according to my testing (variadic application is more expensive than 'cons' in the current miniScheme interpreter, apparently: see times for append-gensym-synthesis-with-cons-1 versus append-gensym-synthesis-with-list-1 tests in test-interp.scm).
 * consider changing reifier and main edit window to display constraints separately from "best guess" definition(s).
 * add `let` and `cond`.
 * add an implicit `begin` to `lambda`, `letrec`, and `let` forms.
