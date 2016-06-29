@@ -292,8 +292,6 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 TODO:
 
 * Replace 'list' call in the "best quess" query with nested 'cons' calls instead.  This can be an order of magnitude faster in some cases, according to my testing (variadic application is more expensive than 'cons' in the current miniScheme interpreter, apparently: see times for append-gensym-synthesis-with-cons-1 versus append-gensym-synthesis-with-list-1 tests in test-interp.scm).
-* Fix error: even if the "best guess" query terminates with success, individual test processes may still keep running, since those tests don't "know" that the best guess involving *all* the tests has succeed.  If the best guess query terminates with success, the individual test processes should be killed, and marked as successful (black text, stop the progress spinner).
-* change reifier so that constraints involving gensym are not displayed.
 * consider changing reifier and main edit window to display constraints separately from "best guess" definition(s).
 * add `let` and `cond`.
 * add an implicit `begin` to `lambda`, `letrec`, and `let` forms.
@@ -330,7 +328,7 @@ TODO:
 * would be smarter/less resource intense to not launch all the tests again when the text in a single test changes.  Only that test and allTests need be re-run, in theory.  Getting the UI to display the state of everything properly may be a little subtle, though.
 * differential relational interpreters
 * use a meta-interpreter to let the programmer know the deepest part of the search path upon failure, to try to give a better hint as to what went wrong (thanks Nada! and halp! :))
-* show the definition guessed for each individual successful test
+* consider showing the definition guessed for each individual successful test
 * show reified test inputs and outputs upon success, for all tests
 * add ability to fill in test input/outputs, given a fully or mostly specified definition
 * have Barliman attempt to guess the result of a test, as the programmer types in the test (thanks Ziyao Wei!)
@@ -376,7 +374,6 @@ KNOWN LIMITATIONS:
 
 KNOWN ERRORS:
 
-* Even if the "best guess" query terminates with success, individual test processes may still keep running, since those tests don't "know" that the best guess involving *all* the tests has succeed.  If the best guess query terminates with success, the individual test processes should be killed, and marked as successful (black text, stop the progress spinner).
 * It is possible, rarely, to exit Barliman and still have a Scheme process running in the background.  Need a way to better track which processes have been started and make sure to kill them.  Or potentially use something like `ulimit` when launching a process.
 * The miniKanren queries constructed by Barliman expose several local variable names and a number of global variable names that could accidentally or intentionally be used by the programmer.  Need to tighten this up.
 * An illegal s-expression in the 'Definitions' edit pane will make test input/output expressions that are legal expressions appear to be illegal.
@@ -384,6 +381,8 @@ KNOWN ERRORS:
 
 DONE (features on the TODO list implemented since the original release of Barliman)
 
+* changed reifier so that constraints involving gensym are not displayed.
+* Fixed error: even if the "best guess" query terminates with success, individual test processes may still keep running, since those tests don't "know" that the best guess involving *all* the tests has succeed.  If the best guess query terminates with success, the individual test processes should be killed, and marked as successful (black text, stop the progress spinner).
 * updated `letrec` to allow for zero or more bindings, and updated `begin` to allow for zero or more definitions; this allows the creation of mutually-recursive functions.
 * define grammar for microScheme (and the other languages) as a miniKanren relation, and use this grammar to separately check and report whether the definition is grammatically correct.
 * cancel the allTests operation if any single test fails, since in that case allTests cannot possibly succeed
