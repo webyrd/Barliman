@@ -5,7 +5,7 @@
 (test 'letrec-keyword-reference-1
   (run* (q) (evalo '(letrec ((quote (lambda x 5))) quote)
                    q))
-  '((closure (lambda x 5) ((letrec (rec quote lambda x 5)) (val cons prim . cons) (val car prim . car) (val cdr prim . cdr) (val null? prim . null?) (val symbol? prim . symbol?) (val not prim . not) (val equal? prim . equal?) (val list closure (lambda x x) ())))))
+  '(((closure (lambda x 5) ((letrec (rec quote lambda x 5)) (val cons prim . cons) (val car prim . car) (val cdr prim . cdr) (val null? prim . null?) (val symbol? prim . symbol?) (val not prim . not) (val equal? prim . equal?) (val list closure (lambda x x) ()))))))
 
 (test 'letrec-keyword-reference-2
   (run* (q) (evalo '(letrec ((foo (lambda x 5))) quote)
@@ -15,17 +15,17 @@
 (test 'letrec-keyword-reference-3
   (run* (q) (evalo '(letrec ((quote (lambda x quote))) 6)
                    q))
-  '(6))
+  '((6)))
 
 (test 'letrec-keyword-reference-4
   (run* (q) (evalo '(letrec ((bar (lambda (y) quote)) (quote (lambda x x))) 6)
                    q))
-  '(6))
+  '((6)))
 
 (test 'letrec-keyword-reference-5
   (run* (q) (evalo '(letrec ((quote (lambda x x)) (bar (lambda (y) quote))) 6)
                    q))
-  '(6))
+  '((6)))
 
 (printf "*** this next test will fail, since 'evalo' doesn't check the syntax of lambda bodies")
 (test 'letrec-keyword-reference-6
@@ -44,7 +44,7 @@
 (test 'begin-keyword-reference-1
   (run* (q) (evalo '(begin (define quote (lambda x 5)) quote)
                    q))
-  '((closure (lambda x 5) ((letrec (rec quote lambda x 5)) (val cons prim . cons) (val car prim . car) (val cdr prim . cdr) (val null? prim . null?) (val symbol? prim . symbol?) (val not prim . not) (val equal? prim . equal?) (val list closure (lambda x x) ())))))
+  '(((closure (lambda x 5) ((letrec (rec quote lambda x 5)) (val cons prim . cons) (val car prim . car) (val cdr prim . cdr) (val null? prim . null?) (val symbol? prim . symbol?) (val not prim . not) (val equal? prim . equal?) (val list closure (lambda x x) ()))))))
 
 (test 'begin-keyword-reference-2
   (run* (q) (evalo '(begin (define foo (lambda x 5)) quote)
@@ -54,17 +54,17 @@
 (test 'begin-keyword-reference-3
   (run* (q) (evalo '(begin (define quote (lambda x quote)) 6)
                    q))
-  '(6))
+  '((6)))
 
 (test 'begin-keyword-reference-4
   (run* (q) (evalo '(begin (define bar (lambda (y) quote)) (define quote (lambda x x)) 6)
                    q))
-  '(6))
+  '((6)))
 
 (test 'begin-keyword-reference-5
   (run* (q) (evalo '(begin (define quote (lambda x x)) (define bar (lambda (y) quote)) 6)
                    q))
-  '(6))
+  '((6)))
 
 (printf "*** this next test will fail, since 'evalo' doesn't check the syntax of lambda bodies")
 (test 'begin-keyword-reference-6
@@ -84,12 +84,12 @@
     (evalo '(letrec ()
               5)
            q))
-  '(5))
+  '((5)))
 
 (test 'begin-with-definitions-1
   (run* (q)
     (evalo '(begin 5) q))
-  '(5))
+  '((5)))
 
 (test 'simple-begin-1
   (run* (q)
@@ -97,14 +97,14 @@
               (define member? (lambda x 6))
               5)
            q))
-  '(5))
+  '((5)))
 
 (test 'simple-letrec-1
   (run* (q)
     (evalo '(letrec ((member? (lambda x 6)))
               5)
            q))
-  '(5))
+  '((5)))
 
 (test 'append-1
   (run* (q)
@@ -115,7 +115,7 @@
                                          (append (cdr l) s))))))
               (append '(1 2 3) '(4 5)))
            q))
-  '((1 2 3 4 5)))
+  '(((1 2 3 4 5))))
 
 (test 'even?/odd?-1
   (run* (q)
@@ -129,7 +129,7 @@
                                  (even? (cdr n))))))
               (even? 'z))
            q))
-  '(#t))
+  '((#t)))
 
 (test 'even?/odd?-2
   (run* (q) (evalo '(letrec ((even? (lambda (n)
@@ -142,7 +142,7 @@
                                          (even? (cdr n))))))
                       (odd? 'z))
                    q))
-  '(#f))
+  '((#f)))
 
 (test 'even?/odd?-3
   (run* (q) (evalo '(letrec ((even? (lambda (n)
@@ -155,7 +155,7 @@
                                          (even? (cdr n))))))
                       (even? '(s . z)))
                    q))
-  '(#f))
+  '((#f)))
 
 (test 'even?/odd?-4
   (run* (q) (evalo '(letrec ((even? (lambda (n)
@@ -168,7 +168,7 @@
                                          (even? (cdr n))))))
                       (even? '(s . (s . z))))
                    q))
-  '(#t))
+  '((#t)))
 
 (test 'even?/odd?-5
   (run* (q) (evalo '(letrec ((even? (lambda (n)
@@ -181,7 +181,7 @@
                                           (even? (cdr n))))))
                        (odd? '(s . (s . z))))
                     q))
-  '(#f))
+  '((#f)))
 
 (test 'proof-letrec-1
   (run 1 (prf)
@@ -210,13 +210,13 @@
                                      (proof? (list r2 assms ants2 A)))]))))
             (proof? ',prf)))
        #t)))
-  '((modus-ponens (A (if A B) (if B C))
+  '(((modus-ponens (A (if A B) (if B C))
                   ((assumption (A (if A B) (if B C)) () (if B C))
                    (modus-ponens (A (if A B) (if B C))
                                  ((assumption (A (if A B) (if B C)) () (if A B))
                                   (assumption (A (if A B) (if B C)) () A))
                                  B))
-                  C)))
+                  C))))
 
 
 (test 'proof-begin-1
@@ -250,7 +250,7 @@
                            (assumption (A (if A B) (if B C)) () A)) B))
                         C)))
            q))
-  '(#t))
+  '((#t)))
 
 (test 'proof-begin-2
   (run 1 (prf)
@@ -281,13 +281,13 @@
                             (proof? (list r2 assms ants2 A)))])))
                 (proof? ',prf))
              #t)))
-  '((modus-ponens (A (if A B) (if B C))
+  '(((modus-ponens (A (if A B) (if B C))
                   ((assumption (A (if A B) (if B C)) () (if B C))
                    (modus-ponens (A (if A B) (if B C))
                                  ((assumption (A (if A B) (if B C)) () (if A B))
                                   (assumption (A (if A B) (if B C)) () A))
                                  B))
-                  C)))
+                  C))))
 
 (test 'begin-append-1
   (run* (q)
@@ -300,7 +300,7 @@
                             (append (cdr l) s)))))
               (append '(1 2 3) '(4 5)))
            q))
-  '((1 2 3 4 5)))
+  '(((1 2 3 4 5))))
 
 (time (test 'begin-append-missing-first-recursive-arg-1
         (run 1 (q)
@@ -313,7 +313,7 @@
                                   (append ,q s)))))
                     (append '(1 2 3) '(4 5)))
                  '(1 2 3 4 5)))
-        '((cdr l))))
+        '(((cdr l)))))
 
 (time (test 'begin-append-missing-first-recursive-arg-gensym-1
         (run 1 (q)
@@ -339,7 +339,7 @@
                         ,defn
                         (append '(,g1 ,g2 ,g3) '(,g4 ,g5)))
                      `(,g1 ,g2 ,g3 ,g4 ,g5)))))
-        '((cdr l))))
+        '(((cdr l)))))
 
 (time (test 'begin-append-missing-second-recursive-arg-1
         (run 1 (q)
@@ -352,7 +352,7 @@
                                   (append (cdr l) ,q)))))
                     (append '(1 2 3) '(4 5)))
                  '(1 2 3 4 5)))
-        '(s)))
+        '((s))))
 
 (time (test 'begin-append-missing-second-recursive-arg-gensym-1
         (run 1 (q)
@@ -378,7 +378,7 @@
                         ,defn
                         (append '(,g1 ,g2 ,g3) '(,g4 ,g5)))
                      `(,g1 ,g2 ,g3 ,g4 ,g5)))))
-        '(s)))
+        '((s))))
 
 (time (test "append-gensym-synthesis-with-cons-1"
         (run 1 (defn)
@@ -415,9 +415,9 @@
                      `(()
                        (,g6 ,g7)
                        (,g1 ,g2 ,g3 ,g4 ,g5))))))
-        '((define append
-            (lambda (l s)
-              (if (null? l) s (cons (car l) (append (cdr l) s))))))))
+        '(((define append
+             (lambda (l s)
+               (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
 
 (time (test "append-gensym-synthesis-with-list-1"
         (run 1 (defn)
@@ -453,9 +453,9 @@
                      `(()
                        (,g6 ,g7)
                        (,g1 ,g2 ,g3 ,g4 ,g5))))))
-        '((define append
+        '(((define append
             (lambda (l s)
-              (if (null? l) s (cons (car l) (append (cdr l) s))))))))
+              (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
 
 #|
 ;;; doesn't come back even after 25 minutes
@@ -483,7 +483,7 @@
                         ,defn
                         (append '(,g1 ,g2 ,g3) '(,g4 ,g5)))
                      `(,g1 ,g2 ,g3 ,g4 ,g5)))))
-        '(((cdr l) s))))
+        '((((cdr l) s)))))
 |#
 
 (test "check quine"
@@ -517,20 +517,20 @@
               (eval-expr ',q
                          'initial-env)))
          q))
-  (list '((lambda (x) `(,x ',x)) '(lambda (x) `(,x ',x)))))
+  (list (list '((lambda (x) `(,x ',x)) '(lambda (x) `(,x ',x))))))
 
-(printf "*** 'generate non-trivial quine old-fashioned way' test takes ~~2 minutes to run under Chez! ***\n")
+(printf "*** 'generate non-trivial quine old-fashioned way' test takes ~~4.5 minutes to run under Chez! ***\n")
 (time
   (test "generate non-trivial quine old-fashioned way"
     (run 4 (q) (evalo q q))
     '((_.0 (num _.0))
-      #t
-      #f
+      (#t)
+      (#f)
       (((lambda (_.0) (list _.0 (list 'quote _.0)))
         '(lambda (_.0) (list _.0 (list 'quote _.0))))
        (=/= ((_.0 closure)) ((_.0 list)) ((_.0 prim)) ((_.0 quote))) (sym _.0)))))
 
-(printf "*** 'generate quine using Scheme-in-Scheme' test takes ~~5 minutes to run under Chez! ***\n")
+(printf "*** 'generate quine using Scheme-in-Scheme' test takes ~~10 minutes to run under Chez! ***\n")
 (time
   (test "generate quine using Scheme-in-Scheme"
     (run 1 (q)
