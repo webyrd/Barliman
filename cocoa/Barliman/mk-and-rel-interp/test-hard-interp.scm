@@ -37,7 +37,6 @@
 ;;; but dynamic ordering via eval-application fixes it!
 (test 'append-cons-first-arg
   (run 1 (q)
-;    (== q '(car l))
     (evalo `(begin (define append
                      (lambda (l s)
                        (if (null? l)
@@ -102,7 +101,6 @@
 
 (time (test 'append-hard-3
   (run 1 (q r)
-    (== q '(cdr l)) (== r 's)  ;; TODO
     (evalo `(begin
               (define append
                 (lambda (l s)
@@ -116,37 +114,39 @@
            (list '(foo bar) '(1 2 3 4 5))))
   '((((cdr l) s)))))
 
-;(time (test 'append-hard-4
-  ;(run 1 (q)
-    ;(== q '((cdr l) s))  ;; TODO
-    ;(evalo `(begin
-              ;(define append
-                ;(lambda (l s)
-                  ;(if (null? l)
-                    ;s
-                    ;(cons (car l)
-                          ;(append . ,q)))))
-              ;(list
-                ;(append '(foo) '(bar))
-                ;(append '(1 2 3) '(4 5))))
-           ;(list '(foo bar) '(1 2 3 4 5))))
-  ;'((((cdr l) s)))))
+(time (test 'append-hard-4
+  (run 1 (q)
+    (evalo `(begin
+              (define append
+                (lambda (l s)
+                  (if (null? l)
+                    s
+                    (cons (car l)
+                          (append . ,q)))))
+              (list
+                (append '(foo) '(bar))
+                (append '(1 2 3) '(4 5))))
+           (list '(foo bar) '(1 2 3 4 5))))
+  '((((cdr l) s)))))
 
-;(time (test 'append-hard-5
-  ;(run 1 (q r)
-    ;(evalo `(begin
-              ;(define append
-                ;(lambda (l s)
-                  ;(if (null? l)
-                    ;s
-                    ;(cons ,q
-                          ;(append . ,r)))))
-              ;(list
-                ;(append '() '())
-                ;(append '(foo) '(bar))
-                ;(append '(1 2 3) '(4 5))))
-           ;(list '() '(foo bar) '(1 2 3 4 5))))
-  ;'(((car l) ((cdr l) s)))))
+(time (test 'append-hard-5
+  (run 1 (q r)
+    (evalo `(begin
+              (define append
+                (lambda (l s)
+                  (if (null? l)
+                    s
+                    (cons ,q
+                          (append . ,r)))))
+              (list
+                (append '() '())
+                (append '(foo) '(bar))
+                (append '(1 2 3) '(4 5))))
+           (list '() '(foo bar) '(1 2 3 4 5))))
+  '((((car l) ((cdr l) s))))))
+
+;; the following are still overfitting
+;; probably need to demote quote and some others
 
 ;(time (test 'append-hard-6
   ;(run 1 (q)

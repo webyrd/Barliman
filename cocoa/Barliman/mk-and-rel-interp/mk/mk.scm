@@ -271,6 +271,15 @@
          (else (let ((c (car c-inf)) (f (cdr c-inf)))
                  e3)))))))
 
+(define-syntax let/vars
+  (syntax-rules ()
+    ((_ _ () body) body)
+    ((_ _ () body ...) (begin body ...))
+    ((_ st (qvar ...) body ...)
+     (let ((scope (subst-scope (state-S st))))
+       (let ((qvar (var scope)) ...)
+         body ...)))))
+
 (define-syntax fresh
   (syntax-rules ()
     ((_ (x ...) g0 g ...)

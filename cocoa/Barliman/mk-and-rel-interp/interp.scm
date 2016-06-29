@@ -283,9 +283,8 @@
        (== `(,rator . ,rands) expr)
        ;; Multi-argument
        (eval-expo rator env `(closure (lambda ,x* ,body) ,env^))
-       (eval-listo rands env a*)
        (ext-env*o x* a* env^ res)
-       (eval-expo body res val)))
+       (eval-application rands env a* (eval-expo body res val))))
 
     ((fresh (rator x* rands a* prim-id)
        (== `(,rator . ,rands) expr)
@@ -414,6 +413,39 @@
        (== `(,v-a . ,v-d) val)
        (eval-expo a env v-a)
        (eval-listo d env v-d)))))
+
+(define (list-split-ground st xs)
+  (let loop ((rprefix '()) (xs xs))
+    (let ((tm (walk xs st)))
+      (if (pair? tm)
+        (loop (cons (car tm) rprefix) (cdr tm))
+        (values rprefix xs)))))
+
+(define (eval-application rands aenv a* body-goal)
+  (define succeed unit)
+  (lambdag@ (st)
+    (let-values (((rrands rands-suffix) (list-split-ground st rands)))
+      (let-values
+        (((ggoals vgoals args-suffix)
+          (let loop ((rands (reverse rrands))
+                     (ggoals succeed)
+                     (vgoals succeed)
+                     (args a*))
+            (if (null? rands) (values ggoals vgoals args)
+              (let ((rand (walk (car rands) st)))
+                (let/vars st (args-rest)
+                  (let ((goal (fresh (arg)
+                                (== `(,arg . ,args-rest) args)
+                                (eval-expo rand aenv arg))))
+                    (if (var? rand)
+                      (loop (cdr rands) ggoals (fresh () vgoals goal) args-rest)
+                      (loop (cdr rands) (fresh () ggoals goal) vgoals args-rest)))))))))
+        ((fresh ()
+           ggoals    ; try ground arguments first
+           body-goal ; then the body
+           vgoals    ; then fill in unbound arguments
+           ; any unbound final segment of arguments
+           (eval-listo rands-suffix aenv args-suffix)) st)))))
 
 ;; need to make sure lambdas are well formed.
 ;; grammar constraints would be useful here!!!
