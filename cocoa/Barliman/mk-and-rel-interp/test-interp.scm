@@ -520,7 +520,8 @@
   (list (list '((lambda (x) `(,x ',x)) '(lambda (x) `(,x ',x))))))
 
 
-(printf "*** 'generate quine using Scheme-in-Scheme' test takes ~~5 minutes to run under Chez! ***\n")
+;;; this test used to take ~5 minutes
+(printf "*** 'generate quine using Scheme-in-Scheme' test takes ~~12 minutes to run under Chez! ***\n")
 (time
   (test "generate quine using Scheme-in-Scheme"
     (run 1 (q)
