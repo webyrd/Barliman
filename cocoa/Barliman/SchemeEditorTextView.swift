@@ -16,25 +16,6 @@ class SchemeEditorTextView: NSTextView {
         // Drawing code here.
     }
     
-    // from http://stackoverflow.com/questions/27880650/swift-extract-regex-matches
-    // and http://stackoverflow.com/questions/24094872/cant-pass-0-to-nsregularexpression-options
-//    func matchesForRegexInText(regex: String!, text: String!) -> [String] {
-//        
-//        var re: NSRegularExpression?
-//        do {
-//            re = try NSRegularExpression(pattern: regex, options: [])
-//        } catch {
-//            Swift.print("invalid regex")
-//        }
-//        
-//        let nsString = text as NSString
-//        let results = re!.matchesInString(text,
-//                                            options: [], range: NSMakeRange(0, nsString.length))
-//        return results.map({ nsString.substringWithRange($0.range)})
-//    }
-    
-
-    
     override func keyDown(event: NSEvent) {
         Swift.print("----------------   keyDown: \(event.keyCode) ")
         
