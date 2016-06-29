@@ -519,7 +519,7 @@
          q))
   (list (list '((lambda (x) `(,x ',x)) '(lambda (x) `(,x ',x))))))
 
-(printf "*** 'generate non-trivial quine old-fashioned way' test takes ~~4.5 minutes to run under Chez! ***\n")
+(printf "*** 'generate non-trivial quine old-fashioned way' test takes ~~2 minutes to run under Chez! ***\n")
 (time
   (test "generate non-trivial quine old-fashioned way"
     (run 4 (q) (evalo q q))
@@ -530,7 +530,7 @@
         '(lambda (_.0) (list _.0 (list 'quote _.0))))
        (=/= ((_.0 closure)) ((_.0 list)) ((_.0 prim)) ((_.0 quote))) (sym _.0)))))
 
-(printf "*** 'generate quine using Scheme-in-Scheme' test takes ~~10 minutes to run under Chez! ***\n")
+(printf "*** 'generate quine using Scheme-in-Scheme' test takes ~~5 minutes to run under Chez! ***\n")
 (time
   (test "generate quine using Scheme-in-Scheme"
     (run 1 (q)
