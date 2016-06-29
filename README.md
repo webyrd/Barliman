@@ -314,7 +314,7 @@ TODO:
 * possibly move as much work as possible into NSTasks, such as loading files.
 * possibly add pairs of tests as processes, once individual tests complete successfully
 * change green text to bold font instead
-* add structured editing capability, with automatic addition of right parens, auto-addition of logic variables, and perhaps something like paredit (thanks Michael Ballantyne, Guannan Wei, Pierce Darragh, Michael Adams, for discussions on how this might work)
+* add structured editing capability, with automatic addition of right parens, auto-addition of logic variables, and perhaps something like paredit (thanks Michael Ballantyne, Guannan Wei, Pierce Darragh, Michael Adams, for discussions on how this might work) [have added automatic addition of right parens, and auto-addition of logic variables]
 * add syntax-directed auto-indentation of code
 * figure out how to do syntax-directed hilighlighting, and precise hilighting of syntax errors.  May not be as important if I go the structured editor route.  Although perhaps this should be an option, either way.
 * add documentation/tutorial
@@ -381,6 +381,7 @@ KNOWN ERRORS:
 
 DONE (features on the TODO list implemented since the original release of Barliman)
 
+* added automatic addition of right parens, and auto-addition of logic variables
 * changed reifier so that constraints involving gensym are not displayed.
 * Fixed error: even if the "best guess" query terminates with success, individual test processes may still keep running, since those tests don't "know" that the best guess involving *all* the tests has succeed.  If the best guess query terminates with success, the individual test processes should be killed, and marked as successful (black text, stop the progress spinner).
 * updated `letrec` to allow for zero or more bindings, and updated `begin` to allow for zero or more definitions; this allows the creation of mutually-recursive functions.
