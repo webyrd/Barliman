@@ -239,7 +239,6 @@
            (list '() '(foo bar) '(1 2 3 4 5))))
   '(((append (cdr l) s)))))
 
-(printf "append-hard-6-gensym does not terminate after 6 minutes\n")
 (time
  (test 'append-hard-6-gensym
    (run 1 (defn)
@@ -274,62 +273,105 @@
                   (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7)))))))
    '(((define append (lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
 
+(time
+ (test 'append-hard-7-gensym
+   (run 1 (defn)
+     (let ((g1 (gensym "g1"))
+           (g2 (gensym "g2"))
+           (g3 (gensym "g3"))
+           (g4 (gensym "g4"))
+           (g5 (gensym "g5"))
+           (g6 (gensym "g6"))
+           (g7 (gensym "g7")))
+       (fresh ()
+         (absento g1 defn)
+         (absento g2 defn)
+         (absento g3 defn)
+         (absento g4 defn)
+         (absento g5 defn)
+         (absento g6 defn)
+         (absento g7 defn)
+         (fresh (q r)
+           (== `(define append
+                  (lambda (l s)
+                    (if (null? l)
+                        s
+                        (cons ,q ,r))))
+               defn)
+           (evalo `(begin
+                     ,defn
+                     (list
+                      (append '() '())
+                      (append '(,g1) '(,g2))
+                      (append '(,g3 ,g4 ,g5) '(,g6 ,g7))))
+                  (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7)))))))
+   '(((define append (lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
 
-;(test 'append-hard-7
-  ;(run 1 (q r)
-    ;(evalo `(begin
-              ;(define append
-                ;(lambda (l s)
-                  ;(if (null? l)
-                    ;s
-                    ;(cons ,q ,r))))
-              ;(list
-                ;(append '() '())
-                ;(append '(foo) '(bar))
-                ;(append '(1 2 3) '(4 5))))
-           ;(list '() '(foo bar) '(1 2 3 4 5))))
-  ;'(((car l) (append (cdr l) s))))
+(printf "append-hard-7-no-gensym returns an over-specific, incorrect answer\n")
+(test 'append-hard-7-no-gensym
+  (run 1 (q r)
+    (evalo `(begin
+              (define append
+                (lambda (l s)
+                  (if (null? l)
+                    s
+                    (cons ,q ,r))))
+              (list
+                (append '() '())
+                (append '(foo) '(bar))
+                (append '(1 2 3) '(4 5))))
+           (list '() '(foo bar) '(1 2 3 4 5))))
+  '(((car l) (append (cdr l) s))))
 
-;(test 'append-hard-8
-  ;(run 1 (q)
-    ;(evalo `(begin
-              ;(define append
-                ;(lambda (l s)
-                  ;(if (null? l) s ,q)))
-              ;(list
-                ;(append '() '())
-                ;(append '(foo) '(bar))
-                ;(append '(1 2 3) '(4 5))))
-           ;(list '() '(foo bar) '(1 2 3 4 5))))
-  ;'(((cons (car l)  (append (cdr l) s)))))
+(time
+ (test 'append-hard-8-gensym
+   (run 1 (defn)
+     (let ((g1 (gensym "g1"))
+           (g2 (gensym "g2"))
+           (g3 (gensym "g3"))
+           (g4 (gensym "g4"))
+           (g5 (gensym "g5"))
+           (g6 (gensym "g6"))
+           (g7 (gensym "g7")))
+       (fresh ()
+         (absento g1 defn)
+         (absento g2 defn)
+         (absento g3 defn)
+         (absento g4 defn)
+         (absento g5 defn)
+         (absento g6 defn)
+         (absento g7 defn)
+         (fresh (q)
+           (== `(define append
+                  (lambda (l s)
+                    (if (null? l)
+                        s
+                        ,q)))
+               defn)
+           (evalo `(begin
+                     ,defn
+                     (list
+                      (append '() '())
+                      (append '(,g1) '(,g2))
+                      (append '(,g3 ,g4 ,g5) '(,g6 ,g7))))
+                  (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7)))))))
+   '(((define append (lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
 
-;(time (test 'append-hard-8-gensym
-  ;(run 1 (binding)
-       ;(let ((g1 (gensym "g1"))
-             ;(g2 (gensym "g2"))
-             ;(g3 (gensym "g3"))
-             ;(g4 (gensym "g4"))
-             ;(g5 (gensym "g5"))
-             ;(g6 (gensym "g6"))
-             ;(g7 (gensym "g7")))
-         ;(fresh (q)
-           ;(absento g1 binding)
-           ;(absento g2 binding)
-           ;(absento g3 binding)
-           ;(absento g4 binding)
-           ;(absento g5 binding)
-           ;(absento g6 binding)
-           ;(absento g7 binding)
-           ;(== `(lambda (l s) (if (null? l) s ,q))
-               ;binding)
-           ;(evalo
-             ;`(begin (define append ,binding)
-                ;(list
-                  ;(append '() '())
-                  ;(append '(,g1) '(,g2))
-                  ;(append '(,g3 ,g4 ,g5) '(,g6 ,g7))))
-             ;(list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7))))))
-  ;'((lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s)))))))
+(time (test 'append-hard-8-no-gensym
+        (run 1 (q)
+          (evalo `(begin
+                    (define append
+                      (lambda (l s)
+                        (if (null? l)
+                            s
+                            ,q)))
+                    (list
+                     (append '() '())
+                     (append '(foo) '(bar))
+                     (append '(1 2 3) '(4 5))))
+                 (list '() '(foo bar) '(1 2 3 4 5))))
+        '(((cons (car l)  (append (cdr l) s))))))
+
 
 ;(time (test 'append-hard-9
   ;(run 1 (q r)
