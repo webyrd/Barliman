@@ -399,11 +399,18 @@
               (if (pair? tagged-rib)
                 (let* ((tag (walk (car tagged-rib) st))
                        (rib (walk (cdr tagged-rib) st))
-                       ;; TODO: specialize this more, too?
-                       (val-goal (conde$
-                                   ((symbolo x) (== `(,x . ,v) rib))
-                                   ((fresh (y b)
-                                      (== `(,y . ,b) rib) (=/= x y) alts))))
+                       (sname (and (pair? rib) (walk (car rib) st)))
+                       (sname-val (and (pair? rib) (cdr rib)))
+                       (x-sym (walk x st))
+                       (val-goal
+                         (if (and (symbol? sname) (symbol? x-sym))
+                           (if (eq? sname x-sym)
+                             (== sname-val v)
+                             alts)
+                           (conde$
+                             ((symbolo x) (== `(,x . ,v) rib))
+                             ((fresh (y b)
+                                (== `(,y . ,b) rib) (=/= x y) alts)))))
                        (letrec-goal
                          (lambdag@ (st)
                            (let-values (((rgbindings vbindings)
