@@ -467,6 +467,23 @@
           (quasi-p-no-match d v2 penv^ penv-out)))))))
 
 
+
+(time (test 'list-nth-element-peano
+  (run 1 (q r)
+    (evalo `(begin
+              (define nth
+                (lambda (n xs)
+                  (if (null? n) ,q ,r)))
+              (list
+                (nth '() '(foo bar))
+                (nth '(s) '(foo bar))
+                (nth '() '(1 2 3))
+                (nth '(s) '(1 2 3))
+                (nth '(s s) '(1 2 3))))
+           (list 'foo 'bar 1 2 3)))
+  '((((car xs) (nth (cdr n) (cdr xs)))))))
+
+
 (test 'append-empty
   (run 1 (q)
        (evalo
@@ -773,7 +790,6 @@
                   (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7)))))))
    '(((define append (lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
 
-(printf "append-hard-7-no-gensym returns an over-specific, incorrect answer\n")
 (test 'append-hard-7-no-gensym
   (run 1 (q r)
     (evalo `(begin
@@ -787,7 +803,7 @@
                 (append '(foo) '(bar))
                 (append '(1 2 3) '(4 5))))
            (list '() '(foo bar) '(1 2 3 4 5))))
-  '(((car l) (append (cdr l) s))))
+  '((((car l) (append (cdr l) s)))))
 
 (time
  (test 'append-hard-8-gensym
@@ -821,7 +837,76 @@
                       (append '(,g1) '(,g2))
                       (append '(,g3 ,g4 ,g5) '(,g6 ,g7))))
                   (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7)))))))
-   '((((define append (lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s))))))))))
+   '(((define append (lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
+
+(time
+ (test 'append-hard-9-gensym
+   (run 1 (defn)
+     (let ((g1 (gensym "g1"))
+           (g2 (gensym "g2"))
+           (g3 (gensym "g3"))
+           (g4 (gensym "g4"))
+           (g5 (gensym "g5"))
+           (g6 (gensym "g6"))
+           (g7 (gensym "g7")))
+       (fresh ()
+         (absento g1 defn)
+         (absento g2 defn)
+         (absento g3 defn)
+         (absento g4 defn)
+         (absento g5 defn)
+         (absento g6 defn)
+         (absento g7 defn)
+         (fresh (q r)
+           (== `(define append
+                  (lambda (l s)
+                    (if (null? l)
+                        ,q
+                        ,r)))
+               defn)
+           (evalo `(begin
+                     ,defn
+                     (list
+                      (append '() '())
+                      (append '(,g1) '(,g2))
+                      (append '(,g3 ,g4 ,g5) '(,g6 ,g7))))
+                  (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7)))))))
+   '(((define append (lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
+
+(printf "append-hard-10-gensym doesn't seem to return\n")
+(time
+ (test 'append-hard-10-gensym
+   (run 1 (defn)
+     (let ((g1 (gensym "g1"))
+           (g2 (gensym "g2"))
+           (g3 (gensym "g3"))
+           (g4 (gensym "g4"))
+           (g5 (gensym "g5"))
+           (g6 (gensym "g6"))
+           (g7 (gensym "g7")))
+       (fresh ()
+         (absento g1 defn)
+         (absento g2 defn)
+         (absento g3 defn)
+         (absento g4 defn)
+         (absento g5 defn)
+         (absento g6 defn)
+         (absento g7 defn)
+         (fresh (q r s)
+           (== `(define append
+                  (lambda (l s)
+                    (if ,q
+                        ,r
+                        ,s)))
+               defn)
+           (evalo `(begin
+                     ,defn
+                     (list
+                      (append '() '())
+                      (append '(,g1) '(,g2))
+                      (append '(,g3 ,g4 ,g5) '(,g6 ,g7))))
+                  (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7)))))))
+   '(((define append (lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
 
 ;; This non-gensym version is still too slow.
 ;; It may come back, but I wasn't feeling patient.
@@ -873,41 +958,26 @@
            ;(list '() '(foo bar) '(1 2 3 4 5))))
   ;'())
 
-(time (test 'list-nth-element-peano
-  (run 1 (q r)
-    (evalo `(begin
-              (define nth
-                (lambda (n xs)
-                  (if (null? n) ,q ,r)))
-              (list
-                (nth '() '(foo bar))
-                (nth '(s) '(foo bar))
-                (nth '() '(1 2 3))
-                (nth '(s) '(1 2 3))
-                (nth '(s s) '(1 2 3))))
-           (list 'foo 'bar 1 2 3)))
-  '((((car xs) (nth (cdr n) (cdr xs)))))))
-
-;(time (test 'reverse-hard-1
-  ;(run 1 (q r s)
-    ;(evalo `(begin
-              ;(define append
-                ;(lambda (l s)
-                  ;(if (null? l) s
-                    ;(cons (car l)
-                          ;(append (cdr l) s)))))
-              ;(begin
-                ;(define reverse
-                  ;(lambda (xs)
-                    ;(if (null? xs) '()
-                      ;(,q (reverse ,r) ,s))))
-                ;(list
-                  ;(reverse '())
-                  ;(reverse '(a))
-                  ;(reverse '(foo bar))
-                  ;(reverse '(1 2 3)))))
-           ;(list '() '(a) '(bar foo) '(3 2 1))))
-  ;'((append (cdr xs) (list (car xs))))))
+;; (time (test 'reverse-hard-1
+;;   (run 1 (q r s)
+;;     (evalo `(begin
+;;               (define append
+;;                 (lambda (l s)
+;;                   (if (null? l) s
+;;                     (cons (car l)
+;;                           (append (cdr l) s)))))
+;;               (begin
+;;                 (define reverse
+;;                   (lambda (xs)
+;;                     (if (null? xs) '()
+;;                       (,q (reverse ,r) ,s))))
+;;                 (list
+;;                   (reverse '())
+;;                   (reverse '(a))
+;;                   (reverse '(foo bar))
+;;                   (reverse '(1 2 3)))))
+;;            (list '() '(a) '(bar foo) '(3 2 1))))
+;;   '((append (cdr xs) (list (car xs))))))
 
 ;(time (test 'reverse-hard-2
   ;(run 1 (q r s)
