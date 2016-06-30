@@ -381,6 +381,8 @@ KNOWN ERRORS:
 * The miniKanren queries constructed by Barliman expose several local variable names and a number of global variable names that could accidentally or intentionally be used by the programmer.  Need to tighten this up.
 * An illegal s-expression in the 'Definitions' edit pane will make test input/output expressions that are legal expressions appear to be illegal.
 * closing one of the windows means the window cannot be reopened!  Oops.  I'm not going to worry about this until I decide what to do with the Semantics window.
+* sometimes the spinners stop spinning but are still visible
+* quicking tab-deleting a test with a syntax error (for example) can leave the 'syntax error message' on an empty test
 
 DONE (features on the TODO list implemented since the original release of Barliman)
 
