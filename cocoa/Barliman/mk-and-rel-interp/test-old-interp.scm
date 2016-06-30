@@ -93,28 +93,23 @@
        (lookupo x rest t)))))
 
 (define (try-lookup-before x env t alts)
-  (conde$
-    ((symbolo x) (lookupo x env t))
-    (alts)))
-
-;; TODO: port this specialization if necessary
-;(def ((try-lookup-before x env t alts) st)
-  ;(values st rgenv venv) = (list-split-ground st env)
-  ;;_ = (when (< 18 (length rgenv)) (newline) (displayln `(lookup prefix ,rgenv)))
-  ;(values st env) = (muk-walk st env)
-  ;goal =
-  ;(forf alts = (conde$ ((symbolo x) (lookupo x venv t))
-                       ;(alts))
-        ;`(,y . ,b) <- rgenv
-        ;(conde$
-          ;((symbolo x) (== x y)
-           ;(conde$
-             ;((== `(val . ,t) b))
-             ;((fresh (lam-expr)
-                     ;(== `(rec . ,lam-expr) b)
-                     ;(== `(closure ,lam-expr ,env) t)))))
-          ;((=/= x y) alts)))
-  ;(muk-goal st goal))
+  (lambdag@ (st)
+    (let-values (((rgenv venv) (list-split-ground st env)))
+      (let loop ((rgenv rgenv) (alts (conde$ ((symbolo x) (lookupo x venv t))
+                                             (alts))))
+        (if (null? rgenv) (alts st)
+          (let ((rib (car rgenv)))
+            (loop (cdr rgenv)
+              (fresh (y b)
+                (== `(,y . ,b) rib)
+                (conde$
+                  ((symbolo x) (== x y)
+                   (conde$
+                     ((== `(val . ,t) b))
+                     ((fresh (lam-expr)
+                             (== `(rec . ,lam-expr) b)
+                             (== `(closure ,lam-expr ,env) t)))))
+                  ((=/= x y) alts))))))))))
 
 (define (not-in-envo x env)
   (conde
