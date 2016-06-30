@@ -244,7 +244,7 @@
   (eval-expo expr initial-env val))
 
 (define (eval-expo expr env val)
-  (try-lookupo expr env val (eval-expo-rest expr env val)))
+  (try-lookupo$ expr env val (eval-expo-rest expr env val)))
 (define (eval-expo-rest expr env val)
   (conde
     ((fresh (rator x* rands a* prim-id)
@@ -361,18 +361,18 @@
          ((=/= p-name x)
           (lookup-in-letrec-envo x env-binding-rest rest env v)))))))
 
+(define (try-lookup-in-letrec-envo x env-binding* env v kont)
+  (conde
+    ((== '() env-binding*) kont)
+    ((fresh (p-name lam-expr env-binding-rest)
+       (== `((rec . (,p-name . ,lam-expr)) . ,env-binding-rest) env-binding*)
+       (conde
+         ((symbolo x) (== p-name x) (== `(closure ,lam-expr ,env) v))
+         ((=/= p-name x)
+         (try-lookup-in-letrec-envo x env-binding-rest env v kont)))))))
+
 ; disjunction-passing style, for improving lookupo scheduling
 (define (try-lookupo x env v alts)
-  (define (try-lookup-in-letrec-envo x env-binding* rest env v alts)
-    (conde
-      ((== '() env-binding*) (try-lookupo x rest v alts))
-      ((fresh (p-name lam-expr env-binding-rest)
-         (== `((rec . (,p-name . ,lam-expr)) . ,env-binding-rest) env-binding*)
-         (conde
-           ((symbolo x) (== p-name x) (== `(closure ,lam-expr ,env) v))
-           ((=/= p-name x)
-            (try-lookup-in-letrec-envo
-              x env-binding-rest rest env v alts)))))))
   (conde
     ((fresh (y b rest)
        (== `((val . (,y . ,b)) . ,rest) env)
@@ -381,8 +381,62 @@
          ((=/= x y) (try-lookupo x rest v alts)))))
     ((fresh (env-binding* rest)
        (== `((letrec . ,env-binding*) . ,rest) env)
-       (try-lookup-in-letrec-envo x env-binding* rest env v alts)))
+       (try-lookup-in-letrec-envo x env-binding* env v
+                                  (try-lookupo x rest v alts))))
     ((== '() env) alts)))
+
+(define (try-lookupo$ x env v alts)
+  (lambdag@ (st)
+    (let-values (((rgenv venv) (list-split-ground st env)))
+      (let loop ((rgenv rgenv)
+                 (rec-env-suffix venv)
+                 (alts (conde$ ((symbolo x) (lookupo x venv v))
+                               (alts))))
+        (if (null? rgenv) (alts st)
+          (let* ((tagged-rib (car rgenv))
+                 (rec-env (cons tagged-rib rec-env-suffix)))
+            (loop (cdr rgenv) (cons tagged-rib rec-env-suffix)
+              (if (pair? tagged-rib)
+                (let* ((tag (walk (car tagged-rib) st))
+                       (rib (walk (cdr tagged-rib) st))
+                       ;; TODO: specialize this more, too?
+                       (val-goal (conde$
+                                   ((symbolo x) (== `(,x . ,v) rib))
+                                   ((fresh (y b)
+                                      (== `(,y . ,b) rib) (=/= x y) alts))))
+                       (letrec-goal
+                         (lambdag@ (st)
+                           (let-values (((rgbindings vbindings)
+                                         (list-split-ground st rib)))
+                             (let loop-letrec
+                               ((rgbindings rgbindings)
+                                (alts (try-lookup-in-letrec-envo
+                                        x vbindings rec-env v alts)))
+                               (if (null? rgbindings) (alts st)
+                                 ;; TODO: specialize more!
+                                 (loop-letrec (cdr rgbindings)
+                                   (fresh (p-name lam-expr env-binding-rest)
+                                     (== `(rec . (,p-name . ,lam-expr))
+                                         (car rgbindings))
+                                     (conde$
+                                       ((== p-name x)
+                                         (== `(closure ,lam-expr ,rec-env) v))
+                                       ((=/= p-name x) alts))))))))))
+                  (cond
+                    ((eq? 'val tag) val-goal)
+                    ((eq? 'letrec tag) letrec-goal)
+                    (else (conde$
+                            ((== 'val tag) val-goal)
+                            ((== 'letrec tag) letrec-goal)))))
+                (conde$
+                  ((fresh (y b)
+                          (== `(val . (,y . ,b)) tagged-rib)
+                          (conde$ ((symbolo x) (== x y) (== b v))
+                                  ((=/= x y) alts))))
+                  ((fresh (env-binding*)
+                          (== `(letrec . ,env-binding*) tagged-rib)
+                          (try-lookup-in-letrec-envo
+                            x env-binding* rec-env v alts))))))))))))
 
 (define (not-in-envo x env)
   (conde
@@ -418,7 +472,7 @@
   (let loop ((rprefix '()) (xs xs))
     (let ((tm (walk xs st)))
       (if (pair? tm)
-        (loop (cons (car tm) rprefix) (cdr tm))
+        (loop (cons (walk (car tm) st) rprefix) (cdr tm))
         (values rprefix xs)))))
 
 (define (eval-application rands aenv a* body-goal)
@@ -432,7 +486,7 @@
                      (vgoals succeed)
                      (args a*))
             (if (null? rands) (values ggoals vgoals args)
-              (let ((rand (walk (car rands) st)))
+              (let ((rand (car rands)))
                 (let/vars st (args-rest)
                   (let ((goal (fresh (arg)
                                 (== `(,arg . ,args-rest) args)
