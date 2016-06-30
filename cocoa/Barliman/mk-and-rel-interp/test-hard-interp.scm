@@ -363,22 +363,22 @@
            ;(list '() '(foo bar) '(1 2 3 4 5))))
   ;'())
 
-;(test 'list-nth-element-peano
-  ;(run 1 (q r)
-    ;(evalo `(begin
-              ;(define nth
-                ;(lambda (n xs)
-                  ;(if (null? n) ,q ,r)))
-              ;(list
-                ;(nth '() '(foo bar))
-                ;(nth '(s) '(foo bar))
-                ;(nth '() '(1 2 3))
-                ;(nth '(s) '(1 2 3))
-                ;(nth '(s s) '(1 2 3))))
-           ;(list 'foo 'bar 1 2 3)))
-  ;'(((car xs) (nth (cdr n) (cdr xs)))))
+(time (test 'list-nth-element-peano
+  (run 1 (q r)
+    (evalo `(begin
+              (define nth
+                (lambda (n xs)
+                  (if (null? n) ,q ,r)))
+              (list
+                (nth '() '(foo bar))
+                (nth '(s) '(foo bar))
+                (nth '() '(1 2 3))
+                (nth '(s) '(1 2 3))
+                (nth '(s s) '(1 2 3))))
+           (list 'foo 'bar 1 2 3)))
+  '((((car xs) (nth (cdr n) (cdr xs)))))))
 
-;(test 'reverse-hard-1
+;(time (test 'reverse-hard-1
   ;(run 1 (q r s)
     ;(evalo `(begin
               ;(define append
@@ -397,7 +397,7 @@
                   ;(reverse '(foo bar))
                   ;(reverse '(1 2 3)))))
            ;(list '() '(a) '(bar foo) '(3 2 1))))
-  ;'((append (cdr xs) (list (car xs)))))
+  ;'((append (cdr xs) (list (car xs))))))
 
 ;(time (test 'reverse-hard-2
   ;(run 1 (q r s)
