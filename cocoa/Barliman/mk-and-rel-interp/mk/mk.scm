@@ -342,6 +342,15 @@
              (bind* (g0 st) g ...)
              (bind* (g1 st) g^ ...) ...)))))))
 
+(define-syntax conde$
+  (syntax-rules ()
+    ((_ (g0 g ...) (g1 g^ ...) ...)
+     (lambdag@ (st)
+       (let ((st (state-with-scope st (new-scope))))
+         (mplus*
+           (bind* (g0 st) g ...)
+           (bind* (g1 st) g^ ...) ...))))))
+
 (define-syntax mplus*
   (syntax-rules ()
     ((_ e) e)
