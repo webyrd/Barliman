@@ -413,15 +413,28 @@
                                 (alts (try-lookup-in-letrec-envo
                                         x vbindings rec-env v alts)))
                                (if (null? rgbindings) (alts st)
-                                 ;; TODO: specialize more!
-                                 (loop-letrec (cdr rgbindings)
-                                   (fresh (p-name lam-expr env-binding-rest)
-                                     (== `(rec . (,p-name . ,lam-expr))
-                                         (car rgbindings))
-                                     (conde$
-                                       ((== p-name x)
-                                         (== `(closure ,lam-expr ,rec-env) v))
-                                       ((=/= p-name x) alts))))))))))
+                                 (let* ((tagged-rib (car rgbindings))
+                                        (unbound-goal
+                                          (fresh (p-name lam-expr)
+                                            (== `(rec . (,p-name . ,lam-expr))
+                                                tagged-rib)
+                                            (conde$
+                                              ((== p-name x)
+                                               (== `(closure ,lam-expr ,rec-env) v))
+                                              ((=/= p-name x) alts)))))
+                                   (loop-letrec (cdr rgbindings)
+                                     (if (pair? tagged-rib)
+                                       (let* ((tag (walk (car tagged-rib) st))
+                                              (rib (walk (cdr tagged-rib) st))
+                                              (p-name (and (pair? rib) (walk (car rib) st)))
+                                              (lam-expr (and (pair? rib) (cdr rib)))
+                                              (x-sym (walk x st)))
+                                         (if (and (eq? 'rec tag) (symbol? p-name) (symbol? x-sym))
+                                           (if (eq? p-name x-sym)
+                                             (== `(closure ,lam-expr ,rec-env) v)
+                                             alts)
+                                           unbound-goal))
+                                       unbound-goal)))))))))
                   (cond
                     ((eq? 'val tag) val-goal)
                     ((eq? 'letrec tag) letrec-goal)
