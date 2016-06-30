@@ -382,10 +382,10 @@ KNOWN ERRORS:
 * An illegal s-expression in the 'Definitions' edit pane will make test input/output expressions that are legal expressions appear to be illegal.
 * closing one of the windows means the window cannot be reopened!  Oops.  I'm not going to worry about this until I decide what to do with the Semantics window.
 * sometimes the spinners stop spinning but are still visible
-* quicking tab-deleting a test with a syntax error (for example) can leave the 'syntax error message' on an empty test
 
 DONE (features on the TODO list implemented since the original release of Barliman)
 
+* fixed: quickly tab-deleting a test with a syntax error (for example) can leave the 'syntax error message' on an empty test
 * added automatic addition of right parens, and auto-addition of logic variables
 * changed reifier so that constraints involving gensym are not displayed.
 * Fixed error: even if the "best guess" query terminates with success, individual test processes may still keep running, since those tests don't "know" that the best guess involving *all* the tests has succeed.  If the best guess query terminates with success, the individual test processes should be killed, and marked as successful (black text, stop the progress spinner).

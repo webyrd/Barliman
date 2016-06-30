@@ -514,6 +514,7 @@ class EditorWindowController: NSWindowController {
             print("queuing test1")
             processingQueue.addOperation(runSchemeOpTest1)
         } else {
+            test1StatusLabel.stringValue = ""
             test1InputField.textColor = NSColor.blackColor()
             test1ExpectedOutputField.textColor = NSColor.blackColor()
         }
@@ -521,6 +522,7 @@ class EditorWindowController: NSWindowController {
             print("queuing test2")
             processingQueue.addOperation(runSchemeOpTest2)
         } else {
+            test2StatusLabel.stringValue = ""
             test2InputField.textColor = NSColor.blackColor()
             test2ExpectedOutputField.textColor = NSColor.blackColor()
         }
@@ -528,6 +530,7 @@ class EditorWindowController: NSWindowController {
             print("queuing test3")
             processingQueue.addOperation(runSchemeOpTest3)
         } else {
+            test3StatusLabel.stringValue = ""
             test3InputField.textColor = NSColor.blackColor()
             test3ExpectedOutputField.textColor = NSColor.blackColor()
         }
@@ -535,6 +538,7 @@ class EditorWindowController: NSWindowController {
             print("queuing test4")
             processingQueue.addOperation(runSchemeOpTest4)
         } else {
+            test4StatusLabel.stringValue = ""
             test4InputField.textColor = NSColor.blackColor()
             test4ExpectedOutputField.textColor = NSColor.blackColor()
         }
@@ -542,6 +546,7 @@ class EditorWindowController: NSWindowController {
             print("queuing test5")
             processingQueue.addOperation(runSchemeOpTest5)
         } else {
+            test5StatusLabel.stringValue = ""
             test5InputField.textColor = NSColor.blackColor()
             test5ExpectedOutputField.textColor = NSColor.blackColor()
         }
@@ -549,6 +554,7 @@ class EditorWindowController: NSWindowController {
             print("queuing test6")
             processingQueue.addOperation(runSchemeOpTest6)
         } else {
+            test6StatusLabel.stringValue = ""
             test6InputField.textColor = NSColor.blackColor()
             test6ExpectedOutputField.textColor = NSColor.blackColor()
         }
