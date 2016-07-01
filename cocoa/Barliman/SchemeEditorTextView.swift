@@ -57,9 +57,30 @@ class SchemeEditorTextView: NSTextView {
 
             self.textStorage?.insertAttributedString(NSAttributedString(string: ")"), atIndex: self.selectedRange.location)
             self.selectedRange.location = self.selectedRange.location - 1
+        } else if event.keyCode == 29 {
+            // right-paren was entered
             
+            Swift.print("---------------- right paren")
+
+            // ignore the paren!  right parens should only come from typing left parens!
+
+        } else if event.keyCode == 51 {
+            // delete key was entered
+
+            // just delete normally for now.  Should refuse to delete right parens, instead moving to the left one character
+            super.keyDown(event)
+            
+        } else if event.keyCode == 36 {
+            // return key was entered
+    
+            // just act normally for now.  Should auto-indent on the next line
+            super.keyDown(event)
+
         } else {
             super.keyDown(event)
+            
+            Swift.print("keyCode: \( event.keyCode )")
+
         }
     }
     
