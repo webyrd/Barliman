@@ -296,11 +296,14 @@ TODO:
 * add add auto-indent
 * add forward/backward s-expression
 * add transpose s-expression
+* add pretty printing of "Best Guess" definitions
 * add smart editing/auto insert of gensyms in the test edit panes, similar to how smart editing/auto insert of logic variables works in the Definitions edit pane
+* for 'syntax error' and 'illegal sexpression' messages for a test, potentially show whether the input, the output, or both is the problem (could be complicated in that the output might be an illegal sexpression, while the input is a syntax error, for example)
 * have Barliman attempt to guess the result of a test, as the programmer types in the test (thanks Ziyao Wei!)
 * show the definition guessed for each individual successful test
 * show reified test inputs and outputs upon success, for all tests (would allow queries like 'quines')
 * mouse hover over ,A variable should display the variable's "Best Guess" value
+* allow resizing of Barliman main window
 * add `let` and `cond`.
 * add better error message for 'invalid syntax', at least indicating whether there is an unexpected paren/missing end paren
 * Possibly replace 'list' call in the "best quess" query with nested 'cons' calls instead.  (Need to time this again with Greg's new improvements to the search.)  This can be an order of magnitude faster in some cases, according to my testing (variadic application is more expensive than 'cons' in the current miniScheme interpreter, apparently: see times for append-gensym-synthesis-with-cons-1 versus append-gensym-synthesis-with-list-1 tests in test-interp.scm).
