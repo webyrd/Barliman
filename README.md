@@ -290,10 +290,20 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
+* replace test input/output edit fields with multi-line edit capabilities similar to that of the 'Definitions' pane
+* add paren hilighting to editor
+* add "smart delete" of parens
+* add add auto-indent
+* add forward/backward s-expression
+* add transpose s-expression
 * add smart editing/auto insert of gensyms in the test edit panes, similar to how smart editing/auto insert of logic variables works in the Definitions edit pane
-* Possibly replace 'list' call in the "best quess" query with nested 'cons' calls instead.  (Need to time this again with Greg's new improvements to the search.)  This can be an order of magnitude faster in some cases, according to my testing (variadic application is more expensive than 'cons' in the current miniScheme interpreter, apparently: see times for append-gensym-synthesis-with-cons-1 versus append-gensym-synthesis-with-list-1 tests in test-interp.scm).
-* consider changing reifier and main edit window to display constraints separately from "best guess" definition(s).
+* have Barliman attempt to guess the result of a test, as the programmer types in the test (thanks Ziyao Wei!)
+* show the definition guessed for each individual successful test
+* show reified test inputs and outputs upon success, for all tests (would allow queries like 'quines')
+* mouse hover over ,A variable should display the variable's "Best Guess" value
 * add `let` and `cond`.
+* add better error message for 'invalid syntax', at least indicating whether there is an unexpected paren/missing end paren
+* Possibly replace 'list' call in the "best quess" query with nested 'cons' calls instead.  (Need to time this again with Greg's new improvements to the search.)  This can be an order of magnitude faster in some cases, according to my testing (variadic application is more expensive than 'cons' in the current miniScheme interpreter, apparently: see times for append-gensym-synthesis-with-cons-1 versus append-gensym-synthesis-with-list-1 tests in test-interp.scm).
 * add an implicit `begin` to `lambda`, `letrec`, and `let` forms.
 * parser should enforce that the variable names are distinct in `lambda` formals, `letrec` bindings and formals, and `define`'s within the same scope.
 * create a version of Barliman on an open platform (Electron, Clojurescript, Lighttable, whatever).  Any help would be appreciated!  :)
@@ -305,16 +315,12 @@ TODO:
 * perhaps be able to drag and drop subexpressions from the best guess pane onto variables in the definition pane.  And also be able to replace an extort subexpression in the definition pane with a logic variable.
 * think about contextual menus/right click and also drag and shift-drag.  What should these do?
 * make sure Semantics and the main Barliman windows can be reopened if the user closes them!  Currently there doesn't seem to be a way to get the window back.  Perhaps allow the user to hide the windows, but not close them?  What is the preferred Mac way?
-* add paren hilighting/blinking when the parens match.
 * for the case in which a simple function is being used to generate test inputs and answers for a more complex version of the same function, may need or want a grounder to make sure answers are fully ground.  May also want a grounder for code, esp for the best guess pane.  Although grounding code may not be necessary or ideal.
 * would be smart to only re-run Scheme processes when the Scheme code actually *changes* -- for example, white space characters outside of an S-expr shouldn't trigger re-evaluation.  One way would be to compare "before" and "after" S-exprs to see if anything has changed.  Could run a single Scheme instance and call `equal?` to see if the code has actually changed.  This could be a big win for expensive computations.
 * add ability to save and load examples/tests/semantics, and include interesting examples, such as a tiny Scheme interpreter written in Scheme, state machine using mutual recursion, examples from pearls, etc.
 * add structured editor for semantics and for type inferencer (as an alternative to/in addition to the free-form editor)
-* add 'transpose S-expression' and other useful Emacs editing commands
 * possibly move as much work as possible into NSTasks, such as loading files.
 * possibly add pairs of tests as processes, once individual tests complete successfully
-* change green text to bold font instead
-* add structured editing capability, with automatic addition of right parens, auto-addition of logic variables, and perhaps something like paredit (thanks Michael Ballantyne, Guannan Wei, Pierce Darragh, Michael Adams, for discussions on how this might work) [have added automatic addition of right parens, and auto-addition of logic variables]
 * add syntax-directed auto-indentation of code
 * figure out how to do syntax-directed hilighlighting, and precise hilighting of syntax errors.  May not be as important if I go the structured editor route.  Although perhaps this should be an option, either way.
 * add documentation/tutorial
@@ -328,10 +334,6 @@ TODO:
 * would be smarter/less resource intense to not launch all the tests again when the text in a single test changes.  Only that test and allTests need be re-run, in theory.  Getting the UI to display the state of everything properly may be a little subtle, though.
 * differential relational interpreters
 * use a meta-interpreter to let the programmer know the deepest part of the search path upon failure, to try to give a better hint as to what went wrong (thanks Nada! and halp! :))
-* consider showing the definition guessed for each individual successful test
-* show reified test inputs and outputs upon success, for all tests
-* add ability to fill in test input/outputs, given a fully or mostly specified definition
-* have Barliman attempt to guess the result of a test, as the programmer types in the test (thanks Ziyao Wei!)
 
 LONGER TERM:
 
@@ -385,8 +387,9 @@ KNOWN ERRORS:
 
 DONE (features on the TODO list implemented since the original release of Barliman)
 
+* changed reifier and main edit window to display constraints separately from "best guess" definition(s).
 * fixed: quickly tab-deleting a test with a syntax error (for example) can leave the 'syntax error message' on an empty test
-* added automatic addition of right parens, and auto-addition of logic variables
+* added automatic addition of right parens, and auto-addition of logic variables (thanks Michael Ballantyne, Guannan Wei, Pierce Darragh, Michael Adams, for discussions on how this might work)
 * changed reifier so that constraints involving gensym are not displayed.
 * Fixed error: even if the "best guess" query terminates with success, individual test processes may still keep running, since those tests don't "know" that the best guess involving *all* the tests has succeed.  If the best guess query terminates with success, the individual test processes should be killed, and marked as successful (black text, stop the progress spinner).
 * updated `letrec` to allow for zero or more bindings, and updated `begin` to allow for zero or more definitions; this allows the creation of mutually-recursive functions.
