@@ -392,6 +392,7 @@ INTERESTING IDEAS:
 
 * Tom Gilray suggests changing the interface to just have a single editor window, which allows for definitions and for test calls/results.  I suspect this is the right way to go, although it will involve significant changes to Barliman.  Tom also suggests having arrows to the right of each logic variable, showing the current value of each variable. 
 * perhaps use delayed goals to implement arithmetic over floating point numbers, and other tricky operations.  If the arguments do not become instantiated enough, Barliman should be non-commital (can't synthesize code, and can't prove tests are not consistent with the code until the code is more instantiated).
+* Greg Ronsenblatt suggests dividing tests into a 'training' set and a 'test' set, as is done in machine learning to avoid overfitting.  Of course this could also lead into 'propety-based testing', generators, etc.
 
 
 KNOWN LIMITATIONS:
