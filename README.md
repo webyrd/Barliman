@@ -272,7 +272,7 @@ For more interesting answers, you can use the logic variables A through G, upper
 
 ## Acknowledgements and thanks
 
-Thanks to Michael Ballantyne, Kenichi Asai, Alan Borning, Nada Amin, Guannan Wei, Pierce Darragh, Alex Warth, Michael Adams, Tim Johnson, Evan Czaplicki, Stephanie Weirich, Molly Feldman, Joe Osborn, Nehal Patel, Andrea Magnorsky, Reid McKenzie, Emina Torlak, Chas Emerick, Martin Clausen, Devon Zuegel, Daniel Selifonov, Greg Rosenblatt, Michael Nielsen, David Kahn, Brian Mastenbrook, Orchid Hybrid, Rob Zinkov, Margaret Staples, Ziyao Wei, Matt Hammer, Hunter Hutchinson, Bryan Joseph, Cesar Marinho, Michael Bernstein, Bodil Stokke, Dan Friedman, Ron Garcia, Rich Hickey, Phil Wadler, Matt Might, participants of my 2016 PEPM tutorial on miniKanren, and particants of the 'As We May Thunk' group (http://webyrd.net/thunk.html), for suggestions, encouragement, and inspiration.
+Thanks to Michael Ballantyne, Kenichi Asai, Alan Borning, Nada Amin, Guannan Wei, Pierce Darragh, Alex Warth, Michael Adams, Tim Johnson, Evan Czaplicki, Stephanie Weirich, Molly Feldman, Joe Osborn, Nehal Patel, Andrea Magnorsky, Reid McKenzie, Emina Torlak, Chas Emerick, Martin Clausen, Devon Zuegel, Daniel Selifonov, Greg Rosenblatt, Michael Nielsen, David Kahn, Brian Mastenbrook, Orchid Hybrid, Rob Zinkov, Margaret Staples, Ziyao Wei, Matt Hammer, Hunter Hutchinson, Bryan Joseph, Cesar Marinho, Michael Bernstein, Bodil Stokke, Dan Friedman, Ron Garcia, Rich Hickey, Phil Wadler, Tom Gilray, Matt Might, participants of my 2016 PEPM tutorial on miniKanren, and particants of the 'As We May Thunk' group (http://webyrd.net/thunk.html), for suggestions, encouragement, and inspiration.
 
 Thanks to Kent Dybvig, Andy Keep, and Cisco Systems for releasing Chez Scheme under an open source license.
 
@@ -340,6 +340,8 @@ TODO:
 
 LONGER TERM:
 
+* mousing over a failing test should highlight subexpressions in the Definitions pane that are incompatible with that test.
+* mousing over a subexpression should hilight any tests which would be incompatible with the definitions, were a logic variable to be substututed for the expression being moused over. (perhaps do this only if a modifier key is help down)
 * improve editor so that typing '(' 'cons' auto completes to '(cons ,A ,B)', based on arity of cons (unless cons is shadowed).
 * consider placing each of the 'definition' forms in its own edit window, with 'uses mutattion', 'uses call/cc', 'well-typed' checkboxes for each definition (inspired by Kenichi Asai's tool for teaching functional programming).
 * try adding contracts/properties/specs. For example, for `append`, could add the property that the sum of `(length l)` and `(length s)` must be equal to `(length (append l s))`.  This could work with randomized testing, even for partially-instantiated definitions.  In the case of `length`, would either need to use Oleg numbers, or CLP(FD).
@@ -361,17 +363,36 @@ LONGER TERM:
 https://cs.stanford.edu/people/sharmar/pubs/asplos291-schkufza.pdf
 
 
+
 POSSIBLE USE CASES:
 
 * write simple implementation of a function, generate test from that function, then use those tests to guide the more sophisticated implementation.  Or more generally, continually test the partially-implemented function vs the fully implemented but perhaps less efficient function.
+
+* Matt Might suggests as a use case, "automatic program repair after bug discovery," and points to work by Stephanie Forrest.  I really like this idea.  Here's how the use case might work:
+
+You write tests and code. The tests pass. Later you find an error in the code, so you go back and add more tests, which fail.
+
+Click a Barliman 'auto-repair' button. Barliman tries, in parallel, removing each subexpression and trying synthesis to fill in the rest.
+
+If Barliman could use a Amazon server with dozens of hardware cores and 2TB RAM (like the new X1 server on AWS), this really could be done in parallel.
+
+Or run locally until there's a timeout, then run again with the holes in other places. Could even try pairs of holes to keep the synthesis problem as small as possible.
+
+Or, perhaps more practical short term until Barliman's synthesis improves...
+
+Have Barliman try removing each subexpression and then check if any of the tests still fail. Then hilight these known bad subexpressions to help guide the user.
+
 
 SUSPECT IDEAS:
 
 * could just call out to Scheme one the program becomes grounded.  However, the semantics and even the grammar may not match that of the interpreter used by miniKanren, so this seems difficult or impossible to do properly.  However, could call a (non-relational) interpreter for miniScheme.
 
+
 INTERESTING IDEAS:
 
+* Tom Gilray suggests changing the interface to just have a single editor window, which allows for definitions and for test calls/results.  I suspect this is the right way to go, although it will involve significant changes to Barliman.  Tom also suggests having arrows to the right of each logic variable, showing the current value of each variable. 
 * perhaps use delayed goals to implement arithmetic over floating point numbers, and other tricky operations.  If the arguments do not become instantiated enough, Barliman should be non-commital (can't synthesize code, and can't prove tests are not consistent with the code until the code is more instantiated).
+
 
 KNOWN LIMITATIONS:
 
@@ -379,8 +400,10 @@ KNOWN LIMITATIONS:
 * Currently the UI only supports 6 tests.  Should allow more tests to be added.
 * Test inputs and outputs are `NSTextField`s rather than `NSTextView`s, which makes writing longer and more complicated tests awkward.
 
+
 KNOWN ERRORS:
 
+* Shadowing of syntax is no longer working.  (and and #t) => #t should result in a syntax error, unless the Definitions pane contains a defn named 'and': (define and (lambda x  x)).  In which case, (and and #t) should be legal syntax.  (Wonder if we broke this when we messed with the environment in evalo.)
 * It is possible, rarely, to exit Barliman and still have a Scheme process running in the background.  Need a way to better track which processes have been started and make sure to kill them.  Or potentially use something like `ulimit` when launching a process.
 * auto-insert of right parens and auto-insert of logic variables breaks 'undo'.  Guess I need to learn how 'undo' works in Cocoa...
 * The miniKanren queries constructed by Barliman expose several local variable names and a number of global variable names that could accidentally or intentionally be used by the programmer.  Need to tighten this up.
