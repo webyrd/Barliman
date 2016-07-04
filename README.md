@@ -382,6 +382,9 @@ Or, perhaps more practical short term until Barliman's synthesis improves...
 
 Have Barliman try removing each subexpression and then check if any of the tests still fail. Then hilight these known bad subexpressions to help guide the user.
 
+Greg Rosenblatt's suggestion for auto-repair: "The user may also want to mark some regions of the code as suspect, which would prioritize the area searched for problematic sub-expressions.  If the user is right, the fix could be found much sooner."
+
+
 
 SUSPECT IDEAS:
 
