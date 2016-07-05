@@ -290,6 +290,7 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
+* Tom Gilray suggests being able to hover over a ,A logic variable to select/approve a suggested/guessed value for that particular subexpression.  Michael Ballantyne and other people have suggested similar notions, including a scrubber for scrubbing over/selecting a generated/guessed value for a subexpression.
 * replace test input/output edit fields with multi-line edit capabilities similar to that of the 'Definitions' pane
 * add paren hilighting to editor
 * add "smart delete" of parens
