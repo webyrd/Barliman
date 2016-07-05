@@ -408,6 +408,7 @@ KNOWN LIMITATIONS:
 
 KNOWN ERRORS:
 
+* The '0' key no longer seems to work.
 * Shadowing of syntax is no longer working.  (and and #t) => #t should result in a syntax error, unless the Definitions pane contains a defn named 'and': (define and (lambda x  x)).  In which case, (and and #t) should be legal syntax.  (Wonder if we broke this when we messed with the environment in evalo.)
 * It is possible, rarely, to exit Barliman and still have a Scheme process running in the background.  Need a way to better track which processes have been started and make sure to kill them.  Or potentially use something like `ulimit` when launching a process.
 * auto-insert of right parens and auto-insert of logic variables breaks 'undo'.  Guess I need to learn how 'undo' works in Cocoa...
