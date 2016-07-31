@@ -119,7 +119,7 @@ class EditorWindowController: NSWindowController {
     func setupRunCodeFromEditPaneTimer() {
         runCodeFromEditPaneTimer?.invalidate()
 
-        runCodeFromEditPaneTimer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: #selector(EditorWindowController.runCodeFromEditPane), userInfo: nil, repeats: false)
+        runCodeFromEditPaneTimer = .scheduledTimerWithTimeInterval(1, target:self, selector: #selector(runCodeFromEditPane), userInfo: nil, repeats: false)
     }
     
     func makeQueryFileString(defns: String,
@@ -392,34 +392,17 @@ class EditorWindowController: NSWindowController {
         print("queryAllTests string:\n \( queryAllTests )\n")
 
         
-        var pathSimple: NSURL
-        pathSimple = NSURL()
-        
-        var pathTest1: NSURL
-        pathTest1 = NSURL()
-        
-        var pathTest2: NSURL
-        pathTest2 = NSURL()
-        
-        var pathTest3: NSURL
-        pathTest3 = NSURL()
+        var pathSimple = NSURL()
+        var pathTest1 = NSURL()
+        var pathTest2 = NSURL()
+        var pathTest3 = NSURL()
+        var pathTest4 = NSURL()
+        var pathTest5 = NSURL()
+        var pathTest6 = NSURL()
+        var pathAllTests = NSURL()
 
-        var pathTest4: NSURL
-        pathTest4 = NSURL()
-
-        var pathTest5: NSURL
-        pathTest5 = NSURL()
-
-        var pathTest6: NSURL
-        pathTest6 = NSURL()
-        
-        var pathAllTests: NSURL
-        pathAllTests = NSURL()
-
-
-        
         // write the temporary file containing the query to the user's Document directory.  This seems a bit naughty.  Where is the right place to put this?  In ~/.barliman, perhaps?
-        if let dir = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true).first {
+        if let dir = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true).first {
             
             pathSimple = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_simple)
             pathTest1 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test1)
@@ -451,48 +434,31 @@ class EditorWindowController: NSWindowController {
         
         
         // paths to the Schemes file containing the miniKanren query
-        var schemeScriptPathStringSimple: String = ""
-        schemeScriptPathStringSimple = pathSimple.path!
-        
-        var schemeScriptPathStringTest1: String = ""
-        schemeScriptPathStringTest1 = pathTest1.path!
-        
-        var schemeScriptPathStringTest2: String = ""
-        schemeScriptPathStringTest2 = pathTest2.path!
+        let schemeScriptPathStringSimple = pathSimple.path!
+        let schemeScriptPathStringTest1 = pathTest1.path!
+        let schemeScriptPathStringTest2 = pathTest2.path!
+        let schemeScriptPathStringTest3 = pathTest3.path!
+        let schemeScriptPathStringTest4 = pathTest4.path!
+        let schemeScriptPathStringTest5 = pathTest5.path!
+        let schemeScriptPathStringTest6 = pathTest6.path!
+        let schemeScriptPathStringAllTests = pathAllTests.path!
 
-        var schemeScriptPathStringTest3: String = ""
-        schemeScriptPathStringTest3 = pathTest3.path!
-
-        var schemeScriptPathStringTest4: String = ""
-        schemeScriptPathStringTest4 = pathTest4.path!
-
-        var schemeScriptPathStringTest5: String = ""
-        schemeScriptPathStringTest5 = pathTest5.path!
-
-        var schemeScriptPathStringTest6: String = ""
-        schemeScriptPathStringTest6 = pathTest6.path!
-        
-        var schemeScriptPathStringAllTests: String = ""
-        schemeScriptPathStringAllTests = pathAllTests.path!
-
-
-        
         // create the operations that will be placed in the operation queue
-        let runSchemeOpSimple: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringSimple, taskType: "simple")
+        let runSchemeOpSimple = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringSimple, taskType: "simple")
         
-        let runSchemeOpTest1: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest1, taskType: "test1")
+        let runSchemeOpTest1 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest1, taskType: "test1")
         
-        let runSchemeOpTest2: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest2, taskType: "test2")
+        let runSchemeOpTest2 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest2, taskType: "test2")
         
-        let runSchemeOpTest3: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest3, taskType: "test3")
+        let runSchemeOpTest3 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest3, taskType: "test3")
         
-        let runSchemeOpTest4: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest4, taskType: "test4")
+        let runSchemeOpTest4 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest4, taskType: "test4")
 
-        let runSchemeOpTest5: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest5, taskType: "test5")
+        let runSchemeOpTest5 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest5, taskType: "test5")
 
-        let runSchemeOpTest6: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest6, taskType: "test6")
+        let runSchemeOpTest6 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest6, taskType: "test6")
         
-        let runSchemeOpAllTests: RunSchemeOperation = RunSchemeOperation.init(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringAllTests, taskType: "allTests")
+        let runSchemeOpAllTests = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringAllTests, taskType: "allTests")
         
         schemeOperationAllTests = runSchemeOpAllTests
 
@@ -515,48 +481,48 @@ class EditorWindowController: NSWindowController {
             processingQueue.addOperation(runSchemeOpTest1)
         } else {
             test1StatusLabel.stringValue = ""
-            test1InputField.textColor = NSColor.blackColor()
-            test1ExpectedOutputField.textColor = NSColor.blackColor()
+            test1InputField.textColor = .blackColor()
+            test1ExpectedOutputField.textColor = .blackColor()
         }
         if processTest2 {
             print("queuing test2")
             processingQueue.addOperation(runSchemeOpTest2)
         } else {
             test2StatusLabel.stringValue = ""
-            test2InputField.textColor = NSColor.blackColor()
-            test2ExpectedOutputField.textColor = NSColor.blackColor()
+            test2InputField.textColor = .blackColor()
+            test2ExpectedOutputField.textColor = .blackColor()
         }
         if processTest3 {
             print("queuing test3")
             processingQueue.addOperation(runSchemeOpTest3)
         } else {
             test3StatusLabel.stringValue = ""
-            test3InputField.textColor = NSColor.blackColor()
-            test3ExpectedOutputField.textColor = NSColor.blackColor()
+            test3InputField.textColor = .blackColor()
+            test3ExpectedOutputField.textColor = .blackColor()
         }
         if processTest4 {
             print("queuing test4")
             processingQueue.addOperation(runSchemeOpTest4)
         } else {
             test4StatusLabel.stringValue = ""
-            test4InputField.textColor = NSColor.blackColor()
-            test4ExpectedOutputField.textColor = NSColor.blackColor()
+            test4InputField.textColor = .blackColor()
+            test4ExpectedOutputField.textColor = .blackColor()
         }
         if processTest5 {
             print("queuing test5")
             processingQueue.addOperation(runSchemeOpTest5)
         } else {
             test5StatusLabel.stringValue = ""
-            test5InputField.textColor = NSColor.blackColor()
-            test5ExpectedOutputField.textColor = NSColor.blackColor()
+            test5InputField.textColor = .blackColor()
+            test5ExpectedOutputField.textColor = .blackColor()
         }
         if processTest6 {
             print("queuing test6")
             processingQueue.addOperation(runSchemeOpTest6)
         } else {
             test6StatusLabel.stringValue = ""
-            test6InputField.textColor = NSColor.blackColor()
-            test6ExpectedOutputField.textColor = NSColor.blackColor()
+            test6InputField.textColor = .blackColor()
+            test6ExpectedOutputField.textColor = .blackColor()
         }
     }
 }
