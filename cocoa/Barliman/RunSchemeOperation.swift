@@ -134,15 +134,15 @@ class RunSchemeOperation: NSOperation {
             func onTestCompletion(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField, datastring: String) {
 
                 if datastring == "parse-error" { // failed to parse!
-                    inputField.textColor = NSColor.magentaColor()
-                    outputField.textColor = NSColor.magentaColor()
+                    inputField.textColor = .magentaColor()
+                    outputField.textColor = .magentaColor()
                     label.stringValue = self.kSyntaxErrorString
                     
                     // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                     self.editorWindowController.schemeOperationAllTests?.cancel()
                 } else if datastring == "()" { // parsed, but evaluator query failed!
-                    inputField.textColor = NSColor.redColor()
-                    outputField.textColor = NSColor.redColor()
+                    inputField.textColor = .redColor()
+                    outputField.textColor = .redColor()
                     label.stringValue = self.kEvaluationFailedString
                     
                     // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
@@ -153,14 +153,14 @@ class RunSchemeOperation: NSOperation {
             }
             
             func onTestSuccess(inputField: NSTextField, outputField: NSTextField, label: NSTextField) {
-                inputField.textColor = NSColor.blackColor()
-                outputField.textColor = NSColor.blackColor()
+                inputField.textColor = .blackColor()
+                outputField.textColor = .blackColor()
                 label.stringValue = ""
             }
             
             func onTestSyntaxError(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField) {
-                inputField.textColor = NSColor.greenColor()
-                outputField.textColor = NSColor.greenColor()
+                inputField.textColor = .greenColor()
+                outputField.textColor = .greenColor()
                 label.stringValue = self.kIllegalSexprString
             }
 
@@ -174,21 +174,21 @@ class RunSchemeOperation: NSOperation {
                 // at least Chez ran to completion!  The query could still have failed, of course
                 if self.taskType == "simple" {
                     if datastring == "parse-error" {
-                        ewc.schemeDefinitionView.textColor = NSColor.magentaColor()
+                        ewc.schemeDefinitionView.textColor = .magentaColor()
                         ewc.definitionStatusLabel.stringValue = self.kSyntaxErrorString
                         
                         // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                         self.editorWindowController.schemeOperationAllTests?.cancel()
                     } else if datastring == "()" {
                         // print("--- turning simple red")
-                        ewc.schemeDefinitionView.textColor = NSColor.redColor()
+                        ewc.schemeDefinitionView.textColor = .redColor()
                         ewc.definitionStatusLabel.stringValue = self.kEvaluationFailedString
                         
                         // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                         self.editorWindowController.schemeOperationAllTests?.cancel()
                     } else {
                         // print("--- turning simple black")
-                        ewc.schemeDefinitionView.textColor = NSColor.blackColor()
+                        ewc.schemeDefinitionView.textColor = .blackColor()
                         ewc.definitionStatusLabel.stringValue = ""
                     }
                 }
@@ -255,7 +255,7 @@ class RunSchemeOperation: NSOperation {
                 if self.taskType == "simple" {
                     // print("--- turning simple green")
                     // print("exitStatus = \( exitStatus )")
-                    ewc.schemeDefinitionView.textColor = NSColor.greenColor()
+                    ewc.schemeDefinitionView.textColor = .greenColor()
                     ewc.definitionStatusLabel.stringValue = self.kIllegalSexprString
                 }
                 
@@ -278,7 +278,7 @@ class RunSchemeOperation: NSOperation {
                     onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test6Spinner, label: ewc.test6StatusLabel)
                 }
                 if taskType == "allTests" {
-                    ewc.bestGuessView.setTextColor(NSColor.blackColor(), range: NSMakeRange(0, (ewc.bestGuessView.textStorage?.length)!))
+                    ewc.bestGuessView.setTextColor(.blackColor(), range: NSMakeRange(0, (ewc.bestGuessView.textStorage?.length)!))
                     ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
                 }
             }
