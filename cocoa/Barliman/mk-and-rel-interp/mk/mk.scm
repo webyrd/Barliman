@@ -578,6 +578,48 @@
 (define c->N (lambda (c) (cadddr c)))
 (define c->T (lambda (c) (cadddr (cdr c))))
 
+(define-syntax conda
+  (syntax-rules ()
+    ((_ (g0 g ...) (g1 g^ ...) ...)
+     (lambdag@ (st)
+       ;; is 'state-with-scope' required here, as it is with conde?
+       ;; I don't think so.
+       (inc
+        (ifa ((g0 st) g ...)
+             ((g1 st) g^ ...) ...))))))
+ 
+(define-syntax ifa
+  (syntax-rules ()
+    ((_) (mzero))
+    ((_ (e g ...) b ...)
+     (let loop ((c-inf e))
+       (case-inf c-inf
+         (() (ifa b ...))
+         ((f) (inc (loop (f))))
+         ((a) (bind* c-inf g ...))
+         ((a f) (bind* c-inf g ...)))))))
+
+(define-syntax condu
+  (syntax-rules ()
+    ((_ (g0 g ...) (g1 g^ ...) ...)
+     (lambdag@ (st)
+       ;; is 'state-with-scope' required here, as it is with conde?
+       ;; I don't think so.
+       (inc
+        (ifu ((g0 st) g ...)
+             ((g1 st) g^ ...) ...))))))
+ 
+(define-syntax ifu
+  (syntax-rules ()
+    ((_) (mzero))
+    ((_ (e g ...) b ...)
+     (let loop ((c-inf e))
+       (case-inf c-inf
+         (() (ifu b ...))
+         ((f) (inc (loop (f))))
+         ((c) (bind* c-inf g ...))
+         ((c f) (bind* (unit c) g ...)))))))
+
 ; Syntax for reification goal objects using the old constraint store
 (define-syntax lambdar@
   (syntax-rules (:)
@@ -930,6 +972,10 @@
 (define succeed (== #f #f))
 
 (define fail (== #f #t))
+
+(define (onceo g)
+  (condu
+    (g succeed)))
 
 (define ==fail-check
   (lambda (S0 D Y N T)
