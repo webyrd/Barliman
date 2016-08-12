@@ -607,11 +607,11 @@
       ((=/= #f t) (eval-expo e2 env val))
       ((== #f t) (eval-expo e3 env val)))))
 
-(define initial-env `((car . (val . (prim . car)))
+(define initial-env `((cons . (val . (prim . cons)))
+                      (car . (val . (prim . car)))
                       (cdr . (val . (prim . cdr)))
                       (null? . (val . (prim . null?)))
                       (symbol? . (val . (prim . symbol?)))
-                      (cons . (val . (prim . cons)))
                       (not . (val . (prim . not)))
                       (equal? . (val . (prim . equal?)))
                       (list . (val . (closure (lambda x x) ,empty-env)))

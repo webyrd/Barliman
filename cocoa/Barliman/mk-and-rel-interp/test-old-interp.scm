@@ -58,7 +58,7 @@
        (== `(define ,name (lambda ,args ,body)) defn)
        (eval-expo `(letrec ((,name (lambda ,args ,body))) ,e) env val)))
 
-    ((handle-matcho expr env val))
+    ;((handle-matcho expr env val))
 
     ((fresh (p-name x body letrec-body)
        ;; single-function variadic letrec version
@@ -290,11 +290,11 @@
       ((=/= #f t) (eval-expo e2 env val))
       ((== #f t) (eval-expo e3 env val)))))
 
-(define initial-env `((car . (val . (prim . car)))
+(define initial-env `((cons . (val . (prim . cons)))
+                      (car . (val . (prim . car)))
                       (cdr . (val . (prim . cdr)))
                       (null? . (val . (prim . null?)))
                       (symbol? . (val . (prim . symbol?)))
-                      (cons . (val . (prim . cons)))
                       (not . (val . (prim . not)))
                       (equal? . (val . (prim . equal?)))
                       (list . (val . (closure (lambda x x) ,empty-env)))
@@ -868,9 +868,79 @@
                   (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7)))))))
    '(((define append (lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
 
-(printf "append-hard-10-gensym doesn't seem to return\n")
 (time
  (test 'append-hard-10-gensym
+   (run 1 (defn)
+     (let ((g1 (gensym "g1"))
+           (g2 (gensym "g2"))
+           (g3 (gensym "g3"))
+           (g4 (gensym "g4"))
+           (g5 (gensym "g5"))
+           (g6 (gensym "g6"))
+           (g7 (gensym "g7")))
+       (fresh ()
+         (absento g1 defn)
+         (absento g2 defn)
+         (absento g3 defn)
+         (absento g4 defn)
+         (absento g5 defn)
+         (absento g6 defn)
+         (absento g7 defn)
+         (fresh (q r s)
+           (== `(define append
+                  (lambda (l s)
+                    (if (null? ,q)
+                        ,r
+                        ,s)))
+               defn)
+           (evalo `(begin
+                     ,defn
+                     (list
+                      (append '() '())
+                      (append '(,g1) '(,g2))
+                      (append '(,g3 ,g4 ,g5) '(,g6 ,g7))))
+                  (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7)))))))
+   '(((define append (lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
+
+(printf "synthesis for append-hard-11-gensym overfits, despite gensyms\n")
+(time
+ (test 'append-hard-11-gensym
+   (run 1 (defn)
+     (let ((g1 (gensym "g1"))
+           (g2 (gensym "g2"))
+           (g3 (gensym "g3"))
+           (g4 (gensym "g4"))
+           (g5 (gensym "g5"))
+           (g6 (gensym "g6"))
+           (g7 (gensym "g7")))
+       (fresh ()
+         (absento g1 defn)
+         (absento g2 defn)
+         (absento g3 defn)
+         (absento g4 defn)
+         (absento g5 defn)
+         (absento g6 defn)
+         (absento g7 defn)
+         (fresh (q r s t)
+           (== `(define append
+                  (lambda (l s)
+                    (if (,t ,q)
+                        ,r
+                        ,s)))
+               defn)
+           (evalo `(begin
+                     ,defn
+                     (list
+                      (append '() '())
+                      (append '(,g1) '(,g2))
+                      (append '(,g3 ,g4 ,g5) '(,g6 ,g7))))
+                  (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7)))))))
+   '(((define append (lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
+
+; this one "succeeds" faster than append-hard-11-gensym
+(printf "synthesis for append-hard-12-gensym overfits, despite gensyms\n")
+(time
+ (test 'append-hard-11-gensym
    (run 1 (defn)
      (let ((g1 (gensym "g1"))
            (g2 (gensym "g2"))
