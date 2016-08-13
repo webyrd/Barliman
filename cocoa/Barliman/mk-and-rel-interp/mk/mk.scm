@@ -587,7 +587,7 @@
        (inc
         (ifa ((g0 st) g ...)
              ((g1 st) g^ ...) ...))))))
- 
+
 (define-syntax ifa
   (syntax-rules ()
     ((_) (mzero))
@@ -608,7 +608,7 @@
        (inc
         (ifu ((g0 st) g ...)
              ((g1 st) g^ ...) ...))))))
- 
+
 (define-syntax ifu
   (syntax-rules ()
     ((_) (mzero))
