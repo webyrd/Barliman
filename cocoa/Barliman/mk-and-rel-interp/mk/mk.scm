@@ -172,19 +172,36 @@
 ; Contains:
 ;   S - the substitution
 ;   C - the constraint store
+;   depth - the current search depth in terms of `conde` nesting
+
+; TODO: use set! to choose appropriate max-search-depth per-run?
+(define max-search-depth
+  ;#f  ; unlimited depth
+  70   ; reasonable depth for typical Barliman problems?
+  )
 
 (define state
-  (lambda (S C)
-    (cons S C)))
+  (lambda (S C depth)
+    (list S C depth)))
 
 (define state-S (lambda (st) (car st)))
-(define state-C (lambda (st) (cdr st)))
+(define state-C (lambda (st) (cadr st)))
+(define state-depth (lambda (st) (caddr st)))
+(define state-depth-set
+  (lambda (st depth) (state (state-S st) (state-C st) depth)))
+(define state-depth-deepen
+  (lambda (st)
+    (let ((next-depth (+ 1 (state-depth st))))
+      (if (and max-search-depth (< max-search-depth next-depth))
+        (mzero) (state (state-S st) (state-C st) next-depth)))))
 
-(define empty-state (state empty-subst empty-C))
+(define empty-state (state empty-subst empty-C 0))
 
 (define state-with-scope
   (lambda (st new-scope)
-    (state (subst-with-scope (state-S st) new-scope) (state-C st))))
+    (state (subst-with-scope (state-S st) new-scope)
+           (state-C st)
+           (state-depth st))))
 
 ; Unification
 
@@ -280,6 +297,12 @@
        (let ((qvar (var scope)) ...)
          body ...)))))
 
+(define-syntax bind*-depth
+  (syntax-rules ()
+    ((_ st0 g0 g ...)
+     (bind* (g0 st0) (lambdag@ (st)
+                       (g (state-depth-set st (state-depth st0)))) ...))))
+
 (define-syntax fresh
   (syntax-rules ()
     ((_ (x ...) g0 g ...)
@@ -287,7 +310,7 @@
        (inc
          (let ((scope (subst-scope (state-S st))))
            (let ((x (var scope)) ...)
-             (bind* (g0 st) g ...))))))))
+             (bind*-depth st g0 g ...))))))))
 
 (define-syntax bind*
   (syntax-rules ()
@@ -336,11 +359,10 @@
   (syntax-rules ()
     ((_ (g0 g ...) (g1 g^ ...) ...)
      (lambdag@ (st)
-       (inc
-         (let ((st (state-with-scope st (new-scope))))
-           (mplus*
-             (bind* (g0 st) g ...)
-             (bind* (g1 st) g^ ...) ...)))))))
+       (inc (bind (state-depth-deepen (state-with-scope st (new-scope)))
+                  (lambdag@ (st)
+                    (mplus* (bind*-depth st g0 g ...)
+                            (bind*-depth st g1 g^ ...) ...))))))))
 
 (define-syntax conde$
   (syntax-rules ()
@@ -348,8 +370,8 @@
      (lambdag@ (st)
        (let ((st (state-with-scope st (new-scope))))
          (mplus*
-           (bind* (g0 st) g ...)
-           (bind* (g1 st) g^ ...) ...))))))
+           (bind*-depth st g0 g ...)
+           (bind*-depth st g1 g^ ...) ...))))))
 
 (define-syntax mplus*
   (syntax-rules ()
@@ -452,7 +474,8 @@
     (lambdag@ (st)
       (let-values (((S added) (unify u v (state-S st))))
         (if S
-          (and-foldl update-constraints (state S (state-C st)) added)
+          (and-foldl
+            update-constraints (state S (state-C st) (state-depth st)) added)
           (mzero))))))
 
 
