@@ -343,6 +343,8 @@
        (ext-env*o x* a* env^ res)
        (eval-application rands env a* (eval-expo body res val))))
 
+    ((if-primo expr env val))
+
     ((fresh (rator x rands body env^ a* res)
        (== `(,rator . ,rands) expr)
        ;; variadic
@@ -546,8 +548,7 @@
   (conde
     ((boolean-primo expr env val))
     ((and-primo expr env val))
-    ((or-primo expr env val))
-    ((if-primo expr env val))))
+    ((or-primo expr env val))))
 
 (define (boolean-primo expr env val)
   (conde
@@ -604,8 +605,12 @@
     (not-in-envo 'if env)
     (eval-expo e1 env t)
     (conde
-      ((=/= #f t) (eval-expo e2 env val))
-      ((== #f t) (eval-expo e3 env val)))))
+      ((== #t t) (eval-expo e2 env val))
+      ((== #f t) (eval-expo e3 env val))
+      ; Adding this line would restore normal Scheme semantics, but
+      ; unfortunately it defeats the performance improvement we just gained.
+      ;((=/= #t t) (=/= #f t) (eval-expo e2 env val))
+      )))
 
 (define initial-env `((cons . (val . (prim . cons)))
                       (car . (val . (prim . car)))
