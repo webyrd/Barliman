@@ -58,7 +58,7 @@
        (== `(define ,name (lambda ,args ,body)) defn)
        (eval-expo `(letrec ((,name (lambda ,args ,body))) ,e) env val)))
 
-    ;((handle-matcho expr env val))
+    ((handle-matcho expr env val))
 
     ((fresh (p-name x body letrec-body)
        ;; single-function variadic letrec version
