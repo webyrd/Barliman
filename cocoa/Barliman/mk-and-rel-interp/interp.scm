@@ -448,9 +448,9 @@
 
 (define (list-split-ground st xs)
   (let loop ((rprefix '()) (xs xs))
-    (let ((tm (walk xs st)))
+    (let ((tm (walk xs (state-S st))))
       (if (pair? tm)
-        (loop (cons (walk (car tm) st) rprefix) (cdr tm))
+        (loop (cons (walk (car tm) (state-S st)) rprefix) (cdr tm))
         (values rprefix xs)))))
 
 (define (eval-application rands aenv a* body-goal)
