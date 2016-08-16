@@ -16,6 +16,7 @@
     ((fresh (rator x* rands a* prim-id)
        (== `(,rator . ,rands) expr)
        (eval-expo rator env `(prim . ,prim-id))
+       pause
        (eval-primo prim-id a* val)
        (eval-listo rands env a*)))
 
@@ -24,6 +25,7 @@
        ;; Multi-argument
        (eval-expo rator env `(closure (lambda ,x* ,body) ,env^))
        (ext-env*o x* a* env^ res)
+       pause
        (eval-application rands env a* (eval-expo body res val))))
 
     ((if-primo expr env val))
@@ -34,6 +36,7 @@
        (symbolo x)
        (== `((,x . (val . ,a*)) . ,env^) res)
        (eval-expo rator env `(closure (lambda ,x ,body) ,env^))
+       pause
        (eval-expo body res val)
        (eval-listo rands env a*)))
 
@@ -58,6 +61,7 @@
     ((fresh (defn args name body e)
        (== `(begin ,defn ,e) expr)
        (== `(define ,name (lambda ,args ,body)) defn)
+       pause
        (eval-expo `(letrec ((,name (lambda ,args ,body))) ,e) env val)))
 
     ((handle-matcho expr env val))
@@ -73,6 +77,7 @@
          ; Multiple argument
          ((list-of-symbolso x)))
        (not-in-envo 'letrec env)
+       pause
        (eval-expo letrec-body
                   `((,p-name . (rec . (lambda ,x ,body))) . ,env)
                   val)))
@@ -249,14 +254,17 @@
     ((== '() e*) (== #t val))
     ((fresh (e)
        (== `(,e) e*)
+       pause
        (eval-expo e env val)))
     ((fresh (e1 e2 e-rest v)
        (== `(,e1 ,e2 . ,e-rest) e*)
        (conde1
          ((== #f v)
           (== #f val)
+          pause
           (eval-expo e1 env v))
          ((=/= #f v)
+          pause
           (eval-expo e1 env v)
           (ando `(,e2 . ,e-rest) env val)))))))
 
@@ -271,14 +279,17 @@
     ((== '() e*) (== #f val))
     ((fresh (e)
        (== `(,e) e*)
+       pause
        (eval-expo e env val)))
     ((fresh (e1 e2 e-rest v)
        (== `(,e1 ,e2 . ,e-rest) e*)
        (conde1
          ((=/= #f v)
           (== v val)
+          pause
           (eval-expo e1 env v))
          ((== #f v)
+          pause
           (eval-expo e1 env v)
           (oro `(,e2 . ,e-rest) env val)))))))
 
@@ -286,10 +297,15 @@
   (fresh (e1 e2 e3 t)
     (== `(if ,e1 ,e2 ,e3) expr)
     (not-in-envo 'if env)
+    pause
     (eval-expo e1 env t)
     (conde1
-      ((== #t t) (eval-expo e2 env val))
-      ((== #f t) (eval-expo e3 env val))
+      ((== #t t)
+       pause
+       (eval-expo e2 env val))
+      ((== #f t)
+       pause
+       (eval-expo e3 env val))
       ; Adding this line would restore normal Scheme semantics, but
       ; unfortunately it defeats the performance improvement we just gained.
       ;((=/= #t t) (=/= #f t) (eval-expo e2 env val))
@@ -310,6 +326,7 @@
     (fresh (against-expr mval clause clauses)
       (== `(match ,against-expr ,clause . ,clauses) expr)
       (not-in-envo 'match env)
+      pause
       (eval-expo against-expr env mval)
       (match-clauses mval `(,clause . ,clauses) env val))))
 
