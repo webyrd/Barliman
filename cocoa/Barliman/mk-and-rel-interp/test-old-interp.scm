@@ -20,6 +20,129 @@
            (list 'foo 'bar 1 2 3)))
   '((((car xs) (nth (cdr n) (cdr xs)))))))
 
+(time
+ (test 'map-hard-0-gensym
+   (run 1 (defn)
+     (let ((g1 (gensym "g1"))
+           (g2 (gensym "g2"))
+           (g3 (gensym "g3"))
+           (g4 (gensym "g4"))
+           (g5 (gensym "g5"))
+           (g6 (gensym "g6"))
+           (g7 (gensym "g7")))
+       (fresh ()
+         (absento g1 defn)
+         (absento g2 defn)
+         (absento g3 defn)
+         (absento g4 defn)
+         (absento g5 defn)
+         (absento g6 defn)
+         (absento g7 defn)
+         (== `(define map
+                (lambda (f xs)
+                  (if (null? xs)
+                    xs (cons (f (car xs)) (map f (cdr xs))))))
+           defn)
+         (evalo `(begin
+                   ,defn
+                   (list
+                     (map ',g1 '())
+                     (map car '((,g2 . ,g3)))
+                     (map cdr '((,g4 . ,g5) (,g6 . ,g7)))))
+                (list '() `(,g2) `(,g5 ,g7))))))
+   '()))
+
+(time
+ (test 'map-hard-1-gensym
+   (run 1 (defn)
+     (let ((g1 (gensym "g1"))
+           (g2 (gensym "g2"))
+           (g3 (gensym "g3"))
+           (g4 (gensym "g4"))
+           (g5 (gensym "g5"))
+           (g6 (gensym "g6"))
+           (g7 (gensym "g7")))
+       (fresh (a b c)
+         (absento g1 defn)
+         (absento g2 defn)
+         (absento g3 defn)
+         (absento g4 defn)
+         (absento g5 defn)
+         (absento g6 defn)
+         (absento g7 defn)
+         (== `(define map
+                (lambda (f xs)
+                  (if (null? xs)
+                    ,a (cons ,b (map f ,c)))))
+           defn)
+         (evalo `(begin
+                   ,defn
+                   (list
+                     (map ',g1 '())
+                     (map car '((,g2 . ,g3)))
+                     (map cdr '((,g4 . ,g5) (,g6 . ,g7)))))
+                (list '() `(,g2) `(,g5 ,g7))))))
+   '()))
+
+(time
+ (test 'map-hard-2-gensym
+   (run 1 (defn)
+     (let ((g1 (gensym "g1"))
+           (g2 (gensym "g2"))
+           (g3 (gensym "g3"))
+           (g4 (gensym "g4"))
+           (g5 (gensym "g5"))
+           (g6 (gensym "g6"))
+           (g7 (gensym "g7")))
+       (fresh (a)
+         (absento g1 defn)
+         (absento g2 defn)
+         (absento g3 defn)
+         (absento g4 defn)
+         (absento g5 defn)
+         (absento g6 defn)
+         (absento g7 defn)
+         (== `(define map
+                (lambda (f xs)
+                  (if (null? xs)
+                    '() (cons (f (car xs)) (map ,a (cdr xs))))))
+           defn)
+         (evalo `(begin
+                   ,defn
+                   (list
+                     (map ',g1 '())
+                     (map car '((,g2 . ,g3)))
+                     (map cdr '((,g4 . ,g5) (,g6 . ,g7)))))
+                (list '() `(,g2) `(,g5 ,g7))))))
+   '()))
+
+(time
+ (test 'map-hard-3-gensym
+   (run 1 (defn)
+     (let ((g1 (gensym "g1"))
+           (g2 (gensym "g2"))
+           (g3 (gensym "g3"))
+           (g4 (gensym "g4"))
+           (g5 (gensym "g5"))
+           (g6 (gensym "g6"))
+           (g7 (gensym "g7")))
+       (fresh ()
+         (absento g1 defn)
+         (absento g2 defn)
+         (absento g3 defn)
+         (absento g4 defn)
+         (absento g5 defn)
+         (absento g6 defn)
+         (absento g7 defn)
+         (evalo `(begin
+                   ,defn
+                   (list
+                     (map ',g1 '())
+                     (map car '((,g2 . ,g3)))
+                     (map cdr '((,g4 . ,g5) (,g6 . ,g7)))))
+                (list '() `(,g2) `(,g5 ,g7))))))
+   '()))
+
 (test 'append-empty
   (run 1 (q)
        (evalo
