@@ -297,11 +297,13 @@
        (let ((qvar (var scope)) ...)
          body ...)))))
 
+(define-syntax with-depth
+  (syntax-rules ()
+    ((_ dst g) (lambdag@ (st) (g (state-depth-set st (state-depth dst)))))))
+
 (define-syntax bind*-depth
   (syntax-rules ()
-    ((_ st0 g0 g ...)
-     (bind* (g0 st0) (lambdag@ (st)
-                       (g (state-depth-set st (state-depth st0)))) ...))))
+    ((_ st0 g0 g ...) (bind* (g0 st0) (with-depth st0 g) ...))))
 
 (define-syntax fresh
   (syntax-rules ()
@@ -372,6 +374,41 @@
          (mplus*
            (bind*-depth st g0 g ...)
            (bind*-depth st g1 g^ ...) ...))))))
+
+(define-syntax case0
+  (syntax-rules ()
+    ((_ expr zero ((cs) more))
+     (let ((result expr)) (if result (let ((cs result)) more) zero)))))
+
+(define-syntax mplus1*
+  (syntax-rules ()
+    ((_ e) e)
+    ((_ e0 e ...)
+     (case0 e0
+       (mplus1* e ...)
+       ((c0) (mplus0* c0 e ...))))))
+
+(define-syntax mplus0*
+  (syntax-rules ()
+    ((_ unpruned) unpruned)
+    ((_ unpruned e0 e ...)
+     (case0 e0
+       (mplus0* unpruned e ...)
+       ((c0) (inc (mplus unpruned (inc (mplus* c0 e ...)))))))))
+
+(define-syntax conde1
+  (syntax-rules ()
+    ((_ (g0 g ...) ...)
+     (lambdag@ (st)
+       (bind (state-depth-deepen (state-with-scope st (new-scope)))
+             (lambdag@ (st) (mplus1* (bind*-depth st g0 g ...) ...)))))))
+
+(define-syntax conde1$
+  (syntax-rules ()
+    ((_ (g0 g ...) ...)
+     (lambdag@ (st)
+       (let ((st (state-with-scope st (new-scope))))
+         (mplus1* (bind*-depth st g0 g ...) ...))))))
 
 (define-syntax mplus*
   (syntax-rules ()
