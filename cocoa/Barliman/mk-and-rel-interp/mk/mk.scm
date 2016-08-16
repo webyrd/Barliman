@@ -264,6 +264,7 @@
 (define mzero (lambda () #f))
 (define unit (lambda (c) c))
 (define choice (lambda (c f) (cons c f)))
+(define pause (lambda (c) (inc c)))
 
 (define-syntax inc
   (syntax-rules ()
@@ -390,7 +391,7 @@
 
 (define-syntax mplus0*
   (syntax-rules ()
-    ((_ unpruned) unpruned)
+    ((_ unpruned) (if (procedure? unpruned) (unpruned) unpruned))
     ((_ unpruned e0 e ...)
      (case0 e0
        (mplus0* unpruned e ...)
