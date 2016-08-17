@@ -413,10 +413,13 @@
 
 (define-syntax conde1$
   (syntax-rules ()
-    ((_ (g0 g ...) ...)
+    ((_ ((name lvar) ...) (g0 g ...) ...)
      (lambdag@ (st)
-       (let ((st (state-with-scope st (new-scope))))
-         (mplus1* (bind*-depth st g0 g ...) ...))))))
+       (let ((name (walk lvar (state-S st))) ...)
+         (if (ormap var? (list name ...))
+           ((conde$ (g0 g ...) ...) st)
+           (let ((st (state-with-scope st (new-scope))))
+             (mplus1* (bind*-depth st g0 g ...) ...))))))))
 
 (define-syntax mplus*
   (syntax-rules ()
