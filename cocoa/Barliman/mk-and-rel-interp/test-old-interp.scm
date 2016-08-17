@@ -48,7 +48,7 @@
     ((fresh (x body)
        (== `(lambda ,x ,body) expr)
        (== `(closure (lambda ,x ,body) ,env) val)
-       (conde1$
+       (conde1$ ((x x))
          ;; Variadic
          ((symbolo x))
          ;; Multi-argument
@@ -71,7 +71,7 @@
        (== `(letrec ((,p-name (lambda ,x ,body)))
               ,letrec-body)
            expr)
-       (conde1$
+       (conde1$ ((x x))
          ; Variadic
          ((symbolo x))
          ; Multiple argument
@@ -102,16 +102,16 @@
 (define (try-lookup-before x env t alts)
   (lambdag@ (st)
     (let-values (((rgenv venv) (list-split-ground st env)))
-      (let loop ((rgenv rgenv) (alts (conde1$ ((symbolo x) (lookupo x venv t))
+      (let loop ((rgenv rgenv) (alts (conde$ ((symbolo x) (lookupo x venv t))
                                              (alts))))
         (if (null? rgenv) (alts st)
           (let ((rib (car rgenv)))
             (loop (cdr rgenv)
               (fresh (y b)
                 (== `(,y . ,b) rib)
-                (conde1$
+                (conde1$ ((x x) (y y))
                   ((symbolo x) (== x y)
-                   (conde1$
+                   (conde1$ ((b b))
                      ((== `(val . ,t) b))
                      ((fresh (lam-expr)
                              (== `(rec . ,lam-expr) b)
@@ -190,7 +190,7 @@
        (ext-env*o dx* da* env2 out)))))
 
 (define (eval-primo prim-id a* val)
-  (conde1$
+  (conde1$ ((prim-id prim-id))
     [(== prim-id 'car)
      (fresh (d)
        (== `((,val . ,d)) a*)
@@ -202,19 +202,19 @@
     [(== prim-id 'not)
      (fresh (b)
        (== `(,b) a*)
-       (conde1$
+       (conde1$ ((b b))
          ((=/= #f b) (== #f val))
          ((== #f b) (== #t val))))]
     [(== prim-id 'equal?)
      (fresh (v1 v2)
        (== `(,v1 ,v2) a*)
-       (conde1$
+       (conde1$ ((v1 v1) (v2 v2))
          ((== v1 v2) (== #t val))
          ((=/= v1 v2) (== #f val))))]
     [(== prim-id 'symbol?)
      (fresh (v)
        (== `(,v) a*)
-       (conde1$
+       (conde1$ ((v v))
          ((symbolo v) (== #t val))
          ((numbero v) (== #f val))
          ((fresh (a d)
@@ -223,7 +223,7 @@
     [(== prim-id 'null?)
      (fresh (v)
        (== `(,v) a*)
-       (conde1$
+       (conde1$ ((v v))
          ((== '() v) (== #t val))
          ((=/= '() v) (== #f val))))]
     [(== prim-id 'cons)
@@ -233,13 +233,13 @@
     ))
 
 (define (prim-expo expr env val)
-  (conde1$
+  (conde1$ ()
     ((boolean-primo expr env val))
     ((and-primo expr env val))
     ((or-primo expr env val))))
 
 (define (boolean-primo expr env val)
-  (conde1$
+  (conde1$ ()
     ((== #t expr) (== #t val))
     ((== #f expr) (== #f val))))
 
@@ -331,7 +331,7 @@
       (match-clauses mval `(,clause . ,clauses) env val))))
 
 (define (not-symbolo t)
-  (conde1$
+  (conde1$ ()
     ((== #f t))
     ((== #t t))
     ((== '() t))
@@ -340,7 +340,7 @@
        (== `(,a . ,d) t)))))
 
 (define (not-numbero t)
-  (conde1$
+  (conde1$ ()
     ((== #f t))
     ((== #t t))
     ((== '() t))
@@ -349,19 +349,19 @@
        (== `(,a . ,d) t)))))
 
 (define (self-eval-literalo t)
-  (conde1$
+  (conde1$ ()
     ((numbero t))
     ((booleano t))))
 
 (define (literalo t)
-  (conde1$
+  (conde1$ ()
     ((numbero t))
     ((symbolo t) (=/= 'closure t))
     ((booleano t))
     ((== '() t))))
 
 (define (booleano t)
-  (conde1$
+  (conde1$ ()
     ((== #f t))
     ((== #t t))))
 
