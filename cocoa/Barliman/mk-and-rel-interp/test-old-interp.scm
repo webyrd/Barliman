@@ -10,7 +10,7 @@
   (try-lookup-before expr env val (eval-expo-rest expr env val)))
 
 (define (eval-expo-rest expr env val)
-  (conde1
+  (conde1 ((expr expr) (env env))
     ((numbero expr) (== expr val))
 
     ((fresh (rator x* rands a* prim-id)
@@ -89,9 +89,9 @@
 (define (lookupo x env t)
   (fresh (y b rest)
     (== `((,y . ,b) . ,rest) env)
-    (conde1
+    (conde1 ((x x))
       ((== x y)
-       (conde1
+       (conde1 ((b b))
          ((== `(val . ,t) b))
          ((fresh (lam-expr)
             (== `(rec . ,lam-expr) b)
@@ -119,7 +119,7 @@
                   ((=/= x y) alts))))))))))
 
 (define (not-in-envo x env)
-  (conde1
+  (conde1 ((x x) (env env))
     ((== empty-env env))
     ((fresh (y b rest)
        (== `((,y . ,b) . ,rest) env)
@@ -127,7 +127,7 @@
        (not-in-envo x rest)))))
 
 (define (eval-listo expr env val)
-  (conde1
+  (conde1 ((expr expr) (env env))
     ((== '() expr)
      (== '() val))
     ((fresh (a d v-a v-d)
@@ -172,7 +172,7 @@
 ;; need to make sure lambdas are well formed.
 ;; grammar constraints would be useful here!!!
 (define (list-of-symbolso los)
-  (conde1
+  (conde1 ((los los))
     ((== '() los))
     ((fresh (a d)
        (== `(,a . ,d) los)
@@ -180,7 +180,7 @@
        (list-of-symbolso d)))))
 
 (define (ext-env*o x* a* env out)
-  (conde1
+  (conde1 ((x* x*))
     ((== '() x*) (== '() a*) (== env out))
     ((fresh (x a dx* da* env2)
        (== `(,x . ,dx*) x*)
@@ -250,7 +250,7 @@
     (ando e* env val)))
 
 (define (ando e* env val)
-  (conde1
+  (conde1 ((e* e*))
     ((== '() e*) (== #t val))
     ((fresh (e)
        (== `(,e) e*)
@@ -258,7 +258,7 @@
        (eval-expo e env val)))
     ((fresh (e1 e2 e-rest v)
        (== `(,e1 ,e2 . ,e-rest) e*)
-       (conde1
+       (conde1 ((v v))
          ((== #f v)
           (== #f val)
           pause
@@ -275,7 +275,7 @@
     (oro e* env val)))
 
 (define (oro e* env val)
-  (conde1
+  (conde1 ((e* e*))
     ((== '() e*) (== #f val))
     ((fresh (e)
        (== `(,e) e*)
@@ -283,7 +283,7 @@
        (eval-expo e env val)))
     ((fresh (e1 e2 e-rest v)
        (== `(,e1 ,e2 . ,e-rest) e*)
-       (conde1
+       (conde1 ((v v))
          ((=/= #f v)
           (== v val)
           pause
@@ -299,7 +299,7 @@
     (not-in-envo 'if env)
     pause
     (eval-expo e1 env t)
-    (conde1
+    (conde1 ((t t))
       ((== #t t)
        pause
        (eval-expo e2 env val))
@@ -366,7 +366,7 @@
     ((== #t t))))
 
 (define (regular-env-appendo env1 env2 env-out)
-  (conde1
+  (conde1 ((env1 env1))
     ((== empty-env env1) (== env2 env-out))
     ((fresh (y v rest res)
        (== `((,y . (val . ,v)) . ,rest) env1)
@@ -638,36 +638,36 @@
           (if (null? xs)
             xs (cons (f (car xs)) (map f (cdr xs))))))))))
 
-(time
- (test 'map-hard-4-gensym
-   (run 1 (defn)
-     (let ((g1 (gensym "g1"))
-           (g2 (gensym "g2"))
-           (g3 (gensym "g3"))
-           (g4 (gensym "g4"))
-           (g5 (gensym "g5"))
-           (g6 (gensym "g6"))
-           (g7 (gensym "g7")))
-       (fresh ()
-         (absento g1 defn)
-         (absento g2 defn)
-         (absento g3 defn)
-         (absento g4 defn)
-         (absento g5 defn)
-         (absento g6 defn)
-         (absento g7 defn)
-         (evalo `(begin
-                   ,defn
-                   (list
-                     (map ',g1 '())
-                     (map car '((,g2 . ,g3)))
-                     (map cdr '((,g4 . ,g5) (,g6 . ,g7)))))
-                (list '() `(,g2) `(,g5 ,g7))))))
-   '(((define map
-        (lambda (_.0 _.1)
-          (if (null? _.1)
-            _.1 (cons (_.0 (car _.1)) (map _.0 (cdr _.1))))))
-      (sym _.0 _.1)))))
+;(time
+ ;(test 'map-hard-4-gensym
+   ;(run 1 (defn)
+     ;(let ((g1 (gensym "g1"))
+           ;(g2 (gensym "g2"))
+           ;(g3 (gensym "g3"))
+           ;(g4 (gensym "g4"))
+           ;(g5 (gensym "g5"))
+           ;(g6 (gensym "g6"))
+           ;(g7 (gensym "g7")))
+       ;(fresh ()
+         ;(absento g1 defn)
+         ;(absento g2 defn)
+         ;(absento g3 defn)
+         ;(absento g4 defn)
+         ;(absento g5 defn)
+         ;(absento g6 defn)
+         ;(absento g7 defn)
+         ;(evalo `(begin
+                   ;,defn
+                   ;(list
+                     ;(map ',g1 '())
+                     ;(map car '((,g2 . ,g3)))
+                     ;(map cdr '((,g4 . ,g5) (,g6 . ,g7)))))
+                ;(list '() `(,g2) `(,g5 ,g7))))))
+   ;'(((define map
+        ;(lambda (_.0 _.1)
+          ;(if (null? _.1)
+            ;_.1 (cons (_.0 (car _.1)) (map _.0 (cdr _.1))))))
+      ;(sym _.0 _.1)))))
 
 (test 'append-empty
   (run 1 (q)
