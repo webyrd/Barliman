@@ -268,13 +268,13 @@
 (define mzero (lambda () #f))
 (define unit (lambda (c) c))
 (define choice (lambda (c f) (cons c f)))
-(define pause (lambda (c) (inc c)))
 
 (define-syntax inc
   (syntax-rules ()
     ((_ e) (lambda () e))))
 
 (define empty-f (inc (mzero)))
+(define pause (lambda (c) (inc c)))
 
 (define-syntax lambdag@
   (syntax-rules ()
