@@ -176,6 +176,7 @@
 ;   S - the substitution
 ;   C - the constraint store
 ;   depth - the current search depth in terms of `conde` nesting
+;   deferred - expensive goals that will be tried later
 
 ; TODO: use set! to choose appropriate max-search-depth per-run?
 (define max-search-depth
@@ -184,28 +185,32 @@
   100)
 
 (define state
-  (lambda (S C depth)
-    (list S C depth)))
+  (lambda (S C depth deferred)
+    (list S C depth deferred)))
 
 (define state-S (lambda (st) (car st)))
 (define state-C (lambda (st) (cadr st)))
 (define state-depth (lambda (st) (caddr st)))
+(define state-deferred (lambda (st) (cadddr st)))
 (define state-depth-set
-  (lambda (st depth) (state (state-S st) (state-C st) depth)))
+  (lambda (st depth)
+    (state (state-S st) (state-C st) depth (state-deferred st))))
 (define state-depth-deepen
   (lambda (st)
     (let ((next-depth (+ 1 (state-depth st))))
       (if (and allow-incomplete-search?
                max-search-depth (< max-search-depth next-depth))
-        (mzero) (state (state-S st) (state-C st) next-depth)))))
+        (mzero)
+        (state (state-S st) (state-C st) next-depth (state-deferred st))))))
 
-(define empty-state (state empty-subst empty-C 0))
+(define empty-state (state empty-subst empty-C 0 '('() '())))
 
 (define state-with-scope
   (lambda (st new-scope)
     (state (subst-with-scope (state-S st) new-scope)
            (state-C st)
-           (state-depth st))))
+           (state-depth st)
+           (state-deferred st))))
 
 ; Unification
 
@@ -523,7 +528,8 @@
       (let-values (((S added) (unify u v (state-S st))))
         (if S
           (and-foldl
-            update-constraints (state S (state-C st) (state-depth st)) added)
+            update-constraints
+            (state S (state-C st) (state-depth st) (state-deferred st)) added)
           (mzero))))))
 
 
