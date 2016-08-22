@@ -376,7 +376,7 @@
 (define (match-clauses mval clauses env val)
   (fresh (p result-expr d penv)
     (== `((,p ,result-expr) . ,d) clauses)
-    (conde
+    (conde1 ((mval mval) (p p))
       ((fresh (env^)
          (p-match p mval '() penv)
          (regular-env-appendo penv env env^)
@@ -388,7 +388,7 @@
   (fresh (val)
     (symbolo var)
     (=/= 'closure mval)
-    (conde
+    (conde1 ((var var) (mval mval) (penv penv))
       ((== mval val)
        (== penv penv-out)
        (lookupo var penv val))
@@ -403,7 +403,7 @@
     (lookupo var penv val)))
 
 (define (p-match p mval penv penv-out)
-  (conde
+  (conde1 ((p p) (mval mval))
     ((self-eval-literalo p)
      (== p mval)
      (== penv penv-out))
@@ -421,7 +421,7 @@
       (quasi-p-match quasi-p mval penv penv-out)))))
 
 (define (p-no-match p mval penv penv-out)
-  (conde
+  (conde1 ((p p) (mval mval))
     ((self-eval-literalo p)
      (=/= p mval)
      (== penv penv-out))
@@ -446,7 +446,7 @@
       (quasi-p-no-match quasi-p mval penv penv-out)))))
 
 (define (quasi-p-match quasi-p mval penv penv-out)
-  (conde
+  (conde1 ((quasi-p quasi-p) (mval mval))
     ((== quasi-p mval)
      (== penv penv-out)
      (literalo quasi-p))
@@ -461,7 +461,7 @@
        (quasi-p-match d v2 penv^ penv-out)))))
 
 (define (quasi-p-no-match quasi-p mval penv penv-out)
-  (conde
+  (conde1 ((quasi-p quasi-p) (mval mval))
     ((=/= quasi-p mval)
      (== penv penv-out)
      (literalo quasi-p))
