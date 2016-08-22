@@ -669,6 +669,32 @@
             ;_.1 (cons (_.0 (car _.1)) (map _.0 (cdr _.1))))))
       ;(sym _.0 _.1)))))
 
+(test 'append-equal-1
+  (run 1 (defn)
+     (let ((g1 (gensym "g1"))
+           (g2 (gensym "g2"))
+           (g3 (gensym "g3"))
+           (g4 (gensym "g4"))
+           (g5 (gensym "g5"))
+           (g6 (gensym "g6"))
+           (g7 (gensym "g7")))
+       (fresh ()
+         (absento g1 defn)
+         (absento g2 defn)
+         (absento g3 defn)
+         (absento g4 defn)
+         (absento g5 defn)
+         (absento g6 defn)
+         (absento g7 defn)
+         (evalo `(begin
+                   ,defn
+                   (list
+                     (equal? (append '() ' ()) ' ())
+                     (equal? (append '(,g1) '(,g2)) (list ',g1 ',g2))
+                     (equal? (append '(,g3 ,g4) '(,g5 ,g6)) (list ',g3 ',g4 ',g5 ',g6))))
+                (list #t #t #t)))))
+  '(((define append (lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s))))))))
+
 (test 'append-empty
   (run 1 (q)
        (evalo
