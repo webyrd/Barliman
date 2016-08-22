@@ -423,21 +423,25 @@
   (syntax-rules ()
     ((_ ((name lvar) ...) (g0 g ...) ...)
      (lambdag@ (st)
-       (let ((name (walk lvar (state-S st))) ...)
+       (let* ((name (walk lvar (state-S st))) ...
+              (depth (state-depth st))
+              (goal (lambdag@ (st) ((conde (g0 g ...) ...)
+                                    (state-depth-set st depth)))))
          (if (ormap var? (list name ...))
-           ((conde (g0 g ...) ...) st)
-           (bind (state-depth-deepen (state-with-scope st (new-scope)))
-                 (lambdag@ (st) (mplus1* (bind*-depth st g0 g ...) ...)))))))))
+           (state-deferred-defer st goal)
+           (goal st)))))))
 
 (define-syntax conde1$
   (syntax-rules ()
     ((_ ((name lvar) ...) (g0 g ...) ...)
      (lambdag@ (st)
-       (let ((name (walk lvar (state-S st))) ...)
+       (let* ((name (walk lvar (state-S st))) ...
+              (depth (state-depth st))
+              (goal (lambdag@ (st) ((conde$ (g0 g ...) ...)
+                                    (state-depth-set st depth)))))
          (if (ormap var? (list name ...))
-           ((conde$ (g0 g ...) ...) st)
-           (let ((st (state-with-scope st (new-scope))))
-             (mplus1* (bind*-depth st g0 g ...) ...))))))))
+           (state-deferred-defer st goal)
+           (goal st)))))))
 
 (define-syntax mplus*
   (syntax-rules ()
