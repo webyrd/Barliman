@@ -202,8 +202,25 @@
                max-search-depth (< max-search-depth next-depth))
         (mzero)
         (state (state-S st) (state-C st) next-depth (state-deferred st))))))
+(define state-deferred-defer
+  (lambda (st goal)
+    (state (state-S st)
+           (state-C st)
+           (state-depth st)
+           (cons goal (state-deferred st)))))
+(define state-deferred-resume
+  (lambda (st)
+    (let ((deferred (state-deferred st)))
+      (if (null? deferred)
+        st
+        ((fold-left (lambda (g1 g0)
+                      (lambda (st)
+                        (bind (bind (g0 st) state-deferred-resume) g1)))
+                    unit
+                    deferred)
+         (state (state-S st) (state-C st) (state-depth st) '()))))))
 
-(define empty-state (state empty-subst empty-C 0 '('() '())))
+(define empty-state (state empty-subst empty-C 0 '()))
 
 (define state-with-scope
   (lambda (st new-scope)
@@ -342,7 +359,7 @@
     ((_ n (q) g0 g ...)
      (take n
        (inc
-         ((fresh (q) g0 g ...
+         ((fresh (q) g0 g ... state-deferred-resume
             (lambdag@ (st)
               (let ((st (state-with-scope st nonlocal-scope)))
                 (let ((z ((reify q) st)))
