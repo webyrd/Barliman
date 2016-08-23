@@ -45,7 +45,7 @@
     ((fresh (x body)
        (== `(lambda ,x ,body) expr)
        (== `(closure (lambda ,x ,body) ,env) val)
-       (conde1$ (((x x)))
+       (conde$
          ;; Variadic
          ((symbolo x))
          ;; Multi-argument
@@ -67,7 +67,7 @@
        (== `(letrec ((,p-name (lambda ,x ,body)))
               ,letrec-body)
            expr)
-       (conde1$ (((x x)))
+       (conde$
          ; Variadic
          ((symbolo x))
          ; Multiple argument
@@ -84,9 +84,9 @@
 (define (lookupo x env t)
   (fresh (y b rest)
     (== `((,y . ,b) . ,rest) env)
-    (conde1 (((x x) (y y)))
+    (conde;1 (((x x) (y y)))
       ((== x y)
-       (conde1 (((b b)))
+       (conde;1 (((b b)))
          ((== `(val . ,t) b))
          ((fresh (lam-expr)
             (== `(rec . ,lam-expr) b)
@@ -97,17 +97,19 @@
 (define (try-lookup-before x env t alts)
   (lambdag@ (st)
     (let-values (((rgenv venv) (list-split-ground st env)))
-      (let loop ((rgenv rgenv) (alts (conde1$ (((x x)))
+      (let loop ((rgenv rgenv) (alts (conde$ ;1$ (((x x)))
                                        ((symbolo x) (lookupo x venv t))
-                                       ((not-symbolo x) alts))))
+                                       (alts))))
         (if (null? rgenv) (alts st)
           (let ((rib (car rgenv)))
             (loop (cdr rgenv)
               (fresh (y b)
                 (== `(,y . ,b) rib)
-                (conde1$ (((x x) (y y)))
+                (conde$ ;1$ ((;(x x)
+                           ;(y y)
+                           ;))
                   ((symbolo x) (== x y)
-                   (conde1$ (((b b)))
+                   (conde$ ;1$ (((b b)))
                      ((== `(val . ,t) b))
                      ((fresh (lam-expr)
                              (== `(rec . ,lam-expr) b)
@@ -123,7 +125,7 @@
        (not-in-envo x rest)))))
 
 (define (eval-listo expr env val)
-  (conde1 (((expr expr) (env env)))
+  (conde1 (((expr expr)) ((val val)))
     ((== '() expr)
      (== '() val))
     ((fresh (a d v-a v-d)
@@ -176,7 +178,7 @@
        (list-of-symbolso d)))))
 
 (define (ext-env*o x* a* env out)
-  (conde1 (((x* x*)))
+  (conde1 (((x* x*)) ((a* a*)))
     ((== '() x*) (== '() a*) (== env out))
     ((fresh (x a dx* da* env2)
        (== `(,x . ,dx*) x*)
@@ -186,7 +188,7 @@
        (ext-env*o dx* da* env2 out)))))
 
 (define (eval-primo prim-id a* val)
-  (conde1$ (((prim-id prim-id)))
+  (conde$ ;1$ (((prim-id prim-id)))
     [(== prim-id 'cons)
      (fresh (a d)
        (== `(,a ,d) a*)
@@ -235,7 +237,7 @@
     ((or-primo expr env val))))
 
 (define (boolean-primo expr env val)
-  (conde1$ (((expr expr)))
+  (conde1$ (((expr expr)) ((val val)))
     ((== #t expr) (== #t val))
     ((== #f expr) (== #f val))))
 
