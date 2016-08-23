@@ -204,21 +204,24 @@
         (state (state-S st) (state-C st) next-depth (state-deferred st))))))
 (define state-deferred-defer
   (lambda (st goal)
-    (state (state-S st)
-           (state-C st)
-           (state-depth st)
-           (cons goal (state-deferred st)))))
+    (let ((deferred (state-deferred st)))
+      (if deferred
+        (state (state-S st)
+               (state-C st)
+               (state-depth st)
+               (cons goal (state-deferred st)))
+        (goal st)))))
 (define state-deferred-resume
   (lambda (st)
     (let ((deferred (state-deferred st)))
-      (if (null? deferred)
-        st
+      (if (and deferred (pair? deferred))
         ((fold-left (lambda (g1 g0)
                       (lambda (st)
-                        (bind (bind (g0 st) state-deferred-resume) g1)))
+                        (bind (g0 st) g1)))
                     unit
                     deferred)
-         (state (state-S st) (state-C st) (state-depth st) '()))))))
+         (state (state-S st) (state-C st) (state-depth st) #f))
+        st))))
 
 (define empty-state (state empty-subst empty-C 0 '()))
 
