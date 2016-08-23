@@ -422,29 +422,27 @@
        (mplus0* unpruned e ...)
        ((c0) (inc (mplus unpruned (inc (mplus* c0 e ...)))))))))
 
-(define-syntax conde1
+(define-syntax let**
   (syntax-rules ()
-    ((_ ((name lvar) ...) (g0 g ...) ...)
-     (lambdag@ (st)
-       (let* ((name (walk lvar (state-S st))) ...
-              (depth (state-depth st))
-              (goal (lambdag@ (st) ((conde (g0 g ...) ...)
-                                    (state-depth-set st depth)))))
-         (if (ormap var? (list name ...))
-           (state-deferred-defer st goal)
-           (goal st)))))))
+    ((_ () body) body)
+    ((_ (((name val) ...) ... ((name1 val1) ...)) body ...)
+     (let** (((name val) ...) ...) (let* ((name1 val1) ...) body ...)))))
 
-(define-syntax conde1$
+(define-syntax conde1^
   (syntax-rules ()
-    ((_ ((name lvar) ...) (g0 g ...) ...)
+    ((_ conde^ (((name lvar) ...) ...) (g0 g ...) ...)
      (lambdag@ (st)
-       (let* ((name (walk lvar (state-S st))) ...
-              (depth (state-depth st))
-              (goal (lambdag@ (st) ((conde$ (g0 g ...) ...)
-                                    (state-depth-set st depth)))))
-         (if (ormap var? (list name ...))
+       (let** (((name (walk lvar (state-S st))) ...) ...
+               ((depth (state-depth st))
+                (goal (lambdag@ (st) ((conde^ (g0 g ...) ...)
+                                      (state-depth-set st depth))))))
+         (if (and (ormap var? (list name ...)) ...)
            (state-deferred-defer st goal)
            (goal st)))))))
+(define-syntax conde1
+  (syntax-rules () ((_ body ...) (conde1^ conde body ...))))
+(define-syntax conde1$
+  (syntax-rules () ((_ body ...) (conde1^ conde$ body ...))))
 
 (define-syntax mplus*
   (syntax-rules ()
