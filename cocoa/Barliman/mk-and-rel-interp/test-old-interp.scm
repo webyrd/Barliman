@@ -28,6 +28,7 @@
                          ;; Multi-argument
                          (eval-expo rator env `(closure (lambda ,x* ,body) ,env^))
                          (ext-env*o x* a* env^ res)
+                         ; replacing eval-application with these may be faster with multi-level defer
                          ;(eval-expo body res val)
                          ;(eval-listo rands env a*)
                          (eval-application rands env a* (eval-expo body res val))
