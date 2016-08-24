@@ -178,7 +178,7 @@
 ; TODO: use set! to choose appropriate max-search-depth per-run?
 (define max-search-depth
   ;#f  ; unlimited depth
-  70   ; reasonable depth for typical Barliman problems?
+  100   ; reasonable depth for typical Barliman problems?
   )
 
 (define state
