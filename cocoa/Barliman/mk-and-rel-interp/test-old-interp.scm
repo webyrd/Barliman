@@ -188,7 +188,7 @@
        (ext-env*o dx* da* env2 out)))))
 
 (define (eval-primo prim-id a* val)
-  (conde$ ;1$ (((prim-id prim-id)))
+  (conde1$ (((prim-id prim-id)))
     [(== prim-id 'cons)
      (fresh (a d)
        (== `(,a ,d) a*)
