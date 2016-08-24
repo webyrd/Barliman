@@ -10,74 +10,88 @@
   (try-lookup-before expr env val (eval-expo-rest expr env val)))
 
 (define (eval-expo-rest expr env val)
-  (conde1 (((expr expr) (env env)))
-    ((numbero expr) (== expr val))
+  (lambdag@ (st)
+    (let* ((expr (walk expr (state-S st)))
+           (env (walk env (state-S st)))
+           (depth (state-depth st))
+           (goal (lambdag@ (st)
+                   ((conde
+                      ((numbero expr) (== expr val))
+                      ((fresh (rator x* rands a* prim-id)
+                         (== `(,rator . ,rands) expr)
+                         (eval-expo rator env `(prim . ,prim-id))
+                         (eval-primo prim-id a* val)
+                         (eval-listo rands env a*)))
 
-    ((fresh (rator x* rands a* prim-id)
-       (== `(,rator . ,rands) expr)
-       (eval-expo rator env `(prim . ,prim-id))
-       (eval-primo prim-id a* val)
-       (eval-listo rands env a*)))
+                      ((fresh (rator x* rands body env^ a* res)
+                         (== `(,rator . ,rands) expr)
+                         ;; Multi-argument
+                         (eval-expo rator env `(closure (lambda ,x* ,body) ,env^))
+                         (ext-env*o x* a* env^ res)
+                         ;(eval-expo body res val)
+                         ;(eval-listo rands env a*)
+                         (eval-application rands env a* (eval-expo body res val))
+                         ))
 
-    ((fresh (rator x* rands body env^ a* res)
-       (== `(,rator . ,rands) expr)
-       ;; Multi-argument
-       (eval-expo rator env `(closure (lambda ,x* ,body) ,env^))
-       (ext-env*o x* a* env^ res)
-       (eval-application rands env a* (eval-expo body res val))))
+                      ((if-primo expr env val))
 
-    ((if-primo expr env val))
+                      ((fresh (rator x rands body env^ a* res)
+                         (== `(,rator . ,rands) expr)
+                         ;; variadic
+                         (symbolo x)
+                         (== `((,x . (val . ,a*)) . ,env^) res)
+                         (eval-expo rator env `(closure (lambda ,x ,body) ,env^))
+                         (eval-expo body res val)
+                         (eval-listo rands env a*)))
 
-    ((fresh (rator x rands body env^ a* res)
-       (== `(,rator . ,rands) expr)
-       ;; variadic
-       (symbolo x)
-       (== `((,x . (val . ,a*)) . ,env^) res)
-       (eval-expo rator env `(closure (lambda ,x ,body) ,env^))
-       (eval-expo body res val)
-       (eval-listo rands env a*)))
+                      ((== `(quote ,val) expr)
+                       (absento 'closure val)
+                       (absento 'prim val)
+                       (not-in-envo 'quote env))
 
-    ((== `(quote ,val) expr)
-     (absento 'closure val)
-     (absento 'prim val)
-     (not-in-envo 'quote env))
+                      ((fresh (x body)
+                         (== `(lambda ,x ,body) expr)
+                         (== `(closure (lambda ,x ,body) ,env) val)
+                         (conde$
+                           ;; Variadic
+                           ((symbolo x))
+                           ;; Multi-argument
+                           ((list-of-symbolso x)))
+                         (not-in-envo 'lambda env)))
 
-    ((fresh (x body)
-       (== `(lambda ,x ,body) expr)
-       (== `(closure (lambda ,x ,body) ,env) val)
-       (conde$
-         ;; Variadic
-         ((symbolo x))
-         ;; Multi-argument
-         ((list-of-symbolso x)))
-       (not-in-envo 'lambda env)))
+                      ;; WEB 25 May 2016 -- This rather budget version of 'begin' is
+                      ;; useful for separating 'define' from the expression 'e',
+                      ;; specifically for purposes of Barliman.
+                      ((fresh (defn args name body e)
+                         (== `(begin ,defn ,e) expr)
+                         (== `(define ,name (lambda ,args ,body)) defn)
+                         (eval-expo `(letrec ((,name (lambda ,args ,body))) ,e) env val)))
 
-    ;; WEB 25 May 2016 -- This rather budget version of 'begin' is
-    ;; useful for separating 'define' from the expression 'e',
-    ;; specifically for purposes of Barliman.
-    ((fresh (defn args name body e)
-       (== `(begin ,defn ,e) expr)
-       (== `(define ,name (lambda ,args ,body)) defn)
-       (eval-expo `(letrec ((,name (lambda ,args ,body))) ,e) env val)))
+                      ((handle-matcho expr env val))
 
-    ((handle-matcho expr env val))
+                      ((fresh (p-name x body letrec-body)
+                         ;; single-function variadic letrec version
+                         (== `(letrec ((,p-name (lambda ,x ,body)))
+                                ,letrec-body)
+                             expr)
+                         (conde$
+                           ; Variadic
+                           ((symbolo x))
+                           ; Multiple argument
+                           ((list-of-symbolso x)))
+                         (not-in-envo 'letrec env)
+                         (eval-expo letrec-body
+                                    `((,p-name . (rec . (lambda ,x ,body))) . ,env)
+                                    val)))
 
-    ((fresh (p-name x body letrec-body)
-       ;; single-function variadic letrec version
-       (== `(letrec ((,p-name (lambda ,x ,body)))
-              ,letrec-body)
-           expr)
-       (conde$
-         ; Variadic
-         ((symbolo x))
-         ; Multiple argument
-         ((list-of-symbolso x)))
-       (not-in-envo 'letrec env)
-       (eval-expo letrec-body
-                  `((,p-name . (rec . (lambda ,x ,body))) . ,env)
-                  val)))
+                      ((prim-expo expr env val)))
+                    (state-depth-set st depth)))))
 
-    ((prim-expo expr env val))))
+      (if (or (var? expr)
+              (var? env)
+              (and (pair? expr) (var? (walk (car expr) (state-S st)))))
+        (state-deferred-defer st goal)
+        (goal st)))))
 
 (define empty-env '())
 
