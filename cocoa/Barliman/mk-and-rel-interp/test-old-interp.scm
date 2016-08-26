@@ -1204,6 +1204,134 @@
            (sym _.0 _.1)))))
 
 (time
+  (test 'interp-0
+    (run 1 (defn)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6"))
+            (g7 (gensym "g7")))
+        (fresh (a b c d)
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (absento g7 defn)
+          (== `(define eval-expr
+                 (lambda (expr env)
+                   (match expr
+                     [`(quote ,datum) datum]
+                     [`(lambda (,(? symbol? x)) ,body)
+                       (lambda (a)
+                         (eval-expr body (lambda (y)
+                                           (if (equal? ,a ,b)
+                                             ,c
+                                             (env ,d)))))]
+                     [(? symbol? x) (env x)]
+                     [`(cons ,e1 ,e2) (cons (eval-expr e1 env) (eval-expr e2 env))]
+                     [`(,rator ,rand) ((eval-expr rator env) (eval-expr rand env))])))
+              defn)
+          (evalo `(begin
+                    ,defn
+                    (list
+                      (eval-expr '((lambda (y) y) ',g1) 'initial-env)
+                      (eval-expr '(((lambda (z) z) (lambda (v) v)) ',g2) 'initial-env)
+                      (eval-expr '(((lambda (a) (a a)) (lambda (b) b)) ',g3) 'initial-env)
+                      (eval-expr '(((lambda (c) (lambda (d) c)) ',g4) ',g5) 'initial-env)
+                      (eval-expr '(((lambda (f) (lambda (v1) (f (f v1)))) (lambda (e) e)) ',g6) 'initial-env)
+                      (eval-expr '((lambda (g) ((g g) g)) (lambda (i) (lambda (j) ',g7))) 'initial-env)
+                      ))
+                 (list
+                   g1
+                   g2
+                   g3
+                   g4
+                   g6
+                   g7
+                   )))))
+    '(((define eval-expr
+         (lambda (expr env)
+           (match expr
+             [`(quote ,datum) datum]
+             [`(lambda (,(? symbol? x)) ,body)
+               (lambda (a)
+                 (eval-expr body (lambda (y)
+                                   (if (equal? y x)
+                                     a
+                                     (env y)))))]
+             [(? symbol? x) (env x)]
+             [`(cons ,e1 ,e2) (cons (eval-expr e1 env) (eval-expr e2 env))]
+             [`(,rator ,rand) ((eval-expr rator env) (eval-expr rand env))])))))))
+
+;(time
+  ;(test 'interp-1
+    ;(run 1 (defn)
+      ;(let ((g1 (gensym "g1"))
+            ;(g2 (gensym "g2"))
+            ;(g3 (gensym "g3"))
+            ;(g4 (gensym "g4"))
+            ;(g5 (gensym "g5"))
+            ;(g6 (gensym "g6"))
+            ;(g7 (gensym "g7")))
+        ;(fresh (a b c d)
+          ;(absento g1 defn)
+          ;(absento g2 defn)
+          ;(absento g3 defn)
+          ;(absento g4 defn)
+          ;(absento g5 defn)
+          ;(absento g6 defn)
+          ;(absento g7 defn)
+          ;(== `(define eval-expr
+                 ;(lambda (expr env)
+                   ;(match expr
+                     ;[`(quote ,datum) datum]
+                     ;[`(lambda (,(? symbol? x)) ,body)
+                       ;(lambda (a)
+                         ;(eval-expr body (lambda (y)
+                                           ;(if (equal? ,a ,b)
+                                             ;,c
+                                             ;,d))))]
+                     ;[(? symbol? x) (env x)]
+                     ;[`(cons ,e1 ,e2) (cons (eval-expr e1 env) (eval-expr e2 env))]
+                     ;[`(,rator ,rand) ((eval-expr rator env) (eval-expr rand env))])))
+              ;defn)
+          ;(evalo `(begin
+                    ;,defn
+                    ;(list
+                      ;(eval-expr '((lambda (y) y) ',g1) 'initial-env)
+                      ;(eval-expr '(((lambda (z) z) (lambda (v) v)) ',g2) 'initial-env)
+                      ;(eval-expr '(((lambda (a) (a a)) (lambda (b) b)) ',g3) 'initial-env)
+                      ;(eval-expr '(((lambda (c) (lambda (d) c)) ',g4) ',g5) 'initial-env)
+                      ;(eval-expr '(((lambda (f) (lambda (v1) (f (f v1)))) (lambda (e) e)) ',g6) 'initial-env)
+                      ;(eval-expr '((lambda (g) ((g g) g)) (lambda (i) (lambda (j) ',g7))) 'initial-env)
+                      ;))
+                 ;(list
+                   ;g1
+                   ;g2
+                   ;g3
+                   ;g4
+                   ;g6
+                   ;g7
+                   ;)))))
+    ;'(((define eval-expr
+         ;(lambda (expr env)
+           ;(match expr
+             ;[`(quote ,datum) datum]
+             ;[`(lambda (,(? symbol? x)) ,body)
+               ;(lambda (a)
+                 ;(eval-expr body (lambda (y)
+                                   ;(if (equal? y x)
+                                     ;a
+                                     ;(env y)))))]
+             ;[(? symbol? x) (env x)]
+             ;[`(cons ,e1 ,e2) (cons (eval-expr e1 env) (eval-expr e2 env))]
+             ;[`(,rator ,rand) ((eval-expr rator env) (eval-expr rand env))])))))))
+
+(time
  (test 'append-hard-12-gensym
    (run 1 (defn)
      (let ((g1 (gensym "g1"))
