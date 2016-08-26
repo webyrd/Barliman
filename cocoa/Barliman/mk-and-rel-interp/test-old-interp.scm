@@ -1462,7 +1462,7 @@
                   (append (cdr _.0) _.1)))))
       (sym _.0 _.1)))))
 
-(time (test 'reverse-hard-1
+(time (test 'reverse-1
   (run 1 (q r s)
     (evalo `(begin
               (define append
@@ -1483,23 +1483,331 @@
           (list '() '(a) '(bar foo) '(3 2 1))))
   '(((append (cdr xs) (list (car xs)))))))
 
-;(time (test 'reverse-hard-2
-  ;(run 1 (q r s)
-    ;(evalo `(begin
-              ;(define append
-                ;(lambda (l s)
-                  ;(if (null? l) s
-                    ;(cons (car l)
-                          ;(append (cdr l) s)))))
-              ;(begin
-                ;(define reverse
-                  ;(lambda (xs)
-                    ;(if (null? xs) '()
-                      ;(append (,q ,r) ,s))))
-                ;(list
-                  ;(reverse '())
-                  ;(reverse '(a))
-                  ;(reverse '(foo bar))
-                  ;(reverse '(1 2 3)))))
-           ;(list '() '(a) '(bar foo) '(3 2 1))))
-  ;'(((append (cdr xs) (list (car xs)))))))
+(time (test 'reverse-2
+  (run 1 (defn)
+    (let ((g1 (gensym "g1"))
+          (g2 (gensym "g2"))
+          (g3 (gensym "g3"))
+          (g4 (gensym "g4"))
+          (g5 (gensym "g5"))
+          (g6 (gensym "g6"))
+          (g7 (gensym "g7")))
+      (fresh (q r s)
+        (absento g1 defn)
+        (absento g2 defn)
+        (absento g3 defn)
+        (absento g4 defn)
+        (absento g5 defn)
+        (absento g6 defn)
+        (absento g7 defn)
+        (== `(define reverse
+               (lambda (xs)
+                 (if (null? xs)
+                   '()
+                   (,q (reverse ,r) ,s))))
+            defn)
+        (evalo `(begin
+                  (define append
+                    (lambda (l s)
+                      (if (null? l) s
+                        (cons (car l)
+                              (append (cdr l) s)))))
+                  (begin
+                    ,defn
+                    (list
+                      (reverse '())
+                      (reverse '(,g1))
+                      (reverse '(,g2 ,g3))
+                      (reverse '(,g4 ,g5 ,g6)))))
+               (list '() `(,g1) `(,g3 ,g2) `(,g6 ,g5 ,g4))))))
+  '(((define reverse
+       (lambda (xs)
+         (if (null? xs)
+           '()
+           (append (reverse (cdr xs))
+                   (list (car xs))))))))))
+
+;(time (test 'reverse-3
+  ;(run 1 (defn)
+    ;(let ((g1 (gensym "g1"))
+          ;(g2 (gensym "g2"))
+          ;(g3 (gensym "g3"))
+          ;(g4 (gensym "g4"))
+          ;(g5 (gensym "g5"))
+          ;(g6 (gensym "g6"))
+          ;(g7 (gensym "g7")))
+      ;(fresh (q r s)
+        ;(absento g1 defn)
+        ;(absento g2 defn)
+        ;(absento g3 defn)
+        ;(absento g4 defn)
+        ;(absento g5 defn)
+        ;(absento g6 defn)
+        ;(absento g7 defn)
+        ;(== `(define reverse
+               ;(lambda (xs)
+                 ;(if (null? xs)
+                   ;'()
+                   ;(append (,q ,r) ,s))))
+            ;defn)
+        ;(evalo `(begin
+                  ;(define append
+                    ;(lambda (l s)
+                      ;(if (null? l) s
+                        ;(cons (car l)
+                              ;(append (cdr l) s)))))
+                  ;(begin
+                    ;,defn
+                    ;(list
+                      ;(reverse '())
+                      ;(reverse '(,g1))
+                      ;(reverse '(,g2 ,g3))
+                      ;(reverse '(,g4 ,g5 ,g6)))))
+               ;(list '() `(,g1) `(,g3 ,g2) `(,g6 ,g5 ,g4))))))
+  ;'(((define reverse
+       ;(lambda (xs)
+         ;(if (null? xs)
+           ;'()
+           ;(append (reverse (cdr xs))
+                   ;(list (car xs))))))))))
+
+;(time (test 'reverse-4
+  ;(run 1 (defn)
+    ;(let ((g1 (gensym "g1"))
+          ;(g2 (gensym "g2"))
+          ;(g3 (gensym "g3"))
+          ;(g4 (gensym "g4"))
+          ;(g5 (gensym "g5"))
+          ;(g6 (gensym "g6"))
+          ;(g7 (gensym "g7")))
+      ;(fresh (q r)
+        ;(absento g1 defn)
+        ;(absento g2 defn)
+        ;(absento g3 defn)
+        ;(absento g4 defn)
+        ;(absento g5 defn)
+        ;(absento g6 defn)
+        ;(absento g7 defn)
+        ;(== `(define reverse
+               ;(lambda (xs)
+                 ;(if (null? xs)
+                   ;'()
+                   ;(append ,q ,r))))
+            ;defn)
+        ;(evalo `(begin
+                  ;(define append
+                    ;(lambda (l s)
+                      ;(if (null? l) s
+                        ;(cons (car l)
+                              ;(append (cdr l) s)))))
+                  ;(begin
+                    ;,defn
+                    ;(list
+                      ;(reverse '())
+                      ;(reverse '(,g1))
+                      ;(reverse '(,g2 ,g3))
+                      ;(reverse '(,g4 ,g5 ,g6)))))
+               ;(list '() `(,g1) `(,g3 ,g2) `(,g6 ,g5 ,g4))))))
+  ;'(((define reverse
+       ;(lambda (xs)
+         ;(if (null? xs)
+           ;'()
+           ;(append (reverse (cdr xs))
+                   ;(list (car xs))))))))))
+
+;(time (test 'reverse-5
+  ;(run 1 (defn)
+    ;(let ((g1 (gensym "g1"))
+          ;(g2 (gensym "g2"))
+          ;(g3 (gensym "g3"))
+          ;(g4 (gensym "g4"))
+          ;(g5 (gensym "g5"))
+          ;(g6 (gensym "g6"))
+          ;(g7 (gensym "g7")))
+      ;(fresh (q)
+        ;(absento g1 defn)
+        ;(absento g2 defn)
+        ;(absento g3 defn)
+        ;(absento g4 defn)
+        ;(absento g5 defn)
+        ;(absento g6 defn)
+        ;(absento g7 defn)
+        ;(absento 'match defn)
+        ;(== `(define reverse
+               ;(lambda (xs)
+                 ;(if (null? xs)
+                   ;'()
+                   ;,q)))
+            ;defn)
+        ;(evalo `(begin
+                  ;(define append
+                    ;(lambda (l s)
+                      ;(if (null? l) s
+                        ;(cons (car l)
+                              ;(append (cdr l) s)))))
+                  ;(begin
+                    ;,defn
+                    ;(list
+                      ;(reverse '())
+                      ;(reverse '(,g1))
+                      ;(reverse '(,g2 ,g3))
+                      ;(reverse '(,g4 ,g5 ,g6)))
+                    ;)
+                  ;)
+               ;(list '() `(,g1) `(,g3 ,g2) `(,g6 ,g5 ,g4))))))
+  ;'(((define reverse
+       ;(lambda (xs)
+         ;(if (null? xs)
+           ;'()
+           ;(append (reverse (cdr xs))
+                   ;(list (car xs))))))))))
+
+;(time (test 'reverse-6
+  ;(run 1 (defn)
+    ;(let ((g1 (gensym "g1"))
+          ;(g2 (gensym "g2"))
+          ;(g3 (gensym "g3"))
+          ;(g4 (gensym "g4"))
+          ;(g5 (gensym "g5"))
+          ;(g6 (gensym "g6"))
+          ;(g7 (gensym "g7")))
+      ;(fresh (q r s)
+        ;(absento g1 defn)
+        ;(absento g2 defn)
+        ;(absento g3 defn)
+        ;(absento g4 defn)
+        ;(absento g5 defn)
+        ;(absento g6 defn)
+        ;(absento g7 defn)
+        ;(== `(define reverse
+               ;(lambda (xs)
+                 ;(if ,q ,r ,s)))
+            ;defn)
+        ;(evalo `(begin
+                  ;(define foldl
+                    ;(lambda (f acc xs)
+                      ;(if (null? xs)
+                        ;acc
+                        ;(foldl f (f (car xs) acc) (cdr xs)))))
+                  ;(begin
+                    ;,defn
+                    ;(list
+                      ;(reverse '())
+                      ;(reverse '(,g1))
+                      ;(reverse '(,g2 ,g3))
+                      ;(reverse '(,g4 ,g5 ,g6)))))
+               ;(list '() `(,g1) `(,g3 ,g2) `(,g6 ,g5 ,g4))))))
+  ;'(((define reverse
+       ;(lambda (xs)
+         ;(if (null? xs)
+           ;xs
+           ;(foldl cons (list) xs))))))))
+
+(time (test 'reverse-7
+  (run 1 (defn)
+    (let ((g1 (gensym "g1"))
+          (g2 (gensym "g2"))
+          (g3 (gensym "g3"))
+          (g4 (gensym "g4"))
+          (g5 (gensym "g5"))
+          (g6 (gensym "g6"))
+          (g7 (gensym "g7")))
+      (fresh (q r s)
+        (absento g1 defn)
+        (absento g2 defn)
+        (absento g3 defn)
+        (absento g4 defn)
+        (absento g5 defn)
+        (absento g6 defn)
+        (absento g7 defn)
+        (== `(define reverse
+               (lambda (xs) ,q))
+            defn)
+        (evalo `(begin
+                  (define foldl
+                    (lambda (f acc xs)
+                      (if (null? xs)
+                        acc
+                        (foldl f (f (car xs) acc) (cdr xs)))))
+                  (begin
+                    ,defn
+                    (list
+                      (reverse '())
+                      (reverse '(,g1))
+                      (reverse '(,g2 ,g3))
+                      (reverse '(,g4 ,g5 ,g6)))))
+               (list '() `(,g1) `(,g3 ,g2) `(,g6 ,g5 ,g4))))))
+  '(((define reverse
+       (lambda (xs)
+         (if (null? xs)
+           xs
+           (foldl cons (list) xs))))))))
+
+;(time (test 'reverse-8
+  ;(run 1 (defn)
+    ;(let ((g1 (gensym "g1"))
+          ;(g2 (gensym "g2"))
+          ;(g3 (gensym "g3"))
+          ;(g4 (gensym "g4"))
+          ;(g5 (gensym "g5"))
+          ;(g6 (gensym "g6"))
+          ;(g7 (gensym "g7")))
+      ;(fresh ()
+        ;(absento g1 defn)
+        ;(absento g2 defn)
+        ;(absento g3 defn)
+        ;(absento g4 defn)
+        ;(absento g5 defn)
+        ;(absento g6 defn)
+        ;(absento g7 defn)
+        ;(evalo `(begin
+                  ;(define foldl
+                    ;(lambda (f acc xs)
+                      ;(if (null? xs)
+                        ;acc
+                        ;(foldl f (f (car xs) acc) (cdr xs)))))
+                  ;(begin
+                    ;,defn
+                    ;(list
+                      ;(reverse '())
+                      ;(reverse '(,g1))
+                      ;(reverse '(,g2 ,g3))
+                      ;(reverse '(,g4 ,g5 ,g6)))))
+               ;(list '() `(,g1) `(,g3 ,g2) `(,g6 ,g5 ,g4))))))
+  ;'(((define reverse
+       ;(lambda (xs)
+         ;(if (null? xs)
+           ;xs
+           ;(foldl cons (list) xs))))))))
+
+(time (test 'rev-tailcall-1
+  (run 1 (defn)
+    (let ((g1 (gensym "g1"))
+          (g2 (gensym "g2"))
+          (g3 (gensym "g3"))
+          (g4 (gensym "g4"))
+          (g5 (gensym "g5"))
+          (g6 (gensym "g6"))
+          (g7 (gensym "g7")))
+      (fresh (q r s)
+        (absento g1 defn)
+        (absento g2 defn)
+        (absento g3 defn)
+        (absento g4 defn)
+        (absento g5 defn)
+        (absento g6 defn)
+        (absento g7 defn)
+        (evalo `(begin
+                  ,defn
+                  (list
+                    (rev-tailcall '() ',g7)
+                    (rev-tailcall '(,g1) ',g7)
+                    (rev-tailcall '(,g2 ,g3) ',g7)
+                    (rev-tailcall '(,g4 ,g5 ,g6) ',g7)))
+               (list g7 `(,g1 . ,g7) `(,g3 ,g2 . ,g7) `(,g6 ,g5 ,g4 . ,g7))))))
+  '(((define rev-tailcall
+       (lambda (_.0 _.1)
+         (if (null? _.0)
+           _.1
+           (rev-tailcall (cdr _.0) (cons (car _.0) _.1)))))
+     (sym _.0 _.1)))))
