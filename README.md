@@ -272,7 +272,7 @@ For more interesting answers, you can use the logic variables A through G, upper
 
 ## Acknowledgements and thanks
 
-Thanks to Michael Ballantyne, Kenichi Asai, Alan Borning, Nada Amin, Guannan Wei, Pierce Darragh, Alex Warth, Michael Adams, Tim Johnson, Evan Czaplicki, Stephanie Weirich, Molly Feldman, Joe Osborn, Nehal Patel, Andrea Magnorsky, Reid McKenzie, Emina Torlak, Chas Emerick, Martin Clausen, Devon Zuegel, Daniel Selifonov, Greg Rosenblatt, Michael Nielsen, David Kahn, Brian Mastenbrook, Orchid Hybrid, Rob Zinkov, Margaret Staples, Ziyao Wei, Matt Hammer, Hunter Hutchinson, Bryan Joseph, Cesar Marinho, Michael Bernstein, Bodil Stokke, Dan Friedman, Ron Garcia, Rich Hickey, Phil Wadler, Tom Gilray, Dakota Fisher, Gavin Whelan, Devon Zeugel, Matt Might, participants of my 2016 PEPM tutorial on miniKanren, and particants of the 'As We May Thunk' group (http://webyrd.net/thunk.html), for suggestions, encouragement, and inspiration.
+Thanks to Michael Ballantyne, Kenichi Asai, Alan Borning, Nada Amin, Guannan Wei, Pierce Darragh, Alex Warth, Michael Adams, Tim Johnson, Evan Czaplicki, Stephanie Weirich, Molly Feldman, Joe Osborn, Nehal Patel, Andrea Magnorsky, Reid McKenzie, Emina Torlak, Chas Emerick, Martin Clausen, Devon Zuegel, Daniel Selifonov, Greg Rosenblatt, Michael Nielsen, David Kahn, Brian Mastenbrook, Orchid Hybrid, Rob Zinkov, Margaret Staples, Ziyao Wei, Matt Hammer, Hunter Hutchinson, Bryan Joseph, Cesar Marinho, Michael Bernstein, Bodil Stokke, Dan Friedman, Ron Garcia, Rich Hickey, Phil Wadler, Tom Gilray, Dakota Fisher, Gavin Whelan, Devon Zeugel, Jonas Kölker, Matt Might, participants of my 2016 PEPM tutorial on miniKanren, and particants of the 'As We May Thunk' group (http://webyrd.net/thunk.html), for suggestions, encouragement, and inspiration.
 
 Thanks to Kent Dybvig, Andy Keep, and Cisco Systems for releasing Chez Scheme under an open source license.
 
@@ -290,6 +290,7 @@ Barliman is intended to be an improved version of the very crude 'miniKanren pla
 
 TODO:
 
+* Matt Might suggests using properties like `(append (cons a l) s) == (cons a (append l s))` for synthesizing `append`.
 * Devon Zeugel suggests using a monospace font, and perhaps swapping the tests and the definitions in the main window.  Devon suggests using the number of tests that pass to guide search for auto-repair or other synthesis.  Or, to try to maximize the number of tests that pass, then have the user take over.  Maybe use the number of tests that pass as a score/heuristic for stochastic search.
 * Tom Gilray suggests being able to hover over a ,A logic variable to select/approve a suggested/guessed value for that particular subexpression.  Michael Ballantyne and other people have suggested similar notions, including a scrubber for scrubbing over/selecting a generated/guessed value for a subexpression.
 * replace test input/output edit fields with multi-line edit capabilities similar to that of the 'Definitions' pane
@@ -396,9 +397,11 @@ SUSPECT IDEAS:
 
 INTERESTING IDEAS:
 
+* Tom Gilray suggests using a simplified intermediate representation (IR) that disallows shadowing, has `if` but not `cond`, etc.  Could have the IR be the macro expanded code.  Could possibly reverse engineer/infer macro calls that could have produced the IR.
 * Tom Gilray suggests changing the interface to just have a single editor window, which allows for definitions and for test calls/results.  I suspect this is the right way to go, although it will involve significant changes to Barliman.  Tom also suggests having arrows to the right of each logic variable, showing the current value of each variable. 
 * perhaps use delayed goals to implement arithmetic over floating point numbers, and other tricky operations.  If the arguments do not become instantiated enough, Barliman should be non-commital (can't synthesize code, and can't prove tests are not consistent with the code until the code is more instantiated).
 * Greg Ronsenblatt suggests dividing tests into a 'training' set and a 'test' set, as is done in machine learning to avoid overfitting.  Of course this could also lead into 'propety-based testing', generators, etc.
+* Jonas Kölker suggests synthesizing multiple definitions, or perhaps even all of the Haskell Prelude-style list functions, simultaneously, based on the relationships between the functions, and their Quickcheck-style properties.  He also suggests using properties like `reverse (xs++ys) == reverse ys ++ reverse xs` and `map f (xs++ys) == map f xs ++ map f ys` for synthesis.
 
 
 KNOWN LIMITATIONS:
