@@ -305,6 +305,7 @@
 (define parse-initial-env `((val . (car . (prim . car)))
                             (val . (cdr . (prim . cdr)))
                             (val . (null? . (prim . null?)))
+                            (val . (pair? . (prim . pair?)))
                             (val . (symbol? . (prim . symbol?)))
                             (val . (cons . (prim . cons)))
                             (val . (not . (prim . not)))
@@ -511,6 +512,16 @@
      (fresh (a)
        (== `((,a . ,val)) a*)
        (=/= 'closure a))]
+    [(== prim-id 'pair?)
+     (fresh (v)
+       (== `(,v) a*)
+       (conde
+         ((symbolo v) (== #f val))
+         ((numbero v) (== #f val))
+         ((== '() v) (== #f val))
+         ((fresh (a d)
+            (== `(,a . ,d) v)
+            (== #t val)))))]
     [(== prim-id 'not)
      (fresh (b)
        (== `(,b) a*)
@@ -529,6 +540,7 @@
        (conde
          ((symbolo v) (== #t val))
          ((numbero v) (== #f val))
+         ((== '() v) (== #f val))
          ((fresh (a d)
             (== `(,a . ,d) v)
             (== #f val)))))]
@@ -616,6 +628,7 @@
                       (car . (val . (prim . car)))
                       (cdr . (val . (prim . cdr)))
                       (null? . (val . (prim . null?)))
+                      (pair? . (val . (prim . pair?)))
                       (symbol? . (val . (prim . symbol?)))
                       (not . (val . (prim . not)))
                       (equal? . (val . (prim . equal?)))
