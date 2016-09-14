@@ -24,7 +24,7 @@
        (conde
          ((keywordo expr)
           ;; if expr is a keyword ('lambda', 'begin', 'define', 'letrec', 'and', 'or', 'if', 'match', or whatever)
-          ;; *and* expr is shadowed in the environment, succeed.  Otherwuse, it is a syntax violation.
+          ;; *and* expr is shadowed in the environment, succeed.  Otherwise, it is a syntax violation.
           (fresh (val)
             (lookupo expr env val)))
          ((not-keywordo expr)
@@ -122,7 +122,8 @@
     ((boolean-parseo expr env))
     ((and-parseo expr env))
     ((or-parseo expr env))
-    ((if-parseo expr env))))
+    ((if-parseo expr env))
+    ((cond-parseo expr env))))
 
 (define (boolean-parseo expr env)
   (conde
@@ -149,6 +150,33 @@
     (parse-expo e2 env)
     (parse-expo e3 env)))
 
+(define (cond-parseo expr env)
+  (fresh (c c*)
+    (== `(cond ,c . ,c*) expr)
+    (parse-not-in-envo 'cond env)
+    (parse-cond-clauses `(,c . ,c*) env)))
+
+(define (parse-cond-clauses c* env)
+  (conde
+    ((fresh (test conseq)
+       (== `((,test ,conseq)) c*)
+       (conde
+         ((== 'else test))
+         ((=/= 'else test)
+          (parse-expo test env)))
+       (parse-expo conseq env)))
+    ((fresh (test conseq c*-rest)
+       (== `((,test ,conseq) . ,c*-rest) c*)
+       ;; ensure expressions like (cond (else 5) (6 7))
+       ;; don't parse, unless 'else' has been shadowed
+       (conde
+         ((== 'else test)
+          (fresh (v) (lookupo test env v)))
+         ((=/= 'else test)
+          (parse-expo test env)))
+       (parse-expo conseq env)
+       (parse-cond-clauses c*-rest env)))))
+
 (define keywordo
   (lambda (x)
     (conde
@@ -160,6 +188,7 @@
       ((== 'and x))
       ((== 'or x))
       ((== 'if x))
+      ((== 'conde x))
       ((== 'match x))
       ((== 'quasiquote x))
       ((== 'unquote x)))))
@@ -176,6 +205,7 @@
       (=/= 'and x)
       (=/= 'or x)
       (=/= 'if x)
+      (=/= 'conde x)
       (=/= 'match x)
       (=/= 'quasiquote x)
       (=/= 'unquote x))))
@@ -345,6 +375,8 @@
        (eval-application rands env a* (eval-expo body res val))))
 
     ((if-primo expr env val))
+
+    ((cond-primo expr env val))
 
     ((fresh (rator x rands body env^ a* res)
        (== `(,rator . ,rands) expr)
@@ -619,10 +651,70 @@
     (conde
       ((== #t t) (eval-expo e2 env val))
       ((== #f t) (eval-expo e3 env val))
-      ; Adding this line would restore normal Scheme semantics, but
-      ; unfortunately it defeats the performance improvement we just gained.
-      ;((=/= #t t) (=/= #f t) (eval-expo e2 env val))
+      ;; Adding this line would restore normal Scheme semantics, but
+      ;; unfortunately it defeats the performance improvement we just gained.
+      ;; ((=/= #t t) (=/= #f t) (eval-expo e2 env val))
       )))
+
+(define (cond-primo expr env val)
+  (fresh (c c*)
+    (== `(cond ,c . ,c*) expr)
+    (not-in-envo 'cond env)
+    (cond-clauseso `(,c . ,c*) env val)))
+
+(define (cond-clauseso c* env val)
+  (conde
+    ((fresh (test conseq)
+       (== `((,test ,conseq)) c*)
+       (conde
+         ((== 'else test)
+          (not-in-envo 'else env)
+          ;; the "real" 'else' auxilliary keyword,
+          ;; not shadowed
+          (eval-expo conseq env val))
+         ((fresh (v)
+            ;; Restricted cond, like restricted else, requires
+            ;; all tests to evaluate to a Boolean value.
+            ;; Remove this goal, and uncomment the associated goals,
+            ;; to recover Scheme semantics.
+            (booleano v)
+            (eval-expo test env v)
+            ;; if test is 'else', it must have been shadowed
+            (conde
+              ((== #f v)
+               ;; evaluate to an unspecified value!
+               (== 'unspecified val))
+              ((== #t v)
+               ;; restricted cond, like restricted else, requires
+               ;; all tests to evaluate to a Boolean value
+               (eval-expo conseq env val))
+              ;; Adding this line, *and* removing the (booleano v)
+              ;; goal above, would restore normal Scheme semantics,
+              ;; but unfortunately it defeats the performance
+              ;; improvement we just gained.
+              ;; ((=/= #f v) (=/= #t v) (eval-expo conseq env val))
+              ))))
+       (eval-expo conseq env val)))
+    ((fresh (test conseq c*-rest)
+       (== `((,test ,conseq) . ,c*-rest) c*)
+       (fresh (v)
+         ;; Restricted cond, like restricted else, requires
+         ;; all tests to evaluate to a Boolean value.
+         ;; Remove this goal, and uncomment the associated goals,
+         ;; to recover Scheme semantics.
+         (booleano v)
+         (eval-expo test env v)
+         (conde
+           ((== #f v)
+            (cond-clauseso c*-rest env val))
+           ((== #t v)
+            ;; restricted cond, like restricted else, requires
+            ;; all tests to evaluate to a Boolean value
+            (eval-expo conseq env val))
+           ;; Adding this line would restore normal Scheme semantics, but
+           ;; unfortunately it defeats the performance improvement we just gained.
+           ;; ((=/= #f v) (=/= #t v) (eval-expo conseq env val))
+           ))))))
 
 (define initial-env `((cons . (val . (prim . cons)))
                       (car . (val . (prim . car)))
