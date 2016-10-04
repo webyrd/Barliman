@@ -22,7 +22,7 @@ class RunSchemeOperation: NSOperation {
     let kFailedErrorColor = NSColor.redColor()
     
     let kIllegalSexprString = "Illegal sexpression"
-    let kSyntaxErrorString = "Syntax error"
+    let kParseErrorString = "Syntax error"
     let kEvaluationFailedString = "Evaluation failed"
     
     init(editorWindowController: EditorWindowController, schemeScriptPathString: String, taskType: String) {
@@ -145,7 +145,7 @@ class RunSchemeOperation: NSOperation {
                 if datastring == "parse-error" { // failed to parse!
                     inputField.textColor = self.kParseErrorColor
                     outputField.textColor = self.kParseErrorColor
-                    label.stringValue = self.kSyntaxErrorString
+                    label.stringValue = self.kParseErrorString
                     
                     // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                     self.editorWindowController.schemeOperationAllTests?.cancel()
@@ -243,18 +243,21 @@ class RunSchemeOperation: NSOperation {
                 if self.taskType == "simple" {
                     if datastring == "parse-error" {
                         ewc.schemeDefinitionView.textColor = self.kParseErrorColor
-                        ewc.definitionStatusLabel.stringValue = self.kSyntaxErrorString
+                        ewc.definitionStatusLabel.textColor = self.kParseErrorColor
+                        ewc.definitionStatusLabel.stringValue = self.kParseErrorString
                         
                         // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                         self.editorWindowController.schemeOperationAllTests?.cancel()
                     } else if datastring == "()" {
                         ewc.schemeDefinitionView.textColor = self.kFailedErrorColor
+                        ewc.definitionStatusLabel.textColor = self.kFailedErrorColor
                         ewc.definitionStatusLabel.stringValue = self.kEvaluationFailedString
                         
                         // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                         self.editorWindowController.schemeOperationAllTests?.cancel()
                     } else {
                         ewc.schemeDefinitionView.textColor = self.kDefaultColor
+                        ewc.definitionStatusLabel.textColor = self.kDefaultColor
                         ewc.definitionStatusLabel.stringValue = ""
                     }
                 }
@@ -318,6 +321,7 @@ class RunSchemeOperation: NSOperation {
                 if self.taskType == "simple" {
                     // print("exitStatus = \( exitStatus )")
                     ewc.schemeDefinitionView.textColor = self.kSyntaxErrorColor
+                    ewc.definitionStatusLabel.textColor = self.kSyntaxErrorColor
                     ewc.definitionStatusLabel.stringValue = self.kIllegalSexprString
                 }
                 
