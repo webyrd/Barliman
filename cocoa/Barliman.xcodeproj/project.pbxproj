@@ -211,13 +211,16 @@
 				TargetAttributes = {
 					891E42F11CE6FD8C003C3333 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 					};
 					891E43001CE6FD8D003C3333 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = 891E42F11CE6FD8C003C3333;
 					};
 					891E430B1CE6FD8D003C3333 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = 891E42F11CE6FD8C003C3333;
 					};
 				};
@@ -419,6 +422,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.Barliman;
 				PRODUCT_NAME = Barliman;
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -431,6 +435,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.Barliman;
 				PRODUCT_NAME = Barliman;
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
@@ -443,6 +448,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.BarlimanTests;
 				PRODUCT_NAME = Barliman;
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Barliman.app/Contents/MacOS/Barliman";
 			};
 			name = Debug;
@@ -456,6 +462,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.BarlimanTests;
 				PRODUCT_NAME = Barliman;
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Barliman.app/Contents/MacOS/Barliman";
 			};
 			name = Release;
@@ -468,6 +475,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.BarlimanUITests;
 				PRODUCT_NAME = Barliman;
+				SWIFT_VERSION = 2.3;
 				TEST_TARGET_NAME = Barliman;
 			};
 			name = Debug;
@@ -480,6 +488,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.BarlimanUITests;
 				PRODUCT_NAME = Barliman;
+				SWIFT_VERSION = 2.3;
 				TEST_TARGET_NAME = Barliman;
 			};
 			name = Release;
