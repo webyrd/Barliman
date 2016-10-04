@@ -17,7 +17,7 @@ class RunSchemeOperation: NSOperation {
     var taskType: String
     
     let kDefaultColor = NSColor.blackColor()
-    let kSyntaxErrorColor = NSColor.greenColor()
+    let kSyntaxErrorColor = NSColor.orangeColor()
     let kParseErrorColor = NSColor.magentaColor()
     let kFailedErrorColor = NSColor.redColor()
     
