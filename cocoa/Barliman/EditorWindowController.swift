@@ -404,14 +404,14 @@ class EditorWindowController: NSWindowController {
         // write the temporary file containing the query to the user's Document directory.  This seems a bit naughty.  Where is the right place to put this?  In ~/.barliman, perhaps?
         if let dir = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true).first {
             
-            pathSimple = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_simple)
-            pathTest1 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test1)
-            pathTest2 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test2)
-            pathTest3 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test3)
-            pathTest4 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test4)
-            pathTest5 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test5)
-            pathTest6 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test6)
-            pathAllTests = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_alltests)
+            pathSimple = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_simple)!
+            pathTest1 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test1)!
+            pathTest2 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test2)!
+            pathTest3 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test3)!
+            pathTest4 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test4)!
+            pathTest5 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test5)!
+            pathTest6 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test6)!
+            pathAllTests = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_alltests)!
 
             
             // write the query files
