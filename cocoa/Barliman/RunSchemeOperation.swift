@@ -16,6 +16,11 @@ class RunSchemeOperation: NSOperation {
     var task: NSTask
     var taskType: String
     
+    let kDefaultColor = NSColor.blackColor()
+    let kSyntaxErrorColor = NSColor.greenColor()
+    let kParseErrorColor = NSColor.magentaColor()
+    let kFailedErrorColor = NSColor.redColor()
+    
     let kIllegalSexprString = "Illegal sexpression"
     let kSyntaxErrorString = "Syntax error"
     let kEvaluationFailedString = "Evaluation failed"
@@ -138,8 +143,8 @@ class RunSchemeOperation: NSOperation {
             func onTestCompletion(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField, datastring: String) {
 
                 if datastring == "parse-error" { // failed to parse!
-                    inputField.textColor = .magentaColor()
-                    outputField.textColor = .magentaColor()
+                    inputField.textColor = self.kParseErrorColor
+                    outputField.textColor = self.kParseErrorColor
                     label.stringValue = self.kSyntaxErrorString
                     
                     // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
@@ -155,10 +160,10 @@ class RunSchemeOperation: NSOperation {
                 let endTime = NSDate();
                 let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
                 
-                inputField.textColor = .blackColor()
-                outputField.textColor = .blackColor()
+                inputField.textColor = self.kDefaultColor
+                outputField.textColor = self.kDefaultColor
                 // formatting from realityone's answer to http://stackoverflow.com/questions/24051314/precision-string-format-specifier-in-swift
-                label.textColor = .blackColor()
+                label.textColor = self.kDefaultColor
                 label.stringValue = String(format: "Succeeded (%.2f s)",  timeInterval)
             }
             
@@ -166,10 +171,10 @@ class RunSchemeOperation: NSOperation {
                 let endTime = NSDate();
                 let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
              
-                inputField.textColor = .redColor()
-                outputField.textColor = .redColor()
+                inputField.textColor = self.kFailedErrorColor
+                outputField.textColor = self.kFailedErrorColor
                 // formatting from realityone's answer to http://stackoverflow.com/questions/24051314/precision-string-format-specifier-in-swift
-                label.textColor = .redColor()
+                label.textColor = self.kFailedErrorColor
                 label.stringValue = String(format: "Failed (%.2f s)",  timeInterval)
                 
                 // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
@@ -177,9 +182,9 @@ class RunSchemeOperation: NSOperation {
             }
             
             func onTestSyntaxError(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField) {
-                inputField.textColor = .greenColor()
-                outputField.textColor = .greenColor()
-                label.textColor = .greenColor()
+                inputField.textColor = self.kSyntaxErrorColor
+                outputField.textColor = self.kSyntaxErrorColor
+                label.textColor = self.kSyntaxErrorColor
                 label.stringValue = self.kIllegalSexprString
             }
             
@@ -188,7 +193,7 @@ class RunSchemeOperation: NSOperation {
                 let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
                 
                 bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: guess))
-                label.textColor = .blackColor()
+                label.textColor = self.kDefaultColor
                 label.stringValue = String(format: "Succeeded (%.2f s)",  timeInterval)
                 
                 // Be polite and cancel all the other tests, since they must succeed!
@@ -200,7 +205,7 @@ class RunSchemeOperation: NSOperation {
                 let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
                 
                 bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
-                label.textColor = .redColor()
+                label.textColor = self.kFailedErrorColor
                 label.stringValue = String(format: "Failed (%.2f s)",  timeInterval)
                 
                 // Be polite and cancel all the other tests, since they must succeed!
@@ -209,7 +214,7 @@ class RunSchemeOperation: NSOperation {
 
             func onBestGuessKilled(bestGuessView: NSTextView, label: NSTextField) {
                 bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
-                label.textColor = .blackColor()
+                label.textColor = self.kDefaultColor
                 label.stringValue = ""
             }
             
@@ -217,10 +222,10 @@ class RunSchemeOperation: NSOperation {
             func onSyntaxErrorBestGuess(bestGuessView: NSTextView, label: NSTextField) {
                 
                 // is this line still needed?  seems like old code
-                bestGuessView.setTextColor(.blackColor(), range: NSMakeRange(0, (bestGuessView.textStorage?.length)!))
+                bestGuessView.setTextColor(self.kDefaultColor, range: NSMakeRange(0, (bestGuessView.textStorage?.length)!))
 
                 bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
-                label.textColor = .blackColor()
+                label.textColor = self.kDefaultColor
                 label.stringValue = ""
             }
 
@@ -237,21 +242,19 @@ class RunSchemeOperation: NSOperation {
                 // at least Chez ran to completion!  The query could still have failed, of course
                 if self.taskType == "simple" {
                     if datastring == "parse-error" {
-                        ewc.schemeDefinitionView.textColor = .magentaColor()
+                        ewc.schemeDefinitionView.textColor = self.kParseErrorColor
                         ewc.definitionStatusLabel.stringValue = self.kSyntaxErrorString
                         
                         // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                         self.editorWindowController.schemeOperationAllTests?.cancel()
                     } else if datastring == "()" {
-                        // print("--- turning simple red")
-                        ewc.schemeDefinitionView.textColor = .redColor()
+                        ewc.schemeDefinitionView.textColor = self.kFailedErrorColor
                         ewc.definitionStatusLabel.stringValue = self.kEvaluationFailedString
                         
                         // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                         self.editorWindowController.schemeOperationAllTests?.cancel()
                     } else {
-                        // print("--- turning simple black")
-                        ewc.schemeDefinitionView.textColor = .blackColor()
+                        ewc.schemeDefinitionView.textColor = self.kDefaultColor
                         ewc.definitionStatusLabel.stringValue = ""
                     }
                 }
@@ -313,9 +316,8 @@ class RunSchemeOperation: NSOperation {
             } else {
                 // the query wasn't even a legal s-expression, according to Chez!
                 if self.taskType == "simple" {
-                    // print("--- turning simple green")
                     // print("exitStatus = \( exitStatus )")
-                    ewc.schemeDefinitionView.textColor = .greenColor()
+                    ewc.schemeDefinitionView.textColor = self.kSyntaxErrorColor
                     ewc.definitionStatusLabel.stringValue = self.kIllegalSexprString
                 }
                 
