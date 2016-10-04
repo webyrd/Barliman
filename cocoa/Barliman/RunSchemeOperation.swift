@@ -102,24 +102,37 @@ class RunSchemeOperation: NSOperation {
             case "allTests":
                 ewc.bestGuessStatusLabel.textColor = self.kThinkingColor
                 ewc.bestGuessStatusLabel.stringValue = self.kThinkingString
+                ewc.bestGuessView.textColor = self.kThinkingColor
             case "test1":
                 ewc.test1StatusLabel.textColor = self.kThinkingColor
                 ewc.test1StatusLabel.stringValue = self.kThinkingString
+                ewc.test1InputField.textColor = self.kThinkingColor
+                ewc.test1ExpectedOutputField.textColor = self.kThinkingColor
             case "test2":
                 ewc.test2StatusLabel.textColor = self.kThinkingColor
                 ewc.test2StatusLabel.stringValue = self.kThinkingString
+                ewc.test2InputField.textColor = self.kThinkingColor
+                ewc.test2ExpectedOutputField.textColor = self.kThinkingColor
             case "test3":
                 ewc.test3StatusLabel.textColor = self.kThinkingColor
                 ewc.test3StatusLabel.stringValue = self.kThinkingString
+                ewc.test3InputField.textColor = self.kThinkingColor
+                ewc.test3ExpectedOutputField.textColor = self.kThinkingColor
             case "test4":
                 ewc.test4StatusLabel.textColor = self.kThinkingColor
                 ewc.test4StatusLabel.stringValue = self.kThinkingString
+                ewc.test4InputField.textColor = self.kThinkingColor
+                ewc.test4ExpectedOutputField.textColor = self.kThinkingColor
             case "test5":
                 ewc.test5StatusLabel.textColor = self.kThinkingColor
                 ewc.test5StatusLabel.stringValue = self.kThinkingString
+                ewc.test5InputField.textColor = self.kThinkingColor
+                ewc.test5ExpectedOutputField.textColor = self.kThinkingColor
             case "test6":
                 ewc.test6StatusLabel.textColor = self.kThinkingColor
                 ewc.test6StatusLabel.stringValue = self.kThinkingString
+                ewc.test6InputField.textColor = self.kThinkingColor
+                ewc.test6ExpectedOutputField.textColor = self.kThinkingColor
             default: print("!!!!!!!!!! SWITCHERROR in thinkingColorAndLabel: unknown taskType: \( self.taskType )\n")
             }
         }
