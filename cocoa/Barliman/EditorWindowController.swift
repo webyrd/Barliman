@@ -48,7 +48,7 @@ class EditorWindowController: NSWindowController {
     @IBOutlet weak var test4StatusLabel: NSTextField!
     @IBOutlet weak var test5StatusLabel: NSTextField!
     @IBOutlet weak var test6StatusLabel: NSTextField!
-
+    @IBOutlet weak var bestGuessStatusLabel: NSTextField!
     
 
     var runCodeFromEditPaneTimer: NSTimer?

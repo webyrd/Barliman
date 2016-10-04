@@ -159,7 +159,7 @@ class RunSchemeOperation: NSOperation {
                 outputField.textColor = .blackColor()
                 // formatting from realityone's answer to http://stackoverflow.com/questions/24051314/precision-string-format-specifier-in-swift
                 label.textColor = .blackColor()
-                label.stringValue = String(format: "Passed (%.2f s)",  timeInterval)
+                label.stringValue = String(format: "Succeeded (%.2f s)",  timeInterval)
             }
             
             func onTestFailure(inputField: NSTextField, outputField: NSTextField, label: NSTextField) {
@@ -182,6 +182,50 @@ class RunSchemeOperation: NSOperation {
                 label.textColor = .greenColor()
                 label.stringValue = self.kIllegalSexprString
             }
+            
+            func onBestGuessSuccess(bestGuessView: NSTextView, label: NSTextField, guess: String) {
+                let endTime = NSDate();
+                let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
+                
+                bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: guess))
+                label.textColor = .blackColor()
+                label.stringValue = String(format: "Succeeded (%.2f s)",  timeInterval)
+                
+                // Be polite and cancel all the other tests, since they must succeed!
+                self.editorWindowController.processingQueue.cancelAllOperations()
+            }
+            
+            func onBestGuessFailure(bestGuessView: NSTextView, label: NSTextField) {
+                let endTime = NSDate();
+                let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
+                
+                bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
+                label.textColor = .redColor()
+                label.stringValue = String(format: "Failed (%.2f s)",  timeInterval)
+                
+                // Be polite and cancel all the other tests, since they must succeed!
+                self.editorWindowController.processingQueue.cancelAllOperations()
+            }
+
+            func onBestGuessKilled(bestGuessView: NSTextView, label: NSTextField) {
+                bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
+                label.textColor = .blackColor()
+                label.stringValue = ""
+            }
+            
+            // syntax error was caused by the main code or a test, not by the best guess!
+            func onSyntaxErrorBestGuess(bestGuessView: NSTextView, label: NSTextField) {
+                
+                // is this line still needed?  seems like old code
+                bestGuessView.setTextColor(.blackColor(), range: NSMakeRange(0, (bestGuessView.textStorage?.length)!))
+
+                bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
+                label.textColor = .blackColor()
+                label.stringValue = ""
+            }
+
+
+            
 
             let datastring = NSString(data: data, encoding: NSUTF8StringEncoding) as! String
             let errorDatastring = NSString(data: errorData, encoding: NSUTF8StringEncoding) as! String
@@ -231,12 +275,9 @@ class RunSchemeOperation: NSOperation {
                 }
                 if self.taskType == "allTests" {
                     if datastring == "fail" {
-                        ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
+                        onBestGuessFailure(ewc.bestGuessView, label: ewc.bestGuessStatusLabel)
                     } else {
-                        ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: datastring))
-                        
-                        // Be polite and cancel all the other tests, since they must succeed!
-                        ewc.processingQueue.cancelAllOperations()
+                        onBestGuessSuccess(ewc.bestGuessView, label: ewc.bestGuessStatusLabel, guess: datastring)
                     }
                 }
             } else if exitStatus == 15 {
@@ -245,7 +286,7 @@ class RunSchemeOperation: NSOperation {
                 
                 // allTests must have been cancelled by a failing test, meaning there is no way for allTests to succeed
                 if self.taskType == "allTests" {
-                    ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
+                    onBestGuessKilled(ewc.bestGuessView, label: ewc.bestGuessStatusLabel)
                 }
                 
                 // individual tests must have been cancelled by allTests succeeding, meaning that all the individual tests should succeed
@@ -297,8 +338,7 @@ class RunSchemeOperation: NSOperation {
                     onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test6Spinner, label: ewc.test6StatusLabel)
                 }
                 if taskType == "allTests" {
-                    ewc.bestGuessView.setTextColor(.blackColor(), range: NSMakeRange(0, (ewc.bestGuessView.textStorage?.length)!))
-                    ewc.bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
+                    onSyntaxErrorBestGuess(ewc.bestGuessView, label: ewc.bestGuessStatusLabel)
                 }
             }
             
