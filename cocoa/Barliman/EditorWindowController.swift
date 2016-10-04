@@ -60,6 +60,9 @@ class EditorWindowController: NSWindowController {
     
     let processingQueue: NSOperationQueue = NSOperationQueue()
     
+    // naughty!  also defined in RunSchemeOperation.  Where is the right place to put this?
+    let kDefaultColor = NSColor.blackColor()
+
     
     override var windowNibName: String? {
         return "EditorWindowController"
@@ -476,53 +479,47 @@ class EditorWindowController: NSWindowController {
         
         processingQueue.addOperation(runSchemeOpSimple)
         
+        func resetTestUI(statusLabel: NSTextField, inputField: NSTextField, outputField: NSTextField) {
+            statusLabel.stringValue = ""
+            inputField.textColor = kDefaultColor
+            outputField.textColor = kDefaultColor
+        }
+        
         if processTest1 {
             print("queuing test1")
             processingQueue.addOperation(runSchemeOpTest1)
         } else {
-            test1StatusLabel.stringValue = ""
-            test1InputField.textColor = .blackColor()
-            test1ExpectedOutputField.textColor = .blackColor()
+            resetTestUI(test1StatusLabel, inputField: test1InputField, outputField: test1ExpectedOutputField)
         }
         if processTest2 {
             print("queuing test2")
             processingQueue.addOperation(runSchemeOpTest2)
         } else {
-            test2StatusLabel.stringValue = ""
-            test2InputField.textColor = .blackColor()
-            test2ExpectedOutputField.textColor = .blackColor()
+            resetTestUI(test2StatusLabel, inputField: test2InputField, outputField: test2ExpectedOutputField)
         }
         if processTest3 {
             print("queuing test3")
             processingQueue.addOperation(runSchemeOpTest3)
         } else {
-            test3StatusLabel.stringValue = ""
-            test3InputField.textColor = .blackColor()
-            test3ExpectedOutputField.textColor = .blackColor()
+            resetTestUI(test3StatusLabel, inputField: test3InputField, outputField: test3ExpectedOutputField)
         }
         if processTest4 {
             print("queuing test4")
             processingQueue.addOperation(runSchemeOpTest4)
         } else {
-            test4StatusLabel.stringValue = ""
-            test4InputField.textColor = .blackColor()
-            test4ExpectedOutputField.textColor = .blackColor()
+            resetTestUI(test4StatusLabel, inputField: test4InputField, outputField: test4ExpectedOutputField)
         }
         if processTest5 {
             print("queuing test5")
             processingQueue.addOperation(runSchemeOpTest5)
         } else {
-            test5StatusLabel.stringValue = ""
-            test5InputField.textColor = .blackColor()
-            test5ExpectedOutputField.textColor = .blackColor()
+            resetTestUI(test5StatusLabel, inputField: test5InputField, outputField: test5ExpectedOutputField)
         }
         if processTest6 {
             print("queuing test6")
             processingQueue.addOperation(runSchemeOpTest6)
         } else {
-            test6StatusLabel.stringValue = ""
-            test6InputField.textColor = .blackColor()
-            test6ExpectedOutputField.textColor = .blackColor()
+            resetTestUI(test6StatusLabel, inputField: test6InputField, outputField: test6ExpectedOutputField)
         }
     }
 }
