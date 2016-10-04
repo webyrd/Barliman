@@ -379,7 +379,7 @@ class EditorWindowController: NSWindowController {
             alltests_string_part_2 + "\n" +
             "(== `(" +
             definitionText +
-            ") defns) (appendo defns `((list " +
+            ") defns) (appendo defns `(((lambda x x) " +
             allTestInputs +
             ")) begin-body) (evalo `(begin . ,begin-body) (list " +
             allTestOutputs +
