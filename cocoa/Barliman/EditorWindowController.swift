@@ -180,13 +180,16 @@ class EditorWindowController: NSWindowController {
                           " (evalo `(begin \( defns ) \( body )) \( expectedOut )))))"
         
         
-        let write_ans_string: String = "(write (if (null? parse-ans) 'parse-error \( eval_string )))"
+        let define_ans_string: String = "(define query-val (if (null? parse-ans) 'parse-error \( eval_string )))"
+        
+        let write_ans_string = "(write query-val)"
         
         let full_string: String = load_mk_vicare_string + "\n" +
                                   load_mk_string + "\n" +
                                   interp_string + "\n" +
-                                  (simple ? ";; simple query" : ";; individual test query") + "\n" +
-                                  (simple ? parse_ans_string : parse_with_fake_defns_ans_string) + "\n" +
+                                  (simple ? ";; simple query" : ";; individual test query") + "\n\n" +
+                                  (simple ? parse_ans_string : parse_with_fake_defns_ans_string) + "\n\n" +
+                                  define_ans_string + "\n\n" +
                                   write_ans_string
       
         print("query string:\n \( full_string )\n")
