@@ -131,15 +131,16 @@ class EditorWindowController: NSWindowController {
                              interp_string: String,
                              mk_vicare_path_string: String,
                              mk_path_string: String,
-                             simple: Bool) -> String {
+                             simple: Bool,
+                             name: String) -> String {
         
         let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
         let load_mk_string: String = "(load \"\( mk_path_string )\")"
-        let parse_ans_string: String = "(define parse-ans (run 1 (q)" + "\n" +
+        let parse_ans_string: String = "(define parse-ans\( name ) (run 1 (q)" + "\n" +
         " (let ((g1 (gensym \"g1\")) (g2 (gensym \"g2\")) (g3 (gensym \"g3\")) (g4 (gensym \"g4\")) (g5 (gensym \"g5\")) (g6 (gensym \"g6\")) (g7 (gensym \"g7\")) (g8 (gensym \"g8\")) (g9 (gensym \"g9\")) (g10 (gensym \"g10\")) (g11 (gensym \"g11\")) (g12 (gensym \"g12\")) (g13 (gensym \"g13\")) (g14 (gensym \"g14\")) (g15 (gensym \"g15\")) (g16 (gensym \"g16\")) (g17 (gensym \"g17\")) (g18 (gensym \"g18\")) (g19 (gensym \"g19\")) (g20 (gensym \"g20\")))" + "\n" +
         "(fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (parseo `(begin \( defns ) \( body )))))))"
         
-        let parse_with_fake_defns_ans_string: String = "(define parse-ans (run 1 (q)" + "\n" +
+        let parse_with_fake_defns_ans_string: String = "(define parse-ans\( name ) (run 1 (q)" + "\n" +
             " (let ((g1 (gensym \"g1\")) (g2 (gensym \"g2\")) (g3 (gensym \"g3\")) (g4 (gensym \"g4\")) (g5 (gensym \"g5\")) (g6 (gensym \"g6\")) (g7 (gensym \"g7\")) (g8 (gensym \"g8\")) (g9 (gensym \"g9\")) (g10 (gensym \"g10\")) (g11 (gensym \"g11\")) (g12 (gensym \"g12\")) (g13 (gensym \"g13\")) (g14 (gensym \"g14\")) (g15 (gensym \"g15\")) (g16 (gensym \"g16\")) (g17 (gensym \"g17\")) (g18 (gensym \"g18\")) (g19 (gensym \"g19\")) (g20 (gensym \"g20\")))" + "\n" +
             " (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (fresh (names dummy-expr) (extract-nameso `( \( defns ) ) names) (parseo `((lambda ,names \( body )) ,dummy-expr)))))))"
 
@@ -180,9 +181,9 @@ class EditorWindowController: NSWindowController {
                           " (evalo `(begin \( defns ) \( body )) \( expectedOut )))))"
         
         
-        let define_ans_string: String = "(define query-val (if (null? parse-ans) 'parse-error \( eval_string )))"
+        let define_ans_string: String = "(define query-val\( name ) (if (null? parse-ans\( name )) 'parse-error \( eval_string )))"
         
-        let write_ans_string = "(write query-val)"
+        let write_ans_string = "(write query-val\( name ))"
         
         let full_string: String = load_mk_vicare_string + "\n" +
                                   load_mk_string + "\n" +
@@ -253,7 +254,8 @@ class EditorWindowController: NSWindowController {
                                 interp_string: interp_string,
                                 mk_vicare_path_string: mk_vicare_path_string,
                                 mk_path_string: mk_path_string,
-                                simple: true)
+                                simple: true,
+                                name: "-simple")
         
         let queryTest1: String =
             (processTest1 ?
@@ -263,7 +265,8 @@ class EditorWindowController: NSWindowController {
                     interp_string: interp_string,
                     mk_vicare_path_string: mk_vicare_path_string,
                     mk_path_string: mk_path_string,
-                    simple: false)
+                    simple: false,
+                    name: "-test1")
                 : "")
 
         let queryTest2: String =
@@ -274,7 +277,8 @@ class EditorWindowController: NSWindowController {
                     interp_string: interp_string,
                     mk_vicare_path_string: mk_vicare_path_string,
                     mk_path_string: mk_path_string,
-                    simple: false)
+                    simple: false,
+                    name: "-test2")
                 : "")
 
         let queryTest3: String =
@@ -285,7 +289,8 @@ class EditorWindowController: NSWindowController {
                     interp_string: interp_string,
                     mk_vicare_path_string: mk_vicare_path_string,
                     mk_path_string: mk_path_string,
-                    simple: false)
+                    simple: false,
+                    name: "-test3")
                 : "")
         
         let queryTest4: String =
@@ -296,7 +301,8 @@ class EditorWindowController: NSWindowController {
                     interp_string: interp_string,
                     mk_vicare_path_string: mk_vicare_path_string,
                     mk_path_string: mk_path_string,
-                    simple: false)
+                    simple: false,
+                    name: "-test4")
                 : "")
 
         let queryTest5: String =
@@ -307,7 +313,8 @@ class EditorWindowController: NSWindowController {
                     interp_string: interp_string,
                     mk_vicare_path_string: mk_vicare_path_string,
                     mk_path_string: mk_path_string,
-                    simple: false)
+                    simple: false,
+                    name: "-test5")
                 : "")
         
         let queryTest6: String =
@@ -318,7 +325,8 @@ class EditorWindowController: NSWindowController {
                     interp_string: interp_string,
                     mk_vicare_path_string: mk_vicare_path_string,
                     mk_path_string: mk_path_string,
-                    simple: false)
+                    simple: false,
+                    name: "-test6")
                 : "")
 
         
