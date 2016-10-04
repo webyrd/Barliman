@@ -20,10 +20,13 @@ class RunSchemeOperation: NSOperation {
     let kSyntaxErrorColor = NSColor.orangeColor()
     let kParseErrorColor = NSColor.magentaColor()
     let kFailedErrorColor = NSColor.redColor()
-    
+    let kThinkingColor = NSColor.purpleColor()
+
     let kIllegalSexprString = "Illegal sexpression"
     let kParseErrorString = "Syntax error"
     let kEvaluationFailedString = "Evaluation failed"
+    let kThinkingString = "???"
+
     
     init(editorWindowController: EditorWindowController, schemeScriptPathString: String, taskType: String) {
         self.editorWindowController = editorWindowController
@@ -85,6 +88,44 @@ class RunSchemeOperation: NSOperation {
         }
     }
     
+    func thinkingColorAndLabel() {
+        
+        // update the user interface, which *must* be done through the main thread
+        NSOperationQueue.mainQueue().addOperationWithBlock {
+            
+            let ewc = self.editorWindowController
+            
+            switch self.taskType {
+            case "simple":
+                ewc.definitionStatusLabel.textColor = self.kThinkingColor
+                ewc.definitionStatusLabel.stringValue = self.kThinkingString
+            case "allTests":
+                ewc.bestGuessStatusLabel.textColor = self.kThinkingColor
+                ewc.bestGuessStatusLabel.stringValue = self.kThinkingString
+            case "test1":
+                ewc.test1StatusLabel.textColor = self.kThinkingColor
+                ewc.test1StatusLabel.stringValue = self.kThinkingString
+            case "test2":
+                ewc.test2StatusLabel.textColor = self.kThinkingColor
+                ewc.test2StatusLabel.stringValue = self.kThinkingString
+            case "test3":
+                ewc.test3StatusLabel.textColor = self.kThinkingColor
+                ewc.test3StatusLabel.stringValue = self.kThinkingString
+            case "test4":
+                ewc.test4StatusLabel.textColor = self.kThinkingColor
+                ewc.test4StatusLabel.stringValue = self.kThinkingString
+            case "test5":
+                ewc.test5StatusLabel.textColor = self.kThinkingColor
+                ewc.test5StatusLabel.stringValue = self.kThinkingString
+            case "test6":
+                ewc.test6StatusLabel.textColor = self.kThinkingColor
+                ewc.test6StatusLabel.stringValue = self.kThinkingString
+            default: print("!!!!!!!!!! SWITCHERROR in thinkingColorAndLabel: unknown taskType: \( self.taskType )\n")
+            }
+        }
+    }
+
+    
     override func main() {
         
         if self.cancelled {
@@ -99,6 +140,7 @@ class RunSchemeOperation: NSOperation {
     func runSchemeCode() {
         
         startSpinner()
+        thinkingColorAndLabel()
         
         // If we move to only support macOS 10.12, can use the improved time difference code adapted from JeremyP's answer to http://stackoverflow.com/questions/24755558/measure-elapsed-time-in-swift.  Instead we'll use JeremyP's NSDate version instead.
         let startTime = NSDate();
