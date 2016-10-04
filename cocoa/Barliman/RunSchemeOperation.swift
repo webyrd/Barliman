@@ -94,6 +94,10 @@ class RunSchemeOperation: NSOperation {
     func runSchemeCode() {
         
         startSpinner()
+        
+        // If we move to only support macOS 10.12, can use the improved time difference code adapted from JeremyP's answer to http://stackoverflow.com/questions/24755558/measure-elapsed-time-in-swift.  Instead we'll use JeremyP's NSDate version instead.
+        let startTime = NSDate();
+        
     
         // Path to Chez Scheme
         // Perhaps this should be settable in a preferences panel.
@@ -153,9 +157,13 @@ class RunSchemeOperation: NSOperation {
             }
             
             func onTestSuccess(inputField: NSTextField, outputField: NSTextField, label: NSTextField) {
+                let endTime = NSDate();
+                let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
+                
                 inputField.textColor = .blackColor()
                 outputField.textColor = .blackColor()
-                label.stringValue = ""
+                // formatting from realityone's answer to http://stackoverflow.com/questions/24051314/precision-string-format-specifier-in-swift
+                label.stringValue = String(format: "Success (%.2f s)",  timeInterval)
             }
             
             func onTestSyntaxError(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField) {
