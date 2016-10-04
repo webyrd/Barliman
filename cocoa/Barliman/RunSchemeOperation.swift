@@ -145,12 +145,7 @@ class RunSchemeOperation: NSOperation {
                     // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                     self.editorWindowController.schemeOperationAllTests?.cancel()
                 } else if datastring == "()" { // parsed, but evaluator query failed!
-                    inputField.textColor = .redColor()
-                    outputField.textColor = .redColor()
-                    label.stringValue = self.kEvaluationFailedString
-                    
-                    // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
-                    self.editorWindowController.schemeOperationAllTests?.cancel()
+                    onTestFailure(inputField, outputField: outputField, label: label)
                 } else { // parsed, and evaluator query succeeded!
                     onTestSuccess(inputField, outputField: outputField, label: label)
                 }
@@ -163,12 +158,28 @@ class RunSchemeOperation: NSOperation {
                 inputField.textColor = .blackColor()
                 outputField.textColor = .blackColor()
                 // formatting from realityone's answer to http://stackoverflow.com/questions/24051314/precision-string-format-specifier-in-swift
-                label.stringValue = String(format: "Success (%.2f s)",  timeInterval)
+                label.textColor = .blackColor()
+                label.stringValue = String(format: "Passed (%.2f s)",  timeInterval)
+            }
+            
+            func onTestFailure(inputField: NSTextField, outputField: NSTextField, label: NSTextField) {
+                let endTime = NSDate();
+                let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
+             
+                inputField.textColor = .redColor()
+                outputField.textColor = .redColor()
+                // formatting from realityone's answer to http://stackoverflow.com/questions/24051314/precision-string-format-specifier-in-swift
+                label.textColor = .redColor()
+                label.stringValue = String(format: "Failed (%.2f s)",  timeInterval)
+                
+                // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
+                self.editorWindowController.schemeOperationAllTests?.cancel()
             }
             
             func onTestSyntaxError(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField) {
                 inputField.textColor = .greenColor()
                 outputField.textColor = .greenColor()
+                label.textColor = .greenColor()
                 label.stringValue = self.kIllegalSexprString
             }
 
