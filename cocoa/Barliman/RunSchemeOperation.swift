@@ -88,6 +88,36 @@ class RunSchemeOperation: NSOperation {
         }
     }
     
+    func illegalSexpInDefn() {
+        
+        // update the user interface, which *must* be done through the main thread
+        NSOperationQueue.mainQueue().addOperationWithBlock {
+            
+            let ewc = self.editorWindowController
+            
+            ewc.schemeDefinitionView.textColor = self.kSyntaxErrorColor
+            ewc.definitionStatusLabel.textColor = self.kSyntaxErrorColor
+            ewc.definitionStatusLabel.stringValue = self.kIllegalSexprString
+        }
+    }
+    
+    func parseErrorInDefn() {
+        
+        // update the user interface, which *must* be done through the main thread
+        NSOperationQueue.mainQueue().addOperationWithBlock {
+            
+            let ewc = self.editorWindowController
+            
+            ewc.schemeDefinitionView.textColor = self.kParseErrorColor
+            ewc.definitionStatusLabel.textColor = self.kParseErrorColor
+            ewc.definitionStatusLabel.stringValue = self.kParseErrorString
+            
+            // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
+            self.editorWindowController.schemeOperationAllTests?.cancel()
+        }
+    }
+
+    
     func thinkingColorAndLabel() {
         
         // update the user interface, which *must* be done through the main thread
@@ -197,13 +227,30 @@ class RunSchemeOperation: NSOperation {
             
             func onTestCompletion(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField, datastring: String) {
 
-                if datastring == "parse-error" { // failed to parse!
+                if datastring == "illegal-sexp-in-test/answer" {
+                    inputField.textColor = self.kSyntaxErrorColor
+                    outputField.textColor = self.kSyntaxErrorColor
+                    label.textColor = self.kSyntaxErrorColor
+                    label.stringValue = self.kIllegalSexprString
+                    
+                    // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
+                    self.editorWindowController.schemeOperationAllTests?.cancel()
+                } else if datastring == "parse-error-in-test/answer" {
                     inputField.textColor = self.kParseErrorColor
                     outputField.textColor = self.kParseErrorColor
+                    label.textColor = self.kParseErrorColor
                     label.stringValue = self.kParseErrorString
                     
                     // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
                     self.editorWindowController.schemeOperationAllTests?.cancel()
+                } else if (datastring == "illegal-sexp-in-defn" || datastring == "parse-error-in-defn") {
+                    // The definition is messed up.  We don't really know the state of the test.
+                    // We represent this in the UI as the ??? "thinking" string without the spinner
+                    
+                    inputField.textColor = self.kThinkingColor
+                    outputField.textColor = self.kThinkingColor
+                    label.textColor = self.kThinkingColor
+                    label.stringValue = self.kThinkingString
                 } else if datastring == "()" { // parsed, but evaluator query failed!
                     onTestFailure(inputField, outputField: outputField, label: label)
                 } else { // parsed, and evaluator query succeeded!
@@ -247,12 +294,27 @@ class RunSchemeOperation: NSOperation {
                 let endTime = NSDate();
                 let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
                 
-                bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: guess))
-                label.textColor = self.kDefaultColor
-                label.stringValue = String(format: "Succeeded (%.2f s)",  timeInterval)
-                
-                // Be polite and cancel all the other tests, since they must succeed!
-                self.editorWindowController.processingQueue.cancelAllOperations()
+                if (guess == "illegal-sexp-in-defn" ||
+                    guess == "parse-error-in-defn" ||
+                    guess == "illegal-sexp-in-test/answer" ||
+                    guess == "parse-error-in-test/answer") {
+                    // someone goofed!
+                    // we just don't know what to do!
+                    
+                    bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
+                    label.textColor = self.kThinkingColor
+                    label.stringValue = self.kThinkingString
+                    
+                } else { // success!
+                    
+                    bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: guess))
+
+                    label.textColor = self.kDefaultColor
+                    label.stringValue = String(format: "Succeeded (%.2f s)",  timeInterval)
+                    
+                    // Be polite and cancel all the other tests, since they must succeed!
+                    self.editorWindowController.processingQueue.cancelAllOperations()
+                }
             }
             
             func onBestGuessFailure(bestGuessView: NSTextView, label: NSTextField) {
@@ -296,13 +358,10 @@ class RunSchemeOperation: NSOperation {
             if exitStatus == 0 {
                 // at least Chez ran to completion!  The query could still have failed, of course
                 if self.taskType == "simple" {
-                    if datastring == "parse-error" {
-                        ewc.schemeDefinitionView.textColor = self.kParseErrorColor
-                        ewc.definitionStatusLabel.textColor = self.kParseErrorColor
-                        ewc.definitionStatusLabel.stringValue = self.kParseErrorString
-                        
-                        // Be polite and cancel the allTests operation as well, since it cannot possibly succeed
-                        self.editorWindowController.schemeOperationAllTests?.cancel()
+                    if datastring == "parse-error-in-defn" {
+                        self.parseErrorInDefn()
+                    } else if datastring == "illegal-sexp-in-defn" {
+                        self.illegalSexpInDefn()
                     } else if datastring == "()" {
                         ewc.schemeDefinitionView.textColor = self.kFailedErrorColor
                         ewc.definitionStatusLabel.textColor = self.kFailedErrorColor
@@ -375,9 +434,7 @@ class RunSchemeOperation: NSOperation {
                 // the query wasn't even a legal s-expression, according to Chez!
                 if self.taskType == "simple" {
                     // print("exitStatus = \( exitStatus )")
-                    ewc.schemeDefinitionView.textColor = self.kSyntaxErrorColor
-                    ewc.definitionStatusLabel.textColor = self.kSyntaxErrorColor
-                    ewc.definitionStatusLabel.stringValue = self.kIllegalSexprString
+                    self.illegalSexpInDefn()
                 }
                 
                 if taskType == "test1" {
