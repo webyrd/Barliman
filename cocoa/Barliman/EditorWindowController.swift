@@ -405,15 +405,6 @@ class EditorWindowController: NSWindowController {
         
         
         // write the Scheme code containing the miniKanren query to a temp file
-        let query_file_simple = "barliman-query-simple.scm"
-        let query_file_test1 = "barliman-query-test1.scm"
-        let query_file_test2 = "barliman-query-test2.scm"
-        let query_file_test3 = "barliman-query-test3.scm"
-        let query_file_test4 = "barliman-query-test4.scm"
-        let query_file_test5 = "barliman-query-test5.scm"
-        let query_file_test6 = "barliman-query-test6.scm"
-        let query_file_alltests = "barliman-query-alltests.scm"
-        
         let query_simple_for_mondo_scheme_file = "barliman-query-simple-for-mondo-scheme-file.scm"
         
         // files that load query code
@@ -446,88 +437,6 @@ class EditorWindowController: NSWindowController {
         
         let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
         
-        
-        let querySimple: String =
-            makeQueryFileString(definitionText,
-                                body: ",_",
-                                expectedOut: "q",
-                                interp_string: interp_string,
-                                mk_vicare_path_string: mk_vicare_path_string,
-                                mk_path_string: mk_path_string,
-                                simple: true,
-                                name: "-simple")
-        
-        let queryTest1: String =
-            (processTest1 ?
-                makeQueryFileString(definitionText,
-                    body: test1InputField.stringValue,
-                    expectedOut: test1ExpectedOutputField.stringValue,
-                    interp_string: interp_string,
-                    mk_vicare_path_string: mk_vicare_path_string,
-                    mk_path_string: mk_path_string,
-                    simple: false,
-                    name: "-test1")
-                : "")
-        
-        let queryTest2: String =
-            (processTest2 ?
-                makeQueryFileString(definitionText,
-                    body: test2InputField.stringValue,
-                    expectedOut: test2ExpectedOutputField.stringValue,
-                    interp_string: interp_string,
-                    mk_vicare_path_string: mk_vicare_path_string,
-                    mk_path_string: mk_path_string,
-                    simple: false,
-                    name: "-test2")
-                : "")
-
-        let queryTest3: String =
-            (processTest3 ?
-                makeQueryFileString(definitionText,
-                    body: test3InputField.stringValue,
-                    expectedOut: test3ExpectedOutputField.stringValue,
-                    interp_string: interp_string,
-                    mk_vicare_path_string: mk_vicare_path_string,
-                    mk_path_string: mk_path_string,
-                    simple: false,
-                    name: "-test3")
-                : "")
-        
-        let queryTest4: String =
-            (processTest4 ?
-                makeQueryFileString(definitionText,
-                    body: test4InputField.stringValue,
-                    expectedOut: test4ExpectedOutputField.stringValue,
-                    interp_string: interp_string,
-                    mk_vicare_path_string: mk_vicare_path_string,
-                    mk_path_string: mk_path_string,
-                    simple: false,
-                    name: "-test4")
-                : "")
-
-        let queryTest5: String =
-            (processTest5 ?
-                makeQueryFileString(definitionText,
-                    body: test5InputField.stringValue,
-                    expectedOut: test5ExpectedOutputField.stringValue,
-                    interp_string: interp_string,
-                    mk_vicare_path_string: mk_vicare_path_string,
-                    mk_path_string: mk_path_string,
-                    simple: false,
-                    name: "-test5")
-                : "")
-        
-        let queryTest6: String =
-            (processTest6 ?
-                makeQueryFileString(definitionText,
-                    body: test6InputField.stringValue,
-                    expectedOut: test6ExpectedOutputField.stringValue,
-                    interp_string: interp_string,
-                    mk_vicare_path_string: mk_vicare_path_string,
-                    mk_path_string: mk_path_string,
-                    simple: false,
-                    name: "-test6")
-                : "")
         
         let querySimpleForMondoSchemeContents: String = makeQuerySimpleForMondoSchemeFileString(interp_string,
                                                                                                 mk_vicare_path_string: mk_vicare_path_string,
@@ -730,85 +639,6 @@ class EditorWindowController: NSWindowController {
                            + out5 + " "
                            + out6 + " "
         
-        // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
-        let interp_alltests_query_string_part_1: String? = bundle.pathForResource("interp-alltests-query-string-part-1", ofType: "swift", inDirectory: "mk-and-rel-interp")
-        let interp_alltests_query_string_part_2: String? = bundle.pathForResource("interp-alltests-query-string-part-2", ofType: "swift", inDirectory: "mk-and-rel-interp")
-        
-        let alltests_string_part_1 : String
-        do
-        {
-            alltests_string_part_1 = try String(contentsOfFile: interp_alltests_query_string_part_1!)
-        }
-        catch
-        {
-            print("!!!!!  LOAD_ERROR -- can't load alltests_string_part_1\n")
-            alltests_string_part_1 = ""
-        }
-        
-        let alltests_string_part_2 : String
-        do
-        {
-            alltests_string_part_2 = try String(contentsOfFile: interp_alltests_query_string_part_2!)
-        }
-        catch
-        {
-            print("!!!!!  LOAD_ERROR -- can't load alltests_string_part_2\n")
-            alltests_string_part_2 = ""
-        }
-
-        
-        let allTestFuncString = alltests_string_part_1 + "\n" +
-        "        (== `( \( definitionText ) ) defn-list)" + "\n" + "\n" +
-            alltests_string_part_2 + "\n" +
-            "(== `(" +
-            definitionText +
-            ") defns) (appendo defns `(((lambda x x) " +
-            allTestInputs +
-            ")) begin-body) (evalo `(begin . ,begin-body) (list " +
-            allTestOutputs +
-            ")" +
-            ")))))" + "\n\n"
-        
-        let allTestWriteString: String = "(define (write-allTest-ans)" + "\n" +
-                                         "  (let ((ans-all (ans-allTests)))" + "\n" +
-                                         "    (if (null? ans-all)" + "\n" +
-                                         "        (write 'fail)" + "\n" +
-                                         "        (begin" + "\n" +
-                                         "          (for-each" + "\n" +
-                                         "            (lambda (a)" + "\n" +
-                                         "              (pretty-print a)" + "\n" +
-                                         "              (newline)" + "\n" +
-                                         "              (newline))" + "\n" +
-                                         "            (caar ans-all))" + "\n" +
-                                         "          (unless (null? (cdar ans-all))" + "\n" +
-                                         "            (newline)" + "\n" +
-                                         "            (display \"Side conditions:\")" + "\n" +
-                                         "            (newline)" + "\n" +
-                                         "            (for-each" + "\n" +
-                                         "              (lambda (a)" + "\n" +
-                                         "                (write a)" + "\n" +
-                                         "                (newline))" + "\n" +
-                                         "              (cdar ans-all)))))))"
-        
-        let queryAllTests: String = load_mk_vicare_string +
-            load_mk_string +
-            interp_string + "\n" +
-            ";; allTestWriteString" + "\n" +
-            allTestFuncString + "\n" +
-            allTestWriteString + "\n\n" +
-            "(write-allTest-ans)"
-        
-        print("queryAllTests string:\n \( queryAllTests )\n")
-
-        
-        var pathSimple = NSURL()
-        var pathTest1 = NSURL()
-        var pathTest2 = NSURL()
-        var pathTest3 = NSURL()
-        var pathTest4 = NSURL()
-        var pathTest5 = NSURL()
-        var pathTest6 = NSURL()
-        var pathAllTests = NSURL()
         
         var pathQuerySimpleForMondoSchemeFile = NSURL()
         var pathMondoScheme = NSURL()
@@ -834,15 +664,6 @@ class EditorWindowController: NSWindowController {
         // write the temporary file containing the query to the user's Document directory.  This seems a bit naughty.  Where is the right place to put this?  In ~/.barliman, perhaps?
         if let dir = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true).first {
             
-            pathSimple = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_simple)!
-            pathTest1 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test1)!
-            pathTest2 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test2)!
-            pathTest3 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test3)!
-            pathTest4 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test4)!
-            pathTest5 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test5)!
-            pathTest6 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_test6)!
-            pathAllTests = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_file_alltests)!
-            
             pathQuerySimpleForMondoSchemeFile = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_simple_for_mondo_scheme_file)!
             
             
@@ -866,14 +687,6 @@ class EditorWindowController: NSWindowController {
 
             // write the query files
             do {
-                try querySimple.writeToURL(pathSimple, atomically: false, encoding: NSUTF8StringEncoding)
-                try queryTest1.writeToURL(pathTest1, atomically: false, encoding: NSUTF8StringEncoding)
-                try queryTest2.writeToURL(pathTest2, atomically: false, encoding: NSUTF8StringEncoding)
-                try queryTest3.writeToURL(pathTest3, atomically: false, encoding: NSUTF8StringEncoding)
-                try queryTest4.writeToURL(pathTest4, atomically: false, encoding: NSUTF8StringEncoding)
-                try queryTest5.writeToURL(pathTest5, atomically: false, encoding: NSUTF8StringEncoding)
-                try queryTest6.writeToURL(pathTest6, atomically: false, encoding: NSUTF8StringEncoding)
-                try queryAllTests.writeToURL(pathAllTests, atomically: false, encoding: NSUTF8StringEncoding)
                 
                 try querySimpleForMondoSchemeContents.writeToURL(pathQuerySimpleForMondoSchemeFile, atomically: false, encoding: NSUTF8StringEncoding)
                 
@@ -903,16 +716,7 @@ class EditorWindowController: NSWindowController {
         }
         
         
-        // paths to the Schemes file containing the miniKanren query
-        let schemeScriptPathStringSimple = pathSimple.path!
-        let schemeScriptPathStringTest1 = pathTest1.path!
-        let schemeScriptPathStringTest2 = pathTest2.path!
-        let schemeScriptPathStringTest3 = pathTest3.path!
-        let schemeScriptPathStringTest4 = pathTest4.path!
-        let schemeScriptPathStringTest5 = pathTest5.path!
-        let schemeScriptPathStringTest6 = pathTest6.path!
-        let schemeScriptPathStringAllTests = pathAllTests.path!
-        
+        // paths to the Schemes file containing the miniKanren query        
         let schemeScriptPathStringQuerySimpleForMondoScheme = pathQuerySimpleForMondoSchemeFile.path!
         
         
