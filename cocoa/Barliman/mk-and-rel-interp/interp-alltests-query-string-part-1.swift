@@ -1,4 +1,4 @@
-(let ((ans
+(define (ans-allTests)
        (run 1 (defns)
          (let ((g1 (gensym "g1"))
                (g2 (gensym "g2"))
