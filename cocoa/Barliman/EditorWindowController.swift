@@ -149,63 +149,6 @@ class EditorWindowController: NSWindowController {
         return full_string
     }
     
-    // deprecated
-    /*
-    func makeMondoSchemeFileString() -> String {
-        
-        let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
-
-        
-        let test1QueryString: String =   makeQueryString(definitionText,
-                                                             body: test1InputField.stringValue,
-                                                             expectedOut: test1ExpectedOutputField.stringValue,
-                                                             simple: false,
-                                                             name: "-test1")
-        
-        let test2QueryString: String =   makeQueryString(definitionText,
-                                                             body: test2InputField.stringValue,
-                                                             expectedOut: test2ExpectedOutputField.stringValue,
-                                                             simple: false,
-                                                             name: "-test2")
-        
-        let test3QueryString: String =   makeQueryString(definitionText,
-                                                             body: test3InputField.stringValue,
-                                                             expectedOut: test3ExpectedOutputField.stringValue,
-                                                             simple: false,
-                                                             name: "-test3")
-        
-        let test4QueryString: String =   makeQueryString(definitionText,
-                                                             body: test4InputField.stringValue,
-                                                             expectedOut: test4ExpectedOutputField.stringValue,
-                                                             simple: false,
-                                                             name: "-test4")
-
-        let test5QueryString: String =   makeQueryString(definitionText,
-                                                             body: test5InputField.stringValue,
-                                                             expectedOut: test5ExpectedOutputField.stringValue,
-                                                             simple: false,
-                                                             name: "-test5")
-        
-        let test6QueryString: String =   makeQueryString(definitionText,
-                                                             body: test6InputField.stringValue,
-                                                             expectedOut: test6ExpectedOutputField.stringValue,
-                                                             simple: false,
-                                                             name: "-test6")
-        
-
-        let allTestsQueryString = makeAllTestsQueryString()
-        
-        let full_string: String = test1QueryString + "\n" +
-                                  test2QueryString + "\n" +
-                                  test3QueryString + "\n" +
-                                  test4QueryString + "\n" +
-                                  test5QueryString + "\n" +
-                                  test6QueryString + "\n" +
-                                  allTestsQueryString
-
-        return full_string
-    }
- */
     
     func makeAllTestsQueryString() -> String {
         
@@ -473,9 +416,6 @@ class EditorWindowController: NSWindowController {
         
         let query_simple_for_mondo_scheme_file = "barliman-query-simple-for-mondo-scheme-file.scm"
         
-        // deprecated!  get rid of this
-        // let mondo_scheme_file = "barliman-mondo-scheme-file.scm"
-
         // files that load query code
         let new_query_file_simple = "barliman-new-query-simple.scm"
         let new_query_file_test1 = "barliman-new-query-test1.scm"
@@ -592,8 +532,6 @@ class EditorWindowController: NSWindowController {
         let querySimpleForMondoSchemeContents: String = makeQuerySimpleForMondoSchemeFileString(interp_string,
                                                                                                 mk_vicare_path_string: mk_vicare_path_string,
                                                                                                 mk_path_string: mk_path_string)
-        // deprecated
-        // let mondoSchemeContents: String = makeMondoSchemeFileString()
         
         
         
@@ -725,9 +663,6 @@ class EditorWindowController: NSWindowController {
             let localNewQueryActualAlltestsFilePath = fullNewQueryActualAlltestsFilePath.path!
 
 
-            // deprecated
-            // let fullMondoSchemeFilePath = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent("barliman-mondo-scheme-file.scm")!
-            // let localMondoSchemeFilePath = fullMondoSchemeFilePath.path!
             
             let loadFileString =
                 "(define simple-query-for-mondo-file-path \"\( localSimpleQueryForMondoSchemeFilePath )\")"
@@ -910,8 +845,6 @@ class EditorWindowController: NSWindowController {
             
             pathQuerySimpleForMondoSchemeFile = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_simple_for_mondo_scheme_file)!
             
-            // deprecated
-            // pathMondoScheme = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(mondo_scheme_file)!
             
             pathNewSimple = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_simple)!
             
@@ -944,8 +877,6 @@ class EditorWindowController: NSWindowController {
                 
                 try querySimpleForMondoSchemeContents.writeToURL(pathQuerySimpleForMondoSchemeFile, atomically: false, encoding: NSUTF8StringEncoding)
                 
-                // deprecated
-               //  try mondoSchemeContents.writeToURL(pathMondoScheme, atomically: false, encoding: NSUTF8StringEncoding)
                 
                 try newSimpleQueryString.writeToURL(pathNewSimple, atomically: false, encoding: NSUTF8StringEncoding)
                 
@@ -984,8 +915,6 @@ class EditorWindowController: NSWindowController {
         
         let schemeScriptPathStringQuerySimpleForMondoScheme = pathQuerySimpleForMondoSchemeFile.path!
         
-        // deprecated
-        // let schemeScriptPathStringMondoScheme = pathMondoScheme.path!
         
         let schemeScriptPathStringNewSimple = pathNewSimple.path!
         
@@ -1026,25 +955,7 @@ class EditorWindowController: NSWindowController {
         let runSchemeOpAllTests = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewAlltests, taskType: "allTests")
 
         
-        // deprecated
-/*
-        let runSchemeOpSimple = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringSimple, taskType: "simple")
         
-        let runSchemeOpTest1 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest1, taskType: "test1")
-        
-        let runSchemeOpTest2 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest2, taskType: "test2")
-        
-        let runSchemeOpTest3 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest3, taskType: "test3")
-        
-        let runSchemeOpTest4 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest4, taskType: "test4")
-
-        let runSchemeOpTest5 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest5, taskType: "test5")
-
-        let runSchemeOpTest6 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringTest6, taskType: "test6")
-        
-        let runSchemeOpAllTests = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringAllTests, taskType: "allTests")
- */
- 
         schemeOperationAllTests = runSchemeOpAllTests
 
 
