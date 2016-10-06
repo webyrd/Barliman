@@ -536,6 +536,10 @@
 
 (define (eval-primo prim-id a* val)
   (conde
+    [(== prim-id 'cons)
+     (fresh (a d)
+       (== `(,a ,d) a*)
+       (== `(,a . ,d) val))]
     [(== prim-id 'car)
      (fresh (d)
        (== `((,val . ,d)) a*)
@@ -544,6 +548,12 @@
      (fresh (a)
        (== `((,a . ,val)) a*)
        (=/= 'closure a))]
+    [(== prim-id 'null?)
+     (fresh (v)
+       (== `(,v) a*)
+       (conde
+         ((== '() v) (== #t val))
+         ((=/= '() v) (== #f val))))]
     [(== prim-id 'pair?)
      (fresh (v)
        (== `(,v) a*)
@@ -554,6 +564,16 @@
          ((fresh (a d)
             (== `(,a . ,d) v)
             (== #t val)))))]
+    [(== prim-id 'symbol?)
+     (fresh (v)
+       (== `(,v) a*)
+       (conde
+         ((symbolo v) (== #t val))
+         ((numbero v) (== #f val))
+         ((== '() v) (== #f val))
+         ((fresh (a d)
+            (== `(,a . ,d) v)
+            (== #f val)))))]
     [(== prim-id 'not)
      (fresh (b)
        (== `(,b) a*)
@@ -566,26 +586,7 @@
        (conde
          ((== v1 v2) (== #t val))
          ((=/= v1 v2) (== #f val))))]
-    [(== prim-id 'symbol?)
-     (fresh (v)
-       (== `(,v) a*)
-       (conde
-         ((symbolo v) (== #t val))
-         ((numbero v) (== #f val))
-         ((== '() v) (== #f val))
-         ((fresh (a d)
-            (== `(,a . ,d) v)
-            (== #f val)))))]
-    [(== prim-id 'null?)
-     (fresh (v)
-       (== `(,v) a*)
-       (conde
-         ((== '() v) (== #t val))
-         ((=/= '() v) (== #f val))))]
-    [(== prim-id 'cons)
-     (fresh (a d)
-       (== `(,a ,d) a*)
-       (== `(,a . ,d) val))]
+
     ))
 
 (define (prim-expo expr env val)
