@@ -158,7 +158,7 @@
 
 (define (parse-cond-clauses c* env)
   (conde
-    ((fresh (test conseq)       
+    ((fresh (test conseq)
        (== `((,test ,conseq)) c*)
        (conde
          ((== 'else test))
@@ -672,20 +672,19 @@
           (eval-expo e1 env v)
           (oro `(,e2 . ,e-rest) env val)))))))
 
+;; Set this flag to #f to recover Scheme semantics.
+(define boolean-conditions-only #t)
+(define (condition v) (if boolean-conditions-only (booleano v) unit))
+(define (condition-true v) (if boolean-conditions-only (== #t v) (=/= #f v)))
+
 (define (if-primo expr env val)
   (fresh (e1 e2 e3 t)
     (== `(if ,e1 ,e2 ,e3) expr)
     (not-in-envo 'if env)
     (eval-expo e1 env t)
     (conde1 (((t t)))
-      ((== #t t)
-       (eval-expo e2 env val))
-      ((== #f t)
-       (eval-expo e3 env val))
-      ;; Adding this line would restore normal Scheme semantics, but
-      ;; unfortunately it defeats the performance improvement we just gained.
-      ;; ((=/= #t t) (=/= #f t) (eval-expo e2 env val))
-      )))
+      ((condition-true t) (eval-expo e2 env val))
+      ((== #f t) (eval-expo e3 env val)))))
 
 (define (cond-primo expr env val)
   (fresh (c c*)
@@ -704,48 +703,23 @@
           ;; not shadowed
           (eval-expo conseq env val))
          ((fresh (v)
-            ;; Restricted cond, like restricted else, requires
-            ;; all tests to evaluate to a Boolean value.
-            ;; Remove this goal, and uncomment the associated goals,
-            ;; to recover Scheme semantics.
-            (booleano v)
+            (condition v)
             (eval-expo test env v)
             ;; if test is 'else', it must have been shadowed
             (conde
               ((== #f v)
                ;; evaluate to an unspecified value!
                (== 'unspecified val))
-              ((== #t v)
-               ;; restricted cond, like restricted else, requires
-               ;; all tests to evaluate to a Boolean value
-               (eval-expo conseq env val))
-              ;; Adding this line, *and* removing the (booleano v)
-              ;; goal above, would restore normal Scheme semantics,
-              ;; but unfortunately it defeats the performance
-              ;; improvement we just gained.
-              ;; ((=/= #f v) (=/= #t v) (eval-expo conseq env val))
-              ))))
+              ((condition-true v) (eval-expo conseq env val))))))
        (eval-expo conseq env val)))
     ((fresh (test conseq c*-rest)
        (== `((,test ,conseq) . ,c*-rest) c*)
        (fresh (v)
-         ;; Restricted cond, like restricted else, requires
-         ;; all tests to evaluate to a Boolean value.
-         ;; Remove this goal, and uncomment the associated goals,
-         ;; to recover Scheme semantics.
-         (booleano v)
-         (eval-expo test env v)         
+         (condition v)
+         (eval-expo test env v)
          (conde
-           ((== #f v)
-            (cond-clauseso c*-rest env val))
-           ((== #t v)
-            ;; restricted cond, like restricted else, requires
-            ;; all tests to evaluate to a Boolean value
-            (eval-expo conseq env val))
-           ;; Adding this line would restore normal Scheme semantics, but
-           ;; unfortunately it defeats the performance improvement we just gained.
-           ;; ((=/= #f v) (=/= #t v) (eval-expo conseq env val))
-           ))))))
+           ((== #f v) (cond-clauseso c*-rest env val))
+           ((condition-true v) (eval-expo conseq env val))))))))
 
 (define initial-env `((cons . (val . (prim . cons)))
                       (car . (val . (prim . car)))
