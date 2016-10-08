@@ -674,8 +674,14 @@
 
 ;; Set this flag to #f to recover Scheme semantics.
 (define boolean-conditions-only #t)
-(define (condition v) (if boolean-conditions-only (booleano v) unit))
-(define (condition-true v) (if boolean-conditions-only (== #t v) (=/= #f v)))
+(define (condition v)
+  (if (and allow-incomplete-search boolean-conditions-only)
+    (booleano v)
+    unit))
+(define (condition-true v)
+  (if (and allow-incomplete-search boolean-conditions-only)
+    (== #t v)
+    (=/= #f v)))
 
 (define (if-primo expr env val)
   (fresh (e1 e2 e3 t)

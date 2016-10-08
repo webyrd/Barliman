@@ -3,6 +3,8 @@
 (load "mk/test-check.scm")
 (load "interp.scm")
 
+(set! allow-incomplete-search #t)
+
 (time (test 'list-nth-element-peano
   (run 1 (q r)
     (evalo `(begin

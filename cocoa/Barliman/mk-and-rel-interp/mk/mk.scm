@@ -4,6 +4,9 @@
 ; and substitutions will contain a scope. When a substitution flows through a
 ; conde it is assigned a new scope.
 
+;; To allow use of optimizations that sacrifice completeness, set this to #t.
+(define allow-incomplete-search #t)
+
 ; Creates a new scope that is not scope-eq? to any other scope
 (define new-scope
   (lambda ()
@@ -178,8 +181,8 @@
 ; TODO: use set! to choose appropriate max-search-depth per-run?
 (define max-search-depth
   ;#f  ; unlimited depth
-  100   ; reasonable depth for typical Barliman problems?
-  )
+  ; Is this a reasonable depth for typical Barliman problems?
+  100)
 
 (define state
   (lambda (S C depth deferred)
@@ -195,7 +198,8 @@
 (define state-depth-deepen
   (lambda (st)
     (let ((next-depth (+ 1 (state-depth st))))
-      (if (and max-search-depth (< max-search-depth next-depth))
+      (if (and allow-incomplete-search
+               max-search-depth (< max-search-depth next-depth))
         (mzero)
         (state (state-S st) (state-C st) next-depth (state-deferred st))))))
 (define state-deferred-defer
