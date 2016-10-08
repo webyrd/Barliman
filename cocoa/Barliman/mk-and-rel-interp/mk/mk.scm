@@ -7,6 +7,9 @@
 ;; To allow use of optimizations that sacrifice completeness, set this to #t.
 (define allow-incomplete-search? #f)
 
+;; To allow use of experimental `conde1` optimization, set this to #t.
+(define enable-conde1? #f)
+
 ; Creates a new scope that is not scope-eq? to any other scope
 (define new-scope
   (lambda ()
@@ -223,7 +226,7 @@
          (state (state-S st) (state-C st) (state-depth st) #f))
         st))))
 
-(define empty-state (state empty-subst empty-C 0 '()))
+(define (empty-state) (state empty-subst empty-C 0 (and enable-conde1? '())))
 
 (define state-with-scope
   (lambda (st new-scope)
@@ -367,7 +370,7 @@
               (let ((st (state-with-scope st nonlocal-scope)))
                 (let ((z ((reify q) st)))
                   (choice z empty-f)))))
-          empty-state))))
+          (empty-state)))))
     ((_ n (q0 q1 q ...) g0 g ...)
      (run n (x) (fresh (q0 q1 q ...) g0 g ... (== `(,q0 ,q1 ,q ...) x))))))
 
