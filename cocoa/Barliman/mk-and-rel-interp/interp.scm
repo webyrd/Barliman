@@ -645,13 +645,13 @@
           (oro `(,e2 . ,e-rest) env val)))))))
 
 ;; Set this flag to #f to recover Scheme semantics.
-(define boolean-conditions-only #t)
+(define boolean-conditions-only? #t)
 (define (condition v)
-  (if (and allow-incomplete-search boolean-conditions-only)
+  (if (and allow-incomplete-search? boolean-conditions-only?)
     (booleano v)
     unit))
 (define (condition-true v)
-  (if (and allow-incomplete-search boolean-conditions-only)
+  (if (and allow-incomplete-search? boolean-conditions-only?)
     (== #t v)
     (=/= #f v)))
 
