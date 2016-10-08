@@ -5,7 +5,7 @@
 ; conde it is assigned a new scope.
 
 ;; To allow use of optimizations that sacrifice completeness, set this to #t.
-(define allow-incomplete-search #t)
+(define allow-incomplete-search? #t)
 
 ; Creates a new scope that is not scope-eq? to any other scope
 (define new-scope
@@ -198,7 +198,7 @@
 (define state-depth-deepen
   (lambda (st)
     (let ((next-depth (+ 1 (state-depth st))))
-      (if (and allow-incomplete-search
+      (if (and allow-incomplete-search?
                max-search-depth (< max-search-depth next-depth))
         (mzero)
         (state (state-S st) (state-C st) next-depth (state-deferred st))))))
