@@ -287,11 +287,20 @@ class EditorWindowController: NSWindowController {
             eval_string_part_2 + "\n" +
             " (evalo `(begin \( defns ) \( body )) \( expectedOut )))))"
 
+        let eval_flags_fast = "(set! allow-incomplete-search? #t)"
+        let eval_flags_complete = "(set! allow-incomplete-search? #f)"
+
+        let eval_string_fast = "(begin \( eval_flags_fast ) \( eval_string ))"
+        let eval_string_complete = "(begin \( eval_flags_complete ) \( eval_string ))"
+        let eval_string_both = "(let ((results-fast \( eval_string_fast )))\n" +
+                                 "(if (null? results-fast)\n" +
+                                    "\( eval_string_complete )\n" +
+                                    "results-fast))"
 
         let define_ans_string: String = "(define (query-val\( name ))" + "\n" +
                                         "  (if (null? (parse-ans\( name )))" + "\n" +
                                         "      'parse-error" + "\n" +
-                                        "      \( eval_string )))"
+                                        "      \( eval_string_both )))"
 
         let full_string: String = (simple ? ";; simple query" : ";; individual test query") + "\n\n" +
                                   (simple ? parse_ans_string : parse_with_fake_defns_ans_string) + "\n\n" +
