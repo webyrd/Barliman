@@ -217,8 +217,14 @@ class EditorWindowController: NSWindowController {
             alltests_string_part_2 = ""
         }
 
+        let eval_flags_fast = "(set! allow-incomplete-search? #t)"
+        let eval_flags_complete = "(set! allow-incomplete-search? #f)"
+        let eval_string_fast = "(begin \( eval_flags_fast ) (results))"
+        let eval_string_complete = "(begin \( eval_flags_complete ) (results))"
 
-        let allTestWriteString = alltests_string_part_1 + "\n" +
+        let allTestWriteString = "(define (ans-allTests)\n" +
+                                 "  (define (results)\n" +
+                                 alltests_string_part_1 + "\n" +
             "        (== `( \( definitionText ) ) defn-list)" + "\n" + "\n" +
             alltests_string_part_2 + "\n" +
             "(== `(" +
@@ -228,7 +234,11 @@ class EditorWindowController: NSWindowController {
             ")) begin-body) (evalo `(begin . ,begin-body) (list " +
             allTestOutputs +
             ")" +
-        ")))))"
+        ")))))\n" +
+        "(let ((results-fast \( eval_string_fast )))\n" +
+        "  (if (null? results-fast)\n" +
+        "    \( eval_string_complete )\n" +
+        "    results-fast)))"
 
         let fullString: String = ";; allTests" + "\n" + allTestWriteString
 
@@ -293,9 +303,9 @@ class EditorWindowController: NSWindowController {
         let eval_string_fast = "(begin \( eval_flags_fast ) \( eval_string ))"
         let eval_string_complete = "(begin \( eval_flags_complete ) \( eval_string ))"
         let eval_string_both = "(let ((results-fast \( eval_string_fast )))\n" +
-                                 "(if (null? results-fast)\n" +
-                                    "\( eval_string_complete )\n" +
-                                    "results-fast))"
+                               "  (if (null? results-fast)\n" +
+                               "    \( eval_string_complete )\n" +
+                               "     results-fast))"
 
         let define_ans_string: String = "(define (query-val\( name ))" + "\n" +
                                         "  (if (null? (parse-ans\( name )))" + "\n" +

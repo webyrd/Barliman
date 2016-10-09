@@ -1,4 +1,3 @@
-(define (ans-allTests)
        (run 1 (defns)
          (let ((g1 (gensym "g1"))
                (g2 (gensym "g2"))
@@ -23,4 +22,3 @@
            (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
              (fresh (defn-list)
 
-  
