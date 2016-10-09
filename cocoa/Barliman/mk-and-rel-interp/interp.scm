@@ -358,21 +358,28 @@
   (try-lookup-before expr env val (eval-expo-rest expr env val)))
 
 (define (eval-expo-rest expr env val)
-  (conde
+  (lambdag@ (st)
+    (let* ((expr (walk expr (state-S st)))
+           (env (walk env (state-S st)))
+           (depth (state-depth st))
+           (goal (lambdag@ (st)
+                   ((conde
     ((numbero expr) (== expr val))
-
     ((fresh (rator x* rands a* prim-id)
        (== `(,rator . ,rands) expr)
        (eval-expo rator env `(prim . ,prim-id))
-       (eval-primo prim-id a* val)
-       (eval-listo rands env a*)))
+       (eval-primo prim-id a* val rands env)))
 
     ((fresh (rator x* rands body env^ a* res)
        (== `(,rator . ,rands) expr)
        ;; Multi-argument
        (eval-expo rator env `(closure (lambda ,x* ,body) ,env^))
        (ext-env*o x* a* env^ res)
-       (eval-application rands env a* (eval-expo body res val))))
+       ; replacing eval-application with these may be faster with multi-level defer
+       ;(eval-expo body res val)
+       ;(eval-listo rands env a*)
+       (eval-application rands env a* (eval-expo body res val))
+       ))
 
     ((if-primo expr env val))
 
@@ -395,7 +402,7 @@
     ((fresh (x body)
        (== `(lambda ,x ,body) expr)
        (== `(closure (lambda ,x ,body) ,env) val)
-       (conde
+       (conde$
          ;; Variadic
          ((symbolo x))
          ;; Multi-argument
@@ -417,7 +424,7 @@
        (== `(letrec ((,p-name (lambda ,x ,body)))
               ,letrec-body)
            expr)
-       (conde
+       (conde$
          ; Variadic
          ((symbolo x))
          ; Multiple argument
@@ -427,16 +434,23 @@
                   `((,p-name . (rec . (lambda ,x ,body))) . ,env)
                   val)))
 
-    ((prim-expo expr env val))))
+    ((prim-expo expr env val)))
+                    (state-depth-set st depth)))))
+
+      (if (or (var? expr)
+              (var? env)
+              (and (pair? expr) (var? (walk (car expr) (state-S st)))))
+        (state-deferred-defer st goal)
+        (goal st)))))
 
 (define empty-env '())
 
 (define (lookupo x env t)
   (fresh (y b rest)
     (== `((,y . ,b) . ,rest) env)
-    (conde
+    (conde;1 (((x x) (y y)))
       ((== x y)
-       (conde
+       (conde;1 (((b b)))
          ((== `(val . ,t) b))
          ((fresh (lam-expr)
             (== `(rec . ,lam-expr) b)
@@ -447,16 +461,19 @@
 (define (try-lookup-before x env t alts)
   (lambdag@ (st)
     (let-values (((rgenv venv) (list-split-ground st env)))
-      (let loop ((rgenv rgenv) (alts (conde$ ((symbolo x) (lookupo x venv t))
-                                             (alts))))
+      (let loop ((rgenv rgenv) (alts (conde$ ;1$ (((x x)))
+                                       ((symbolo x) (lookupo x venv t))
+                                       (alts))))
         (if (null? rgenv) (alts st)
           (let ((rib (car rgenv)))
             (loop (cdr rgenv)
               (fresh (y b)
                 (== `(,y . ,b) rib)
-                (conde$
+                (conde$ ;1$ ((;(x x)
+                           ;(y y)
+                           ;))
                   ((symbolo x) (== x y)
-                   (conde$
+                   (conde$ ;1$ (((b b)))
                      ((== `(val . ,t) b))
                      ((fresh (lam-expr)
                              (== `(rec . ,lam-expr) b)
@@ -464,7 +481,7 @@
                   ((=/= x y) alts))))))))))
 
 (define (not-in-envo x env)
-  (conde
+  (conde1 (((x x) (env env)))
     ((== empty-env env))
     ((fresh (y b rest)
        (== `((,y . ,b) . ,rest) env)
@@ -472,7 +489,7 @@
        (not-in-envo x rest)))))
 
 (define (eval-listo expr env val)
-  (conde
+  (conde1 (((expr expr)) ((val val)))
     ((== '() expr)
      (== '() val))
     ((fresh (a d v-a v-d)
@@ -517,7 +534,7 @@
 ;; need to make sure lambdas are well formed.
 ;; grammar constraints would be useful here!!!
 (define (list-of-symbolso los)
-  (conde
+  (conde1 (((los los)))
     ((== '() los))
     ((fresh (a d)
        (== `(,a . ,d) los)
@@ -525,7 +542,7 @@
        (list-of-symbolso d)))))
 
 (define (ext-env*o x* a* env out)
-  (conde
+  (conde;1 (((x* x*)) ((a* a*)))
     ((== '() x*) (== '() a*) (== env out))
     ((fresh (x a dx* da* env2)
        (== `(,x . ,dx*) x*)
@@ -534,30 +551,35 @@
        (symbolo x)
        (ext-env*o dx* da* env2 out)))))
 
-(define (eval-primo prim-id a* val)
-  (conde
+(define (eval-primo prim-id a* val rands env)
+  (conde$ ;1$ (((prim-id prim-id)))
     [(== prim-id 'cons)
      (fresh (a d)
        (== `(,a ,d) a*)
-       (== `(,a . ,d) val))]
+       (== `(,a . ,d) val)
+       (eval-listo rands env a*))]
     [(== prim-id 'car)
      (fresh (d)
        (== `((,val . ,d)) a*)
-       (=/= 'closure val))]
+       (=/= 'closure val)
+       (eval-listo rands env a*))]
     [(== prim-id 'cdr)
      (fresh (a)
        (== `((,a . ,val)) a*)
-       (=/= 'closure a))]
+       (=/= 'closure a)
+       (eval-listo rands env a*))]
     [(== prim-id 'null?)
      (fresh (v)
        (== `(,v) a*)
-       (conde
+       (eval-listo rands env a*)
+       (conde$;1$ (((v v)) ((val val)))
          ((== '() v) (== #t val))
          ((=/= '() v) (== #f val))))]
     [(== prim-id 'pair?)
      (fresh (v)
        (== `(,v) a*)
-       (conde
+       (eval-listo rands env a*)
+       (conde$;1$ (((v v)))
          ((symbolo v) (== #f val))
          ((numbero v) (== #f val))
          ((== '() v) (== #f val))
@@ -567,7 +589,8 @@
     [(== prim-id 'symbol?)
      (fresh (v)
        (== `(,v) a*)
-       (conde
+       (eval-listo rands env a*)
+       (conde$;1$ (((v v)))
          ((symbolo v) (== #t val))
          ((numbero v) (== #f val))
          ((== '() v) (== #f val))
@@ -577,26 +600,26 @@
     [(== prim-id 'not)
      (fresh (b)
        (== `(,b) a*)
-       (conde
+       (eval-listo rands env a*)
+       (conde1$ (((b b)) ((val val)))
          ((=/= #f b) (== #f val))
          ((== #f b) (== #t val))))]
     [(== prim-id 'equal?)
      (fresh (v1 v2)
        (== `(,v1 ,v2) a*)
-       (conde
+       (eval-listo rands env a*)
+       (conde$ ;1$ (((v1 v1) (v2 v2)) ((val val)))
          ((== v1 v2) (== #t val))
-         ((=/= v1 v2) (== #f val))))]
-
-    ))
+         ((=/= v1 v2) (== #f val))))]))
 
 (define (prim-expo expr env val)
-  (conde
+  (conde1$ (((expr expr)))
     ((boolean-primo expr env val))
     ((and-primo expr env val))
     ((or-primo expr env val))))
 
 (define (boolean-primo expr env val)
-  (conde
+  (conde1$ (((expr expr)) ((val val)))
     ((== #t expr) (== #t val))
     ((== #f expr) (== #f val))))
 
@@ -607,14 +630,14 @@
     (ando e* env val)))
 
 (define (ando e* env val)
-  (conde
+  (conde1 (((e* e*)))
     ((== '() e*) (== #t val))
     ((fresh (e)
        (== `(,e) e*)
        (eval-expo e env val)))
     ((fresh (e1 e2 e-rest v)
        (== `(,e1 ,e2 . ,e-rest) e*)
-       (conde
+       (conde1 (((e1 e1) (env env)))
          ((== #f v)
           (== #f val)
           (eval-expo e1 env v))
@@ -629,14 +652,14 @@
     (oro e* env val)))
 
 (define (oro e* env val)
-  (conde
+  (conde1 (((e* e*)))
     ((== '() e*) (== #f val))
     ((fresh (e)
        (== `(,e) e*)
        (eval-expo e env val)))
     ((fresh (e1 e2 e-rest v)
        (== `(,e1 ,e2 . ,e-rest) e*)
-       (conde
+       (conde1 (((e1 e1) (env env)))
          ((=/= #f v)
           (== v val)
           (eval-expo e1 env v))
@@ -660,7 +683,7 @@
     (== `(if ,e1 ,e2 ,e3) expr)
     (not-in-envo 'if env)
     (eval-expo e1 env t)
-    (conde
+    (conde1 (((t t)))
       ((condition-true t) (eval-expo e2 env val))
       ((== #f t) (eval-expo e3 env val)))))
 
@@ -719,7 +742,7 @@
       (match-clauses mval `(,clause . ,clauses) env val))))
 
 (define (not-symbolo t)
-  (conde
+  (conde1$ (((t t)))
     ((== #f t))
     ((== #t t))
     ((== '() t))
@@ -728,7 +751,7 @@
        (== `(,a . ,d) t)))))
 
 (define (not-numbero t)
-  (conde
+  (conde1$ (((t t)))
     ((== #f t))
     ((== #t t))
     ((== '() t))
@@ -737,24 +760,24 @@
        (== `(,a . ,d) t)))))
 
 (define (self-eval-literalo t)
-  (conde
+  (conde1$ (((t t)))
     ((numbero t))
     ((booleano t))))
 
 (define (literalo t)
-  (conde
+  (conde1$ (((t t)))
     ((numbero t))
     ((symbolo t) (=/= 'closure t))
     ((booleano t))
     ((== '() t))))
 
 (define (booleano t)
-  (conde
+  (conde1$ (((t t)))
     ((== #f t))
     ((== #t t))))
 
 (define (regular-env-appendo env1 env2 env-out)
-  (conde
+  (conde1 (((env1 env1)))
     ((== empty-env env1) (== env2 env-out))
     ((fresh (y v rest res)
        (== `((,y . (val . ,v)) . ,rest) env1)
@@ -764,7 +787,7 @@
 (define (match-clauses mval clauses env val)
   (fresh (p result-expr d penv)
     (== `((,p ,result-expr) . ,d) clauses)
-    (conde
+    (conde1 (((mval mval) (p p)))
       ((fresh (env^)
          (p-match p mval '() penv)
          (regular-env-appendo penv env env^)
@@ -776,7 +799,7 @@
   (fresh (val)
     (symbolo var)
     (=/= 'closure mval)
-    (conde
+    (conde1 (((var var) (mval mval) (penv penv)))
       ((== mval val)
        (== penv penv-out)
        (lookupo var penv val))
@@ -791,14 +814,14 @@
     (lookupo var penv val)))
 
 (define (p-match p mval penv penv-out)
-  (conde
+  (conde1 (((p p) (mval mval)))
     ((self-eval-literalo p)
      (== p mval)
      (== penv penv-out))
     ((var-p-match p mval penv penv-out))
     ((fresh (var pred val)
       (== `(? ,pred ,var) p)
-      (conde
+      (conde1 (((pred pred)) ((mval mval)))
         ((== 'symbol? pred)
          (symbolo mval))
         ((== 'number? pred)
@@ -809,7 +832,7 @@
       (quasi-p-match quasi-p mval penv penv-out)))))
 
 (define (p-no-match p mval penv penv-out)
-  (conde
+  (conde1 (((p p) (mval mval)))
     ((self-eval-literalo p)
      (=/= p mval)
      (== penv penv-out))
@@ -818,14 +841,14 @@
        (== `(? ,pred ,var) p)
        (== penv penv-out)
        (symbolo var)
-       (conde
+       (conde1 (((pred pred)))
          ((== 'symbol? pred)
-          (conde
+          (conde1 (((mval mval)))
             ((not-symbolo mval))
             ((symbolo mval)
              (var-p-no-match var mval penv penv-out))))
          ((== 'number? pred)
-          (conde
+          (conde1 (((mval mval)))
             ((not-numbero mval))
             ((numbero mval)
              (var-p-no-match var mval penv penv-out)))))))
@@ -834,7 +857,7 @@
       (quasi-p-no-match quasi-p mval penv penv-out)))))
 
 (define (quasi-p-match quasi-p mval penv penv-out)
-  (conde
+  (conde1 (((quasi-p quasi-p) (mval mval)))
     ((== quasi-p mval)
      (== penv penv-out)
      (literalo quasi-p))
@@ -849,7 +872,7 @@
        (quasi-p-match d v2 penv^ penv-out)))))
 
 (define (quasi-p-no-match quasi-p mval penv penv-out)
-  (conde
+  (conde1 (((quasi-p quasi-p) (mval mval)))
     ((=/= quasi-p mval)
      (== penv penv-out)
      (literalo quasi-p))
@@ -866,7 +889,7 @@
        (== `(,a . ,d) quasi-p)
        (=/= 'unquote a)
        (== `(,v1 . ,v2) mval)
-       (conde
+       (conde1 (((a a)) ((v1 v1)))
          ((quasi-p-no-match a v1 penv penv^))
          ((quasi-p-match a v1 penv penv^)
           (quasi-p-no-match d v2 penv^ penv-out)))))))
