@@ -23,7 +23,7 @@ This example is interesting because:
   (1) the partial definition of 'remove-foo' is at least plausible, in that the programmer is writing the lhs first before tackling the rest of the definition---note that the [else (cons (car ls) ,C)] structure is necessary for refutation, since otherwise the 'else' clause could contain a nested conditional;
   (2) only the rhs being edited (in the 'else' clause) is instantiated at all
   (3) no gensyms are used in the tests;
-  (4) retutation is fast (less than a second).
+  (4) retutation is fast (about a second).
 
 
 
