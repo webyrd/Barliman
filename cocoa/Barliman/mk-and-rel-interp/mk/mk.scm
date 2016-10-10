@@ -442,10 +442,13 @@
        (let** (((name (walk lvar (state-S st))) ...) ...
                ((depth (state-depth st))
                 (goal (lambdag@ (st) ((conde^ (g0 g ...) ...)
-                                      (state-depth-set st depth))))))
+                                      (state-depth-set st depth))))
+                (goal-deterministic
+                  (lambdag@ (st) ((conde$ (g0 g ...) ...)
+                                  (state-depth-set st depth))))))
          (if (and (ormap var? (list name ...)) ...)
            (state-deferred-defer st goal)
-           (goal st)))))))
+           (goal-deterministic st)))))))
 (define-syntax conde1
   (syntax-rules () ((_ body ...) (conde1^ conde body ...))))
 (define-syntax conde1$
