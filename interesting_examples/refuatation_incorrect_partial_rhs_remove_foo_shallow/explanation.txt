@@ -1,0 +1,92 @@
+9 Oct 2016
+
+
+
+Explanation:
+
+
+This example shows Barliman proving the given partial definition of remove-foo is incompatible with the test 
+
+(remove-foo '(foo))
+=>
+'()
+
+This example is interesting because:
+  (1) the partial definition of remove-foo is realistic, in that the programmer is writing code from the "top" down;
+  (2) typical type systems would not be able to prove the refutation, since the type of the erroneous clause is compatible with the type of remove-foo;
+  (3) even though remove-foo is a very simple function, this example shows that Barliman can refute code/tests when the code has relatively little stucture (in this case, even the number of 'cond' clauses is unspecified)---it may be possible to refute much larger, complex, and interesting definitions in a similar fashion;
+  (4) retutation is fast (less than a second).
+
+
+
+Code:
+
+
+The complete definition of remove-foo is
+
+(define remove-foo
+  (lambda (ls)
+    (cond
+      [(null? ls) '()]
+      [(equal? (car ls) 'foo) (remove-foo (cdr ls))]
+      [else (cons (car ls) (remove-foo (cdr ls)))])))
+
+This version of remove-foo works over "shallow" lists---that is, it doesn't remove any 'foo symbols nested inside a sublist.
+
+
+The partial definition given in Definitions pane:
+
+(define remove-foo
+  (lambda (ls)
+    (cond
+      [(null? ls) '()]
+      [(equal? (car ls) 'foo) (cons ,A ,B)]
+      .
+      ,C)))
+
+Note that the number of clauses isn't specified.
+
+
+Tests:
+
+(remove-foo '())
+=>
+'()
+
+(remove-foo '(foo))
+=>
+'()
+
+(remove-foo '(,g1))
+=>
+`(,g1)
+
+(remove-foo '(,g2 foo))
+=>
+`(,g2)
+
+(remove-foo '(foo ,g3 foo))
+=>
+`(,g3)
+
+(remove-foo '(foo ,g4 foo ,g5))
+=>
+`(,g4 ,g5)
+
+
+
+
+Setup:
+
+
+Will's MacBook Pro (Retina, 15-inch, Early 2013)
+2.8 GHz Intel Core i7
+16 GB 1600 MHz DDR3 RAM
+OS X El Capitan 10.11.6
+
+On branch conde1-no-deepening
+
+Set conde1 optimization flag to true in mk/mk.scm
+
+;; To allow use of experimental `conde1` optimization, set this to #t.
+(define enable-conde1? #t)
