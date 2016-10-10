@@ -84,9 +84,9 @@ Will's MacBook Pro (Retina, 15-inch, Early 2013)
 16 GB 1600 MHz DDR3 RAM
 OS X El Capitan 10.11.6
 
-On branch conde1-no-deepening
+Screenshot was taken on branch conde1-no-deepening, but the main branch now also has the same behavior.  SHA: 700372294d2573231ad14fa2d7803aeae4c1cc82
 
-Set conde1 optimization flag to true in mk/mk.scm
+Set conde1 optimization flag to true in mk/mk.scm:
 
 ;; To allow use of experimental `conde1` optimization, set this to #t.
 (define enable-conde1? #t)
