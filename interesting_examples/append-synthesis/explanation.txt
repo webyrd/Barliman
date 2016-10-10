@@ -1,0 +1,94 @@
+10 Oct 2016
+
+
+
+Explanation:
+
+
+This example shows Barliman synthesizing part or all of the definition of 'append', defined for two lists.
+
+This example is interesting because:
+  (1) it shows synthesis of an entire recursive definition;
+  (2) it shows the use of gensyms in the tests;
+  (3) the various screenshots show the running times as the definition of 'append' becomes more instantiated, starting as a single logic variable ,A;
+  (4) the screenshots show how specifying the number of arguments radically reduces the synthesis time, and providing specific variable names for those arguments reduces the running time even further.
+
+
+Code:
+
+
+The complete definition of 'append' is
+
+(define append
+  (lambda (l s)
+    (if (null? l)
+        s
+        (cons (car l) (append (cdr l) s)))))
+
+
+Here are the partially-specified definitions, and corresponding running times, shown in each of the screenshots:
+
+------------
+
+,A
+
+27.40 seconds
+
+------------
+
+(define ,A
+  (lambda ,B
+    ,C))
+
+27.09 seconds
+
+------------
+
+(define ,A
+  (lambda (,B ,D)
+    ,C))
+
+13.67 seconds
+
+------------
+
+(define ,A
+  (lambda (l s)
+    ,C))
+
+6.23 seconds
+
+------------
+
+
+
+Tests:
+
+(append '() '())
+=>
+'()
+
+(append '(,g1) '(,g2))
+=>
+`(,g1 ,g2)
+
+(append '(,g3 ,g4) '(,g5 ,g6))
+=>
+`(,g3 ,g4 ,g5 ,g6)
+
+
+
+Setup:
+
+
+Will's MacBook Pro (Retina, 15-inch, Early 2013)
+2.8 GHz Intel Core i7
+16 GB 1600 MHz DDR3 RAM
+OS X El Capitan 10.11.6
+
+Screenshot was taken on main branch.  Main branch SHA: 700372294d2573231ad14fa2d7803aeae4c1cc82
+
+Set conde1 optimization flag to true in mk/mk.scm:
+
+;; To allow use of experimental `conde1` optimization, set this to #t.
+(define enable-conde1? #t)

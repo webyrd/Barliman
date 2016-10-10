@@ -37,7 +37,7 @@ Barliman is general enough to handle multiple programming languages.  In fact, t
 
 ### Barliman in action
 
-Here are a few screenshots of Barliman, using the Mac implementation as of June 4, 2016.  (Update:  I've added a few newer screenshots from June 16, 2016.  Once Barliman stops changing as rapidly I'll update all the screenshots.)
+Here are a few screenshots of Barliman, using the Mac implementation as of June 4, 2016.  (Update:  I've added a few newer screenshots from June 16, 2016.  Once Barliman stops changing as rapidly I'll update all the screenshots.)  (Update, 10 October 2016:  Please see the `interesting_examples` directory for more recent examples and screenshots.)
 
 The first screenshot shows the main editor window.  The `Scheme Definition` edit pane contains the complete (fully instantiated) and correct definition of `append`, the list concatenation function in Barliman's default "miniScheme" language.  `append` will be our simple running example in these screenshots.  The edit window also contains three tests; each test contains an input expression, and the expected value of that expression.  The `Best Guess` pane, which is not editable by the user, contains the same fully instantiated definition of `append` as in the `Scheme Definition` edit pane.
 
@@ -413,6 +413,8 @@ KNOWN LIMITATIONS:
 
 KNOWN ERRORS:
 
+* Will modified the miniKanren reifier to remove unnecessary constraints involving gensyms.  Alas, he goofed it, and the reifier removes too many constraints, including some =/= and absento constraints in play when gensyms are used.  Need to fix this!
+* (lambda (,A ,B) ...) should always produce a disequality constraint between A and B.
 * The '0' key no longer seems to work.
 * Shadowing of syntax is no longer working.  (and and #t) => #t should result in a syntax error, unless the Definitions pane contains a defn named 'and': (define and (lambda x  x)).  In which case, (and and #t) should be legal syntax.  (Wonder if we broke this when we messed with the environment in evalo.)
 * It is possible, rarely, to exit Barliman and still have a Scheme process running in the background.  Need a way to better track which processes have been started and make sure to kill them.  Or potentially use something like `ulimit` when launching a process.
