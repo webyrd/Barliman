@@ -5,7 +5,7 @@
 Explanation:
 
 
-This example shows Barliman proving the given partial definition of 'remove-foo' is incompatible with the test:
+This example shows Barliman proving the given partial definition of "shallow" 'remove-foo' is incompatible with the test:
 
 (remove-foo '(foo))
 =>
@@ -15,14 +15,15 @@ This example is interesting because:
   (1) the partial definition of 'remove-foo' is realistic, in that the programmer is writing code from the "top" down;
   (2) typical type systems would not be able to prove the refutation, since the type of the erroneous clause is compatible with the type of 'remove-foo';
   (3) even though 'remove-foo' is a very simple function, this example shows that Barliman can refute code/tests when the code has relatively little stucture (in this case, even the number of 'cond' clauses is unspecified)---it may be possible to refute much larger, complex, and interesting definitions in a similar fashion;
-  (4) retutation is fast (less than a second).
+  (4) gensyms are used in the test (? are they necessary ?);
+  (5) retutation is fast (less than a second).
 
 
 
 Code:
 
 
-The complete definition of 'remove-foo' is
+The complete definition of "shallow" 'remove-foo' is
 
 (define remove-foo
   (lambda (ls)

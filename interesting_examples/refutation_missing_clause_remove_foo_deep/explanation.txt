@@ -1,0 +1,108 @@
+9 Oct 2016
+
+
+
+Explanation:
+
+
+This example shows Barliman proving that the given partial definition of the "deep" version of 'remove-foo' is incompatible with the test:
+
+(remove-foo '((d foo) foo (e (foo f foo)) foo g foo (h)))
+=>
+'((d foo) (e (foo f foo)) g (h))
+
+This is because the [(pair? (car ls)) ...] clause is missing from the partial definition.  One screenshot shows the test failing, while the other screenshot shows all individual tests passing once the partially-specified clause
+
+      [(pair? (car ls)) ,D]
+
+has been added to the partial definition.
+
+Thanks to Michael Adams and Matt Might for an interesting discussion and suggestions that lead to this example.  In particular, I believe Michael suggested a test that could detect a missing clause.  Matt strongly suggested pushing on the "Refutation-Oriented Programming" angle (a phrase he coined), of which this test is an example.
+
+This example is interesting because:
+  (1) the partial definition of 'remove-foo' is at least plausible, in that the programmer is writing the lhs first before tackling the rest of the definition---note that the [else (cons (car ls) ,C)] structure is necessary for refutation, since otherwise the 'else' clause could contain a nested conditional;
+  (2) only the rhs being edited (in the 'else' clause) is instantiated at all
+  (3) no gensyms are used in the tests;
+  (4) retutation is fast (less than a second).
+
+
+
+Code:
+
+
+The complete definition of "deep" 'remove-foo' is
+
+(define remove-foo
+  (lambda (ls)
+    (cond
+      [(null? ls) '()]
+      [(pair? (car ls)) (cons (remove-foo (car ls)) (remove-foo (cdr ls)))]
+      [(equal? (car ls) 'foo) (remove-foo (cdr ls))]
+      [else (cons (car ls) (remove-foo (cdr ls)))])))
+
+This version of 'remove-foo' works over "deep" lists---that is, it removes any 'foo symbols nested inside a sublist.
+
+
+The partial definition of 'remove-foo' given in Definitions pane for refutation:
+
+(define remove-foo
+  (lambda (ls)
+    (cond
+      [(null? ls) ,A]
+      [(equal? (car ls) 'foo) ,B]
+      [else (cons (car ls) ,C)])))
+
+Adding the partially-instantiated [(pair? (car ls)) ,D] clause allows all the individual tests to pass, but is not sufficient for synthesis of the missing code:
+
+(define remove-foo
+  (lambda (ls)
+    (cond
+      [(null? ls) ,A]
+      [(pair? (car ls)) ,D]
+      [(equal? (car ls) 'foo) ,B]
+      [else (cons (car ls) ,C)])))
+
+
+Tests:
+
+(remove-foo '())
+=>
+'()
+
+(remove-foo '(a))
+=>
+'(a)
+
+(remove-foo '(foo))
+=>
+'()
+
+(remove-foo '(b foo c))
+=>
+'(b c)
+
+(remove-foo '(bar foo baz (foo) foo ((quux foo) foo)))
+=>
+'(bar baz (foo) ((quux foo) foo))
+
+(remove-foo '((d foo) foo (e (foo f foo)) foo g foo (h)))
+=>
+'((d) (e (f)) g (h))
+
+
+
+
+Setup:
+
+
+Will's MacBook Pro (Retina, 15-inch, Early 2013)
+2.8 GHz Intel Core i7
+16 GB 1600 MHz DDR3 RAM
+OS X El Capitan 10.11.6
+
+Screenshot was taken on branch conde1-no-deepening, but the main branch now also has the same behavior.  Main branch SHA: 700372294d2573231ad14fa2d7803aeae4c1cc82
+
+Set conde1 optimization flag to true in mk/mk.scm:
+
+;; To allow use of experimental `conde1` optimization, set this to #t.
+(define enable-conde1? #t)
