@@ -1209,7 +1209,7 @@
        ;(lambda (xs)
          ;(if (null? xs)
            ;xs
-           ;(foldl cons (list) xs))))))))
+           ;(foldl cons '() xs))))))))
 
 (time (test 'reverse-7
   (run 1 (defn)
@@ -1249,7 +1249,7 @@
        (lambda (xs)
          (if (null? xs)
            xs
-           (foldl cons (list) xs))))))))
+           (foldl cons '() xs))))))))
 
 ;(time (test 'reverse-8
   ;(run 1 (defn)
@@ -1286,7 +1286,7 @@
        ;(lambda (xs)
          ;(if (null? xs)
            ;xs
-           ;(foldl cons (list) xs))))))))
+           ;(foldl cons '() xs))))))))
 
 (time (test 'rev-tailcall-1
   (run 1 (defn)
