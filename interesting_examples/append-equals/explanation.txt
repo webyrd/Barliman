@@ -1,0 +1,151 @@
+11 Oct 2016
+
+
+
+Explanation:
+
+
+This example shows Barliman synthesizing all of the definition of 'append', defined for two lists, using tests involving equality ('equal?').
+
+Matt Might suggested using these sorts of equality tests for synthesis.
+
+This example is interesting because:
+  (1) complete synthesis with the `equal?` specifications is significantly faster than complete synthesis with the examples in the `append-synthesis` directory(!);
+  (2) the `equal?` specifications in some sense mimic property-based testing;
+  (3) the use of `equal?` means that the results of the calls to `append` need not be known, or even representable---rather, it is the relationship between the calls to `append` that are important;
+  (4) synthesis is just as fast without using gensyms;
+  (5) demonstrates synthesis in which the second argument to `append` is not a list, and also synthesis in which the second argument to `append` is always a list.
+
+
+
+
+Code:
+
+
+The complete definition of 'append' is
+
+(define append
+  (lambda (l s)
+    (if (null? l)
+        s
+        (cons (car l) (append (cdr l) s)))))
+
+
+Here is the partially-specified definition, and corresponding running time, shown in the screenshot:
+
+------------
+
+,A
+
+------------
+
+which generates:
+
+(define append
+  (lambda (_.0 _.1)
+    (if (null? _.0)
+        _.1
+        (cons (car _.0) (append (cdr _.0) _.1)))))
+
+
+
+Side conditions:
+(sym _.0 _.1)
+
+
+
+
+Tests:
+
+(equal? (cons ',g7 (append '() ',g8)) (append (cons ',g7 '()) ',g8))
+=>
+#t
+
+(equal? (cons ',g4 (append '(,g5) ',g6)) (append (cons ',g4 '(,g5)) ',g6))
+=>
+#t
+
+(equal? (append '(,g9) '(,g10 . ,g11)) (append '(,g9 ,g10) ',g11))
+=>
+#t
+
+(equal? (append '(,g1) (append '(,g2) ',g3)) (append (append '(,g1) '(,g2)) ',g3))
+=>
+#t
+
+6.10 seconds
+
+
+-----------
+
+Removing the last test speeds up the tests, as shown in a second screenshot.  The tests
+
+(equal? (cons ',g7 (append '() ',g8)) (append (cons ',g7 '()) ',g8))
+=>
+#t
+
+(equal? (cons ',g4 (append '(,g5) ',g6)) (append (cons ',g4 '(,g5)) ',g6))
+=>
+#t
+
+(equal? (append '(,g9) '(,g10 . ,g11)) (append '(,g9 ,g10) ',g11))
+=>
+#t
+
+synthesize all of append in 4.23 seconds.
+
+-----------
+
+Using concrete symbols rather than gensyms for the three previous tests is just as fast.  The tests
+
+(equal? (cons 'a (append '() 'b)) (append (cons 'a '()) 'b))
+=>
+#t
+
+(equal? (cons 'c (append '(d) 'e)) (append (cons 'c '(d)) 'e))
+=>
+#t
+
+(equal? (append '(f) '(g . h)) (append '(f g) 'h))
+=>
+#t
+
+synthesize all of append in 4.24 seconds.
+
+-----------
+
+Same as above, but in which the second argument to append is always a list:
+
+(equal? (cons 'a (append '() '(b))) (append (cons 'a '()) '(b)))
+=>
+#t
+
+(equal? (cons 'c (append '(d) '(e))) (append (cons 'c '(d)) '(e)))
+=>
+#t
+
+(equal? (append '(f) '(g h)) (append '(f g) '(h)))
+=>
+#t
+
+synthesize all of append in 4.94 seconds.
+
+-----------
+
+
+
+
+Setup:
+
+
+Will's MacBook Pro (Retina, 15-inch, Early 2013)
+2.8 GHz Intel Core i7
+16 GB 1600 MHz DDR3 RAM
+OS X El Capitan 10.11.6
+
+Screenshot was taken on main branch.  Main branch SHA: 700372294d2573231ad14fa2d7803aeae4c1cc82
+
+Set conde1 optimization flag to true in mk/mk.scm:
+
+;; To allow use of experimental `conde1` optimization, set this to #t.
+(define enable-conde1? #t)
