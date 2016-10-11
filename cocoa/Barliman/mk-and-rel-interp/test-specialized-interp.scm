@@ -22,10 +22,10 @@
                    ((conde
     ((numbero expr) (== expr val))
 
-    ((fresh (rator x* rands a* prim-id)
+    ((fresh (rator rands prim-id)
        (== `(,rator . ,rands) expr)
        (eval-expo rator env `(prim . ,prim-id))
-       (eval-primo prim-id a* val rands env)))
+       (eval-primo prim-id val rands env)))
 
     ((fresh (rator x* rands body env^ a* res)
        (== `(,rator . ,rands) expr)
@@ -40,14 +40,14 @@
 
     ((if-primo expr env val))
 
-    ((fresh (rator x rands body env^ a* res)
-       (== `(,rator . ,rands) expr)
-       ;; variadic
-       (symbolo x)
-       (== `((,x . (val . ,a*)) . ,env^) res)
-       (eval-expo rator env `(closure (lambda ,x ,body) ,env^))
-       (eval-expo body res val)
-       (eval-listo rands env a*)))
+;    ((fresh (rator x rands body env^ a* res)
+;       (== `(,rator . ,rands) expr)
+;       ;; variadic
+;       (symbolo x)
+;       (== `((,x . (val . ,a*)) . ,env^) res)
+;       (eval-expo rator env `(closure (lambda ,x ,body) ,env^))
+;       (eval-expo body res val)
+;       (eval-listo rands env a*)))
 
     ((== `(quote ,val) expr)
      (absento 'closure val)
@@ -57,11 +57,12 @@
     ((fresh (x body)
        (== `(lambda ,x ,body) expr)
        (== `(closure (lambda ,x ,body) ,env) val)
-       (conde$
-         ;; Variadic
-         ((symbolo x))
-         ;; Multi-argument
-         ((list-of-symbolso x)))
+;       (conde$
+;         ; Variadic
+;         ((symbolo x))
+;         ; Multiple argument
+;         ((list-of-symbolso x)))
+       (list-of-symbolso x)
        (not-in-envo 'lambda env)))
 
     ;; WEB 25 May 2016 -- This rather budget version of 'begin' is
@@ -77,11 +78,12 @@
        (== `(letrec ((,p-name (lambda ,x ,body)))
               ,letrec-body)
            expr)
-       (conde$
-         ; Variadic
-         ((symbolo x))
-         ; Multiple argument
-         ((list-of-symbolso x)))
+;       (conde$
+;         ; Variadic
+;         ((symbolo x))
+;         ; Multiple argument
+;         ((list-of-symbolso x)))
+       (list-of-symbolso x)
        (not-in-envo 'letrec env)
        (eval-expo letrec-body
                   `((,p-name . (rec . (lambda ,x ,body))) . ,env)
@@ -95,8 +97,6 @@
               (and (pair? expr) (var? (walk (car expr) (state-S st)))))
         (state-deferred-defer st goal)
         (goal st)))))
-
-(define empty-env '())
 
 (define (lookupo x env t)
   (fresh (y b rest)
@@ -204,34 +204,29 @@
        (symbolo x)
        (ext-env*o dx* da* env2 out)))))
 
-(define (eval-primo prim-id a* val rands env)
+(define (eval-primo prim-id val rands env)
   (conde$ ;1$ (((prim-id prim-id)))
     [(== prim-id 'cons)
      (fresh (a d)
-       (== `(,a ,d) a*)
        (== `(,a . ,d) val)
-       (eval-listo rands env a*))]
+       (eval-listo rands env `(,a ,d)))]
     [(== prim-id 'car)
      (fresh (d)
-       (== `((,val . ,d)) a*)
        (=/= 'closure val)
-       (eval-listo rands env a*))]
+       (eval-listo rands env `((,val . ,d))))]
     [(== prim-id 'cdr)
      (fresh (a)
-       (== `((,a . ,val)) a*)
        (=/= 'closure a)
-       (eval-listo rands env a*))]
+       (eval-listo rands env `((,a . ,val))))]
     [(== prim-id 'null?)
      (fresh (v)
-       (== `(,v) a*)
-       (eval-listo rands env a*)
+       (eval-listo rands env `(,v))
        (conde$;1$ (((v v)) ((val val)))
          ((== '() v) (== #t val))
          ((=/= '() v) (== #f val))))]
     [(== prim-id 'pair?)
      (fresh (v)
-       (== `(,v) a*)
-       (eval-listo rands env a*)
+       (eval-listo rands env `(,v))
        (conde$;1$ (((v v)))
          ((symbolo v) (== #f val))
          ((numbero v) (== #f val))
@@ -241,8 +236,7 @@
             (== #t val)))))]
     [(== prim-id 'symbol?)
      (fresh (v)
-       (== `(,v) a*)
-       (eval-listo rands env a*)
+       (eval-listo rands env `(,v))
        (conde$;1$ (((v v)))
          ((symbolo v) (== #t val))
          ((numbero v) (== #f val))
@@ -252,18 +246,18 @@
             (== #f val)))))]
     [(== prim-id 'not)
      (fresh (b)
-       (== `(,b) a*)
-       (eval-listo rands env a*)
+       (eval-listo rands env `(,b))
        (conde1$ (((b b)) ((val val)))
          ((=/= #f b) (== #f val))
          ((== #f b) (== #t val))))]
     [(== prim-id 'equal?)
      (fresh (v1 v2)
-       (== `(,v1 ,v2) a*)
-       (eval-listo rands env a*)
+       (eval-listo rands env `(,v1 ,v2))
        (conde$ ;1$ (((v1 v1) (v2 v2)) ((val val)))
          ((== v1 v2) (== #t val))
-         ((=/= v1 v2) (== #f val))))]))
+         ((=/= v1 v2) (== #f val))))]
+    [(== prim-id 'list)
+     (eval-listo rands env val)]))
 
 (define (prim-expo expr env val)
   (conde1$ (((expr expr)))
@@ -276,7 +270,7 @@
     ((== #f expr) (== #f val))))
 
 ;; Set this flag to #f to recover Scheme semantics.
-(define boolean-conditions-only? #f)
+(define boolean-conditions-only? #t)
 (define (condition v)
   (if (and allow-incomplete-search? boolean-conditions-only?)
     (booleano v)
@@ -303,7 +297,8 @@
                       (symbol? . (val . (prim . symbol?)))
                       (not . (val . (prim . not)))
                       (equal? . (val . (prim . equal?)))
-                      (list . (val . (closure (lambda x x) ,empty-env)))
+                      (list . (val . (prim . list)))
+                      ;(list . (val . (closure (lambda x x) ,empty-env)))
                       . ,empty-env))
 
 (define (not-symbolo t)
