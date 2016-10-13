@@ -21,7 +21,7 @@
 
 ;; Switched to N-way Trie implementation to reduce depth
 
-(define shift-size 3)
+(define shift-size 4)
 (define node-size (fxsll 1 shift-size))
 (define local-mask (fx- node-size 1))
 (define (shift-n xi) (fxsra xi shift-size))
