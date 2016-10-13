@@ -43,7 +43,7 @@
     ((node-n? trie)
      (let loop ((ci 0) (sz 0))
        (if (fx=? node-size ci) sz
-         (loop (fx+ ci 1) (fx+ sz (nwt:size (vector-ref trie ci)))))))
+         (loop (fx+ ci 1) (fx+ sz (nwt:size (node-n-get trie ci)))))))
     ((data? trie) 1)
     (else 0)))
 
