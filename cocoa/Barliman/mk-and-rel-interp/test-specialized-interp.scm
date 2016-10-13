@@ -52,7 +52,7 @@
 ;       (eval-listo rands env a*)))
 
     ((== `(quote ,val) expr)
-     (absento 'closure val)
+     (absento closure-tag val)
      (absento 'prim val)
      (not-in-envo 'quote env))
 
@@ -214,11 +214,11 @@
        (eval-listo rands env `(,a ,d)))]
     [(== prim-id 'car)
      (fresh (d)
-       (=/= 'closure val)
+       (=/= closure-tag val)
        (eval-listo rands env `((,val . ,d))))]
     [(== prim-id 'cdr)
      (fresh (a)
-       (=/= 'closure a)
+       (=/= closure-tag a)
        (eval-listo rands env `((,a . ,val))))]
     [(== prim-id 'null?)
      (fresh (v)
