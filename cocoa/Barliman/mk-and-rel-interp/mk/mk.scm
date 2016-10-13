@@ -606,6 +606,12 @@
        (let ((x (walk* x (state-S st))) ...)
          ((fresh () g g* ...) st))))))
 
+(define-syntax project0
+  (syntax-rules ()
+    ((_ (x ...) g g* ...)
+     (lambdag@ (st)
+       (let ((x (walk x (state-S st))) ...)
+         ((fresh () g g* ...) st))))))
 
 ; Create a constraint store of the old representation from a state object,
 ; so that we can use the old reifier. Only accumulates constraints related
