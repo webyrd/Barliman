@@ -13,6 +13,53 @@
 (define (evalo expr val)
   (eval-expo expr initial-env val))
 
+;; TODO: specialized synthesis relational interpreter
+;; goal graph
+;;   unbound logic variable listener map
+;;     unbound variables -> affected goals; trigger goals upon binding
+;;   evaluated term map
+;;     term -> (env -> result)
+;;     i.e., unify results for same env
+;;   special constraints
+;;     finite domains that don't require splitting states
+;;     argument lists
+;;       list-of-symbolso
+;;       all different
+;;       avoid shadowing
+;;     delayed env concatenation; env with mystery prefix
+;;     negations?
+;;       absento tags: closures, prims, user gensyms
+;;       =/= for symbols during env lookup
+;;       not-in-envo
+;;       =/= for some evaluation results
+;;         not #f (condition results and 'not' operator), not equal?, not null?
+;;     there may be more...
+;; unshadowed environment enumeration
+;; size incrementing generation
+;; space and time quotas for evaluation slices
+;; JIT denotational interpretation
+;; strategic, benign incompleteness
+;;   weighted disjunctions
+;;   avoid redundant terms
+;;     if both 'cons' and 'list' are available, usually no need to apply 'list'?
+;;       but it may make sense to pass list as an argument
+;;       and 'list' terms may be smaller and faster to find...
+;;   limit generation of if/cond/match (can also do everything with just 'if')
+;;   prefer applying primitives that produce booleans in conditional positions
+;;   possibly omit applications of literal lambdas
+;;   synthesize letrec rather than begin/define; can translate for the UI
+;; specialized goal scheduling
+;;   small, composable goal-indexing predicates
+;;     used to uniquely identify branch
+;;     refined as new information comes in
+;;   generators, special constraints, branch refinement, priority?
+;;     satisfiability problems (not just constraints)
+;;       how to share code with synthesizer while distinguishing this concept?
+;;   eval continuation management
+;;   hierarchical? parents know what matters, no point in refining useless children
+;;   specialized unify/disunify predicates tied to boolean outcomes
+;;     distinguish between test and assign
+
 (define (eval-expo expr env val)
   (try-lookup-before expr env val (eval-expo-rest expr env val)))
 
