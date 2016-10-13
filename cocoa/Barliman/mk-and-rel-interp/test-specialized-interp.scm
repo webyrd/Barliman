@@ -6,6 +6,7 @@
 (set! enable-conde1? #t)
 
 (define closure-tag (gensym "#%closure"))
+(define prim-tag (gensym "#%primitive"))
 
 (define empty-env '())
 
@@ -26,7 +27,7 @@
 
     ((fresh (rator rands prim-id)
        (== `(,rator . ,rands) expr)
-       (eval-expo rator env `(prim . ,prim-id))
+       (eval-expo rator env `(,prim-tag . ,prim-id))
        (eval-primo prim-id val rands env)))
 
     ((fresh (rator x* rands body env^ a* res)
@@ -53,7 +54,7 @@
 
     ((== `(quote ,val) expr)
      (absento closure-tag val)
-     (absento 'prim val)
+     (absento prim-tag val)
      (not-in-envo 'quote env))
 
     ((fresh (x body)
@@ -291,15 +292,15 @@
       ((condition-true t) (eval-expo e2 env val))
       ((== #f t) (eval-expo e3 env val)))))
 
-(define initial-env `((cons . (val . (prim . cons)))
-                      (car . (val . (prim . car)))
-                      (cdr . (val . (prim . cdr)))
-                      (null? . (val . (prim . null?)))
-                      (pair? . (val . (prim . pair?)))
-                      (symbol? . (val . (prim . symbol?)))
-                      (not . (val . (prim . not)))
-                      (equal? . (val . (prim . equal?)))
-                      (list . (val . (prim . list)))
+(define initial-env `((cons . (val . (,prim-tag . cons)))
+                      (car . (val . (,prim-tag . car)))
+                      (cdr . (val . (,prim-tag . cdr)))
+                      (null? . (val . (,prim-tag . null?)))
+                      (pair? . (val . (,prim-tag . pair?)))
+                      (symbol? . (val . (,prim-tag . symbol?)))
+                      (not . (val . (,prim-tag . not)))
+                      (equal? . (val . (,prim-tag . equal?)))
+                      (list . (val . (,prim-tag . list)))
                       ;(list . (val . (,closure-tag (lambda x x) ,empty-env)))
                       . ,empty-env))
 
