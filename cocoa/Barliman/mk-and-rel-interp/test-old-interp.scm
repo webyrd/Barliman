@@ -6,6 +6,48 @@
 (set! allow-incomplete-search? #t)
 (set! enable-conde1? #t)
 
+(time
+  (test 'remove-foo-1
+    (run 1 (q)
+      (evalo
+        `(begin
+           (define remove-foo
+             (lambda (ls)
+               (cond
+                 [(null? ls) '()]
+                 [(pair? (car ls)) (cons (remove-foo (car ls)) (remove-foo (cdr ls)))]
+                 [(equal? (car ls) 'foo) (remove-foo (cdr ls))]
+                 [else (cons (car ls) (remove-foo (cdr ls)))])))
+           (list (remove-foo '())
+                 (remove-foo '(a))
+                 (remove-foo '(foo))
+                 (remove-foo '(b foo c))
+                 (remove-foo '(bar foo baz (foo) foo ((quux foo) foo)))
+                 (remove-foo '((d foo) foo (e (foo f foo)) foo g foo (h)))))
+        '(() (a) () (b c) (bar baz () ((quux))) ((d) (e (f)) g (h)))))
+    '((_.0))))
+
+(time
+  (test 'remove-foo-2
+    (run 1 (q)
+      (evalo
+        `(begin
+           (define remove-foo
+             (lambda (ls)
+               (cond
+                 [(null? ls) '()]
+                 [(pair? (car ls)) (cons (remove-foo (car ls)) (remove-foo (cdr ls)))]
+                 [(equal? (car ls) 'foo) (remove-foo (cdr ,q))]
+                 [else (cons (car ls) (remove-foo (cdr ls)))])))
+           (list (remove-foo '())
+                 (remove-foo '(a))
+                 (remove-foo '(foo))
+                 (remove-foo '(b foo c))
+                 (remove-foo '(bar foo baz (foo) foo ((quux foo) foo)))
+                 (remove-foo '((d foo) foo (e (foo f foo)) foo g foo (h)))))
+        '(() (a) () (b c) (bar baz () ((quux))) ((d) (e (f)) g (h)))))
+    '((ls))))
+
 (time (test 'list-nth-element-peano
   (run 1 (q r)
     (evalo `(begin
