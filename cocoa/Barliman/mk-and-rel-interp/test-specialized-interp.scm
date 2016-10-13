@@ -5,6 +5,8 @@
 (set! allow-incomplete-search? #t)
 (set! enable-conde1? #t)
 
+(define closure-tag (gensym "#%closure"))
+
 (define empty-env '())
 
 (define (evalo expr val)
@@ -30,7 +32,7 @@
     ((fresh (rator x* rands body env^ a* res)
        (== `(,rator . ,rands) expr)
        ;; Multi-argument
-       (eval-expo rator env `(closure (lambda ,x* ,body) ,env^))
+       (eval-expo rator env `(,closure-tag (lambda ,x* ,body) ,env^))
        (ext-env*o x* a* env^ res)
        ; replacing eval-application with these may be faster with multi-level defer
        ;(eval-expo body res val)
@@ -45,7 +47,7 @@
 ;       ;; variadic
 ;       (symbolo x)
 ;       (== `((,x . (val . ,a*)) . ,env^) res)
-;       (eval-expo rator env `(closure (lambda ,x ,body) ,env^))
+;       (eval-expo rator env `(,closure-tag (lambda ,x ,body) ,env^))
 ;       (eval-expo body res val)
 ;       (eval-listo rands env a*)))
 
@@ -56,7 +58,7 @@
 
     ((fresh (x body)
        (== `(lambda ,x ,body) expr)
-       (== `(closure (lambda ,x ,body) ,env) val)
+       (== `(,closure-tag (lambda ,x ,body) ,env) val)
 ;       (conde$
 ;         ; Variadic
 ;         ((symbolo x))
@@ -107,7 +109,7 @@
          ((== `(val . ,t) b))
          ((fresh (lam-expr)
             (== `(rec . ,lam-expr) b)
-            (== `(closure ,lam-expr ,env) t)))))
+            (== `(,closure-tag ,lam-expr ,env) t)))))
       ((=/= x y)
        (lookupo x rest t)))))
 
@@ -130,7 +132,7 @@
                      ((== `(val . ,t) b))
                      ((fresh (lam-expr)
                              (== `(rec . ,lam-expr) b)
-                             (== `(closure ,lam-expr ,env) t)))))
+                             (== `(,closure-tag ,lam-expr ,env) t)))))
                   ((=/= x y) alts))))))))))
 
 (define (not-in-envo x env)
@@ -298,7 +300,7 @@
                       (not . (val . (prim . not)))
                       (equal? . (val . (prim . equal?)))
                       (list . (val . (prim . list)))
-                      ;(list . (val . (closure (lambda x x) ,empty-env)))
+                      ;(list . (val . (,closure-tag (lambda x x) ,empty-env)))
                       . ,empty-env))
 
 (define (booleano t)
