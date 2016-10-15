@@ -303,30 +303,40 @@
              (fresh () assign-result eval-args))))]
       [(== prim-id 'pair?)
        (fresh (v)
-         (eval-listo rands env `(,v))
-         (conde$ ;1$ (((v v)))
-           ((symbolo v) (== #f val))
-           ((numbero v) (== #f val))
-           ((== '() v) (== #f val))
-           ((fresh (a d)
-              (== `(,a . ,d) v)
-              (== #t val)))))]
+         (let ((assign-true (fresh (a d) (== #t val) (== `(,a . ,d) v)))
+               (assign-false (fresh () (== #f val) (conde$
+                                                     ((== '() v))
+                                                     ((symbolo v))
+                                                     ((== #f v))
+                                                     ((== #t v))
+                                                     ((numbero v)))))
+               (eval-args (eval-listo rands env `(,v))))
+           (if (or (var? val) (eq? val #f))
+             (fresh () eval-args (conde$ (assign-true) (assign-false)))
+             (fresh () assign-true eval-args))))]
       [(== prim-id 'symbol?)
        (fresh (v)
-         (eval-listo rands env `(,v))
-         (conde$ ;1$ (((v v)))
-           ((symbolo v) (== #t val))
-           ((numbero v) (== #f val))
-           ((== '() v) (== #f val))
-           ((fresh (a d)
-              (== `(,a . ,d) v)
-              (== #f val)))))]
+         (let ((assign-true (fresh () (== #t val) (symbolo v)))
+               (assign-false (fresh () (== #f val) (conde$
+                                                     ((== '() v))
+                                                     ((fresh (a d)
+                                                        (== `(,a . ,d) v)))
+                                                     ((== #f v))
+                                                     ((== #t v))
+                                                     ((numbero v)))))
+               (eval-args (eval-listo rands env `(,v))))
+           (if (or (var? val) (eq? val #f))
+             (fresh () eval-args (conde$ (assign-true) (assign-false)))
+             (fresh () assign-true eval-args))))]
       [(== prim-id 'not)
        (fresh (b)
-         (eval-listo rands env `(,b))
-         (conde1$ (((b b)) ((val val)))
-                  ((=/= #f b) (== #f val))
-                  ((== #f b) (== #t val))))]
+         (let ((assign-result (conde$
+                                ((== #f b) (== #t val))
+                                ((=/= #f b) (== #f val))))
+               (eval-args (eval-listo rands env `(,b))))
+           (if (var? val)
+             (fresh () eval-args assign-result)
+             (fresh () assign-result eval-args))))]
       [(== prim-id 'equal?)
        (fresh (v1 v2)
          (let ((assign-result (conde$
