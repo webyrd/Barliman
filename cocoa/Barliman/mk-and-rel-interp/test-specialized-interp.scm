@@ -33,16 +33,49 @@
 ;;         put aside with a satisfaction example in case it's difficult to compute?
 ;;           e.g., may be difficult to produce an 'absento' user gensym or shadowed prim
 ;;             note: need inductive proofs to terminate some unsatisfiable problems
+;;               e.g., (car (cons A B)) and (cdr (cons A B)) are useless to generate
+;;                 Say we're performing (eval-expo T env x).  We need to generate T to
+;;                 produce x, given env.  If nothing in the env is exactly x, then we
+;;                 try to build an x using primitives:
+;;                   null?, pair?, symbol?, not: if x is a boolean
+;;                   cons: if the x is a pair
+;;                   car, or cdr otherwise; this is the interesting case.
+;;                 Say that car/cdr are all that's left; let's follow car for simplicity.
+;;                 So now we need to:
+;;                   T=(car ,U), so (eval-expo `(car ,U) env x)
+;;                   which implies (eval-expo U env `(,x . _))
+;;                 If there is a (,x . _) available in env, we're done.  Otherwise, we
+;;                 only continue trying car and cdr.  Why not the others?  Other than
+;;                 cons, they produce booleans, and cons can be shown to be useless:
+;;                 Say we try:
+;;                   U=(cons ,V _), so (eval-expo `(cons ,V _) env `(,x . _))
+;;                   which implies (eval-expo V env x).  But we're already trying to
+;;                   generate such a V, called T!  There is no solution down this path
+;;                   that we won't already find with just car and cdr.  If car and cdr can't
+;;                   be used to find the answer, cons would end up searching forever when we
+;;                   should instead just terminate.
+;;                 Special case: we're solving a weird code as data problem, such as one
+;;                 with an external constraint insisting the datum T contain a 'cons' symbol.
+;;                 Well, we have to generate a cons to satisfy that external constraint!  But
+;;                 in this case, the constraint itself should be usable as a pre-generator,
+;;                 freeing us to continue reasoning inductively like this with whatever holes
+;;                 remain in the pre-generated skeleton that need to be synthesized.
+;;                 Another option for this special case: instead of forcing cons to terminate,
+;;                 suspend it until car/cdr uses are exhausted.  If there are car/cdr solutions,
+;;                 but they fail due to such a weird constraint, resuming the cons branch may
+;;                 succeed.  This is probably a safer choice for completeness.
 ;;   special constraints
 ;;     types and finite domains that don't require splitting states
 ;;       for simple values, closures and primitives
 ;;       also negated types and sets
-;;     evaluated term map
-;;       term -> (env -> result)
-;;       i.e., unify results for same env
-;;         term generators may use (env -> result) component to improve guesses
-;;           e.g., `if` might partition results and satisfy partitions independently
-;;           e.g., inductive proofs for terminating unsatisfiable problems
+;;     evaluation problem mappings
+;;       track a sets of evaluation problems (env -> result)
+;;         solved/satisfied (for caching, optional?), pending (for inductive reasoning)
+;;       term-var -> [(env -> result)]
+;;         i.e. keep track of evaluation problems for each unsolved term-var
+;;       term generators may use (env -> result) component to improve guesses
+;;         e.g., `if` might partition results and satisfy partitions independently
+;;         e.g., inductive proofs for terminating unsatisfiable problems
 ;;     term
 ;;     env
 ;;     operative
@@ -70,7 +103,7 @@
 ;;   must continue to respect quotas
 ;;   escape when analysis is required (e.g., running into an unbound term)
 ;; strategic, benign incompleteness
-;;   weighted disjunctions
+;;   weighted or DFS disjunctions
 ;;   avoid redundant terms
 ;;     if both 'cons' and 'list' are available, usually no need to apply 'list'?
 ;;       but it may make sense to pass list as an argument
