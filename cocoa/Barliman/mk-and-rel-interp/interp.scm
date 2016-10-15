@@ -372,10 +372,10 @@
            (goal (lambdag@ (st)
                    ((conde
     ((numbero expr) (== expr val))
-    ((fresh (rator x* rands a* prim-id)
+    ((fresh (rator x* rands prim-id)
        (== `(,rator . ,rands) expr)
        (eval-expo rator env `(prim . ,prim-id))
-       (eval-primo prim-id a* val rands env)))
+       (eval-primo prim-id val rands env)))
 
     ((fresh (rator x* rands body env^ a* res)
        (== `(,rator . ,rands) expr)
@@ -550,34 +550,29 @@
        (symbolo x)
        (ext-env*o dx* da* env2 out)))))
 
-(define (eval-primo prim-id a* val rands env)
+(define (eval-primo prim-id val rands env)
   (conde$ ;1$ (((prim-id prim-id)))
     [(== prim-id 'cons)
      (fresh (a d)
-       (== `(,a ,d) a*)
        (== `(,a . ,d) val)
-       (eval-listo rands env a*))]
+       (eval-listo rands env `(,a ,d)))]
     [(== prim-id 'car)
      (fresh (d)
-       (== `((,val . ,d)) a*)
        (=/= 'closure val)
-       (eval-listo rands env a*))]
+       (eval-listo rands env `((,val . ,d))))]
     [(== prim-id 'cdr)
      (fresh (a)
-       (== `((,a . ,val)) a*)
        (=/= 'closure a)
-       (eval-listo rands env a*))]
+       (eval-listo rands env `((,a . ,val))))]
     [(== prim-id 'null?)
      (fresh (v)
-       (== `(,v) a*)
-       (eval-listo rands env a*)
+       (eval-listo rands env `(,v))
        (conde$;1$ (((v v)) ((val val)))
          ((== '() v) (== #t val))
          ((=/= '() v) (== #f val))))]
     [(== prim-id 'pair?)
      (fresh (v)
-       (== `(,v) a*)
-       (eval-listo rands env a*)
+       (eval-listo rands env `(,v))
        (conde$;1$ (((v v)))
          ((symbolo v) (== #f val))
          ((numbero v) (== #f val))
@@ -587,8 +582,7 @@
             (== #t val)))))]
     [(== prim-id 'symbol?)
      (fresh (v)
-       (== `(,v) a*)
-       (eval-listo rands env a*)
+       (eval-listo rands env `(,v))
        (conde$;1$ (((v v)))
          ((symbolo v) (== #t val))
          ((numbero v) (== #f val))
@@ -598,15 +592,13 @@
             (== #f val)))))]
     [(== prim-id 'not)
      (fresh (b)
-       (== `(,b) a*)
-       (eval-listo rands env a*)
+       (eval-listo rands env `(,b))
        (conde1$ (((b b)) ((val val)))
          ((=/= #f b) (== #f val))
          ((== #f b) (== #t val))))]
     [(== prim-id 'equal?)
      (fresh (v1 v2)
-       (== `(,v1 ,v2) a*)
-       (eval-listo rands env a*)
+       (eval-listo rands env `(,v1 ,v2))
        (conde$ ;1$ (((v1 v1) (v2 v2)) ((val val)))
          ((== v1 v2) (== #t val))
          ((=/= v1 v2) (== #f val))))]))
