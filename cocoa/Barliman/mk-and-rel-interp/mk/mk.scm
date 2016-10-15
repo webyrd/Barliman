@@ -398,6 +398,14 @@
                   (lambdag@ (st)
                     (mplus* (bind*-depth st g0 g ...)
                             (bind*-depth st g1 g^ ...) ...))))))))
+(define-syntax conde-dfs
+  (syntax-rules ()
+    ((_ (g0 g ...) (g1 g^ ...) ...)
+     (lambdag@ (st)
+       (inc (bind (state-depth-deepen (state-with-scope st (new-scope)))
+                  (lambdag@ (st)
+                    (mplus*-dfs (bind*-depth st g0 g ...)
+                                (bind*-depth st g1 g^ ...) ...))))))))
 
 (define-syntax conde$
   (syntax-rules ()
@@ -405,6 +413,14 @@
      (lambdag@ (st)
        (let ((st (state-with-scope st (new-scope))))
          (mplus*
+           (bind*-depth st g0 g ...)
+           (bind*-depth st g1 g^ ...) ...))))))
+(define-syntax conde$-dfs
+  (syntax-rules ()
+    ((_ (g0 g ...) (g1 g^ ...) ...)
+     (lambdag@ (st)
+       (let ((st (state-with-scope st (new-scope))))
+         (mplus*-dfs
            (bind*-depth st g0 g ...)
            (bind*-depth st g1 g^ ...) ...))))))
 
@@ -459,6 +475,11 @@
     ((_ e) e)
     ((_ e0 e ...) (mplus e0
                     (inc (mplus* e ...))))))
+(define-syntax mplus*-dfs
+  (syntax-rules ()
+    ((_ e) e)
+    ((_ e0 e ...) (mplus-dfs e0
+                    (inc (mplus*-dfs e ...))))))
 
 (define mplus
   (lambda (c-inf f)
@@ -467,6 +488,14 @@
       ((f^) (inc (mplus (f) f^)))
       ((c) (choice c f))
       ((c f^) (choice c (inc (mplus (f) f^)))))))
+
+(define mplus-dfs
+  (lambda (c-inf f)
+    (case-inf c-inf
+      (() (f))
+      ((f^) (inc (mplus-dfs (f^) f)))
+      ((c) (choice c f))
+      ((c f^) (choice c (inc (mplus-dfs (f^) f)))))))
 
 
 ; Constraints
