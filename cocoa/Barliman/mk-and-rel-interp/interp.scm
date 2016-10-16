@@ -357,6 +357,13 @@
 (define (eval-expo expr env val)
   (try-lookup-before expr env val (eval-expo-rest expr env val)))
 
+(define (paramso params)
+  (conde$-dfs
+    ; Multiple argument
+    ((list-of-symbolso params))
+    ; Variadic
+    ((symbolo params))))
+
 (define (eval-expo-rest expr env val)
   (lambdag@ (st)
     (let* ((expr (walk expr (state-S st)))
@@ -402,11 +409,7 @@
     ((fresh (x body)
        (== `(lambda ,x ,body) expr)
        (== `(closure (lambda ,x ,body) ,env) val)
-       (conde$
-         ;; Variadic
-         ((symbolo x))
-         ;; Multi-argument
-         ((list-of-symbolso x)))
+       (paramso x)
        (not-in-envo 'lambda env)))
 
     ;; WEB 25 May 2016 -- This rather budget version of 'begin' is
@@ -424,11 +427,7 @@
        (== `(letrec ((,p-name (lambda ,x ,body)))
               ,letrec-body)
            expr)
-       (conde$
-         ; Variadic
-         ((symbolo x))
-         ; Multiple argument
-         ((list-of-symbolso x)))
+       (paramso x)
        (not-in-envo 'letrec env)
        (eval-expo letrec-body
                   `((,p-name . (rec . (lambda ,x ,body))) . ,env)
