@@ -135,7 +135,7 @@
            (depth (state-depth st))
            (goal (lambdag@ (st)
                    ((conde-weighted
-   (10 (conde$-dfs ((== `(quote ,val) expr)
+   (5000 1 (conde$-dfs ((== `(quote ,val) expr)
                       (absento closure-tag val)
                       (absento prim-tag val)
                       (not-in-envo 'quote env))
@@ -201,7 +201,7 @@
    ;(eval-application rands env a* (eval-expo body res val))
    ;))
 
-   (10 (if-primo expr env val))
+   (5000 #f (if-primo expr env val))
 
    ;((fresh (rator x rands body env^ a* res)
    ;(== `(,rator . ,rands) expr)
@@ -213,7 +213,7 @@
    ;(eval-listo rands env a*)
    ;))
 
-   (1 (fresh (x body)
+   (1 1 (fresh (x body)
         (== `(lambda ,x ,body) expr)
         (== `(,closure-tag (lambda ,x ,body) ,env) val)
         (paramso x)
@@ -222,12 +222,12 @@
    ;; WEB 25 May 2016 -- This rather budget version of 'begin' is
    ;; useful for separating 'define' from the expression 'e',
    ;; specifically for purposes of Barliman.
-   (1 (fresh (defn args name body e)
+   (1 1 (fresh (defn args name body e)
         (== `(begin ,defn ,e) expr)
         (== `(define ,name (lambda ,args ,body)) defn)
         (eval-expo `(letrec ((,name (lambda ,args ,body))) ,e) env val)))
 
-   (1 (fresh (p-name x body letrec-body)
+   (1 1 (fresh (p-name x body letrec-body)
         ;; single-function variadic letrec version
         (== `(letrec ((,p-name (lambda ,x ,body)))
                ,letrec-body)

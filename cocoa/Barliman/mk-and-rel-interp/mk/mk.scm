@@ -408,12 +408,13 @@
                                 (bind*-depth st g1 g^ ...) ...))))))))
 (define-syntax conde-weighted
   (syntax-rules ()
-    ((_ (w0 g0 g ...) (w1 g1 g^ ...) ...)
+    ((_ (w0 c0 g0 g ...) (w1 c1 g1 g^ ...) ...)
      (lambdag@ (st)
        (inc (bind (state-depth-deepen (state-with-scope st (new-scope)))
                   (lambdag@ (st)
-                    (mplus*-weighted (w0 (bind*-depth st g0 g ...))
-                                     (w1 (bind*-depth st g1 g^ ...)) ...))))))))
+                    (mplus*-weighted
+                      (w0 c0 (bind*-depth st g0 g ...))
+                      (w1 c1 (bind*-depth st g1 g^ ...)) ...))))))))
 
 (define-syntax conde$
   (syntax-rules ()
@@ -433,12 +434,12 @@
            (bind*-depth st g1 g^ ...) ...))))))
 (define-syntax conde$-weighted
   (syntax-rules ()
-    ((_ (w0 g0 g ...) (w1 g1 g^ ...) ...)
+    ((_ (w0 c0 g0 g ...) (w1 c1 g1 g^ ...) ...)
      (lambdag@ (st)
        (let ((st (state-with-scope st (new-scope))))
          (mplus*-weighted
-           (w0 (bind*-depth st g0 g ...))
-           (w1 (bind*-depth st g1 g^ ...)) ...))))))
+           (w0 c0 (bind*-depth st g0 g ...))
+           (w1 c1 (bind*-depth st g1 g^ ...)) ...))))))
 
 (define-syntax case0
   (syntax-rules ()
@@ -498,9 +499,9 @@
                     (inc (mplus*-dfs e ...))))))
 (define-syntax mplus*-weighted
   (syntax-rules ()
-    ((_ (_ e)) e)
-    ((_ (w0 e0) e ...) (mplus-weighted
-                         w0 w0 1 e0 (inc (mplus*-weighted e ...))))))
+    ((_ (_ _ e)) e)
+    ((_ (w0 c0 e0) e ...)
+     (mplus-weighted w0 w0 1 c0 e0 (inc (mplus*-weighted e ...))))))
 
 (define mplus
   (lambda (c-inf f)
@@ -518,20 +519,23 @@
       ((c) (choice c f))
       ((c f^) (choice c (inc (mplus-dfs (f^) f)))))))
 
-(define (mplus-weighted-next remaining weight other f^ f)
+(define (mplus-weighted-next remaining weight other cycles f^ f)
   (inc (let ((weight-next (and remaining (- remaining 1))))
          (if (and weight-next (<= weight-next 0))
-           (mplus-weighted other other weight (f) f^)
-           (mplus-weighted weight-next weight other (f^) f)))))
+           (let ((cycles (and cycles (- cycles 1))))
+             (if (and cycles (<= cycles 0))
+               (mplus (f) f^)
+               (mplus-weighted other other weight cycles (f) f^)))
+           (mplus-weighted weight-next weight other cycles (f^) f)))))
 (define mplus-weighted
-  (lambda (remaining weight other-weight c-inf f)
+  (lambda (remaining weight other-weight cycles c-inf f)
     (case-inf c-inf
       (() (f))
-      ((f^) (inc (mplus-weighted-next remaining weight other-weight f^ f)))
+      ((f^) (inc (mplus-weighted-next
+                   remaining weight other-weight cycles f^ f)))
       ((c) (choice c f))
       ((c f^) (choice c (inc (mplus-weighted-next
-                               remaining weight other-weight f^ f)))))))
-
+                               remaining weight other-weight cycles f^ f)))))))
 
 ; Constraints
 ; C refers to the constraint store map
