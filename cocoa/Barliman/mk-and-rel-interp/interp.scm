@@ -370,43 +370,43 @@
            (env (walk env (state-S st)))
            (depth (state-depth st))
            (goal (lambdag@ (st)
-                   ((conde
-    ((numbero expr) (== expr val))
-    ((fresh (rator x* rands prim-id)
-       (== `(,rator . ,rands) expr)
-       (eval-expo rator env `(prim . ,prim-id))
-       (eval-primo prim-id val rands env)))
+                   ((conde-weighted
+    (5000 1 (conde$-dfs
+              ((== `(quote ,val) expr)
+               (absento 'closure val)
+               (absento 'prim val)
+               (not-in-envo 'quote env))
 
-    ((fresh (rator x* rands body env^ a* res)
-       (== `(,rator . ,rands) expr)
-       ;; Multi-argument
-       (eval-expo rator env `(closure (lambda ,x* ,body) ,env^))
-       (ext-env*o x* a* env^ res)
-       ; replacing eval-application with these may be faster with multi-level defer
-       ;(eval-expo body res val)
-       ;(eval-listo rands env a*)
-       (eval-application rands env a* (eval-expo body res val))
-       ))
+              ((numbero expr) (== expr val))
 
-    ((if-primo expr env val))
+              ((boolean-primo expr val))
 
-    ((cond-primo expr env val))
+              ((fresh (rator rands rator-val)
+                 (== `(,rator . ,rands) expr)
+                 (eval-expo rator env rator-val)
+                 (conde$-dfs
+                   ((fresh (prim-id)
+                      (== rator-val `(prim . ,prim-id))
+                      (eval-primo prim-id val rands env)))
+                   ((fresh (x body env^ a* res)
+                      (== rator-val `(closure (lambda ,x ,body) ,env^))
+                      (conde$-dfs
+                        (;; Multi-argument
+                         (ext-env*o x a* env^ res)
+                         ; replacing eval-application with these may be faster with multi-level defer
+                         ;(eval-expo body res val)
+                         ;(eval-listo rands env a*)
+                         (eval-application rands env a* (eval-expo body res val)))
+                        (;; variadic
+                         (symbolo x)
+                         ;(project (rator) (lambdag@ (st) ((begin (display `(happened ,rator)) (newline) succeed) st)))
+                         (== `((,x . (val . ,a*)) . ,env^) res)
+                         (eval-expo body res val)
+                         (eval-listo rands env a*))))))))))
 
-    ((fresh (rator x rands body env^ a* res)
-       (== `(,rator . ,rands) expr)
-       ;; variadic
-       (symbolo x)
-       (== `((,x . (val . ,a*)) . ,env^) res)
-       (eval-expo rator env `(closure (lambda ,x ,body) ,env^))
-       (eval-expo body res val)
-       (eval-listo rands env a*)))
+    (5000 #f (if-primo expr env val))
 
-    ((== `(quote ,val) expr)
-     (absento 'closure val)
-     (absento 'prim val)
-     (not-in-envo 'quote env))
-
-    ((fresh (x body)
+    (1 1 (fresh (x body)
        (== `(lambda ,x ,body) expr)
        (== `(closure (lambda ,x ,body) ,env) val)
        (paramso x)
@@ -415,14 +415,12 @@
     ;; WEB 25 May 2016 -- This rather budget version of 'begin' is
     ;; useful for separating 'define' from the expression 'e',
     ;; specifically for purposes of Barliman.
-    ((fresh (defn args name body e)
+    (1 1 (fresh (defn args name body e)
        (== `(begin ,defn ,e) expr)
        (== `(define ,name (lambda ,args ,body)) defn)
        (eval-expo `(letrec ((,name (lambda ,args ,body))) ,e) env val)))
 
-    ((handle-matcho expr env val))
-
-    ((fresh (p-name x body letrec-body)
+    (1 1 (fresh (p-name x body letrec-body)
        ;; single-function variadic letrec version
        (== `(letrec ((,p-name (lambda ,x ,body)))
               ,letrec-body)
@@ -433,7 +431,11 @@
                   `((,p-name . (rec . (lambda ,x ,body))) . ,env)
                   val)))
 
-    ((prim-expo expr env val)))
+    (1 1 (cond-primo expr env val))
+
+    (1 1 (handle-matcho expr env val))
+
+    (1 1 (prim-expo expr env val)))
                     (state-depth-set st depth)))))
 
       (if (or (var? expr)
@@ -625,11 +627,10 @@
 
 (define (prim-expo expr env val)
   (conde1$ (((expr expr)))
-    ((boolean-primo expr env val))
     ((and-primo expr env val))
     ((or-primo expr env val))))
 
-(define (boolean-primo expr env val)
+(define (boolean-primo expr val)
   (conde1$ (((expr expr)) ((val val)))
     ((== #t expr) (== #t val))
     ((== #f expr) (== #f val))))
