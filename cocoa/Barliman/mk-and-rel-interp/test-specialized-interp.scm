@@ -119,83 +119,128 @@
 (define (eval-expo expr env val)
   (try-lookup-before expr env val (eval-expo-rest expr env val)))
 
+(define (paramso params)
+  ;(list-of-symbolso params)
+  (conde$-dfs
+    ; Multiple argument
+    ((list-of-symbolso params))
+    ; Variadic
+    ((symbolo params)))
+  )
+
 (define (eval-expo-rest expr env val)
   (lambdag@ (st)
     (let* ((expr (walk expr (state-S st)))
            (env (walk env (state-S st)))
            (depth (state-depth st))
            (goal (lambdag@ (st)
-                   ((conde
-    ((numbero expr) (== expr val))
+                   ((conde-weighted
+   (10 (conde$-dfs ((== `(quote ,val) expr)
+                      (absento closure-tag val)
+                      (absento prim-tag val)
+                      (not-in-envo 'quote env))
 
-    ((fresh (rator rands prim-id)
-       (== `(,rator . ,rands) expr)
-       (eval-expo rator env `(,prim-tag . ,prim-id))
-       (eval-primo prim-id val rands env)))
+                     ((numbero expr) (== expr val))
 
-    ((fresh (rator x* rands body env^ a* res)
-       (== `(,rator . ,rands) expr)
-       ;; Multi-argument
-       (eval-expo rator env `(,closure-tag (lambda ,x* ,body) ,env^))
-       (ext-env*o x* a* env^ res)
-       ; replacing eval-application with these may be faster with multi-level defer
-       ;(eval-expo body res val)
-       ;(eval-listo rands env a*)
-       (eval-application rands env a* (eval-expo body res val))
-       ))
+                     ((prim-expo expr env val))
 
-    ((if-primo expr env val))
+                     ((fresh (rator rands rator-val)
+                        (== `(,rator . ,rands) expr)
+                        (eval-expo rator env rator-val)
+                        (conde-dfs
+                          ((fresh (prim-id)
+                             (== rator-val `(,prim-tag . ,prim-id))
+                             (eval-primo prim-id val rands env)))
+                          ((fresh (x body env^ a* res)
+                             (== rator-val `(,closure-tag (lambda ,x ,body) ,env^))
+                             (conde$-dfs
+                               (;; Multi-argument
+                                (ext-env*o x a* env^ res)
+                                ; replacing eval-application with these may be faster with multi-level defer
+                                ;(eval-expo body res val)
+                                ;(eval-listo rands env a*)
+                                (eval-application rands env a* (eval-expo body res val)))
+                               (;; variadic
+                                (symbolo x)
+                                ;(project (rator) (lambdag@ (st) ((begin (display `(happened ,rator)) (newline) succeed) st)))
+                                (== `((,x . (val . ,a*)) . ,env^) res)
+                                (eval-expo body res val)
+                                (eval-listo rands env a*))))))))))
 
-;    ((fresh (rator x rands body env^ a* res)
-;       (== `(,rator . ,rands) expr)
-;       ;; variadic
-;       (symbolo x)
-;       (== `((,x . (val . ,a*)) . ,env^) res)
-;       (eval-expo rator env `(,closure-tag (lambda ,x ,body) ,env^))
-;       (eval-expo body res val)
-;       (eval-listo rands env a*)))
+   ;((fresh (rator rands prim-id)
+   ;(== `(,rator . ,rands) expr)
+   ;(eval-expo rator env `(,prim-tag . ,prim-id))
+   ;(eval-primo prim-id val rands env)))
 
-    ((== `(quote ,val) expr)
-     (absento closure-tag val)
-     (absento prim-tag val)
-     (not-in-envo 'quote env))
+   ;((fresh (rator x rands body env^ a* res)
+   ;(== `(,rator . ,rands) expr)
+   ;(eval-expo rator env `(,closure-tag (lambda ,x ,body) ,env^))
+   ;(conde$-dfs
+   ;(;; Multi-argument
+   ;(ext-env*o x a* env^ res)
+   ;; replacing eval-application with these may be faster with multi-level defer
+   ;;(eval-expo body res val)
+   ;;(eval-listo rands env a*)
+   ;(eval-application rands env a* (eval-expo body res val)))
+   ;(;; variadic
+   ;(symbolo x)
+   ;(project (rator) (lambdag@ (st) ((begin (display `(happened ,rator)) (newline) succeed) st)))
+   ;(== `((,x . (val . ,a*)) . ,env^) res)
+   ;(eval-expo body res val)
+   ;(eval-listo rands env a*))
+   ;)))
 
-    ((fresh (x body)
-       (== `(lambda ,x ,body) expr)
-       (== `(,closure-tag (lambda ,x ,body) ,env) val)
-;       (conde$
-;         ; Variadic
-;         ((symbolo x))
-;         ; Multiple argument
-;         ((list-of-symbolso x)))
-       (list-of-symbolso x)
-       (not-in-envo 'lambda env)))
+   ;((fresh (rator x rands body env^ a* res)
+   ;(== `(,rator . ,rands) expr)
+   ;(eval-expo rator env `(,closure-tag (lambda ,x ,body) ,env^))
+   ;;; Multi-argument
+   ;(ext-env*o x a* env^ res)
+   ;; replacing eval-application with these may be faster with multi-level defer
+   ;;(eval-expo body res val)
+   ;;(eval-listo rands env a*)
+   ;(eval-application rands env a* (eval-expo body res val))
+   ;))
 
-    ;; WEB 25 May 2016 -- This rather budget version of 'begin' is
-    ;; useful for separating 'define' from the expression 'e',
-    ;; specifically for purposes of Barliman.
-    ((fresh (defn args name body e)
-       (== `(begin ,defn ,e) expr)
-       (== `(define ,name (lambda ,args ,body)) defn)
-       (eval-expo `(letrec ((,name (lambda ,args ,body))) ,e) env val)))
+   (10 (if-primo expr env val))
 
-    ((fresh (p-name x body letrec-body)
-       ;; single-function variadic letrec version
-       (== `(letrec ((,p-name (lambda ,x ,body)))
-              ,letrec-body)
-           expr)
-;       (conde$
-;         ; Variadic
-;         ((symbolo x))
-;         ; Multiple argument
-;         ((list-of-symbolso x)))
-       (list-of-symbolso x)
-       (not-in-envo 'letrec env)
-       (eval-expo letrec-body
-                  `((,p-name . (rec . (lambda ,x ,body))) . ,env)
-                  val)))
+   ;((fresh (rator x rands body env^ a* res)
+   ;(== `(,rator . ,rands) expr)
+   ;(eval-expo rator env `(,closure-tag (lambda ,x ,body) ,env^))
+   ;;; variadic
+   ;(symbolo x)
+   ;(== `((,x . (val . ,a*)) . ,env^) res)
+   ;(eval-expo body res val)
+   ;(eval-listo rands env a*)
+   ;))
 
-    ((prim-expo expr env val)))
+   (1 (fresh (x body)
+        (== `(lambda ,x ,body) expr)
+        (== `(,closure-tag (lambda ,x ,body) ,env) val)
+        (paramso x)
+        (not-in-envo 'lambda env)))
+
+   ;; WEB 25 May 2016 -- This rather budget version of 'begin' is
+   ;; useful for separating 'define' from the expression 'e',
+   ;; specifically for purposes of Barliman.
+   (1 (fresh (defn args name body e)
+        (== `(begin ,defn ,e) expr)
+        (== `(define ,name (lambda ,args ,body)) defn)
+        (eval-expo `(letrec ((,name (lambda ,args ,body))) ,e) env val)))
+
+   (1 (fresh (p-name x body letrec-body)
+        ;; single-function variadic letrec version
+        (== `(letrec ((,p-name (lambda ,x ,body)))
+               ,letrec-body)
+            expr)
+        (paramso x)
+        (conde$ ((symbolo x) (project (x) (lambdag@ (st) ((begin (display `(letrec ,p-name ,x)) (newline) fail) st)))) (succeed))
+        (not-in-envo 'letrec env)
+        (eval-expo letrec-body
+                   `((,p-name . (rec . (lambda ,x ,body))) . ,env)
+                   val)))
+
+
+   )
                     (state-depth-set st depth)))))
 
       (if (or (var? expr)
