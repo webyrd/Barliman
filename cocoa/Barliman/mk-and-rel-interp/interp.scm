@@ -360,7 +360,7 @@
 (define (paramso params)
   (conde$-dfs
     ; Multiple argument
-    ((list-of-symbolso params))
+    ((list-of-paramso params))
     ; Variadic
     ((symbolo params))))
 
@@ -541,6 +541,23 @@
        (== `(,a . ,d) los)
        (symbolo a)
        (list-of-symbolso d)))))
+
+(define (not-in-paramso x params)
+  (conde1 (((params params)))
+    ((== '() params))
+    ((fresh (a d)
+       (== `(,a . ,d) params)
+       (=/= a x)
+       (not-in-paramso x d)))))
+
+(define (list-of-paramso los)
+  (conde1 (((los los)))
+    ((== '() los))
+    ((fresh (a d)
+       (== `(,a . ,d) los)
+       (symbolo a)
+       (list-of-paramso d)
+       (not-in-paramso a d)))))
 
 (define (ext-env*o x* a* env out)
   (conde;1 (((x* x*)) ((a* a*)))
