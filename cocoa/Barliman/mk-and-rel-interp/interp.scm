@@ -404,7 +404,7 @@
                          (eval-expo body res val)
                          (eval-listo rands env a*))))))))))
 
-    (5000 #f (if-primo expr env val))
+    (#f #f (if-primo expr env val))
 
     (1 1 (fresh (x body)
        (== `(lambda ,x ,body) expr)
