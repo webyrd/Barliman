@@ -64,47 +64,13 @@
 ;;                 suspend it until car/cdr uses are exhausted.  If there are car/cdr solutions,
 ;;                 but they fail due to such a weird constraint, resuming the cons branch may
 ;;                 succeed.  This is probably a safer choice for completeness.
-;;   special constraints
-;;     types and finite domains that don't require splitting states
-;;       for simple values, closures and primitives
-;;       also negated types and sets
-;;     evaluation problem mappings
-;;       track a sets of evaluation problems (env -> result)
-;;         solved/satisfied (for caching, optional?), pending (for inductive reasoning)
-;;       term-var -> [(env -> result)]
-;;         i.e. keep track of evaluation problems for each unsolved term-var
-;;       term generators may use (env -> result) component to improve guesses
-;;         e.g., `if` might partition results and satisfy partitions independently
-;;         e.g., inductive proofs for terminating unsatisfiable problems
-;;     term
-;;     env
-;;       not-in-envo/not-binding (set of symbols (likely special syntax) to avoid binding)
-;;       in-envo/binds: ensure a symbol is bound
-;;         e.g., this is an unsatisfiable situation:
-;;           env binders = {unknown1, unknown2, known...}
-;;           term references 3 symbols not bound in 'known' portion
-;;         track satisfiability when individual symbol constraints are updated independently
-;;           need some kind of (symbol -> env) dependency structure here
-;;     transparent: quotable, not an applicable (which would be opaque)
-;;     applicable: prim or closure
-;;     operator syntax
-;;       term evaluating to a prim or lambda
-;;       unshadowed syntactic symbol (e.g., quote, if, lambda, letrec, etc.)
-;;     parameter lists
-;;       list-of-symbolso
-;;       all different
-;;       avoid shadowing
-;;     negations?
-;;       absento tags: closures, prims, user gensyms
-;;       =/= for symbols during env lookup
-;;       not-in-envo/not-binding
-;;       =/= for some evaluation results
-;;         not #f (condition results and 'not' operator), not equal?, not null?
-;;     there may be more...
 ;; grammar-based term recognizers and generators
 ;;   small, composable pieces to allow problems to be broken up and refined
 ;;   specialized unify/disunify predicates tied to boolean outcomes
 ;;     distinguish between test and assign
+;;   term generators may use (env -> result) component to improve guesses
+;;     e.g., `if` might partition results and satisfy partitions independently
+;;     e.g., inductive proofs for terminating unsatisfiable problems
 ;; size incrementing generation
 ;; unshadowed environment enumeration
 ;; space and time quotas for evaluation slices
@@ -163,6 +129,8 @@
 ;;       group is coupled with demand and ready status
 ;;     ready goals
 ;;       those whose dependencies are already satisfied, partitioned by demand
+;;     goal details
+;;       goal-id -> goal-attrs
 ;;   constraint store
 ;;     logic variable -> constraints/goals
 ;;       logic variables refer to known or attributes of unknown values
@@ -170,6 +138,57 @@
 ;;         goals they depend on
 ;;         goals depending on them
 ;;         demand status
+
+;; variable attributes:
+;;   demand status
+;;   dependent goals
+;;     when new constraints are added for this variable, update these goals
+;;   constraints
+;;     mk-derived constraints
+;;       numbero, symbolo, absento, =/=*
+;;     extended constraints
+;;       individual =/=
+;;         singletons: (), #t, #f,
+;;         members of infinite sets: [number], [symbol], [pair], [lvar]
+;;       negated type constraints:
+;;         not-pair, not-number, not-symbol
+;;         be careful about satisfiability:
+;;           not-pair, not-number, not-symbol, and =/= for (), #t, and #f gives the empty set
+;;       grammars
+;;         applicable: prim or closure
+;;         not-applicable: quotable
+;;         term, and related syntax
+;;           operator: term OR syntactic symbol (so it's actually a superset of term)
+;;             quote, if, lambda, letrec, begin/define, cond, match, and, or
+;;           parameter list:
+;;             list of symbols, all different (=/=)
+;;         env (with additional env-specific constraints):
+;;           in-envo
+;;             e.g., this is an unsatisfiable situation:
+;;               env binders = {unknown1, unknown2, known...}
+;;               term references 3 symbols not bound in 'known' portion
+;;             e.g., this can prove non-shadowing of some names
+;;               env binders = {unknown1, unknown2, known...}
+;;               term references 2 symbols not bound in 'known' portion
+;;               full set of bound names is now known
+;;             track satisfiability when individual symbol constraints are updated independently
+;;               need some kind of (symbol -> env) dependency structure here
+;;           not-in-envo: set of symbols (likely special syntax) to avoid binding
+;;       future: finite/interval domains, comparison, arithmetic
+
+;; goal types:
+;;   term construction
+;;     operator: which will determine how to process operands
+;;     lambda parameter list
+;;     letrec binding(s)
+;;     parsing: lambda body, if branches, etc., which may not end up evaluated
+;;     other special syntax: begin/define, cond, match
+;;   env construction
+;;     symbol resolution
+;;       links a variable used as an env symbol to its containing env
+;;       simplify in-envo/not-in-envo constraints of the containing env
+;;   evaluation: a variable may be the term, env, or result
+;;     as the result, a variable provides information that flows backwards
 
 (define (evalo expr val)
   (eval-expo expr initial-env val))
