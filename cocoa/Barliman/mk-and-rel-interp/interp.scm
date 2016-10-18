@@ -357,84 +357,85 @@
 (define (eval-expo expr env val)
   (try-lookup-before expr env val (eval-expo-rest expr env val)))
 
+(define (paramso params)
+  (conde$-dfs
+    ; Multiple argument
+    ((list-of-paramso params))
+    ; Variadic
+    ((symbolo params))))
+
 (define (eval-expo-rest expr env val)
   (lambdag@ (st)
     (let* ((expr (walk expr (state-S st)))
            (env (walk env (state-S st)))
            (depth (state-depth st))
            (goal (lambdag@ (st)
-                   ((conde
-    ((numbero expr) (== expr val))
-    ((fresh (rator x* rands a* prim-id)
-       (== `(,rator . ,rands) expr)
-       (eval-expo rator env `(prim . ,prim-id))
-       (eval-primo prim-id a* val rands env)))
+                   ((conde-weighted
+    (5000 1 (conde$-dfs
+              ((== `(quote ,val) expr)
+               (absento 'closure val)
+               (absento 'prim val)
+               (not-in-envo 'quote env))
 
-    ((fresh (rator x* rands body env^ a* res)
-       (== `(,rator . ,rands) expr)
-       ;; Multi-argument
-       (eval-expo rator env `(closure (lambda ,x* ,body) ,env^))
-       (ext-env*o x* a* env^ res)
-       ; replacing eval-application with these may be faster with multi-level defer
-       ;(eval-expo body res val)
-       ;(eval-listo rands env a*)
-       (eval-application rands env a* (eval-expo body res val))
-       ))
+              ((numbero expr) (== expr val))
 
-    ((if-primo expr env val))
+              ((boolean-primo expr val))
 
-    ((cond-primo expr env val))
+              ((fresh (rator rands rator-val)
+                 (== `(,rator . ,rands) expr)
+                 (eval-expo rator env rator-val)
+                 (conde$-dfs
+                   ((fresh (prim-id)
+                      (== rator-val `(prim . ,prim-id))
+                      (eval-primo prim-id val rands env)))
+                   ((fresh (x body env^ a* res)
+                      (== rator-val `(closure (lambda ,x ,body) ,env^))
+                      (conde$-dfs
+                        (;; Multi-argument
+                         (ext-env*o x a* env^ res)
+                         ; replacing eval-application with these may be faster with multi-level defer
+                         ;(eval-expo body res val)
+                         ;(eval-listo rands env a*)
+                         (eval-application rands env a* (eval-expo body res val)))
+                        (;; variadic
+                         (symbolo x)
+                         ;(project (rator) (lambdag@ (st) ((begin (display `(happened ,rator)) (newline) succeed) st)))
+                         (== `((,x . (val . ,a*)) . ,env^) res)
+                         (eval-expo body res val)
+                         (eval-listo rands env a*))))))))))
 
-    ((fresh (rator x rands body env^ a* res)
-       (== `(,rator . ,rands) expr)
-       ;; variadic
-       (symbolo x)
-       (== `((,x . (val . ,a*)) . ,env^) res)
-       (eval-expo rator env `(closure (lambda ,x ,body) ,env^))
-       (eval-expo body res val)
-       (eval-listo rands env a*)))
+    (#f #f (if-primo expr env val))
 
-    ((== `(quote ,val) expr)
-     (absento 'closure val)
-     (absento 'prim val)
-     (not-in-envo 'quote env))
-
-    ((fresh (x body)
+    (1 1 (fresh (x body)
        (== `(lambda ,x ,body) expr)
        (== `(closure (lambda ,x ,body) ,env) val)
-       (conde$
-         ;; Variadic
-         ((symbolo x))
-         ;; Multi-argument
-         ((list-of-symbolso x)))
+       (paramso x)
        (not-in-envo 'lambda env)))
 
     ;; WEB 25 May 2016 -- This rather budget version of 'begin' is
     ;; useful for separating 'define' from the expression 'e',
     ;; specifically for purposes of Barliman.
-    ((fresh (defn args name body e)
+    (1 1 (fresh (defn args name body e)
        (== `(begin ,defn ,e) expr)
        (== `(define ,name (lambda ,args ,body)) defn)
        (eval-expo `(letrec ((,name (lambda ,args ,body))) ,e) env val)))
 
-    ((handle-matcho expr env val))
-
-    ((fresh (p-name x body letrec-body)
+    (1 1 (fresh (p-name x body letrec-body)
        ;; single-function variadic letrec version
        (== `(letrec ((,p-name (lambda ,x ,body)))
               ,letrec-body)
            expr)
-       (conde$
-         ; Variadic
-         ((symbolo x))
-         ; Multiple argument
-         ((list-of-symbolso x)))
+       (paramso x)
        (not-in-envo 'letrec env)
        (eval-expo letrec-body
                   `((,p-name . (rec . (lambda ,x ,body))) . ,env)
                   val)))
 
-    ((prim-expo expr env val)))
+    (1 1 (cond-primo expr env val))
+
+    (1 1 (handle-matcho expr env val))
+
+    (1 1 (prim-expo expr env val)))
                     (state-depth-set st depth)))))
 
       (if (or (var? expr)
@@ -541,6 +542,23 @@
        (symbolo a)
        (list-of-symbolso d)))))
 
+(define (not-in-paramso x params)
+  (conde1 (((params params)))
+    ((== '() params))
+    ((fresh (a d)
+       (== `(,a . ,d) params)
+       (=/= a x)
+       (not-in-paramso x d)))))
+
+(define (list-of-paramso los)
+  (conde1 (((los los)))
+    ((== '() los))
+    ((fresh (a d)
+       (== `(,a . ,d) los)
+       (symbolo a)
+       (list-of-paramso d)
+       (not-in-paramso a d)))))
+
 (define (ext-env*o x* a* env out)
   (conde;1 (((x* x*)) ((a* a*)))
     ((== '() x*) (== '() a*) (== env out))
@@ -551,74 +569,85 @@
        (symbolo x)
        (ext-env*o dx* da* env2 out)))))
 
-(define (eval-primo prim-id a* val rands env)
-  (conde$ ;1$ (((prim-id prim-id)))
-    [(== prim-id 'cons)
-     (fresh (a d)
-       (== `(,a ,d) a*)
-       (== `(,a . ,d) val)
-       (eval-listo rands env a*))]
-    [(== prim-id 'car)
-     (fresh (d)
-       (== `((,val . ,d)) a*)
-       (=/= 'closure val)
-       (eval-listo rands env a*))]
-    [(== prim-id 'cdr)
-     (fresh (a)
-       (== `((,a . ,val)) a*)
-       (=/= 'closure a)
-       (eval-listo rands env a*))]
-    [(== prim-id 'null?)
-     (fresh (v)
-       (== `(,v) a*)
-       (eval-listo rands env a*)
-       (conde$;1$ (((v v)) ((val val)))
-         ((== '() v) (== #t val))
-         ((=/= '() v) (== #f val))))]
-    [(== prim-id 'pair?)
-     (fresh (v)
-       (== `(,v) a*)
-       (eval-listo rands env a*)
-       (conde$;1$ (((v v)))
-         ((symbolo v) (== #f val))
-         ((numbero v) (== #f val))
-         ((== '() v) (== #f val))
-         ((fresh (a d)
-            (== `(,a . ,d) v)
-            (== #t val)))))]
-    [(== prim-id 'symbol?)
-     (fresh (v)
-       (== `(,v) a*)
-       (eval-listo rands env a*)
-       (conde$;1$ (((v v)))
-         ((symbolo v) (== #t val))
-         ((numbero v) (== #f val))
-         ((== '() v) (== #f val))
-         ((fresh (a d)
-            (== `(,a . ,d) v)
-            (== #f val)))))]
-    [(== prim-id 'not)
-     (fresh (b)
-       (== `(,b) a*)
-       (eval-listo rands env a*)
-       (conde1$ (((b b)) ((val val)))
-         ((=/= #f b) (== #f val))
-         ((== #f b) (== #t val))))]
-    [(== prim-id 'equal?)
-     (fresh (v1 v2)
-       (== `(,v1 ,v2) a*)
-       (eval-listo rands env a*)
-       (conde$ ;1$ (((v1 v1) (v2 v2)) ((val val)))
-         ((== v1 v2) (== #t val))
-         ((=/= v1 v2) (== #f val))))]))
+(define (eval-primo prim-id val rands env)
+  (project0 (prim-id val rands env)
+    (conde$ ;1$ (((prim-id prim-id)))
+      [(== prim-id 'cons)
+       (fresh (a d)
+         (== `(,a . ,d) val)
+         (eval-listo rands env `(,a ,d)))]
+      [(== prim-id 'car)
+       (fresh (d)
+         (=/= 'closure val)
+         (eval-listo rands env `((,val . ,d))))]
+      [(== prim-id 'cdr)
+       (fresh (a)
+         (=/= 'closure a)
+         (eval-listo rands env `((,a . ,val))))]
+      [(== prim-id 'null?)
+       (fresh (v)
+         (let ((assign-result (conde$
+                                ((== '() v) (== #t val))
+                                ((=/= '() v) (== #f val))))
+               (eval-args (eval-listo rands env `(,v))))
+           (if (var? val)
+             (fresh () eval-args assign-result)
+             (fresh () assign-result eval-args))))]
+      [(== prim-id 'pair?)
+       (fresh (v)
+         (let ((assign-true (fresh (a d) (== #t val) (== `(,a . ,d) v)))
+               (assign-false (fresh () (== #f val) (conde$
+                                                     ((== '() v))
+                                                     ((symbolo v))
+                                                     ((== #f v))
+                                                     ((== #t v))
+                                                     ((numbero v)))))
+               (eval-args (eval-listo rands env `(,v))))
+           (if (or (var? val) (eq? val #f))
+             (fresh () eval-args (conde$ (assign-true) (assign-false)))
+             (fresh () assign-true eval-args))))]
+      [(== prim-id 'symbol?)
+       (fresh (v)
+         (let ((assign-true (fresh () (== #t val) (symbolo v)))
+               (assign-false (fresh () (== #f val) (conde$
+                                                     ((== '() v))
+                                                     ((fresh (a d)
+                                                        (== `(,a . ,d) v)))
+                                                     ((== #f v))
+                                                     ((== #t v))
+                                                     ((numbero v)))))
+               (eval-args (eval-listo rands env `(,v))))
+           (if (or (var? val) (eq? val #f))
+             (fresh () eval-args (conde$ (assign-true) (assign-false)))
+             (fresh () assign-true eval-args))))]
+      [(== prim-id 'not)
+       (fresh (b)
+         (let ((assign-result (conde$
+                                ((== #f b) (== #t val))
+                                ((=/= #f b) (== #f val))))
+               (eval-args (eval-listo rands env `(,b))))
+           (if (var? val)
+             (fresh () eval-args assign-result)
+             (fresh () assign-result eval-args))))]
+      [(== prim-id 'equal?)
+       (fresh (v1 v2)
+         (let ((assign-result (conde$
+                                ((== v1 v2) (== #t val))
+                                ((=/= v1 v2) (== #f val))))
+               (eval-args (eval-listo rands env `(,v1 ,v2))))
+           (if (var? val)
+             (fresh () eval-args assign-result)
+             (fresh () assign-result eval-args))))]
+      ;[(== prim-id 'list)
+       ;(eval-listo rands env val)]
+      )))
 
 (define (prim-expo expr env val)
   (conde1$ (((expr expr)))
-    ((boolean-primo expr env val))
     ((and-primo expr env val))
     ((or-primo expr env val))))
 
-(define (boolean-primo expr env val)
+(define (boolean-primo expr val)
   (conde1$ (((expr expr)) ((val val)))
     ((== #t expr) (== #t val))
     ((== #f expr) (== #f val))))
