@@ -123,21 +123,19 @@
 ;;   pending goals
 ;;     parsing
 ;;       (syntax, term) grouped by syntax
-;;       group is coupled with demand and ready status
 ;;     evaluation
 ;;       (term, env, value) grouped by term
-;;       group is coupled with demand and ready status
-;;     ready goals
-;;       those whose dependencies are already satisfied, partitioned by demand
 ;;     goal details
 ;;       goal-id -> goal-attrs
+;;     demanded goals
+;;       goals that should be good guessing candidates
+;;         dependents are constrained enough to narrow search space
 ;;   constraint store
 ;;     logic variable -> constraints/goals
 ;;       logic variables refer to known or attributes of unknown values
 ;;         constraints
 ;;         goals they depend on
 ;;         goals depending on them
-;;         demand status
 
 ;; variable attributes:
 ;;   demand status
