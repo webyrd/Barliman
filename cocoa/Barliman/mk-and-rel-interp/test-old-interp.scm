@@ -7,6 +7,46 @@
 (set! enable-conde1? #t)
 
 (time
+  (test 'append-fast-1
+    (run 1 (defn)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6"))
+            (g7 (gensym "g7"))
+            (g8 (gensym "g8"))
+            (g9 (gensym "g9"))
+            (g10 (gensym "g10"))
+            (g11 (gensym "g11")))
+        (fresh ()
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (absento g7 defn)
+          (absento g8 defn)
+          (absento g9 defn)
+          (absento g10 defn)
+          (absento g11 defn)
+          (evalo
+            `(begin ,defn
+                    (list
+                      (equal? (cons ',g7 (append '() ',g8)) (append (cons ',g7 '()) ',g8))
+                      (equal? (cons ',g4 (append '(,g5) ',g6)) (append (cons ',g4 '(,g5)) ',g6))
+                      (equal? (append '(,g9) '(,g10 . ,g11)) (append '(,g9 ,g10) ',g11))))
+            '(#t #t #t)))))
+    '(((define append
+         (lambda (_.0 _.1)
+           (if (null? _.0)
+             _.1
+             (cons (car _.0) (append (cdr _.0) _.1)))))
+       (sym _.0 _.1)))))
+
+(time
   (test 'remove-foo-1
     (run 1 (q)
       (evalo
