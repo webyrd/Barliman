@@ -188,6 +188,52 @@
 ;;   evaluation: a variable may be the term, env, or result
 ;;     as the result, a variable provides information that flows backwards
 
+(define-record-type goal-parse-term (fields term penv))
+(define-record-type goal-parse-operator (fields op penv))
+(define-record-type goal-parse-parameters (fields params penv))
+(define-record-type goal-parse-letrec-bindings (fields bindings penv))
+(define-record-type goal-penv-resolve (fields symbol penv))
+(define-record-type goal-env-resolve (fields symbol env))
+(define-record-type goal-eval (fields term env result))
+
+;; TODO: How do we learn about updated vars to identify unsatisfiability?
+;; Assign the cx in both directions? (Only needed for singleton assignments.)
+;; #f for numbers, symbols, pairs if fully negated
+
+;; negated domains for [un]known types
+(define-record-type domain-unknown-=/= (fields applicable? nil? t? f? numbers symbols pairs vars))
+(define-record-type domain-applicable-=/= (fields vars))
+
+(define-record-type ndomain-applicable (fields prims..? vars))
+(define-record-type ndomain-parameter-list (fields ... vars))  ; should this inherit [not-]in-envo cxs from related environments, instead of using an env-resolve goal?
+                    ; operator, env
+                    ; factor out negated vars?
+; should applicable? be closure? instead? can prims be separated since they're finite?
+
+;; applicable? can be #t, #f, or () for unknown
+
+;(define-record-type cx-type-unknown (fields not-pair not-number not-symbol applicable?))
+
+(define-record-type constraints (fields =/= absent =/=*))
+(define-record-type var-attr (fields cxs goal-dependents goal-dependencies))
+(define-record-type estate (fields vs goals goals-demanded))
+
+(define estate-empty
+  (make-estate))
+
+(define (eval-in-envo term env val)
+  (define
+
+    )
+  (lambda (st)
+    ;; TODO: import mk constraints
+
+    ;; build initial state with initial eval goal ready-demanded
+    ;; start processing, splitting states when guessing
+
+    ;; TODO: export mk constraints for each answer state produced
+    ))
+
 (define (evalo expr val)
   (eval-expo expr initial-env val))
 
