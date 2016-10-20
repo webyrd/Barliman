@@ -242,51 +242,7 @@
                                 (eval-expo body res val)
                                 (eval-listo rands env a*))))))))))
 
-   ;((fresh (rator rands prim-id)
-   ;(== `(,rator . ,rands) expr)
-   ;(eval-expo rator env `(,prim-tag . ,prim-id))
-   ;(eval-primo prim-id val rands env)))
-
-   ;((fresh (rator x rands body env^ a* res)
-   ;(== `(,rator . ,rands) expr)
-   ;(eval-expo rator env `(,closure-tag (lambda ,x ,body) ,env^))
-   ;(conde$-dfs
-   ;(;; Multi-argument
-   ;(ext-env*o x a* env^ res)
-   ;; replacing eval-application with these may be faster with multi-level defer
-   ;;(eval-expo body res val)
-   ;;(eval-listo rands env a*)
-   ;(eval-application rands env a* (eval-expo body res val)))
-   ;(;; variadic
-   ;(symbolo x)
-   ;(project (rator) (lambdag@ (st) ((begin (display `(happened ,rator)) (newline) succeed) st)))
-   ;(== `((,x . (val . ,a*)) . ,env^) res)
-   ;(eval-expo body res val)
-   ;(eval-listo rands env a*))
-   ;)))
-
-   ;((fresh (rator x rands body env^ a* res)
-   ;(== `(,rator . ,rands) expr)
-   ;(eval-expo rator env `(,closure-tag (lambda ,x ,body) ,env^))
-   ;;; Multi-argument
-   ;(ext-env*o x a* env^ res)
-   ;; replacing eval-application with these may be faster with multi-level defer
-   ;;(eval-expo body res val)
-   ;;(eval-listo rands env a*)
-   ;(eval-application rands env a* (eval-expo body res val))
-   ;))
-
    (5000 #f (if-primo expr env val))
-
-   ;((fresh (rator x rands body env^ a* res)
-   ;(== `(,rator . ,rands) expr)
-   ;(eval-expo rator env `(,closure-tag (lambda ,x ,body) ,env^))
-   ;;; variadic
-   ;(symbolo x)
-   ;(== `((,x . (val . ,a*)) . ,env^) res)
-   ;(eval-expo body res val)
-   ;(eval-listo rands env a*)
-   ;))
 
    (1 1 (fresh (x body)
         (== `(lambda ,x ,body) expr)
