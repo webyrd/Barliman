@@ -19,9 +19,9 @@ class SchemeEditorTextView: NSTextView {
     override func keyDown(event: NSEvent) {
         Swift.print("----------------   keyDown: \(event.keyCode) ")
         
-        if event.keyCode == 0x31 {
-            // space was entered
-            Swift.print("---------------- space")
+        if ((event.keyCode == 0x31) && (event.modifierFlags.contains(NSEventModifierFlags.Option))) {
+            // space was entered while holding the 'option' key
+            Swift.print("---------------- space + option")
 
             let cursorPos = self.selectedRange.location
             let myString : String = (self.string)!
@@ -35,45 +35,11 @@ class SchemeEditorTextView: NSTextView {
             Swift.print("left char: \( leftChar )")
             Swift.print("right char: \( rightChar )")
 
-            if (leftChar == "(" || leftChar == " " || leftChar == "\n") && (rightChar == ")" || rightChar == " " ||  rightChar == "\n") {
-                self.textStorage?.insertAttributedString(NSAttributedString(string: getNextUnusedLogicVar(myString)), atIndex: self.selectedRange.location)
-                // adapted from http://stackoverflow.com/questions/30093688/how-to-create-range-in-swift
-                let range = NSRange(location: cursorPos, length: 2)
-                self.setSelectedRange(range)
-            } else {
-                super.keyDown(event)
-                if self.string == " " {
-                    self.string = getNextUnusedLogicVar(self.string!)
-                    let range = NSRange(location: 0, length: 2)
-                    self.setSelectedRange(range)
-                }
-            }
+            self.textStorage?.insertAttributedString(NSAttributedString(string: getNextUnusedLogicVar(myString)), atIndex: self.selectedRange.location)
+            // adapted from http://stackoverflow.com/questions/30093688/how-to-create-range-in-swift
+            // let range = NSRange(location: cursorPos, length: 2)
+            // self.setSelectedRange(range)
             
-        } else if event.keyCode == 25 {
-            // left-paren was entered
-            Swift.print("---------------- left paren")
-            
-            super.keyDown(event)
-
-            self.textStorage?.insertAttributedString(NSAttributedString(string: ")"), atIndex: self.selectedRange.location)
-            self.selectedRange.location = self.selectedRange.location - 1
-        } else if event.keyCode == 29 {
-            // right-paren was entered
-            
-            Swift.print("---------------- right paren")
-
-            // ignore the paren!  right parens should only come from typing left parens!
-
-        } else if event.keyCode == 51 {
-            // delete key was entered
-
-            // just delete normally for now.  Should refuse to delete right parens, instead moving to the left one character
-            super.keyDown(event)
-            
-        } else if event.keyCode == 36 {
-            // return key was entered
-    
-            // just act normally for now.  Should auto-indent on the next line
             super.keyDown(event)
 
         } else {
