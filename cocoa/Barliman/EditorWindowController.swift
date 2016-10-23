@@ -91,23 +91,24 @@ class EditorWindowController: NSWindowController {
         
         let defaultFontName = EditorWindowController.fontName()
         let defaultFontSize = EditorWindowController.fontSize()
+        let font = NSFont(name: defaultFontName, size: defaultFontSize)
         
         schemeDefinitionView.font = NSFont(name: defaultFontName, size: defaultFontSize)
         bestGuessView.font = NSFont(name: defaultFontName, size: defaultFontSize)
         
-        test1InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
-        test2InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
-        test3InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
-        test4InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
-        test5InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
-        test6InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        test1InputField.font = font
+        test2InputField.font = font
+        test3InputField.font = font
+        test4InputField.font = font
+        test5InputField.font = font
+        test6InputField.font = font
         
-        test1ExpectedOutputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
-        test2ExpectedOutputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
-        test3ExpectedOutputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
-        test4ExpectedOutputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
-        test5ExpectedOutputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
-        test6ExpectedOutputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        test1ExpectedOutputField.font = font
+        test2ExpectedOutputField.font = font
+        test3ExpectedOutputField.font = font
+        test4ExpectedOutputField.font = font
+        test5ExpectedOutputField.font = font
+        test6ExpectedOutputField.font = font
     }
 
     func cleanup() {
