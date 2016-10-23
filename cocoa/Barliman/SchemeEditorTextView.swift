@@ -23,18 +23,9 @@ class SchemeEditorTextView: NSTextView {
             // space was entered while holding the 'control' key
             Swift.print("---------------- space + control")
 
-            let cursorPos = self.selectedRange.location
             let myString : String = (self.string)!
             Swift.print("myString: \( myString )")
-            let rightIndex = myString.startIndex.advancedBy(cursorPos)
-            let leftIndex = (rightIndex == myString.startIndex) ? myString.startIndex : myString.startIndex.advancedBy(cursorPos).predecessor()
             
-            let leftChar = (leftIndex == myString.startIndex) ? " " : myString[leftIndex]
-            let rightChar = (rightIndex == myString.endIndex) ? " " : myString[rightIndex]
-            
-            Swift.print("left char: \( leftChar )")
-            Swift.print("right char: \( rightChar )")
-
             self.textStorage?.insertAttributedString(NSAttributedString(string: getNextUnusedLogicVar(myString)), atIndex: self.selectedRange.location)
             // adapted from http://stackoverflow.com/questions/30093688/how-to-create-range-in-swift
             // let range = NSRange(location: cursorPos, length: 2)
