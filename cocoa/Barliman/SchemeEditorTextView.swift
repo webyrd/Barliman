@@ -26,18 +26,24 @@ class SchemeEditorTextView: NSTextView {
             let myString : String = (self.string)!
             Swift.print("myString: \( myString )")
             
-            self.textStorage?.insertAttributedString(NSAttributedString(string: getNextUnusedLogicVar(myString)), atIndex: self.selectedRange.location)
+            let str : String = getNextUnusedLogicVar(myString)
+            let attrString : NSMutableAttributedString = NSMutableAttributedString(string: str)
+            
+            self.textStorage?.insertAttributedString(attrString, atIndex: self.selectedRange.location)
             // adapted from http://stackoverflow.com/questions/30093688/how-to-create-range-in-swift
-            // let range = NSRange(location: cursorPos, length: 2)
-            // self.setSelectedRange(range)
             
             self.didChangeText()
         } else {
             super.keyDown(event)
             
             Swift.print("keyCode: \( event.keyCode )")
-
         }
+
+        self.textStorage?.addAttribute(NSFontAttributeName,
+                                       value: NSFont(name: "Monaco", size: 14)!,
+                                       range: NSMakeRange(0, self.string!.characters.count))
+
+        
     }
 
     private
