@@ -92,9 +92,8 @@ class EditorWindowController: NSWindowController {
         let defaultFontName = EditorWindowController.fontName()
         let defaultFontSize = EditorWindowController.fontSize()
         
-        schemeDefinitionView.textStorage?.addAttribute(NSFontAttributeName,
-                                       value: NSFont(name: defaultFontName, size: defaultFontSize)!,
-                                       range: NSMakeRange(0, schemeDefinitionView.string!.characters.count))
+        schemeDefinitionView.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        bestGuessView.font = NSFont(name: defaultFontName, size: defaultFontSize)
         
         test1InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
         test2InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
