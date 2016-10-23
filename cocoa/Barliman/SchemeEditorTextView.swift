@@ -40,7 +40,7 @@ class SchemeEditorTextView: NSTextView {
         }
 
         self.textStorage?.addAttribute(NSFontAttributeName,
-                                       value: NSFont(name: "Monaco", size: 14)!,
+                                       value: NSFont(name: "Monaco", size: EditorWindowController.fontSize())!,
                                        range: NSMakeRange(0, self.string!.characters.count))
 
         

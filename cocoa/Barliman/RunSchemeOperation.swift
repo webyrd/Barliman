@@ -227,7 +227,7 @@ class RunSchemeOperation: NSOperation {
 
             func setFontAndSize(bestGuessView: NSTextView) {
                 bestGuessView.textStorage?.addAttribute(NSFontAttributeName,
-                    value: NSFont(name: "Monaco", size: 14)!,
+                    value: NSFont(name: "Monaco", size: EditorWindowController.fontSize())!,
                     range: NSMakeRange(0, bestGuessView.string!.characters.count))
             }
             

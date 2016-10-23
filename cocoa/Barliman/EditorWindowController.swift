@@ -105,6 +105,10 @@ class EditorWindowController: NSWindowController {
         }
     }
 
+    static func fontSize() -> CGFloat {
+        return 14
+    }
+    
     func textDidChange(notification: NSNotification) {
         // NSTextView text changed
         print("@@@@@@@@@@@@@@@@@@@ textDidChange")
