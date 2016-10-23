@@ -59,11 +59,20 @@ class EditorWindowController: NSWindowController {
     var schemeOperationAllTests: RunSchemeOperation?
 
     let processingQueue: NSOperationQueue = NSOperationQueue()
+    
+    static func fontName() -> String {
+        return "Monaco"
+    }
+    
+    static func fontSize() -> CGFloat {
+        return 14
+    }
 
-    // naughty!  also defined in RunSchemeOperation.  Where is the right place to put this?
-    let kDefaultColor = NSColor.blackColor()
-
-
+    static func defaultColor() -> NSColor {
+        return NSColor.blackColor()
+    }
+    
+    
     override var windowNibName: String? {
         return "EditorWindowController"
     }
@@ -79,6 +88,10 @@ class EditorWindowController: NSWindowController {
 
         // For whatever reason, the tabbing from Test 3 Expected Output doesn't got to Test 4 Input
         test3ExpectedOutputField.nextKeyView = test4InputField
+        
+        schemeDefinitionView.textStorage?.addAttribute(NSFontAttributeName,
+                                       value: NSFont(name: EditorWindowController.fontName(), size: EditorWindowController.fontSize())!,
+                                       range: NSMakeRange(0, schemeDefinitionView.string!.characters.count))
 
     }
 
@@ -103,10 +116,6 @@ class EditorWindowController: NSWindowController {
             // handle this better!  :)
             print("$$$$  Oh noes!  Looks like there is a Scheme process still running!")
         }
-    }
-
-    static func fontSize() -> CGFloat {
-        return 14
     }
     
     func textDidChange(notification: NSNotification) {
@@ -728,8 +737,8 @@ class EditorWindowController: NSWindowController {
 
         func resetTestUI(statusLabel: NSTextField, inputField: NSTextField, outputField: NSTextField) {
             statusLabel.stringValue = ""
-            inputField.textColor = kDefaultColor
-            outputField.textColor = kDefaultColor
+            inputField.textColor = EditorWindowController.defaultColor()
+            outputField.textColor = EditorWindowController.defaultColor()
         }
 
         if processTest1 {

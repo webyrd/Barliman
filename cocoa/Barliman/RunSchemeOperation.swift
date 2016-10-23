@@ -16,7 +16,7 @@ class RunSchemeOperation: NSOperation {
     var task: NSTask
     var taskType: String
 
-    let kDefaultColor = NSColor.blackColor()
+    let kDefaultColor = EditorWindowController.defaultColor()
     let kSyntaxErrorColor = NSColor.orangeColor()
     let kParseErrorColor = NSColor.magentaColor()
     let kFailedErrorColor = NSColor.redColor()
@@ -227,7 +227,7 @@ class RunSchemeOperation: NSOperation {
 
             func setFontAndSize(bestGuessView: NSTextView) {
                 bestGuessView.textStorage?.addAttribute(NSFontAttributeName,
-                    value: NSFont(name: "Monaco", size: EditorWindowController.fontSize())!,
+                    value: NSFont(name: EditorWindowController.fontName(), size: EditorWindowController.fontSize())!,
                     range: NSMakeRange(0, bestGuessView.string!.characters.count))
             }
             
