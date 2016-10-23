@@ -225,6 +225,12 @@ class RunSchemeOperation: NSOperation {
         // update the user interface, which *must* be done through the main thread
         NSOperationQueue.mainQueue().addOperationWithBlock {
 
+            func setFontAndSize(bestGuessView: NSTextView) {
+                bestGuessView.textStorage?.addAttribute(NSFontAttributeName,
+                    value: NSFont(name: "Monaco", size: 14)!,
+                    range: NSMakeRange(0, bestGuessView.string!.characters.count))
+            }
+            
             func onTestCompletion(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField, datastring: String) {
 
                 if datastring == "illegal-sexp-in-test/answer" {
@@ -302,12 +308,15 @@ class RunSchemeOperation: NSOperation {
                     // we just don't know what to do!
 
                     bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
+                    setFontAndSize(bestGuessView)
+                    
                     label.textColor = self.kThinkingColor
                     label.stringValue = self.kThinkingString
 
                 } else { // success!
 
                     bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: guess))
+                    setFontAndSize(bestGuessView)
 
                     label.textColor = self.kDefaultColor
                     label.stringValue = String(format: "Succeeded (%.2f s)",  timeInterval)
@@ -322,6 +331,8 @@ class RunSchemeOperation: NSOperation {
                 let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
 
                 bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
+                setFontAndSize(bestGuessView)
+                
                 label.textColor = self.kFailedErrorColor
                 label.stringValue = String(format: "Failed (%.2f s)",  timeInterval)
 
@@ -331,6 +342,8 @@ class RunSchemeOperation: NSOperation {
 
             func onBestGuessKilled(bestGuessView: NSTextView, label: NSTextField) {
                 bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
+                setFontAndSize(bestGuessView)
+
                 label.textColor = self.kDefaultColor
                 label.stringValue = ""
             }
@@ -342,6 +355,8 @@ class RunSchemeOperation: NSOperation {
                 bestGuessView.setTextColor(self.kDefaultColor, range: NSMakeRange(0, (bestGuessView.textStorage?.length)!))
 
                 bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
+                setFontAndSize(bestGuessView)
+
                 label.textColor = self.kDefaultColor
                 label.stringValue = ""
             }
