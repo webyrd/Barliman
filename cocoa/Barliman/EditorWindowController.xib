@@ -55,24 +55,24 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box misplaced="YES" borderType="line" title="Definitions" id="wt0-sc-FFV">
-                        <rect key="frame" x="17" y="279" width="479" height="246"/>
+                        <rect key="frame" x="17" y="279" width="479" height="250"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                         <view key="contentView" id="Ae3-aa-c0f">
-                            <rect key="frame" x="1" y="1" width="477" height="228"/>
+                            <rect key="frame" x="1" y="1" width="477" height="231"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="OJ5-W3-rMK">
-                                    <rect key="frame" x="0.0" y="0.0" width="477" height="228"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="477" height="231"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <clipView key="contentView" id="alQ-A2-iTh">
-                                        <rect key="frame" x="1" y="1" width="475" height="226"/>
+                                        <rect key="frame" x="1" y="1" width="475" height="229"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <textView importsGraphics="NO" richText="NO" findStyle="panel" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" id="4FU-au-vlw" customClass="SchemeEditorTextView" customModule="Barliman" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="475" height="226"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="475" height="229"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <size key="minSize" width="475" height="226"/>
+                                                <size key="minSize" width="475" height="229"/>
                                                 <size key="maxSize" width="617" height="10000000"/>
                                                 <attributedString key="textStorage">
                                                     <fragment>
@@ -831,16 +831,16 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                     <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="r1s-hI-iMh">
-                                        <rect key="frame" x="460" y="1" width="16" height="226"/>
+                                        <rect key="frame" x="460" y="1" width="16" height="229"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                 </scrollView>
                             </subviews>
                         </view>
-                        <font key="titleFont" size="12" name=".AppleSystemUIFont"/>
+                        <font key="titleFont" size="13" name=".AppleSystemUIFont"/>
                     </box>
                     <box misplaced="YES" borderType="line" title="Best Guess" id="omS-co-OrV" userLabel="Best Guess">
-                        <rect key="frame" x="17" y="16" width="479" height="252"/>
+                        <rect key="frame" x="17" y="16" width="479" height="253"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES"/>
                         <view key="contentView" id="ZRc-6X-xDL">
                             <rect key="frame" x="1" y="1" width="477" height="234"/>
@@ -878,19 +878,10 @@
                                 </scrollView>
                             </subviews>
                         </view>
-                        <font key="titleFont" size="12" name=".AppleSystemUIFont"/>
+                        <font key="titleFont" size="13" name=".AppleSystemUIFont"/>
                     </box>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="0d5-fa-ceP" userLabel="Definitions Status Label">
-                        <rect key="frame" x="18" y="511" width="477" height="17"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="tRd-Vy-5v1">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="42x-bp-32O" userLabel="Best Guess Status Label">
-                        <rect key="frame" x="18" y="254" width="477" height="17"/>
+                        <rect key="frame" x="-2" y="254" width="477" height="17"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="BWj-up-N9I">
                             <font key="font" metaFont="system"/>
@@ -899,10 +890,10 @@
                         </textFieldCell>
                     </textField>
                     <box misplaced="YES" borderType="line" title="Test 1" id="bnB-F2-bht" userLabel="Test 1">
-                        <rect key="frame" x="498" y="450" width="528" height="75"/>
+                        <rect key="frame" x="498" y="450" width="528" height="79"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Rz3-f1-pbp">
-                            <rect key="frame" x="1" y="1" width="526" height="57"/>
+                            <rect key="frame" x="1" y="1" width="526" height="60"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Zi0-kV-0Zv" userLabel="Test 1 Expected Output">
@@ -931,13 +922,13 @@
                                 </textField>
                             </subviews>
                         </view>
-                        <font key="titleFont" size="12" name=".AppleSystemUIFont"/>
+                        <font key="titleFont" size="13" name=".AppleSystemUIFont"/>
                     </box>
                     <box misplaced="YES" borderType="line" title="Test 2" id="5ae-CU-xak" userLabel="Test 2">
-                        <rect key="frame" x="498" y="364" width="528" height="75"/>
+                        <rect key="frame" x="498" y="364" width="528" height="80"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="le3-bP-nN0">
-                            <rect key="frame" x="1" y="1" width="526" height="57"/>
+                            <rect key="frame" x="1" y="1" width="526" height="61"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="QEw-0g-Vn0" userLabel="Test 2 Expected Output">
@@ -966,13 +957,13 @@
                                 </textField>
                             </subviews>
                         </view>
-                        <font key="titleFont" size="12" name=".AppleSystemUIFont"/>
+                        <font key="titleFont" size="13" name=".AppleSystemUIFont"/>
                     </box>
                     <box misplaced="YES" borderType="line" title="Test 3" id="9QG-Ds-qrp" userLabel="Test 3">
-                        <rect key="frame" x="498" y="279" width="528" height="75"/>
+                        <rect key="frame" x="498" y="279" width="528" height="78"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Frv-E0-7vv">
-                            <rect key="frame" x="1" y="1" width="526" height="57"/>
+                            <rect key="frame" x="1" y="1" width="526" height="59"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="uC6-hK-TjE" userLabel="Test 3 Expected Output">
@@ -1001,13 +992,13 @@
                                 </textField>
                             </subviews>
                         </view>
-                        <font key="titleFont" size="12" name=".AppleSystemUIFont"/>
+                        <font key="titleFont" size="13" name=".AppleSystemUIFont"/>
                     </box>
                     <box misplaced="YES" borderType="line" title="Test 4" id="4cE-jZ-Dxo" userLabel="Test 4">
-                        <rect key="frame" x="498" y="192" width="528" height="75"/>
+                        <rect key="frame" x="498" y="192" width="528" height="79"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="HLY-1U-C6u">
-                            <rect key="frame" x="1" y="1" width="526" height="57"/>
+                            <rect key="frame" x="1" y="1" width="526" height="60"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="7fA-eR-jIs" userLabel="Test 4 Expected Output">
@@ -1036,13 +1027,13 @@
                                 </textField>
                             </subviews>
                         </view>
-                        <font key="titleFont" size="12" name=".AppleSystemUIFont"/>
+                        <font key="titleFont" size="13" name=".AppleSystemUIFont"/>
                     </box>
                     <box misplaced="YES" borderType="line" title="Test 5" id="IHN-f7-wfW" userLabel="Test 5">
-                        <rect key="frame" x="498" y="105" width="528" height="75"/>
+                        <rect key="frame" x="498" y="105" width="528" height="78"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="WgF-UA-g8I">
-                            <rect key="frame" x="1" y="1" width="526" height="57"/>
+                            <rect key="frame" x="1" y="1" width="526" height="59"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="boC-4Q-D8B" userLabel="Test 5 Input">
@@ -1071,13 +1062,13 @@
                                 </textField>
                             </subviews>
                         </view>
-                        <font key="titleFont" size="12" name=".AppleSystemUIFont"/>
+                        <font key="titleFont" size="13" name=".AppleSystemUIFont"/>
                     </box>
                     <box misplaced="YES" borderType="line" title="Test 6" id="XAs-dB-Kkx" userLabel="Test 6">
-                        <rect key="frame" x="498" y="16" width="528" height="75"/>
+                        <rect key="frame" x="498" y="16" width="528" height="78"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="kMf-UE-GgF">
-                            <rect key="frame" x="1" y="1" width="526" height="57"/>
+                            <rect key="frame" x="1" y="1" width="526" height="59"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="bd0-aO-clQ" userLabel="Test 6 Expected Output">
@@ -1106,11 +1097,15 @@
                                 </textField>
                             </subviews>
                         </view>
-                        <font key="titleFont" size="12" name=".AppleSystemUIFont"/>
+                        <font key="titleFont" size="13" name=".AppleSystemUIFont"/>
                     </box>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="bki-fe-DmI" userLabel="Scheme Definition Spinner">
-                        <rect key="frame" x="95" y="511" width="16" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <rect key="frame" x="477" y="511" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </progressIndicator>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="sDx-rk-wjy">
+                        <rect key="frame" x="477" y="254" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                     </progressIndicator>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="XLM-qT-jee" userLabel="Test1 Spinner">
                         <rect key="frame" x="1007" y="509" width="16" height="16"/>
@@ -1190,9 +1185,15 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="sDx-rk-wjy">
-                        <rect key="frame" x="95" y="254" width="16" height="16"/>
-                    </progressIndicator>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="0d5-fa-ceP" userLabel="Definitions Status Label">
+                        <rect key="frame" x="-2" y="512" width="477" height="17"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="tRd-Vy-5v1">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <connections>
