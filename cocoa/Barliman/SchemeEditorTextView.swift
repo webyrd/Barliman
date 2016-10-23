@@ -19,9 +19,9 @@ class SchemeEditorTextView: NSTextView {
     override func keyDown(event: NSEvent) {
         Swift.print("----------------   keyDown: \(event.keyCode) ")
         
-        if ((event.keyCode == 0x31) && (event.modifierFlags.contains(NSEventModifierFlags.Option))) {
-            // space was entered while holding the 'option' key
-            Swift.print("---------------- space + option")
+        if ((event.keyCode == 0x31) && (event.modifierFlags.contains(NSEventModifierFlags.Control))) {
+            // space was entered while holding the 'control' key
+            Swift.print("---------------- space + control")
 
             let cursorPos = self.selectedRange.location
             let myString : String = (self.string)!
