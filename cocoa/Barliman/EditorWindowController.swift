@@ -89,10 +89,26 @@ class EditorWindowController: NSWindowController {
         // For whatever reason, the tabbing from Test 3 Expected Output doesn't got to Test 4 Input
         test3ExpectedOutputField.nextKeyView = test4InputField
         
+        let defaultFontName = EditorWindowController.fontName()
+        let defaultFontSize = EditorWindowController.fontSize()
+        
         schemeDefinitionView.textStorage?.addAttribute(NSFontAttributeName,
-                                       value: NSFont(name: EditorWindowController.fontName(), size: EditorWindowController.fontSize())!,
+                                       value: NSFont(name: defaultFontName, size: defaultFontSize)!,
                                        range: NSMakeRange(0, schemeDefinitionView.string!.characters.count))
-
+        
+        test1InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        test2InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        test3InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        test4InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        test5InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        test6InputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        
+        test1ExpectedOutputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        test2ExpectedOutputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        test3ExpectedOutputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        test4ExpectedOutputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        test5ExpectedOutputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
+        test6ExpectedOutputField.font = NSFont(name: defaultFontName, size: defaultFontSize)
     }
 
     func cleanup() {
