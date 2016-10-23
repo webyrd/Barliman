@@ -40,8 +40,7 @@ class SchemeEditorTextView: NSTextView {
             // let range = NSRange(location: cursorPos, length: 2)
             // self.setSelectedRange(range)
             
-            super.keyDown(event)
-
+            self.didChangeText()
         } else {
             super.keyDown(event)
             
