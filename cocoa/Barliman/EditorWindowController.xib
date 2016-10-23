@@ -46,14 +46,14 @@
         <window title="Barliman" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5" userLabel="Barliman ">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="1134" height="622"/>
+            <rect key="contentRect" x="196" y="240" width="1134" height="545"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="1134" height="622"/>
+                <rect key="frame" x="0.0" y="0.0" width="1134" height="545"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box fixedFrame="YES" borderType="line" title="Definitions" translatesAutoresizingMaskIntoConstraints="NO" id="wt0-sc-FFV">
-                        <rect key="frame" x="17" y="356" width="619" height="246"/>
+                        <rect key="frame" x="17" y="279" width="619" height="246"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Ae3-aa-c0f">
                             <rect key="frame" x="1" y="1" width="617" height="230"/>
@@ -71,7 +71,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <size key="minSize" width="615" height="228"/>
-                                                <size key="maxSize" width="615" height="10000000"/>
+                                                <size key="maxSize" width="617" height="10000000"/>
                                                 <attributedString key="textStorage">
                                                     <fragment>
                                                         <string key="content">(define ,A
@@ -837,25 +837,25 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" borderType="line" title="Best Guess" translatesAutoresizingMaskIntoConstraints="NO" id="omS-co-OrV" userLabel="Best Guess">
-                        <rect key="frame" x="17" y="16" width="619" height="328"/>
+                        <rect key="frame" x="17" y="16" width="619" height="251"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="ZRc-6X-xDL">
-                            <rect key="frame" x="1" y="1" width="617" height="312"/>
+                            <rect key="frame" x="1" y="1" width="617" height="235"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pql-DL-um8">
                                     <rect key="frame" x="0.0" y="0.0" width="617" height="312"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <clipView key="contentView" ambiguous="YES" id="uN1-sU-4Sj">
-                                        <rect key="frame" x="1" y="1" width="600" height="310"/>
+                                        <rect key="frame" x="1" y="1" width="615" height="310"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <textView ambiguous="YES" editable="NO" importsGraphics="NO" richText="NO" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="udr-Wg-VyJ" userLabel="Best Guess View">
-                                                <rect key="frame" x="0.0" y="0.0" width="600" height="310"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="615" height="310"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <size key="minSize" width="600" height="310"/>
-                                                <size key="maxSize" width="615" height="10000000"/>
+                                                <size key="minSize" width="615" height="310"/>
+                                                <size key="maxSize" width="617" height="10000000"/>
                                                 <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <connections>
                                                     <outlet property="delegate" destination="-2" id="T0w-9y-oCo"/>
@@ -869,7 +869,7 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                     <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="9ze-ya-0Tb">
-                                        <rect key="frame" x="601" y="1" width="15" height="310"/>
+                                        <rect key="frame" x="600" y="1" width="16" height="310"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </scroller>
                                 </scrollView>
@@ -881,7 +881,7 @@
                         </view>
                     </box>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0d5-fa-ceP" userLabel="Definitions Status Label">
-                        <rect key="frame" x="188" y="588" width="250" height="17"/>
+                        <rect key="frame" x="188" y="511" width="250" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="tRd-Vy-5v1">
                             <font key="font" metaFont="system"/>
@@ -890,7 +890,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="42x-bp-32O" userLabel="Best Guess Status Label">
-                        <rect key="frame" x="117" y="330" width="321" height="17"/>
+                        <rect key="frame" x="117" y="253" width="321" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="BWj-up-N9I">
                             <font key="font" metaFont="system"/>
@@ -899,7 +899,7 @@
                         </textFieldCell>
                     </textField>
                     <box fixedFrame="YES" borderType="line" title="Test 1" translatesAutoresizingMaskIntoConstraints="NO" id="bnB-F2-bht" userLabel="Test 1">
-                        <rect key="frame" x="638" y="527" width="479" height="75"/>
+                        <rect key="frame" x="638" y="450" width="479" height="75"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Rz3-f1-pbp">
                             <rect key="frame" x="1" y="1" width="477" height="59"/>
@@ -933,7 +933,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" borderType="line" title="Test 2" translatesAutoresizingMaskIntoConstraints="NO" id="5ae-CU-xak" userLabel="Test 2">
-                        <rect key="frame" x="638" y="441" width="479" height="75"/>
+                        <rect key="frame" x="638" y="364" width="479" height="75"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="le3-bP-nN0">
                             <rect key="frame" x="1" y="1" width="477" height="59"/>
@@ -967,7 +967,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" borderType="line" title="Test 3" translatesAutoresizingMaskIntoConstraints="NO" id="9QG-Ds-qrp" userLabel="Test 3">
-                        <rect key="frame" x="638" y="356" width="479" height="75"/>
+                        <rect key="frame" x="638" y="279" width="479" height="75"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Frv-E0-7vv">
                             <rect key="frame" x="1" y="1" width="477" height="59"/>
@@ -1001,7 +1001,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" borderType="line" title="Test 4" translatesAutoresizingMaskIntoConstraints="NO" id="4cE-jZ-Dxo" userLabel="Test 4">
-                        <rect key="frame" x="638" y="269" width="479" height="75"/>
+                        <rect key="frame" x="638" y="192" width="479" height="75"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="HLY-1U-C6u">
                             <rect key="frame" x="1" y="1" width="477" height="59"/>
@@ -1035,7 +1035,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" borderType="line" title="Test 5" translatesAutoresizingMaskIntoConstraints="NO" id="IHN-f7-wfW" userLabel="Test 5">
-                        <rect key="frame" x="638" y="182" width="479" height="75"/>
+                        <rect key="frame" x="638" y="105" width="479" height="75"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="WgF-UA-g8I">
                             <rect key="frame" x="1" y="1" width="477" height="59"/>
@@ -1069,7 +1069,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" borderType="line" title="Test 6" translatesAutoresizingMaskIntoConstraints="NO" id="XAs-dB-Kkx" userLabel="Test 6">
-                        <rect key="frame" x="638" y="93" width="479" height="75"/>
+                        <rect key="frame" x="638" y="16" width="479" height="75"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="kMf-UE-GgF">
                             <rect key="frame" x="1" y="1" width="477" height="59"/>
@@ -1103,31 +1103,31 @@
                         </view>
                     </box>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="XLM-qT-jee" userLabel="Test1 Spinner">
-                        <rect key="frame" x="1098" y="586" width="16" height="16"/>
+                        <rect key="frame" x="1098" y="509" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="aON-X4-lSn" userLabel="Test2 Spinner">
-                        <rect key="frame" x="1098" y="502" width="16" height="16"/>
+                        <rect key="frame" x="1098" y="425" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="YHK-Mm-i1i" userLabel="Test3 Spinner">
-                        <rect key="frame" x="1098" y="415" width="16" height="16"/>
+                        <rect key="frame" x="1098" y="338" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="1hg-5d-5YD" userLabel="Test4 Spinner">
-                        <rect key="frame" x="1098" y="328" width="16" height="16"/>
+                        <rect key="frame" x="1098" y="251" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="LIB-sw-LCk" userLabel="Test5 Spinner">
-                        <rect key="frame" x="1098" y="241" width="16" height="16"/>
+                        <rect key="frame" x="1098" y="164" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Mxm-SY-a4v" userLabel="Test6 Spinner">
-                        <rect key="frame" x="1098" y="152" width="16" height="16"/>
+                        <rect key="frame" x="1098" y="75" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YAo-sB-usO" userLabel="Test 1 Status Label">
-                        <rect key="frame" x="771" y="588" width="321" height="17"/>
+                        <rect key="frame" x="771" y="511" width="321" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="DIc-CI-rwc">
                             <font key="font" metaFont="system"/>
@@ -1136,7 +1136,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="40V-oL-GeG" userLabel="Test 2 Status Label">
-                        <rect key="frame" x="771" y="504" width="321" height="17"/>
+                        <rect key="frame" x="771" y="427" width="321" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="aOz-oB-Yxh">
                             <font key="font" metaFont="system"/>
@@ -1145,7 +1145,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uHv-aF-lmY" userLabel="Test 3 Status Label">
-                        <rect key="frame" x="771" y="417" width="321" height="17"/>
+                        <rect key="frame" x="771" y="340" width="321" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="UPI-X3-Ykn">
                             <font key="font" metaFont="system"/>
@@ -1154,7 +1154,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J2E-L7-t85" userLabel="Test 4 Status Label">
-                        <rect key="frame" x="771" y="330" width="321" height="17"/>
+                        <rect key="frame" x="771" y="253" width="321" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="DrF-JK-Vkv">
                             <font key="font" metaFont="system"/>
@@ -1163,7 +1163,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xoG-a5-gqq" userLabel="Test 5 Status Label">
-                        <rect key="frame" x="771" y="243" width="321" height="17"/>
+                        <rect key="frame" x="771" y="166" width="321" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="zyZ-uE-l2N">
                             <font key="font" metaFont="system"/>
@@ -1172,7 +1172,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yVL-ff-SSm" userLabel="Test 6 Status Label">
-                        <rect key="frame" x="771" y="154" width="321" height="17"/>
+                        <rect key="frame" x="771" y="77" width="321" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="AVF-MA-UNe">
                             <font key="font" metaFont="system"/>
@@ -1181,7 +1181,7 @@
                         </textFieldCell>
                     </textField>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="bki-fe-DmI" userLabel="Scheme Definition Spinner">
-                        <rect key="frame" x="617" y="586" width="16" height="16"/>
+                        <rect key="frame" x="617" y="509" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                 </subviews>
@@ -1189,7 +1189,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="-88" y="-107"/>
+            <point key="canvasLocation" x="-88" y="-145.5"/>
         </window>
     </objects>
 </document>
