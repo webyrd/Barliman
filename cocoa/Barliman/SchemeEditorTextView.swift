@@ -23,26 +23,72 @@ class SchemeEditorTextView: NSTextView {
             // space was entered while holding the 'control' key
             Swift.print("---------------- space + control")
 
-            let myString : String = (self.string)!
-            Swift.print("myString: \( myString )")
+            let oldString : String = (self.string)!
+            // Swift.print("undo keydown oldString: \( oldString )")
             
-            let str : String = getNextUnusedLogicVar(myString)
-            let attrString : NSMutableAttributedString = NSMutableAttributedString(string: str,
+            let unusedLogicVarString : String = getNextUnusedLogicVar(oldString)
+            
+            let newPartialString : NSMutableAttributedString = NSMutableAttributedString(string: unusedLogicVarString,
                                                                                    attributes: [NSFontAttributeName:NSFont(
-                                                                                    name: EditorWindowController.fontName(),
-                                                                                    size: EditorWindowController.fontSize())!])
+                                                                                   name: EditorWindowController.fontName(),
+                                                                                   size: EditorWindowController.fontSize())!])
             
-            self.textStorage?.insertAttributedString(attrString, atIndex: self.selectedRange.location)
-            // adapted from http://stackoverflow.com/questions/30093688/how-to-create-range-in-swift
+            updateTextStorage(newPartialString)
             
-            self.didChangeText()
         } else {
             super.keyDown(event)
             
             Swift.print("keyCode: \( event.keyCode )")
         }
     }
+    
+    // Adapted from http://nshipster.com/nsundomanager/
+    func updateTextStorage(newPartialString: NSAttributedString) {
+        
+        Swift.print("undo updateTextStorage called with string: \( newPartialString.string )")
 
+        let oldAttrString : NSAttributedString = self.attributedString()
+        let oldAttrStringCopy : NSMutableAttributedString = NSMutableAttributedString.init(attributedString: oldAttrString)
+
+        let undoState : [String:AnyObject] = ["attrString": oldAttrStringCopy, "selectedRange": self.selectedRange]
+        
+        let undoManager = self.undoManager
+        undoManager!.registerUndoWithTarget(self, selector: #selector(undoTextStorage(_:)), object: undoState)
+        
+        Swift.print("undo message will contain string: \( oldAttrStringCopy.string )")
+        
+        self.textStorage?.insertAttributedString(newPartialString, atIndex: self.selectedRange.location)
+        
+        self.didChangeText()
+    }
+
+    // Adapted from http://nshipster.com/nsundomanager/
+    @objc func undoTextStorage(undoState: [String:AnyObject]) {
+        
+        let newAttrString : NSAttributedString = undoState["attrString"] as! NSAttributedString
+        let selectedRange : NSRange = undoState["selectedRange"] as! NSRange
+        
+        Swift.print("undo undoTextStorage called with string: \( newAttrString.string )")
+        
+        
+        let oldAttrString : NSAttributedString = self.attributedString()
+        let oldAttrStringCopy : NSMutableAttributedString = NSMutableAttributedString.init(attributedString: oldAttrString)
+        
+        // Adapted from http://stackoverflow.com/questions/24970713/pass-tuples-as-anyobject-in-swift
+        let undoState : [String:AnyObject] = ["attrString": oldAttrStringCopy, "selectedRange": self.selectedRange]
+        
+        let undoManager = self.undoManager
+        undoManager!.registerUndoWithTarget(self, selector: #selector(undoTextStorage(_:)), object: undoState)
+        
+        Swift.print("undo undoTextStorage will contain string: \( oldAttrStringCopy.string )")
+        
+        self.textStorage?.setAttributedString(newAttrString)
+        self.setSelectedRange(selectedRange)
+        
+        self.didChangeText()
+    }
+
+    
     private
     static let variables = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".characters.map { "," + String($0) }
 
