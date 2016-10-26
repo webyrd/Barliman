@@ -7,6 +7,66 @@
 (set! enable-conde1? #t)
 
 (time
+  (test 'eval-expr-1
+    (run 1 (defn)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6"))
+            (g7 (gensym "g7"))
+            (g8 (gensym "g8"))
+            (g9 (gensym "g9"))
+            (g10 (gensym "g10"))
+            (g11 (gensym "g11")))
+        (fresh (A)
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (absento g7 defn)
+          (absento g8 defn)
+          (absento g9 defn)
+          (absento g10 defn)
+          (absento g11 defn)
+          (== defn
+              `(define eval-expr
+                 (lambda (expr env)
+                   (match expr
+                     [`(quote ,datum) datum]
+                     [`(lambda (,(? symbol? x)) ,body)
+                       (lambda (z)
+                         (eval-expr body (lambda (y)
+                                           (if (equal? x y)
+                                             z
+                                             (env y)))))]
+                     [(? symbol? x) ,A]
+                     [`(cons ,e1 ,e2) (cons (eval-expr e1 env) (eval-expr e2 env))]
+                     [`(,rator ,rand) ((eval-expr rator env) (eval-expr rand env))]))))
+          (evalo
+            `(begin ,defn
+                    (list
+                      (eval-expr '(quote ,g1) 'initial-env)
+                      (eval-expr '((lambda (x) x) (quote ,g2)) 'initial-env)))
+            `(,g1 ,g2)))))
+    '(((define eval-expr
+         (lambda (expr env)
+           (match expr
+             [`(quote ,datum) datum]
+             [`(lambda (,(? symbol? x)) ,body)
+               (lambda (z)
+                 (eval-expr body (lambda (y)
+                                   (if (equal? x y)
+                                     z
+                                     (env y)))))]
+             [(? symbol? x) (env x)]
+             [`(cons ,e1 ,e2) (cons (eval-expr e1 env) (eval-expr e2 env))]
+             [`(,rator ,rand) ((eval-expr rator env) (eval-expr rand env))])))))))
+
+(time
   (test 'append-fast-1
     (run 1 (defn)
       (let ((g1 (gensym "g1"))
