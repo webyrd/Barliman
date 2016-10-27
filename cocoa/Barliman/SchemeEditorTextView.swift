@@ -57,7 +57,7 @@ class SchemeEditorTextView: NSTextView {
         
         Swift.print("undo message will contain string: \( oldAttrStringCopy.string )")
         
-        self.textStorage?.insertAttributedString(newPartialString, atIndex: self.selectedRange.location)
+        self.textStorage?.replaceCharactersInRange(self.selectedRange, withAttributedString: newPartialString)
         
         self.didChangeText()
     }
