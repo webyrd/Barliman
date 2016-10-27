@@ -406,6 +406,7 @@ INTERESTING IDEAS:
 
 KNOWN LIMITATIONS:
 
+* The `Best Guess` pane cannot be resized vertically, which sometimes cuts off text.
 * Non-specific error indication (the color changes for the text, but does not show which part of the text caused the error)
 * Currently the UI only supports 6 tests.  Should allow more tests to be added.
 * Test inputs and outputs are `NSTextField`s rather than `NSTextView`s, which makes writing longer and more complicated tests awkward.
@@ -413,19 +414,21 @@ KNOWN LIMITATIONS:
 
 KNOWN ERRORS:
 
-* Will modified the miniKanren reifier to remove unnecessary constraints involving gensyms.  Alas, he goofed it, and the reifier removes too many constraints, including some =/= and absento constraints in play when gensyms are used.  Need to fix this!
-* (lambda (,A ,B) ...) should always produce a disequality constraint between A and B.
-* The '0' key no longer seems to work.
 * Shadowing of syntax is no longer working.  (and and #t) => #t should result in a syntax error, unless the Definitions pane contains a defn named 'and': (define and (lambda x  x)).  In which case, (and and #t) should be legal syntax.  (Wonder if we broke this when we messed with the environment in evalo.)
 * It is possible, rarely, to exit Barliman and still have a Scheme process running in the background.  Need a way to better track which processes have been started and make sure to kill them.  Or potentially use something like `ulimit` when launching a process.
-* auto-insert of right parens and auto-insert of logic variables breaks 'undo'.  Guess I need to learn how 'undo' works in Cocoa...
 * The miniKanren queries constructed by Barliman expose several local variable names and a number of global variable names that could accidentally or intentionally be used by the programmer.  Need to tighten this up.
-* An illegal s-expression in the 'Definitions' edit pane will make test input/output expressions that are legal expressions appear to be illegal.
 * closing one of the windows means the window cannot be reopened!  Oops.  I'm not going to worry about this until I decide what to do with the Semantics window.
 * sometimes the spinners stop spinning but are still visible
 
 DONE (features on the TODO list implemented since the original release of Barliman)
 
+* Fixed error: An illegal s-expression in the 'Definitions' edit pane will make test input/output expressions that are legal expressions appear to be illegal.
+* Fixed error (by removing auto-insert of right parens): auto-insert of right parens and auto-insert of logic variables breaks 'undo'.  Guess I need to learn how 'undo' works in Cocoa...
+* Fixed error: The '0' key no longer seems to work.
+* Fixed error: (lambda (,A ,B) ...) should always produce a disequality constraint between A and B.
+* Fixed error: Will modified the miniKanren reifier to remove unnecessary constraints involving gensyms.  Alas, he goofed it, and the reifier removes too many constraints, including some =/= and absento constraints in play when gensyms are used.
+* Fixed error: scoping problem introduced by optimizing variable lookup.
+* Fixed error: Inserting a new logic variable with Control-<space> doesn't replace highlighted text.  Instead, it adds the variable and keeps the hilighted text.
 * changed reifier and main edit window to display constraints separately from "best guess" definition(s).
 * fixed: quickly tab-deleting a test with a syntax error (for example) can leave the 'syntax error message' on an empty test
 * added automatic addition of right parens, and auto-addition of logic variables (thanks Michael Ballantyne, Guannan Wei, Pierce Darragh, Michael Adams, for discussions on how this might work)
