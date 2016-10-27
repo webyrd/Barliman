@@ -1,5 +1,7 @@
 # Barliman
 
+Joint work with Greg Rosenblatt (https://github.com/gregr).
+
 ---------------------------------------
 
 "He thinks less than he talks, and slower; yet he can see through a brick wall in time (as they say in Bree)."
