@@ -1217,12 +1217,20 @@
                       `((absento . ,ft))))))
         (append `(,v) (filter-gensyms (append fd fn fy ft)))))))
 
-;;; WEB -- 28 June 2016 -- remove constraints containing gensyms
+;;; WEB -- 27 Oct 2016 -- (hopefully) fixed code that removes constraints containing gensyms
+;;; Must make sure we only remove those portions of a constraint that actually contain gensyms!
+;;; We don't need to worry about symbolo or numbero constraints, since gensyms are symbols!
 (define filter-gensyms
   (lambda (loc)
     (cond
       ((null? loc) '())
-      ((anygen? (car loc)) (filter-gensyms (cdr loc)))
+      ((or (eqv? (caar loc) '=/=)
+           (eqv? (caar loc) 'absento))
+       (let ((fc (filter (lambda (c) (not (anygen? c))) (cdar loc))))
+         (if (null? fc)
+             (filter-gensyms (cdr loc))
+             (cons (cons (caar loc) fc)
+                   (filter-gensyms (cdr loc))))))
       (else (cons (car loc) (filter-gensyms (cdr loc)))))))
 
 #|
