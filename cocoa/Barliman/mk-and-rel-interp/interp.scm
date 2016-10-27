@@ -83,6 +83,7 @@
                 ((fresh (name args e rest letrec-bindings^)
                    (== `((define ,name (lambda ,args ,e)) . ,rest) defn*/body)
                    (== `((,name (lambda ,args ,e)) . ,letrec-bindings) letrec-bindings^)
+                   (symbolo name)
                    (parse-begin rest env letrec-bindings^)))))))
     (parse-begin defn*/body env '())))
 
@@ -418,6 +419,7 @@
     (1 1 (fresh (defn args name body e)
        (== `(begin ,defn ,e) expr)
        (== `(define ,name (lambda ,args ,body)) defn)
+       (symbolo name)
        (eval-expo `(letrec ((,name (lambda ,args ,body))) ,e) env val)))
 
     (1 1 (fresh (p-name x body letrec-body)
@@ -425,7 +427,8 @@
        (== `(letrec ((,p-name (lambda ,x ,body)))
               ,letrec-body)
            expr)
-       (paramso x)
+       (symbolo p-name)
+       (paramso x)       
        (not-in-envo 'letrec env)
        (eval-expo letrec-body
                   `((,p-name . (rec . (lambda ,x ,body))) . ,env)
@@ -937,8 +940,9 @@
     ((== '() list-of-defns)
      (== '() names))
     ((fresh (name ignore rest res)
-       (== `((define ,name . ,ignore) . ,rest) list-of-defns)
+       (== `((define ,name . ,ignore) . ,rest) list-of-defns)       
        (== `(,name . ,res) names)
+       (symbolo name)
        (extract-nameso rest res)))))
 
 (define (appendo l s out)
