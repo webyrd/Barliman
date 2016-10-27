@@ -309,7 +309,7 @@ TODO:
 * allow resizing of Barliman main window
 * add `let` and `cond`.
 * add better error message for 'invalid syntax', at least indicating whether there is an unexpected paren/missing end paren
-* Possibly replace 'list' call in the "best quess" query with nested 'cons' calls instead.  (Need to time this again with Greg's new improvements to the search.)  This can be an order of magnitude faster in some cases, according to my testing (variadic application is more expensive than 'cons' in the current miniScheme interpreter, apparently: see times for append-gensym-synthesis-with-cons-1 versus append-gensym-synthesis-with-list-1 tests in test-interp.scm).
+* Possibly replace `list` call in the "best quess" query with nested `cons` calls instead.  (Need to time this again with Greg's new improvements to the search.)  This can be an order of magnitude faster in some cases, according to my testing (variadic application is more expensive than 'cons' in the current miniScheme interpreter, apparently: see times for append-gensym-synthesis-with-cons-1 versus append-gensym-synthesis-with-list-1 tests in test-interp.scm).
 * add an implicit `begin` to `lambda`, `letrec`, and `let` forms.
 * parser should enforce that the variable names are distinct in `lambda` formals, `letrec` bindings and formals, and `define`'s within the same scope.
 * create a version of Barliman on an open platform (Electron, Clojurescript, Lighttable, whatever).  Any help would be appreciated!  :)
@@ -422,6 +422,7 @@ KNOWN ERRORS:
 
 DONE (features on the TODO list implemented since the original release of Barliman)
 
+* Implemented monospace font, as recommended by Devon Zeugel.
 * Fixed error: An illegal s-expression in the 'Definitions' edit pane will make test input/output expressions that are legal expressions appear to be illegal.
 * Fixed error (by removing auto-insert of right parens): auto-insert of right parens and auto-insert of logic variables breaks 'undo'.  Guess I need to learn how 'undo' works in Cocoa...
 * Fixed error: The '0' key no longer seems to work.
