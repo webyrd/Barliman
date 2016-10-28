@@ -338,6 +338,7 @@
                             (val . (null? . (prim . null?)))
                             (val . (pair? . (prim . pair?)))
                             (val . (symbol? . (prim . symbol?)))
+                            (val . (number? . (prim . number?)))
                             (val . (cons . (prim . cons)))
                             (val . (not . (prim . not)))
                             (val . (equal? . (prim . equal?)))
@@ -625,6 +626,20 @@
            (if (or (var? val) (eq? val #f))
              (fresh () eval-args (conde$ (assign-true) (assign-false)))
              (fresh () assign-true eval-args))))]
+      [(== prim-id 'number?)
+       (fresh (v)
+         (let ((assign-true (fresh () (== #t val) (numbero v)))
+               (assign-false (fresh () (== #f val) (conde$
+                                                     ((== '() v))
+                                                     ((fresh (a d)
+                                                        (== `(,a . ,d) v)))
+                                                     ((== #f v))
+                                                     ((== #t v))
+                                                     ((symbolo v)))))
+               (eval-args (eval-listo rands env `(,v))))
+           (if (or (var? val) (eq? val #f))
+             (fresh () eval-args (conde$ (assign-true) (assign-false)))
+             (fresh () assign-true eval-args))))]
       [(== prim-id 'not)
        (fresh (b)
          (let ((assign-result (conde$
@@ -762,6 +777,7 @@
                       (null? . (val . (prim . null?)))
                       (pair? . (val . (prim . pair?)))
                       (symbol? . (val . (prim . symbol?)))
+                      (number? . (val . (prim . number?)))
                       (not . (val . (prim . not)))
                       (equal? . (val . (prim . equal?)))
                       (list . (val . (closure (lambda x x) ,empty-env)))
