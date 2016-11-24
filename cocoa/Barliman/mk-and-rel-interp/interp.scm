@@ -417,11 +417,9 @@
     ;; WEB 25 May 2016 -- This rather budget version of 'begin' is
     ;; useful for separating 'define' from the expression 'e',
     ;; specifically for purposes of Barliman.
-    (1 1 (fresh (defn args name body e)
-       (== `(begin ,defn ,e) expr)
-       (== `(define ,name (lambda ,args ,body)) defn)
-       (symbolo name)
-       (eval-expo `(letrec ((,name (lambda ,args ,body))) ,e) env val)))
+    (1 1 (fresh (begin-body)
+       (== `(begin . ,begin-body) expr)
+       (eval-begino '() begin-body env val)))
 
     (1 1 (fresh (p-name x body letrec-body)
        ;; single-function variadic letrec version
@@ -447,6 +445,40 @@
               (and (pair? expr) (var? (walk (car expr) (state-S st)))))
         (state-deferred-defer st goal)
         (goal st)))))
+
+;; This version is for working around the lack of mutual recursion.
+;; Ideally we'd use the other definition.
+;; NOTE: rec-defs is Scheme state, not a logic term!
+(define (eval-begino rec-defs begin-body env val)
+  (conde
+    ((fresh (e)
+       (== `(,e) begin-body)
+       (if (null? rec-defs)
+         (eval-expo e env val)
+         (let loop ((rec-defs rec-defs) (body e))
+           (if (null? rec-defs)
+             (eval-expo body env val)
+             (loop (cdr rec-defs) `(letrec (,(car rec-defs)) ,body)))))))
+    ((fresh (name args body begin-rest)
+       (== `((define ,name (lambda ,args ,body)) . ,begin-rest) begin-body)
+       (symbolo name)
+       (eval-begino
+         (cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
+
+;; This is the ideal definition, but we can't use it without generalized letrec.
+;; NOTE: rec-defs is Scheme state, not a logic term!
+;(define (eval-begino rec-defs begin-body env val)
+  ;(conde
+    ;((fresh (e)
+        ;(== `(,e) begin-body)
+        ;(if (null? rec-defs)
+          ;(eval-expo e env val)
+          ;(eval-expo `(letrec ,rec-defs ,e) env val))))
+    ;((fresh (name args body begin-rest)
+        ;(== `((define ,name (lambda ,args ,body)) . ,begin-rest) begin-body)
+        ;(symbolo name)
+        ;(eval-begino
+          ;(cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
 
 (define empty-env '())
 

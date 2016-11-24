@@ -7,6 +7,41 @@
 (set! enable-conde1? #t)
 
 (time
+  (test 'append-foldr-1*
+    (run 1 (defn)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6"))
+            (g7 (gensym "g7")))
+        (fresh (q)
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (absento g7 defn)
+          (== `(define append
+                 (lambda (xs ys) ,q))
+              defn)
+          (evalo `(begin
+                    (define foldr
+                      (lambda (f acc xs)
+                        (if (null? xs)
+                          acc
+                          (f (car xs) (foldr f acc (cdr xs))))))
+                    ,defn
+                    (list
+                      (append '() '())
+                      (append '(,g1) '(,g2))
+                      (append '(,g3 ,g4) '(,g5 ,g6))))
+                 (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6))))))
+    '(((define append (lambda (xs ys) (foldr cons ys xs)))))))
+
+(time
   (test 'append-foldr-1
     (run 1 (defn)
       (let ((g1 (gensym "g1"))
