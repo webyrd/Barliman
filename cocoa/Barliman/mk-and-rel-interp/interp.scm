@@ -427,7 +427,7 @@
               ,letrec-body)
            expr)
        (symbolo p-name)
-       (paramso x)       
+       (paramso x)
        (not-in-envo 'letrec env)
        (eval-expo letrec-body
                   `((,p-name . (rec . (lambda ,x ,body))) . ,env)
@@ -988,7 +988,7 @@
     ((== '() list-of-defns)
      (== '() names))
     ((fresh (name ignore rest res)
-       (== `((define ,name . ,ignore) . ,rest) list-of-defns)       
+       (== `((define ,name . ,ignore) . ,rest) list-of-defns)
        (== `(,name . ,res) names)
        (symbolo name)
        (extract-nameso rest res)))))
