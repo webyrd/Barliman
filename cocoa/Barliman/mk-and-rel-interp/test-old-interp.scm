@@ -77,6 +77,40 @@
                  (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6))))))
     '(((define append (lambda (xs ys) (foldr cons ys xs)))))))
 
+;(time
+  ;(test 'foldr-1
+    ;(run 1 (defn)
+      ;(let ((g1 (gensym "g1"))
+            ;(g2 (gensym "g2"))
+            ;(g3 (gensym "g3"))
+            ;(g4 (gensym "g4"))
+            ;(g5 (gensym "g5"))
+            ;(g6 (gensym "g6"))
+            ;(g7 (gensym "g7")))
+        ;(fresh (q)
+          ;(absento g1 defn)
+          ;(absento g2 defn)
+          ;(absento g3 defn)
+          ;(absento g4 defn)
+          ;(absento g5 defn)
+          ;(absento g6 defn)
+          ;(absento g7 defn)
+          ;(evalo `(begin
+                    ;,defn
+                    ;(list
+                      ;(foldr ',g2 ',g1 '())
+                      ;;(foldr cons ',g3 '(,g4))
+                      ;(foldr cons ',g4 '(,g5 ,g6))
+                      ;(foldr equal? ',g3 '(,g3))
+                      ;))
+                 ;(list
+                   ;g1
+                   ;;`(,g4 . ,g3)
+                   ;`(,g5 ,g6 . ,g4)
+                   ;#t
+                   ;)))))
+    ;'((ok))))
+
 (time
   (test 'eval-expr-1
     (run 1 (defn)
