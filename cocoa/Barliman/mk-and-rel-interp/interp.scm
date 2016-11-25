@@ -446,6 +446,11 @@
                   (symbolo p)
                   (loop b*-rest (cons p p*) (cons rand rand*))))))))
 
+    (1 1 (fresh (qq-expr)
+           (== (list 'quasiquote qq-expr) expr)
+           (not-in-envo 'quasiquote env)
+           (eval-qq-expo qq-expr env val)))
+
     ) (state-depth-set st depth)))))
 
       (if (or (var? expr)
@@ -453,6 +458,27 @@
               (and (pair? expr) (var? (walk (car expr) (state-S st)))))
         (state-deferred-defer st goal)
         (goal st)))))
+
+(define (eval-qq-expo qq-expr env val)
+  (conde
+    ((fresh (expr)
+       (== (list 'unquote expr) qq-expr)
+       (eval-expo expr env val)))
+    ((fresh (qq-a qq-d va vd)
+       (== `(,qq-a . ,qq-d) qq-expr)
+       (== `(,va . ,vd) val)
+       (=/= 'unquote qq-a)
+       (=/= 'closure qq-a)
+       (=/= 'prim qq-a)
+       (eval-qq-expo qq-a env va)
+       (eval-qq-expo qq-d env vd)))
+    ((== qq-expr val)
+     (conde$
+       ((== '() val))
+       ((symbolo val))
+       ((== #f val))
+       ((== #t val))
+       ((numbero val))))))
 
 (define (eval-letreco b* letrec-body env val)
   (let loop ((b* b*) (rb* '()))

@@ -8,10 +8,10 @@
 
 (define-syntax test-barliman
   (syntax-rules ()
-    ((_ name lvars program test-case test-result expected-defs)
+    ((_ name (qvars ...) lvars program test-case test-result expected-defs)
      (time
        (test name
-         (run 1 (defs)
+         (run 1 (defs qvars ...)
            (let ((g1 (gensym "g1"))
                  (g2 (gensym "g2"))
                  (g3 (gensym "g3"))
@@ -36,8 +36,15 @@
                (absento g10 defs)
                (absento g11 defs)
                (== program defs)
-               (evalo `(begin ,@program ,test-case) test-result))))
+               (evalo (cons 'begin (append program (list test-case)))
+                      test-result))))
          expected-defs)))))
+
+(test-barliman 'quasiquote-1 () ()
+  '()
+  '(list `(1 2) `((cons 3 4) ,(cons 5 6)))
+  `((1 2) ((cons 3 4) (5 . 6)))
+  `((())))
 
 (let ((program '((define fsm-ho
                    (lambda (str)
@@ -66,7 +73,7 @@
                                             [`0 (S1 d)]
                                             [`1 (S2 d)]))]))])
                        (S0 str)))))))
-  (test-barliman 'fsm-ho-1 ()
+  (test-barliman 'fsm-ho-1 () ()
     program
     '(list (fsm-ho '(0 1 1)) (fsm-ho '(0 1 1 1)))
     '(accept reject)
@@ -74,7 +81,7 @@
 
 (test-barliman
   'rember-1
-  ()
+  () ()
   '((define rember
       (lambda (x ls)
         (cond
