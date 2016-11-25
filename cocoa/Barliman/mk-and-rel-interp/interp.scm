@@ -446,6 +446,19 @@
                   (symbolo p)
                   (loop b*-rest (cons p p*) (cons rand rand*))))))))
 
+    (1 1 (fresh (b* body)
+           (== `(let* ,b* ,body) expr)
+           (not-in-envo 'let env)
+           (let loop ((b* b*) (env env))
+             (conde
+               ((== '() b*) (eval-expo body env val))
+               ((fresh (p rand a b*-rest res)
+                  (== `((,p ,rand) . ,b*-rest) b*)
+                  (symbolo p)
+                  (== `((val . (,p . ,a)) . ,env) res)
+                  (loop b*-rest res)
+                  (eval-expo rand env a)))))))
+
     (1 1 (fresh (qq-expr)
            (== (list 'quasiquote qq-expr) expr)
            (not-in-envo 'quasiquote env)
