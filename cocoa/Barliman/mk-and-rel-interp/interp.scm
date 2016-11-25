@@ -430,8 +430,23 @@
 
     (1 1 (handle-matcho expr env val))
 
-    (1 1 (prim-expo expr env val)))
-                    (state-depth-set st depth)))))
+    (1 1 (prim-expo expr env val))
+
+    (1 1 (fresh (b* body)
+           (== `(let ,b* ,body) expr)
+           (not-in-envo 'let env)
+           (let loop ((b* b*) (p* '()) (rand* '()))
+             (conde
+               ((fresh (a* res)
+                  (== '() b*)
+                  (ext-env*o p* a* env res)
+                  (eval-application rand* env a* (eval-expo body res val))))
+               ((fresh (p rand b*-rest)
+                  (== `((,p ,rand) . ,b*-rest) b*)
+                  (symbolo p)
+                  (loop b*-rest (cons p p*) (cons rand rand*))))))))
+
+    ) (state-depth-set st depth)))))
 
       (if (or (var? expr)
               (var? env)

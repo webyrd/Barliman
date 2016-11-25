@@ -39,6 +39,39 @@
                (evalo `(begin ,@program ,test-case) test-result))))
          expected-defs)))))
 
+(let ((program '((define fsm-ho
+                   (lambda (str)
+                     (letrec ([S0 (lambda (str)
+                                    (cond
+                                      [(null? str) 'accept]
+                                      [else
+                                        (let ((d (cdr str)))
+                                          (match (car str)
+                                            [`0 (S0 d)]
+                                            [`1 (S1 d)])) ]))]
+                              [S1 (lambda (str)
+                                    (cond
+                                      [(null? str) 'reject]
+                                      [else
+                                        (let ((d (cdr str)))
+                                          (match (car str)
+                                            [`0 (S2 d)]
+                                            [`1 (S0 d)]))]))]
+                              [S2 (lambda (str)
+                                    (cond
+                                      [(null? str) 'reject]
+                                      [else
+                                        (let ((d (cdr str)))
+                                          (match (car str)
+                                            [`0 (S1 d)]
+                                            [`1 (S2 d)]))]))])
+                       (S0 str)))))))
+  (test-barliman 'fsm-ho-1 ()
+    program
+    '(list (fsm-ho '(0 1 1)) (fsm-ho '(0 1 1 1)))
+    '(accept reject)
+    `((,program))))
+
 (test-barliman
   'rember-1
   ()
