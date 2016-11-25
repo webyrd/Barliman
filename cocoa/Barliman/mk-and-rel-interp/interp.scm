@@ -402,7 +402,7 @@
                         (;; variadic
                          (symbolo x)
                          ;(project (rator) (lambdag@ (st) ((begin (display `(happened ,rator)) (newline) succeed) st)))
-                         (== `((,x . (val . ,a*)) . ,env^) res)
+                         (== `((val . (,x . ,a*)) . ,env^) res)
                          (eval-expo body res val)
                          (eval-listo rands env a*))))))))))
 
@@ -421,17 +421,10 @@
        (== `(begin . ,begin-body) expr)
        (eval-begino '() begin-body env val)))
 
-    (1 1 (fresh (p-name x body letrec-body)
-       ;; single-function variadic letrec version
-       (== `(letrec ((,p-name (lambda ,x ,body)))
-              ,letrec-body)
-           expr)
-       (symbolo p-name)
-       (paramso x)
+    (1 1 (fresh (b* letrec-body)
+       (== `(letrec ,b* ,letrec-body) expr)
        (not-in-envo 'letrec env)
-       (eval-expo letrec-body
-                  `((,p-name . (rec . (lambda ,x ,body))) . ,env)
-                  val)))
+       (eval-letreco b* letrec-body env val)))
 
     (1 1 (cond-primo expr env val))
 
@@ -446,86 +439,111 @@
         (state-deferred-defer st goal)
         (goal st)))))
 
-;; This version is for working around the lack of mutual recursion.
-;; Ideally we'd use the other definition.
+(define (eval-letreco b* letrec-body env val)
+  (let loop ((b* b*) (rb* '()))
+    (conde
+      ((== '() b*) (eval-expo letrec-body `((rec . ,rb*) . ,env) val))
+      ((fresh (p-name x body b*-rest)
+         (== `((,p-name (lambda ,x ,body)) . ,b*-rest) b*)
+         (symbolo p-name)
+         (paramso x)
+         (loop b*-rest `((,p-name . (lambda ,x ,body)) . ,rb*)))))))
+
 ;; NOTE: rec-defs is Scheme state, not a logic term!
 (define (eval-begino rec-defs begin-body env val)
   (conde
     ((fresh (e)
-       (== `(,e) begin-body)
-       (if (null? rec-defs)
-         (eval-expo e env val)
-         (let loop ((rec-defs rec-defs) (body e))
-           (if (null? rec-defs)
-             (eval-expo body env val)
-             (loop (cdr rec-defs) `(letrec (,(car rec-defs)) ,body)))))))
+        (== `(,e) begin-body)
+        (if (null? rec-defs)
+          (eval-expo e env val)
+          (eval-expo `(letrec ,rec-defs ,e) env val))))
     ((fresh (name args body begin-rest)
-       (== `((define ,name (lambda ,args ,body)) . ,begin-rest) begin-body)
-       (symbolo name)
-       (eval-begino
-         (cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
-
-;; This is the ideal definition, but we can't use it without generalized letrec.
-;; NOTE: rec-defs is Scheme state, not a logic term!
-;(define (eval-begino rec-defs begin-body env val)
-  ;(conde
-    ;((fresh (e)
-        ;(== `(,e) begin-body)
-        ;(if (null? rec-defs)
-          ;(eval-expo e env val)
-          ;(eval-expo `(letrec ,rec-defs ,e) env val))))
-    ;((fresh (name args body begin-rest)
-        ;(== `((define ,name (lambda ,args ,body)) . ,begin-rest) begin-body)
-        ;(symbolo name)
-        ;(eval-begino
-          ;(cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
+        (== `((define ,name (lambda ,args ,body)) . ,begin-rest) begin-body)
+        (symbolo name)
+        (eval-begino
+          (cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
 
 (define empty-env '())
 
+(define (lookup-reco k renv x b* t)
+    (conde
+      ((== '() b*) (k))
+      ((fresh (b*-rest p-name lam-expr)
+         (== `((,p-name . ,lam-expr) . ,b*-rest) b*)
+         (conde
+           ((== p-name x) (== `(closure ,lam-expr ,renv) t))
+           ((=/= p-name x) (lookup-reco k renv x b*-rest t)))))))
 (define (lookupo x env t)
-  (fresh (y b rest)
-    (== `((,y . ,b) . ,rest) env)
-    (conde;1 (((x x) (y y)))
-      ((== x y)
-       (conde;1 (((b b)))
-         ((== `(val . ,t) b))
-         ((fresh (lam-expr)
-            (== `(rec . ,lam-expr) b)
-            (== `(closure ,lam-expr ,env) t)))))
-      ((=/= x y)
-       (lookupo x rest t)))))
+  (conde
+    ((fresh (y b rest)
+       (== `((val . (,y . ,b)) . ,rest) env)
+       (conde
+         ((== x y) (== b t))
+         ((=/= x y) (lookupo x rest t)))))
+    ((fresh (b* rest)
+       (== `((rec . ,b*) . ,rest) env)
+       (lookup-reco (lambda () (lookupo x rest t)) env x b* t)))))
 
 (define (try-lookup-before x env t alts)
+  (define (try-lookup-rec-before st renv b* alts)
+    (let-values (((rb* vb*) (list-split-ground st b*)))
+      (let loop ((rb* rb*)
+                 (alts (if (null? vb*)
+                         alts
+                         (conde$
+                           ((symbolo x)
+                            (lookup-reco (lambda () alts) renv x vb* t))
+                           (alts)))))
+        (if (null? rb*) alts
+          (let ((rib (car rb*)))
+            (loop (cdr rb*)
+                  (fresh (p-name lam-expr)
+                    (== `(,p-name . ,lam-expr) rib)
+                    (conde$
+                      ((symbolo x)
+                       (== p-name x)
+                       (== `(closure ,lam-expr ,renv) t))
+                      ((=/= p-name x) alts)))))))))
   (lambdag@ (st)
     (let-values (((rgenv venv) (list-split-ground st env)))
       (let loop ((rgenv rgenv)
                  (rec-env venv)
-                 (alts (conde$ ;1$ (((x x)))
-                         ((symbolo x) (lookupo x venv t))
-                         (alts))))
+                 (alts (if (null? venv)
+                         alts
+                         (conde$ ;1$ (((x x)))
+                           ((symbolo x) (lookupo x venv t))
+                           (alts)))))
         (if (null? rgenv) (alts st)
           (let* ((rib (car rgenv)) (rec-env (cons rib rec-env)))
             (loop (cdr rgenv) rec-env
-              (fresh (y b)
-                (== `(,y . ,b) rib)
-                (conde$ ;1$ ((;(x x)
-                           ;(y y)
-                           ;))
-                  ((symbolo x) (== x y)
-                   (conde$ ;1$ (((b b)))
-                     ((== `(val . ,t) b))
-                     ((fresh (lam-expr)
-                             (== `(rec . ,lam-expr) b)
-                             (== `(closure ,lam-expr ,rec-env) t)))))
-                  ((=/= x y) alts))))))))))
+                  (conde$
+                    ((fresh (y b)
+                       (== `(val . (,y . ,b)) rib)
+                       (conde$
+                         ((symbolo x) (== x y) (== b t))
+                         ((=/= x y) alts))))
+                    ((fresh (b*)
+                       (== `(rec . ,b*) rib)
+                       (try-lookup-rec-before st rec-env b* alts)))))))))))
 
 (define (not-in-envo x env)
   (conde1 (((x x) (env env)))
-    ((== empty-env env))
+    ((== '() env))
     ((fresh (y b rest)
-       (== `((,y . ,b) . ,rest) env)
-       (=/= y x)
-       (not-in-envo x rest)))))
+       (== `((val . (,y . ,b)) . ,rest) env)
+       (=/= x y)
+       (not-in-envo x rest)))
+    ((fresh (b* rest)
+       (== `((rec . ,b*) . ,rest) env)
+       (not-in-env-reco x b* rest)))))
+
+(define (not-in-env-reco x b* env)
+  (conde1 (((x x) (b* b*)))
+    ((== '() b*) (not-in-envo x env))
+    ((fresh (p-name lam-expr b*-rest)
+       (== `((,p-name . ,lam-expr) . ,b*-rest) b*)
+       (=/= p-name x)
+       (not-in-env-reco x b*-rest env)))))
 
 (define (eval-listo expr env val)
   (conde1 (((expr expr)) ((val val)))
@@ -603,7 +621,7 @@
     ((fresh (x a dx* da* env2)
        (== `(,x . ,dx*) x*)
        (== `(,a . ,da*) a*)
-       (== `((,x . (val . ,a)) . ,env) env2)
+       (== `((val . (,x . ,a)) . ,env) env2)
        (symbolo x)
        (ext-env*o dx* da* env2 out)))))
 
@@ -803,16 +821,16 @@
            ((== #f v) (cond-clauseso c*-rest env val))
            ((condition-true v) (eval-expo conseq env val))))))))
 
-(define initial-env `((cons . (val . (prim . cons)))
-                      (car . (val . (prim . car)))
-                      (cdr . (val . (prim . cdr)))
-                      (null? . (val . (prim . null?)))
-                      (pair? . (val . (prim . pair?)))
-                      (symbol? . (val . (prim . symbol?)))
-                      (number? . (val . (prim . number?)))
-                      (not . (val . (prim . not)))
-                      (equal? . (val . (prim . equal?)))
-                      (list . (val . (closure (lambda x x) ,empty-env)))
+(define initial-env `((val . (cons . (prim . cons)))
+                      (val . (car . (prim . car)))
+                      (val . (cdr . (prim . cdr)))
+                      (val . (null? . (prim . null?)))
+                      (val . (pair? . (prim . pair?)))
+                      (val . (symbol? . (prim . symbol?)))
+                      (val . (number? . (prim . number?)))
+                      (val . (not . (prim . not)))
+                      (val . (equal? . (prim . equal?)))
+                      (val . (list . (closure (lambda x x) ,empty-env)))
                       . ,empty-env))
 
 (define handle-matcho
@@ -862,8 +880,8 @@
   (conde1 (((env1 env1)))
     ((== empty-env env1) (== env2 env-out))
     ((fresh (y v rest res)
-       (== `((,y . (val . ,v)) . ,rest) env1)
-       (== `((,y . (val . ,v)) . ,res) env-out)
+       (== `((val . (,y . ,v)) . ,rest) env1)
+       (== `((val . (,y . ,v)) . ,res) env-out)
        (regular-env-appendo rest env2 res)))))
 
 (define (match-clauses mval clauses env val)
@@ -885,7 +903,7 @@
       ((== mval val)
        (== penv penv-out)
        (lookupo var penv val))
-      ((== `((,var . (val . ,mval)) . ,penv) penv-out)
+      ((== `((val . (,var . ,mval)) . ,penv) penv-out)
        (not-in-envo var penv)))))
 
 (define (var-p-no-match var mval penv penv-out)
