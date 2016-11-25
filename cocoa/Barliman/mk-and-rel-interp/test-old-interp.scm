@@ -54,24 +54,24 @@
                                       [else
                                         (let ((d (cdr str)))
                                           (match (car str)
-                                            [`0 (S0 d)]
-                                            [`1 (S1 d)])) ]))]
+                                            [0 (S0 d)]
+                                            [1 (S1 d)])) ]))]
                               [S1 (lambda (str)
                                     (cond
                                       [(null? str) 'reject]
                                       [else
                                         (let ((d (cdr str)))
                                           (match (car str)
-                                            [`0 (S2 d)]
-                                            [`1 (S0 d)]))]))]
+                                            [0 (S2 d)]
+                                            [1 (S0 d)]))]))]
                               [S2 (lambda (str)
                                     (cond
                                       [(null? str) 'reject]
                                       [else
                                         (let ((d (cdr str)))
                                           (match (car str)
-                                            [`0 (S1 d)]
-                                            [`1 (S2 d)]))]))])
+                                            [0 (S1 d)]
+                                            [1 (S2 d)]))]))])
                        (S0 str)))))))
   (test-barliman 'fsm-ho-1 () ()
     program
