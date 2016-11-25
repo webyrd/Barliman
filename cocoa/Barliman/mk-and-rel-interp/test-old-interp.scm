@@ -6,22 +6,58 @@
 (set! allow-incomplete-search? #t)
 (set! enable-conde1? #t)
 
-(time
-  (test 'rember-1
-    (run 1 (q)
-      (evalo
-        `(begin
-           (define rember
-             (lambda (x ls)
-               (cond
-                 [(null? ls) '()]
-                 [(equal? x (car ls)) (cdr ls)]
-                 [else (cons (car ls) (rember x (cdr ls)))])))
-           (list (rember 'mint '(lamb chops and mint flavored mint jelly))
-                 (rember 'cup '(coffee cup tea cup and hick cup))))
-        '((lamb chops and flavored mint jelly)
-          (coffee tea cup and hick cup))))
-    '((_.0))))
+(define-syntax test-barliman
+  (syntax-rules ()
+    ((_ name lvars program test-case test-result expected-defs)
+     (time
+       (test name
+         (run 1 (defs)
+           (let ((g1 (gensym "g1"))
+                 (g2 (gensym "g2"))
+                 (g3 (gensym "g3"))
+                 (g4 (gensym "g4"))
+                 (g5 (gensym "g5"))
+                 (g6 (gensym "g6"))
+                 (g7 (gensym "g7"))
+                 (g8 (gensym "g8"))
+                 (g9 (gensym "g9"))
+                 (g10 (gensym "g10"))
+                 (g11 (gensym "g11")))
+             (fresh lvars
+               (absento g1 defs)
+               (absento g2 defs)
+               (absento g3 defs)
+               (absento g4 defs)
+               (absento g5 defs)
+               (absento g6 defs)
+               (absento g7 defs)
+               (absento g8 defs)
+               (absento g9 defs)
+               (absento g10 defs)
+               (absento g11 defs)
+               (== program defs)
+               (evalo `(begin ,@program ,test-case) test-result))))
+         expected-defs)))))
+
+(test-barliman
+  'rember-1
+  ()
+  '((define rember
+      (lambda (x ls)
+        (cond
+          [(null? ls) '()]
+          [(equal? x (car ls)) (cdr ls)]
+          [else (cons (car ls) (rember x (cdr ls)))]))))
+  '(list (rember 'mint '(lamb chops and mint flavored mint jelly))
+         (rember 'cup '(coffee cup tea cup and hick cup)))
+  '((lamb chops and flavored mint jelly)
+    (coffee tea cup and hick cup))
+  '((((define rember
+        (lambda (x ls)
+          (cond
+            ((null? ls) '())
+            ((equal? x (car ls)) (cdr ls))
+            (else (cons (car ls) (rember x (cdr ls)))))))))))
 
 (time
   (test 'rember-2
