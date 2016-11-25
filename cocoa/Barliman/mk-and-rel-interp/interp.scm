@@ -67,9 +67,34 @@
        (parse-not-in-envo 'letrec env)
        (parse-letreco binding* letrec-body env)))
 
+    ((fresh (qq-expr)
+       (== (list 'quasiquote qq-expr) expr)
+       (parse-not-in-envo 'quasiquote env)
+       (parse-qq-expo qq-expr env)))
+
     ((prim-parseo expr env))
 
     ))
+
+(define (parse-qq-expo qq-expr env)
+  (conde
+    ((fresh (expr)
+       (== (list 'unquote expr) qq-expr)
+       (parse-expo expr env)))
+    ((fresh (qq-a qq-d)
+       (== `(,qq-a . ,qq-d) qq-expr)
+       (=/= 'unquote qq-a)
+       (=/= 'closure qq-a)
+       (=/= 'prim qq-a)
+       (parse-qq-expo qq-a env)
+       (parse-qq-expo qq-d env)))
+    ((conde$
+       ((== '() qq-expr))
+       ((symbolo qq-expr))
+       ((== #f qq-expr))
+       ((== #t qq-expr))
+       ((numbero qq-expr))))))
+
 
 (define (parse-begino defn*/body env)
   ;; parse (begin (define name (lambda args e)) ... body)
