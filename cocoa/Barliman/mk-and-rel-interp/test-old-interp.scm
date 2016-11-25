@@ -7,6 +7,63 @@
 (set! enable-conde1? #t)
 
 (time
+  (test 'rember-1
+    (run 1 (q)
+      (evalo
+        `(begin
+           (define rember
+             (lambda (x ls)
+               (cond
+                 [(null? ls) '()]
+                 [(equal? x (car ls)) (cdr ls)]
+                 [else (cons (car ls) (rember x (cdr ls)))])))
+           (list (rember 'mint '(lamb chops and mint flavored mint jelly))
+                 (rember 'cup '(coffee cup tea cup and hick cup))))
+        '((lamb chops and flavored mint jelly)
+          (coffee tea cup and hick cup))))
+    '((_.0))))
+
+(time
+  (test 'rember-2
+    (run 1 (defn)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6"))
+            (g7 (gensym "g7")))
+        (fresh (A B C D)
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (absento g7 defn)
+          (== `(define rember
+                 (lambda (x ls)
+                   (cond
+                     [(null? ls) '()]
+                     [(equal? ,A (car ls)) ,C]
+                     [else ,D])))
+              defn)
+          (evalo
+            `(begin
+               ,defn
+               (list (rember ',g1 '())
+                     (rember ',g1 '(,g1 . ,g2))
+                     (rember ',g1 '(,g2 ,g1 . ,g3))
+                     (rember ',g1 '(,g2 ,g3 ,g1 . ,g4))))
+            `(() ,g2 (,g2 . ,g3) (,g2 ,g3 . ,g4))))))
+    '(((define rember
+         (lambda (x ls)
+           (cond
+             ((null? ls) '())
+             ((equal? x (car ls)) (cdr ls))
+             (else (cons (car ls) (rember x (cdr ls)))))))))))
+
+(time
   (test 'even-odd-1
     (run 1 (q defn)
       (let ((g1 (gensym "g1"))
