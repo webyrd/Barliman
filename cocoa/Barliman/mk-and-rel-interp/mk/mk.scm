@@ -8,7 +8,7 @@
 (define allow-incomplete-search? #f)
 
 ;; To allow use of experimental `conde1` optimization, set this to #t.
-(define enable-conde1? #f)
+(define enable-conde1? #t)
 
 ; Creates a new scope that is not scope-eq? to any other scope
 (define new-scope
