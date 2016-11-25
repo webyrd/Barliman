@@ -65,7 +65,7 @@
 
 (time
   (test 'even-odd-1
-    (run 1 (q defn)
+    (run 1 (defn)
       (let ((g1 (gensym "g1"))
             (g2 (gensym "g2"))
             (g3 (gensym "g3"))
@@ -101,7 +101,7 @@
                  (even? '(s s))
                  (odd? '(s s))))
             (list #t #f #f #t #t #f)))))
-      '(ok)))
+      '((_.0))))
 
 (time
   (test 'append-foldr-1*
@@ -306,6 +306,7 @@
            (if (null? _.0)
              _.1
              (cons (car _.0) (append (cdr _.0) _.1)))))
+       (=/= ((_.0 _.1)) ((_.0 append)) ((_.0 car)) ((_.0 cdr)) ((_.0 cons)) ((_.0 if)) ((_.0 null?)) ((_.1 append)) ((_.1 car)) ((_.1 cdr)) ((_.1 cons)) ((_.1 if)) ((_.1 null?)))
        (sym _.0 _.1)))))
 
 (time
@@ -993,67 +994,61 @@
 
 (time
   (test 'append-equal-0
-        (run 1 (defn)
-          (let ((g1 (gensym "g1"))
-                (g2 (gensym "g2"))
-                (g3 (gensym "g3"))
-                (g4 (gensym "g4"))
-                (g5 (gensym "g5"))
-                (g6 (gensym "g6"))
-                (g7 (gensym "g7")))
-            (fresh ()
-              (absento g1 defn)
-              (absento g2 defn)
-              (absento g3 defn)
-              (absento g4 defn)
-              (absento g5 defn)
-              (absento g6 defn)
-              (absento g7 defn)
-              (evalo `(begin
-                        ,defn
-                        (list
-                          (equal? '() (append '() '()))
-                          (equal? (list ',g1 ',g2) (append '(,g1) '(,g2)))
-                          (equal? (list ',g3 ',g4 ',g5 ',g6) (append '(,g3 ,g4) '(,g5 ,g6)))))
-                     (list #t #t #t)))))
-        '(((define append
-             (lambda (_.0 _.1)
-               (if (null? _.0)
-                 _.1
-                 (cons (car _.0) (append (cdr _.0) _.1)))))
-           (sym _.0 _.1)))))
+    (run 1 (defn)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6"))
+            (g7 (gensym "g7")))
+        (fresh ()
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (absento g7 defn)
+          (evalo `(begin
+                    ,defn
+                    (list
+                      (equal? '() (append '() '()))
+                      (equal? (list ',g1 ',g2) (append '(,g1) '(,g2)))
+                      (equal? (list ',g3 ',g4 ',g5 ',g6) (append '(,g3 ,g4) '(,g5 ,g6)))))
+                  (list #t #t #t)))))
+    '(((define append (lambda (_.0 _.1) (if (null? _.0) _.1 (cons (car _.0) (append (cdr _.0) _.1)))))
+        (=/= ((_.0 _.1)) ((_.0 append)) ((_.0 car)) ((_.0 cdr)) ((_.0 cons)) ((_.0 if)) ((_.0 null?)) ((_.1 append)) ((_.1 car)) ((_.1 cdr)) ((_.1 cons)) ((_.1 if)) ((_.1 null?)))
+        (sym _.0 _.1)))))
 
 (time
   (test 'append-equal-1
-        (run 1 (defn)
-          (let ((g1 (gensym "g1"))
-                (g2 (gensym "g2"))
-                (g3 (gensym "g3"))
-                (g4 (gensym "g4"))
-                (g5 (gensym "g5"))
-                (g6 (gensym "g6"))
-                (g7 (gensym "g7")))
-            (fresh ()
-              (absento g1 defn)
-              (absento g2 defn)
-              (absento g3 defn)
-              (absento g4 defn)
-              (absento g5 defn)
-              (absento g6 defn)
-              (absento g7 defn)
-              (evalo `(begin
-                        ,defn
-                        (list
-                          (equal? (append '() '()) '())
-                          (equal? (append '(,g1) '(,g2)) (list ',g1 ',g2))
-                          (equal? (append '(,g3 ,g4) '(,g5 ,g6)) (list ',g3 ',g4 ',g5 ',g6))))
-                     (list #t #t #t)))))
-        '(((define append
-             (lambda (_.0 _.1)
-               (if (null? _.0)
-                 _.1
-                 (cons (car _.0) (append (cdr _.0) _.1)))))
-           (sym _.0 _.1)))))
+    (run 1 (defn)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6"))
+            (g7 (gensym "g7")))
+        (fresh ()
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (absento g7 defn)
+          (evalo `(begin
+                    ,defn
+                    (list
+                      (equal? (append '() '()) '())
+                      (equal? (append '(,g1) '(,g2)) (list ',g1 ',g2))
+                      (equal? (append '(,g3 ,g4) '(,g5 ,g6)) (list ',g3 ',g4 ',g5 ',g6))))
+                  (list #t #t #t)))))
+    '(((define append (lambda (_.0 _.1) (if (null? _.0) _.1 (cons (car _.0) (append (cdr _.0) _.1)))))
+        (=/= ((_.0 _.1)) ((_.0 append)) ((_.0 car)) ((_.0 cdr)) ((_.0 cons)) ((_.0 if)) ((_.0 null?)) ((_.1 append)) ((_.1 car)) ((_.1 cdr)) ((_.1 cons)) ((_.1 if)) ((_.1 null?)))
+        (sym _.0 _.1)))))
 
 (time
   (test 'interp-0
@@ -1248,41 +1243,8 @@
                   (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7)))))))
    '(((define append (lambda (l s) (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
 
-; append-hard-15-gensym seems just as good, so don't waste time on this test case by default
-;(time
- ;(test 'append-hard-14-gensym
-   ;(run 1 (defn)
-     ;(let ((g1 (gensym "g1"))
-           ;(g2 (gensym "g2"))
-           ;(g3 (gensym "g3"))
-           ;(g4 (gensym "g4"))
-           ;(g5 (gensym "g5"))
-           ;(g6 (gensym "g6"))
-           ;(g7 (gensym "g7")))
-       ;(fresh ()
-         ;(absento g1 defn)
-         ;(absento g2 defn)
-         ;(absento g3 defn)
-         ;(absento g4 defn)
-         ;(absento g5 defn)
-         ;(absento g6 defn)
-         ;(absento g7 defn)
-         ;(fresh (p q r)
-           ;(== `(define ,p
-                  ;(lambda ,q ,r))
-               ;defn)
-           ;(evalo `(begin
-                     ;,defn
-                     ;(list
-                      ;(append '() '())
-                      ;(append '(,g1) '(,g2))
-                      ;(append '(,g3 ,g4 ,g5) '(,g6 ,g7))))
-                  ;(list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7)))))))
-   ;'(((define append (lambda (_.0 _.1) (if (null? _.0) _.1 (cons (car _.0) (append (cdr _.0) _.1))))) (sym _.0 _.1)))))
-
-; this one seems just as fast as append-hard-14-gensym
 (time
- (test 'append-hard-15-gensym
+ (test 'append-hard-14-gensym
    (run 1 (defn)
      (let ((g1 (gensym "g1"))
            (g2 (gensym "g2"))
@@ -1306,12 +1268,8 @@
                      (append '(,g1) '(,g2))
                      (append '(,g3 ,g4 ,g5) '(,g6 ,g7))))
                 (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6 ,g7))))))
-   '(((define append
-        (lambda (_.0 _.1)
-          (if (null? _.0)
-            _.1
-            (cons (car _.0)
-                  (append (cdr _.0) _.1)))))
+   '(((define append (lambda (_.0 _.1) (if (null? _.0) _.1 (cons (car _.0) (append (cdr _.0) _.1)))))
+      (=/= ((_.0 _.1)) ((_.0 append)) ((_.0 car)) ((_.0 cdr)) ((_.0 cons)) ((_.0 if)) ((_.0 null?)) ((_.1 append)) ((_.1 car)) ((_.1 cdr)) ((_.1 cons)) ((_.1 if)) ((_.1 null?)))
       (sym _.0 _.1)))))
 
 (time (test 'reverse-1
@@ -1333,7 +1291,7 @@
                   (reverse '(foo bar))
                   (reverse '(1 2 3)))))
           (list '() '(a) '(bar foo) '(3 2 1))))
-  '(((append (cdr xs) (list (car xs)))))))
+  '(((append (cdr xs) (cons (car xs) '()))))))
 
 (time (test 'reverse-2
   (run 1 (defn)
@@ -1377,7 +1335,7 @@
          (if (null? xs)
            '()
            (append (reverse (cdr xs))
-                   (list (car xs))))))))))
+                   (cons (car xs) '())))))))))
 
 ;(time (test 'reverse-3
   ;(run 1 (defn)
@@ -1589,11 +1547,7 @@
                       (reverse '(,g2 ,g3))
                       (reverse '(,g4 ,g5 ,g6)))))
                (list '() `(,g1) `(,g3 ,g2) `(,g6 ,g5 ,g4))))))
-  '(((define reverse
-       (lambda (xs)
-         (if (null? xs)
-           xs
-           (foldl cons '() xs))))))))
+  '(((define reverse (lambda (xs) (foldl cons '() xs)))))))
 
 ;(time (test 'reverse-8
   ;(run 1 (defn)
@@ -1662,4 +1616,5 @@
          (if (null? _.0)
            _.1
            (rev-tailcall (cdr _.0) (cons (car _.0) _.1)))))
+     (=/= ((_.0 _.1)) ((_.0 car)) ((_.0 cdr)) ((_.0 cons)) ((_.0 if)) ((_.0 null?)) ((_.0 rev-tailcall)) ((_.1 car)) ((_.1 cdr)) ((_.1 cons)) ((_.1 if)) ((_.1 null?)) ((_.1 rev-tailcall)))
      (sym _.0 _.1)))))
