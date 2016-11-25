@@ -421,17 +421,10 @@
        (== `(begin . ,begin-body) expr)
        (eval-begino '() begin-body env val)))
 
-    (1 1 (fresh (p-name x body letrec-body)
-       ;; single-function variadic letrec version
-       (== `(letrec ((,p-name (lambda ,x ,body)))
-              ,letrec-body)
-           expr)
-       (symbolo p-name)
-       (paramso x)
+    (1 1 (fresh (b* letrec-body)
+       (== `(letrec ,b* ,letrec-body) expr)
        (not-in-envo 'letrec env)
-       (eval-expo letrec-body
-                  `((rec . ((,p-name . (lambda ,x ,body)))) . ,env)
-                  val)))
+       (eval-letreco b* letrec-body env val)))
 
     (1 1 (cond-primo expr env val))
 
@@ -446,39 +439,29 @@
         (state-deferred-defer st goal)
         (goal st)))))
 
-;; This version is for working around the lack of mutual recursion.
-;; Ideally we'd use the other definition.
+(define (eval-letreco b* letrec-body env val)
+  (let loop ((b* b*) (rb* '()))
+    (conde
+      ((== '() b*) (eval-expo letrec-body `((rec . ,rb*) . ,env) val))
+      ((fresh (p-name x body b*-rest)
+         (== `((,p-name (lambda ,x ,body)) . ,b*-rest) b*)
+         (symbolo p-name)
+         (paramso x)
+         (loop b*-rest `((,p-name . (lambda ,x ,body)) . ,rb*)))))))
+
 ;; NOTE: rec-defs is Scheme state, not a logic term!
 (define (eval-begino rec-defs begin-body env val)
   (conde
     ((fresh (e)
-       (== `(,e) begin-body)
-       (if (null? rec-defs)
-         (eval-expo e env val)
-         (let loop ((rec-defs rec-defs) (body e))
-           (if (null? rec-defs)
-             (eval-expo body env val)
-             (loop (cdr rec-defs) `(letrec (,(car rec-defs)) ,body)))))))
+        (== `(,e) begin-body)
+        (if (null? rec-defs)
+          (eval-expo e env val)
+          (eval-expo `(letrec ,rec-defs ,e) env val))))
     ((fresh (name args body begin-rest)
-       (== `((define ,name (lambda ,args ,body)) . ,begin-rest) begin-body)
-       (symbolo name)
-       (eval-begino
-         (cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
-
-;; This is the ideal definition, but we can't use it without generalized letrec.
-;; NOTE: rec-defs is Scheme state, not a logic term!
-;(define (eval-begino rec-defs begin-body env val)
-  ;(conde
-    ;((fresh (e)
-        ;(== `(,e) begin-body)
-        ;(if (null? rec-defs)
-          ;(eval-expo e env val)
-          ;(eval-expo `(letrec ,rec-defs ,e) env val))))
-    ;((fresh (name args body begin-rest)
-        ;(== `((define ,name (lambda ,args ,body)) . ,begin-rest) begin-body)
-        ;(symbolo name)
-        ;(eval-begino
-          ;(cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
+        (== `((define ,name (lambda ,args ,body)) . ,begin-rest) begin-body)
+        (symbolo name)
+        (eval-begino
+          (cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
 
 (define empty-env '())
 

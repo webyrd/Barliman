@@ -7,6 +7,46 @@
 (set! enable-conde1? #t)
 
 (time
+  (test 'even-odd-1
+    (run 1 (q defn)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6"))
+            (g7 (gensym "g7")))
+        (fresh ()
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (absento g7 defn)
+          (evalo
+            `(begin
+               (define even?
+                 (lambda (n)
+                   (if (null? n)
+                     #t
+                     (odd? (cdr n)))))
+               (define odd?
+                 (lambda (n)
+                   (if (null? n)
+                     #f
+                     (even? (cdr n)))))
+               (list
+                 (even? '())
+                 (odd? '())
+                 (even? '(s))
+                 (odd? '(s))
+                 (even? '(s s))
+                 (odd? '(s s))))
+            (list #t #f #f #t #t #f)))))
+      '(ok)))
+
+(time
   (test 'append-foldr-1*
     (run 1 (defn)
       (let ((g1 (gensym "g1"))
