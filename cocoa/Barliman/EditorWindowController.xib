@@ -12,6 +12,7 @@
                 <outlet property="bestGuessSpinner" destination="sDx-rk-wjy" id="YNC-U0-ajX"/>
                 <outlet property="bestGuessStatusLabel" destination="42x-bp-32O" id="YS1-yU-ybt"/>
                 <outlet property="bestGuessView" destination="udr-Wg-VyJ" id="CBV-q1-4Tp"/>
+                <outlet property="definitionAndBestGuessSplitView" destination="EBS-n1-Pbf" id="gNv-th-P1q"/>
                 <outlet property="definitionStatusLabel" destination="0d5-fa-ceP" id="Vc0-ao-H4k"/>
                 <outlet property="schemeDefinitionSpinner" destination="bki-fe-DmI" id="NKg-g5-BsN"/>
                 <outlet property="schemeDefinitionView" destination="4FU-au-vlw" id="Ka2-gL-bOM"/>

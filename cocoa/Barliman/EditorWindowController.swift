@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class EditorWindowController: NSWindowController {
+class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
     // Making these views weak references seems to cause a runtime error.  Why?
     @IBOutlet var schemeDefinitionView: NSTextView!
@@ -49,6 +49,8 @@ class EditorWindowController: NSWindowController {
     @IBOutlet weak var test5StatusLabel: NSTextField!
     @IBOutlet weak var test6StatusLabel: NSTextField!
     @IBOutlet weak var bestGuessStatusLabel: NSTextField!
+
+    @IBOutlet weak var definitionAndBestGuessSplitView: NSSplitView!
 
 
     var runCodeFromEditPaneTimer: NSTimer?
@@ -109,7 +111,21 @@ class EditorWindowController: NSWindowController {
         test4ExpectedOutputField.font = font
         test5ExpectedOutputField.font = font
         test6ExpectedOutputField.font = font
+        
+        // from http://stackoverflow.com/questions/28001996/setting-minimum-width-of-nssplitviews
+        self.definitionAndBestGuessSplitView.delegate = self
     }
+    
+    // from http://stackoverflow.com/questions/28001996/setting-minimum-width-of-nssplitviews
+    func splitView(splitView: NSSplitView, constrainMinCoordinate proposedMinimumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
+        return proposedMinimumPosition + 30
+    }
+    
+    // from http://stackoverflow.com/questions/28001996/setting-minimum-width-of-nssplitviews
+    func splitView(splitView: NSSplitView, constrainMaxCoordinate proposedMaximumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
+        return proposedMaximumPosition - 50
+    }
+
 
     func cleanup() {
         // application is about to quit -- clean up!
