@@ -14,6 +14,18 @@ J. R. R. Tolkien
 
 ---------------------------------------
 
+## Barliman News
+
+4 December 2016
+
+* The first talk on Barliman, presented by Will Byrd and Greg Rosenblatt at Clojure/conj 2016, is now online: https://www.youtube.com/watch?v=er_lLvkklsk
+
+* There is now a Barliman Google Group: https://groups.google.com/d/forum/barliman-editor
+
+* We are starting a Google Hangout series on Barliman, relational interpreters, and program synthesis.  Please sign up for the Barliman Google Group if you are interested in joining us!
+
+---------------------------------------
+
 ## Barliman overview
 
 Barliman is a prototype "smart editor" that performs real-time program synthesis to try to make the programmer's life a little easier.  Barliman has several unusual features:
@@ -39,7 +51,7 @@ Barliman is general enough to handle multiple programming languages.  In fact, t
 
 ### Barliman in action
 
-Here are a few screenshots of Barliman, using the Mac implementation as of June 4, 2016.  (Update:  I've added a few newer screenshots from June 16, 2016.  Once Barliman stops changing as rapidly I'll update all the screenshots.)  (Update, 10 October 2016:  Please see the `interesting_examples` directory for more recent examples and screenshots.)
+Here are a few screenshots of Barliman, using the Mac implementation as of June 4, 2016.  (Update:  I've added a few newer screenshots from June 16, 2016.  Once Barliman stops changing as rapidly I'll update all the screenshots.)  (Update, 10 October 2016:  Please see the `interesting_examples` directory for more recent examples and screenshots.)  (Update, 4 December 2016:  The Clojure/conj 2016 talk is currently the best source of up-to-date information on Barliman: https://www.youtube.com/watch?v=er_lLvkklsk)
 
 The first screenshot shows the main editor window.  The `Scheme Definition` edit pane contains the complete (fully instantiated) and correct definition of `append`, the list concatenation function in Barliman's default "miniScheme" language.  `append` will be our simple running example in these screenshots.  The edit window also contains three tests; each test contains an input expression, and the expected value of that expression.  The `Best Guess` pane, which is not editable by the user, contains the same fully instantiated definition of `append` as in the `Scheme Definition` edit pane.
 
