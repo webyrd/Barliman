@@ -18,7 +18,7 @@ J. R. R. Tolkien
 
 4 December 2016
 
-* The first talk on Barliman, presented by Will Byrd and Greg Rosenblatt at Clojure/conj 2016, is now online: https://www.youtube.com/watch?v=er_lLvkklsk
+* The first talk on Barliman, presented by Will Byrd and Greg Rosenblatt at Clojure/conj 2016, is now online: https://www.youtube.com/watch?v=er_lLvkklsk  Here is the example code from the talk: https://github.com/webyrd/Barliman/tree/master/talk_examples_20161203
 
 * There is now a Barliman Google Group: https://groups.google.com/d/forum/barliman-editor
 
