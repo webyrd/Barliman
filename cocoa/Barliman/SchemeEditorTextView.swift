@@ -10,16 +10,16 @@ import Cocoa
 
 class SchemeEditorTextView: NSTextView {
 
-    override func drawRect(dirtyRect: NSRect) {
-        super.drawRect(dirtyRect)
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
 
         // Drawing code here.
     }
     
-    override func keyDown(event: NSEvent) {
+    override func keyDown(with event: NSEvent) {
         Swift.print("----------------   keyDown: \(event.keyCode) ")
         
-        if ((event.keyCode == 0x31) && (event.modifierFlags.contains(NSEventModifierFlags.Control))) {
+        if ((event.keyCode == 0x31) && (event.modifierFlags.contains(NSEventModifierFlags.control))) {
             // space was entered while holding the 'control' key
             Swift.print("---------------- space + control")
 
@@ -36,34 +36,34 @@ class SchemeEditorTextView: NSTextView {
             updateTextStorage(newPartialString)
             
         } else {
-            super.keyDown(event)
+            super.keyDown(with: event)
             
             Swift.print("keyCode: \( event.keyCode )")
         }
     }
     
     // Adapted from http://nshipster.com/nsundomanager/
-    func updateTextStorage(newPartialString: NSAttributedString) {
+    func updateTextStorage(_ newPartialString: NSAttributedString) {
         
         Swift.print("undo updateTextStorage called with string: \( newPartialString.string )")
 
         let oldAttrString : NSAttributedString = self.attributedString()
         let oldAttrStringCopy : NSMutableAttributedString = NSMutableAttributedString.init(attributedString: oldAttrString)
 
-        let undoState : [String:AnyObject] = ["attrString": oldAttrStringCopy, "selectedRange": self.selectedRange]
+        let undoState : [String:AnyObject] = ["attrString": oldAttrStringCopy, "selectedRange": self.selectedRange as AnyObject]
         
         let undoManager = self.undoManager
-        undoManager!.registerUndoWithTarget(self, selector: #selector(undoTextStorage(_:)), object: undoState)
+        undoManager!.registerUndo(withTarget: self, selector: #selector(undoTextStorage(_:)), object: undoState)
         
         Swift.print("undo message will contain string: \( oldAttrStringCopy.string )")
         
-        self.textStorage?.replaceCharactersInRange(self.selectedRange, withAttributedString: newPartialString)
+        self.textStorage?.replaceCharacters(in: self.selectedRange, with: newPartialString)
         
         self.didChangeText()
     }
 
     // Adapted from http://nshipster.com/nsundomanager/
-    @objc func undoTextStorage(undoState: [String:AnyObject]) {
+    @objc func undoTextStorage(_ undoState: [String:AnyObject]) {
         
         let newAttrString : NSAttributedString = undoState["attrString"] as! NSAttributedString
         let selectedRange : NSRange = undoState["selectedRange"] as! NSRange
@@ -75,10 +75,10 @@ class SchemeEditorTextView: NSTextView {
         let oldAttrStringCopy : NSMutableAttributedString = NSMutableAttributedString.init(attributedString: oldAttrString)
         
         // Adapted from http://stackoverflow.com/questions/24970713/pass-tuples-as-anyobject-in-swift
-        let undoState : [String:AnyObject] = ["attrString": oldAttrStringCopy, "selectedRange": self.selectedRange]
+        let undoState : [String:AnyObject] = ["attrString": oldAttrStringCopy, "selectedRange": self.selectedRange as AnyObject]
         
         let undoManager = self.undoManager
-        undoManager!.registerUndoWithTarget(self, selector: #selector(undoTextStorage(_:)), object: undoState)
+        undoManager!.registerUndo(withTarget: self, selector: #selector(undoTextStorage(_:)), object: undoState)
         
         Swift.print("undo undoTextStorage will contain string: \( oldAttrStringCopy.string )")
         
@@ -89,14 +89,14 @@ class SchemeEditorTextView: NSTextView {
     }
 
     
-    private
+    fileprivate
     static let variables = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".characters.map { "," + String($0) }
 
-    func getNextUnusedLogicVar(str: String) -> String {
+    func getNextUnusedLogicVar(_ str: String) -> String {
         //adapted from http://stackoverflow.com/questions/24034043/how-do-i-check-if-a-string-contains-another-string-in-swift
 
         return SchemeEditorTextView.variables.find {
-            str.rangeOfString($0) == nil
+            str.range(of: $0) == nil
         } ?? ""
     }
 

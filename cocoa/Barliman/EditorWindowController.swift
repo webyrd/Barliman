@@ -53,14 +53,14 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     @IBOutlet weak var definitionAndBestGuessSplitView: NSSplitView!
 
 
-    var runCodeFromEditPaneTimer: NSTimer?
+    var runCodeFromEditPaneTimer: Timer?
 
     var semanticsWindowController: SemanticsWindowController?
 
     // keep track of the operation that runs all the tests together, in case we need to cancel it
     var schemeOperationAllTests: RunSchemeOperation?
 
-    let processingQueue: NSOperationQueue = NSOperationQueue()
+    let processingQueue: OperationQueue = OperationQueue()
     
     static func fontName() -> String {
         return "Monaco"
@@ -71,7 +71,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     }
 
     static func defaultColor() -> NSColor {
-        return NSColor.blackColor()
+        return NSColor.black
     }
     
     
@@ -85,8 +85,8 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 
         // from http://stackoverflow.com/questions/19801601/nstextview-with-smart-quotes-disabled-still-replaces-quotes
-        schemeDefinitionView.automaticQuoteSubstitutionEnabled = false
-        bestGuessView.automaticQuoteSubstitutionEnabled = false
+        schemeDefinitionView.isAutomaticQuoteSubstitutionEnabled = false
+        bestGuessView.isAutomaticQuoteSubstitutionEnabled = false
 
         // For whatever reason, the tabbing from Test 3 Expected Output doesn't got to Test 4 Input
         test3ExpectedOutputField.nextKeyView = test4InputField
@@ -117,12 +117,12 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     }
     
     // from http://stackoverflow.com/questions/28001996/setting-minimum-width-of-nssplitviews
-    func splitView(splitView: NSSplitView, constrainMinCoordinate proposedMinimumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
+    func splitView(_ splitView: NSSplitView, constrainMinCoordinate proposedMinimumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
         return proposedMinimumPosition + 30
     }
     
     // from http://stackoverflow.com/questions/28001996/setting-minimum-width-of-nssplitviews
-    func splitView(splitView: NSSplitView, constrainMaxCoordinate proposedMaximumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
+    func splitView(_ splitView: NSSplitView, constrainMaxCoordinate proposedMaximumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
         return proposedMaximumPosition - 50
     }
 
@@ -150,14 +150,14 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         }
     }
     
-    func textDidChange(notification: NSNotification) {
+    func textDidChange(_ notification: Notification) {
         // NSTextView text changed
         print("@@@@@@@@@@@@@@@@@@@ textDidChange")
 
         setupRunCodeFromEditPaneTimer()
     }
 
-    override func controlTextDidChange(aNotification: NSNotification) {
+    override func controlTextDidChange(_ aNotification: Notification) {
         // NSTextField text changed
         print("@@@@@@@@@@@@@@@@@@@ controlTextDidChange")
 
@@ -167,10 +167,10 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     func setupRunCodeFromEditPaneTimer() {
         runCodeFromEditPaneTimer?.invalidate()
 
-        runCodeFromEditPaneTimer = .scheduledTimerWithTimeInterval(1, target:self, selector: #selector(runCodeFromEditPane), userInfo: nil, repeats: false)
+        runCodeFromEditPaneTimer = .scheduledTimer(timeInterval: 1, target:self, selector: #selector(runCodeFromEditPane), userInfo: nil, repeats: false)
     }
 
-    func makeQuerySimpleForMondoSchemeFileString(interp_string: String,
+    func makeQuerySimpleForMondoSchemeFileString(_ interp_string: String,
                                                  mk_vicare_path_string: String,
                                                  mk_path_string: String) -> String {
 
@@ -234,11 +234,11 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
 
         // get the path to the application's bundle, so we can load the query string files
-        let bundle = NSBundle.mainBundle()
+        let bundle = Bundle.main
 
         // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
-        let interp_alltests_query_string_part_1: String? = bundle.pathForResource("interp-alltests-query-string-part-1", ofType: "swift", inDirectory: "mk-and-rel-interp")
-        let interp_alltests_query_string_part_2: String? = bundle.pathForResource("interp-alltests-query-string-part-2", ofType: "swift", inDirectory: "mk-and-rel-interp")
+        let interp_alltests_query_string_part_1: String? = bundle.path(forResource: "interp-alltests-query-string-part-1", ofType: "swift", inDirectory: "mk-and-rel-interp")
+        let interp_alltests_query_string_part_2: String? = bundle.path(forResource: "interp-alltests-query-string-part-2", ofType: "swift", inDirectory: "mk-and-rel-interp")
 
         let alltests_string_part_1 : String
         do
@@ -292,7 +292,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         return fullString
     }
 
-    func makeQueryString(defns: String,
+    func makeQueryString(_ defns: String,
                          body: String,
                          expectedOut: String,
                          simple: Bool,
@@ -309,11 +309,11 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         // get the path to the application's bundle, so we can load the query string files
-        let bundle = NSBundle.mainBundle()
+        let bundle = Bundle.main
 
         // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
-        let interp_eval_query_string_part_1: String? = bundle.pathForResource("interp-eval-query-string-part-1", ofType: "swift", inDirectory: "mk-and-rel-interp")
-        let interp_eval_query_string_part_2: String? = bundle.pathForResource("interp-eval-query-string-part-2", ofType: "swift", inDirectory: "mk-and-rel-interp")
+        let interp_eval_query_string_part_1: String? = bundle.path(forResource: "interp-eval-query-string-part-1", ofType: "swift", inDirectory: "mk-and-rel-interp")
+        let interp_eval_query_string_part_2: String? = bundle.path(forResource: "interp-eval-query-string-part-2", ofType: "swift", inDirectory: "mk-and-rel-interp")
 
         let eval_string_part_1 : String
         do
@@ -389,10 +389,10 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         // get the path to the application's bundle, so we can load the miniKanren and interpreter files
         // into Chez
-        let bundle = NSBundle.mainBundle()
+        let bundle = Bundle.main
 
-        let mk_vicare_path: NSString? = bundle.pathForResource("mk-vicare", ofType: "scm", inDirectory: "mk-and-rel-interp/mk")
-        let mk_path: NSString? = bundle.pathForResource("mk", ofType: "scm", inDirectory: "mk-and-rel-interp/mk")
+        let mk_vicare_path: NSString? = bundle.path(forResource: "mk-vicare", ofType: "scm", inDirectory: "mk-and-rel-interp/mk") as NSString?
+        let mk_path: NSString? = bundle.path(forResource: "mk", ofType: "scm", inDirectory: "mk-and-rel-interp/mk") as NSString?
 
 
         // write the Scheme code containing the miniKanren query to a temp file
@@ -479,7 +479,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
-        let new_simple_query_template: String? = bundle.pathForResource("barliman-new-simple-query-template", ofType: "swift", inDirectory: "mk-and-rel-interp")
+        let new_simple_query_template: String? = bundle.path(forResource: "barliman-new-simple-query-template", ofType: "swift", inDirectory: "mk-and-rel-interp")
 
         let new_simple_query_template_string : String
         do
@@ -495,7 +495,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
-        let new_test_query_template: String? = bundle.pathForResource("barliman-new-test-query-template", ofType: "swift", inDirectory: "mk-and-rel-interp")
+        let new_test_query_template: String? = bundle.path(forResource: "barliman-new-test-query-template", ofType: "swift", inDirectory: "mk-and-rel-interp")
 
         let new_test_query_template_string : String
         do
@@ -511,7 +511,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
-        let new_alltests_query_template: String? = bundle.pathForResource("barliman-new-alltests-query-template", ofType: "swift", inDirectory: "mk-and-rel-interp")
+        let new_alltests_query_template: String? = bundle.path(forResource: "barliman-new-alltests-query-template", ofType: "swift", inDirectory: "mk-and-rel-interp")
 
         let new_alltests_query_template_string : String
         do
@@ -536,31 +536,31 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let newAlltestsQueryString: String
 
 
-        if let dir = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true).first {
+        if let dir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true).first {
 
-            let fullSimpleQueryForMondoSchemeFilePath = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent("barliman-query-simple-for-mondo-scheme-file.scm")!
-            let localSimpleQueryForMondoSchemeFilePath = fullSimpleQueryForMondoSchemeFilePath.path!
+            let fullSimpleQueryForMondoSchemeFilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-query-simple-for-mondo-scheme-file.scm")
+            let localSimpleQueryForMondoSchemeFilePath = fullSimpleQueryForMondoSchemeFilePath.path
 
-            let fullNewQueryActualTest1FilePath = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent("barliman-new-query-actual-test1.scm")!
-            let localNewQueryActualTest1FilePath = fullNewQueryActualTest1FilePath.path!
+            let fullNewQueryActualTest1FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test1.scm")
+            let localNewQueryActualTest1FilePath = fullNewQueryActualTest1FilePath.path
 
-            let fullNewQueryActualTest2FilePath = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent("barliman-new-query-actual-test2.scm")!
-            let localNewQueryActualTest2FilePath = fullNewQueryActualTest2FilePath.path!
+            let fullNewQueryActualTest2FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test2.scm")
+            let localNewQueryActualTest2FilePath = fullNewQueryActualTest2FilePath.path
 
-            let fullNewQueryActualTest3FilePath = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent("barliman-new-query-actual-test3.scm")!
-            let localNewQueryActualTest3FilePath = fullNewQueryActualTest3FilePath.path!
+            let fullNewQueryActualTest3FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test3.scm")
+            let localNewQueryActualTest3FilePath = fullNewQueryActualTest3FilePath.path
 
-            let fullNewQueryActualTest4FilePath = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent("barliman-new-query-actual-test4.scm")!
-            let localNewQueryActualTest4FilePath = fullNewQueryActualTest4FilePath.path!
+            let fullNewQueryActualTest4FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test4.scm")
+            let localNewQueryActualTest4FilePath = fullNewQueryActualTest4FilePath.path
 
-            let fullNewQueryActualTest5FilePath = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent("barliman-new-query-actual-test5.scm")!
-            let localNewQueryActualTest5FilePath = fullNewQueryActualTest5FilePath.path!
+            let fullNewQueryActualTest5FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test5.scm")
+            let localNewQueryActualTest5FilePath = fullNewQueryActualTest5FilePath.path
 
-            let fullNewQueryActualTest6FilePath = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent("barliman-new-query-actual-test6.scm")!
-            let localNewQueryActualTest6FilePath = fullNewQueryActualTest6FilePath.path!
+            let fullNewQueryActualTest6FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test6.scm")
+            let localNewQueryActualTest6FilePath = fullNewQueryActualTest6FilePath.path
 
-            let fullNewQueryActualAlltestsFilePath = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent("barliman-new-query-actual-alltests.scm")!
-            let localNewQueryActualAlltestsFilePath = fullNewQueryActualAlltestsFilePath.path!
+            let fullNewQueryActualAlltestsFilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-alltests.scm")
+            let localNewQueryActualAlltestsFilePath = fullNewQueryActualAlltestsFilePath.path
 
 
 
@@ -575,7 +575,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
                 new_alltests_query_template_string
 
 
-            func makeNewTestNQueryString(n: Int, actualQueryFilePath: String) -> String {
+            func makeNewTestNQueryString(_ n: Int, actualQueryFilePath: String) -> String {
                 return loadFileString + "\n\n" +
                     "(define actual-query-file-path \"\( actualQueryFilePath )\")" + "\n\n" +
                     "(define (test-query-fn) (query-val-test\( n )))" + "\n\n\n" +
@@ -631,74 +631,74 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
                            + out6 + " "
 
 
-        var pathQuerySimpleForMondoSchemeFile = NSURL()
-        var pathMondoScheme = NSURL()
-        var pathNewSimple = NSURL()
+        var pathQuerySimpleForMondoSchemeFile: URL!
+        var pathMondoScheme: URL!
+        var pathNewSimple: URL!
 
-        var pathNewTest1 = NSURL()
-        var pathNewTest2 = NSURL()
-        var pathNewTest3 = NSURL()
-        var pathNewTest4 = NSURL()
-        var pathNewTest5 = NSURL()
-        var pathNewTest6 = NSURL()
-        var pathNewAlltests = NSURL()
+        var pathNewTest1: URL!
+        var pathNewTest2: URL!
+        var pathNewTest3: URL!
+        var pathNewTest4: URL!
+        var pathNewTest5: URL!
+        var pathNewTest6: URL!
+        var pathNewAlltests: URL!
 
-        var pathNewActualTest1 = NSURL()
-        var pathNewActualTest2 = NSURL()
-        var pathNewActualTest3 = NSURL()
-        var pathNewActualTest4 = NSURL()
-        var pathNewActualTest5 = NSURL()
-        var pathNewActualTest6 = NSURL()
-        var pathNewActualAlltests = NSURL()
+        var pathNewActualTest1: URL!
+        var pathNewActualTest2: URL!
+        var pathNewActualTest3: URL!
+        var pathNewActualTest4: URL!
+        var pathNewActualTest5: URL!
+        var pathNewActualTest6: URL!
+        var pathNewActualAlltests: URL!
 
 
         // write the temporary file containing the query to the user's Document directory.  This seems a bit naughty.  Where is the right place to put this?  In ~/.barliman, perhaps?
-        if let dir = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true).first {
+        if let dir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true).first {
 
-            pathQuerySimpleForMondoSchemeFile = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(query_simple_for_mondo_scheme_file)!
+            pathQuerySimpleForMondoSchemeFile = URL(fileURLWithPath: dir).appendingPathComponent(query_simple_for_mondo_scheme_file)
 
 
-            pathNewSimple = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_simple)!
+            pathNewSimple = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_simple)
 
-            pathNewTest1 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_test1)!
-            pathNewTest2 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_test2)!
-            pathNewTest3 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_test3)!
-            pathNewTest4 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_test4)!
-            pathNewTest5 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_test5)!
-            pathNewTest6 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_test6)!
-            pathNewAlltests = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_alltests)!
+            pathNewTest1 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test1)
+            pathNewTest2 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test2)
+            pathNewTest3 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test3)
+            pathNewTest4 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test4)
+            pathNewTest5 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test5)
+            pathNewTest6 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test6)
+            pathNewAlltests = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_alltests)
 
-            pathNewActualTest1 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_actual_test1)!
-            pathNewActualTest2 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_actual_test2)!
-            pathNewActualTest3 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_actual_test3)!
-            pathNewActualTest4 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_actual_test4)!
-            pathNewActualTest5 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_actual_test5)!
-            pathNewActualTest6 = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_actual_test6)!
-            pathNewActualAlltests = NSURL(fileURLWithPath: dir).URLByAppendingPathComponent(new_query_file_actual_alltests)!
+            pathNewActualTest1 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test1)
+            pathNewActualTest2 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test2)
+            pathNewActualTest3 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test3)
+            pathNewActualTest4 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test4)
+            pathNewActualTest5 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test5)
+            pathNewActualTest6 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test6)
+            pathNewActualAlltests = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_alltests)
 
             // write the query files
             do {
 
-                try querySimpleForMondoSchemeContents.writeToURL(pathQuerySimpleForMondoSchemeFile, atomically: false, encoding: NSUTF8StringEncoding)
+                try querySimpleForMondoSchemeContents.write(to: pathQuerySimpleForMondoSchemeFile, atomically: false, encoding: String.Encoding.utf8)
 
 
-                try newSimpleQueryString.writeToURL(pathNewSimple, atomically: false, encoding: NSUTF8StringEncoding)
+                try newSimpleQueryString.write(to: pathNewSimple, atomically: false, encoding: String.Encoding.utf8)
 
-                try newTest1QueryString.writeToURL(pathNewTest1, atomically: false, encoding: NSUTF8StringEncoding)
-                try newTest2QueryString.writeToURL(pathNewTest2, atomically: false, encoding: NSUTF8StringEncoding)
-                try newTest3QueryString.writeToURL(pathNewTest3, atomically: false, encoding: NSUTF8StringEncoding)
-                try newTest4QueryString.writeToURL(pathNewTest4, atomically: false, encoding: NSUTF8StringEncoding)
-                try newTest5QueryString.writeToURL(pathNewTest5, atomically: false, encoding: NSUTF8StringEncoding)
-                try newTest6QueryString.writeToURL(pathNewTest6, atomically: false, encoding: NSUTF8StringEncoding)
-                try newAlltestsQueryString.writeToURL(pathNewAlltests, atomically: false, encoding: NSUTF8StringEncoding)
+                try newTest1QueryString.write(to: pathNewTest1, atomically: false, encoding: String.Encoding.utf8)
+                try newTest2QueryString.write(to: pathNewTest2, atomically: false, encoding: String.Encoding.utf8)
+                try newTest3QueryString.write(to: pathNewTest3, atomically: false, encoding: String.Encoding.utf8)
+                try newTest4QueryString.write(to: pathNewTest4, atomically: false, encoding: String.Encoding.utf8)
+                try newTest5QueryString.write(to: pathNewTest5, atomically: false, encoding: String.Encoding.utf8)
+                try newTest6QueryString.write(to: pathNewTest6, atomically: false, encoding: String.Encoding.utf8)
+                try newAlltestsQueryString.write(to: pathNewAlltests, atomically: false, encoding: String.Encoding.utf8)
 
-                try newTest1ActualQueryString.writeToURL(pathNewActualTest1, atomically: false, encoding: NSUTF8StringEncoding)
-                try newTest2ActualQueryString.writeToURL(pathNewActualTest2, atomically: false, encoding: NSUTF8StringEncoding)
-                try newTest3ActualQueryString.writeToURL(pathNewActualTest3, atomically: false, encoding: NSUTF8StringEncoding)
-                try newTest4ActualQueryString.writeToURL(pathNewActualTest4, atomically: false, encoding: NSUTF8StringEncoding)
-                try newTest5ActualQueryString.writeToURL(pathNewActualTest5, atomically: false, encoding: NSUTF8StringEncoding)
-                try newTest6ActualQueryString.writeToURL(pathNewActualTest6, atomically: false, encoding: NSUTF8StringEncoding)
-                try newAlltestsActualQueryString.writeToURL(pathNewActualAlltests, atomically: false, encoding: NSUTF8StringEncoding)
+                try newTest1ActualQueryString.write(to: pathNewActualTest1, atomically: false, encoding: String.Encoding.utf8)
+                try newTest2ActualQueryString.write(to: pathNewActualTest2, atomically: false, encoding: String.Encoding.utf8)
+                try newTest3ActualQueryString.write(to: pathNewActualTest3, atomically: false, encoding: String.Encoding.utf8)
+                try newTest4ActualQueryString.write(to: pathNewActualTest4, atomically: false, encoding: String.Encoding.utf8)
+                try newTest5ActualQueryString.write(to: pathNewActualTest5, atomically: false, encoding: String.Encoding.utf8)
+                try newTest6ActualQueryString.write(to: pathNewActualTest6, atomically: false, encoding: String.Encoding.utf8)
+                try newAlltestsActualQueryString.write(to: pathNewActualAlltests, atomically: false, encoding: String.Encoding.utf8)
             }
             catch {
                 // this error handling could be better!  :)
@@ -708,26 +708,26 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         // paths to the Schemes file containing the miniKanren query
-        let schemeScriptPathStringQuerySimpleForMondoScheme = pathQuerySimpleForMondoSchemeFile.path!
+        let schemeScriptPathStringQuerySimpleForMondoScheme = pathQuerySimpleForMondoSchemeFile.path
 
 
-        let schemeScriptPathStringNewSimple = pathNewSimple.path!
+        let schemeScriptPathStringNewSimple = pathNewSimple.path
 
-        let schemeScriptPathStringNewTest1 = pathNewTest1.path!
-        let schemeScriptPathStringNewTest2 = pathNewTest2.path!
-        let schemeScriptPathStringNewTest3 = pathNewTest3.path!
-        let schemeScriptPathStringNewTest4 = pathNewTest4.path!
-        let schemeScriptPathStringNewTest5 = pathNewTest5.path!
-        let schemeScriptPathStringNewTest6 = pathNewTest6.path!
-        let schemeScriptPathStringNewAlltests = pathNewAlltests.path!
+        let schemeScriptPathStringNewTest1 = pathNewTest1.path
+        let schemeScriptPathStringNewTest2 = pathNewTest2.path
+        let schemeScriptPathStringNewTest3 = pathNewTest3.path
+        let schemeScriptPathStringNewTest4 = pathNewTest4.path
+        let schemeScriptPathStringNewTest5 = pathNewTest5.path
+        let schemeScriptPathStringNewTest6 = pathNewTest6.path
+        let schemeScriptPathStringNewAlltests = pathNewAlltests.path
 
-        let schemeScriptPathStringNewActualTest1 = pathNewActualTest1.path!
-        let schemeScriptPathStringNewActualTest2 = pathNewActualTest2.path!
-        let schemeScriptPathStringNewActualTest3 = pathNewActualTest3.path!
-        let schemeScriptPathStringNewActualTest4 = pathNewActualTest4.path!
-        let schemeScriptPathStringNewActualTest5 = pathNewActualTest5.path!
-        let schemeScriptPathStringNewActualTest6 = pathNewActualTest6.path!
-        let schemeScriptPathStringNewActualAlltests = pathNewActualAlltests.path!
+        let schemeScriptPathStringNewActualTest1 = pathNewActualTest1.path
+        let schemeScriptPathStringNewActualTest2 = pathNewActualTest2.path
+        let schemeScriptPathStringNewActualTest3 = pathNewActualTest3.path
+        let schemeScriptPathStringNewActualTest4 = pathNewActualTest4.path
+        let schemeScriptPathStringNewActualTest5 = pathNewActualTest5.path
+        let schemeScriptPathStringNewActualTest6 = pathNewActualTest6.path
+        let schemeScriptPathStringNewActualAlltests = pathNewActualAlltests.path
 
 
         // create the operations that will be placed in the operation queue
@@ -767,7 +767,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         processingQueue.addOperation(runSchemeOpSimple)
 
-        func resetTestUI(statusLabel: NSTextField, inputField: NSTextField, outputField: NSTextField) {
+        func resetTestUI(_ statusLabel: NSTextField, inputField: NSTextField, outputField: NSTextField) {
             statusLabel.stringValue = ""
             inputField.textColor = EditorWindowController.defaultColor()
             outputField.textColor = EditorWindowController.defaultColor()

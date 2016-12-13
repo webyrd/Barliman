@@ -9,18 +9,18 @@
 import Foundation
 import Cocoa
 
-class RunSchemeOperation: NSOperation {
+class RunSchemeOperation: Operation {
 
     var editorWindowController: EditorWindowController
     var schemeScriptPathString: String
-    var task: NSTask
+    var task: Process
     var taskType: String
 
     let kDefaultColor = EditorWindowController.defaultColor()
-    let kSyntaxErrorColor = NSColor.orangeColor()
-    let kParseErrorColor = NSColor.magentaColor()
-    let kFailedErrorColor = NSColor.redColor()
-    let kThinkingColor = NSColor.purpleColor()
+    let kSyntaxErrorColor = NSColor.orange
+    let kParseErrorColor = NSColor.magenta
+    let kFailedErrorColor = NSColor.red
+    let kThinkingColor = NSColor.purple
 
     let kIllegalSexprString = "Illegal sexpression"
     let kParseErrorString = "Syntax error"
@@ -31,7 +31,7 @@ class RunSchemeOperation: NSOperation {
     init(editorWindowController: EditorWindowController, schemeScriptPathString: String, taskType: String) {
         self.editorWindowController = editorWindowController
         self.schemeScriptPathString = schemeScriptPathString
-        self.task = NSTask()
+        self.task = Process()
         self.taskType = taskType
     }
 
@@ -49,7 +49,7 @@ class RunSchemeOperation: NSOperation {
     func startSpinner() {
 
         // update the user interface, which *must* be done through the main thread
-        NSOperationQueue.mainQueue().addOperationWithBlock {
+        OperationQueue.main.addOperation {
 
             let ewc = self.editorWindowController
 
@@ -70,7 +70,7 @@ class RunSchemeOperation: NSOperation {
     func stopSpinner() {
 
         // update the user interface, which *must* be done through the main thread
-        NSOperationQueue.mainQueue().addOperationWithBlock {
+        OperationQueue.main.addOperation {
 
             let ewc = self.editorWindowController
 
@@ -91,7 +91,7 @@ class RunSchemeOperation: NSOperation {
     func illegalSexpInDefn() {
 
         // update the user interface, which *must* be done through the main thread
-        NSOperationQueue.mainQueue().addOperationWithBlock {
+        OperationQueue.main.addOperation {
 
             let ewc = self.editorWindowController
 
@@ -104,7 +104,7 @@ class RunSchemeOperation: NSOperation {
     func parseErrorInDefn() {
 
         // update the user interface, which *must* be done through the main thread
-        NSOperationQueue.mainQueue().addOperationWithBlock {
+        OperationQueue.main.addOperation {
 
             let ewc = self.editorWindowController
 
@@ -121,7 +121,7 @@ class RunSchemeOperation: NSOperation {
     func thinkingColorAndLabel() {
 
         // update the user interface, which *must* be done through the main thread
-        NSOperationQueue.mainQueue().addOperationWithBlock {
+        OperationQueue.main.addOperation {
 
             let ewc = self.editorWindowController
 
@@ -171,7 +171,7 @@ class RunSchemeOperation: NSOperation {
 
     override func main() {
 
-        if self.cancelled {
+        if self.isCancelled {
             // print("*** cancelled immediately! ***\n")
             return
         }
@@ -186,7 +186,7 @@ class RunSchemeOperation: NSOperation {
         thinkingColorAndLabel()
 
         // If we move to only support macOS 10.12, can use the improved time difference code adapted from JeremyP's answer to http://stackoverflow.com/questions/24755558/measure-elapsed-time-in-swift.  Instead we'll use JeremyP's NSDate version instead.
-        let startTime = NSDate();
+        let startTime = Date();
 
 
         // Path to Chez Scheme
@@ -196,8 +196,8 @@ class RunSchemeOperation: NSOperation {
         // Arguments to Chez Scheme
         task.arguments = ["--script", self.schemeScriptPathString]
 
-        let outputPipe = NSPipe()
-        let errorPipe = NSPipe()
+        let outputPipe = Pipe()
+        let errorPipe = Pipe()
 
         task.standardOutput = outputPipe
         task.standardError = errorPipe
@@ -223,15 +223,15 @@ class RunSchemeOperation: NSOperation {
         stopSpinner()
 
         // update the user interface, which *must* be done through the main thread
-        NSOperationQueue.mainQueue().addOperationWithBlock {
+        OperationQueue.main.addOperation {
 
-            func setFontAndSize(bestGuessView: NSTextView) {
+            func setFontAndSize(_ bestGuessView: NSTextView) {
                 bestGuessView.textStorage?.addAttribute(NSFontAttributeName,
                     value: NSFont(name: EditorWindowController.fontName(), size: EditorWindowController.fontSize())!,
                     range: NSMakeRange(0, bestGuessView.string!.characters.count))
             }
             
-            func onTestCompletion(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField, datastring: String) {
+            func onTestCompletion(_ inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField, datastring: String) {
 
                 if datastring == "illegal-sexp-in-test/answer" {
                     inputField.textColor = self.kSyntaxErrorColor
@@ -264,9 +264,9 @@ class RunSchemeOperation: NSOperation {
                 }
             }
 
-            func onTestSuccess(inputField: NSTextField, outputField: NSTextField, label: NSTextField) {
-                let endTime = NSDate();
-                let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
+            func onTestSuccess(_ inputField: NSTextField, outputField: NSTextField, label: NSTextField) {
+                let endTime = Date();
+                let timeInterval: Double = endTime.timeIntervalSince(startTime);
 
                 inputField.textColor = self.kDefaultColor
                 outputField.textColor = self.kDefaultColor
@@ -275,9 +275,9 @@ class RunSchemeOperation: NSOperation {
                 label.stringValue = String(format: "Succeeded (%.2f s)",  timeInterval)
             }
 
-            func onTestFailure(inputField: NSTextField, outputField: NSTextField, label: NSTextField) {
-                let endTime = NSDate();
-                let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
+            func onTestFailure(_ inputField: NSTextField, outputField: NSTextField, label: NSTextField) {
+                let endTime = Date();
+                let timeInterval: Double = endTime.timeIntervalSince(startTime);
 
                 inputField.textColor = self.kFailedErrorColor
                 outputField.textColor = self.kFailedErrorColor
@@ -289,16 +289,16 @@ class RunSchemeOperation: NSOperation {
                 self.editorWindowController.schemeOperationAllTests?.cancel()
             }
 
-            func onTestSyntaxError(inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField) {
+            func onTestSyntaxError(_ inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField) {
                 inputField.textColor = self.kSyntaxErrorColor
                 outputField.textColor = self.kSyntaxErrorColor
                 label.textColor = self.kSyntaxErrorColor
                 label.stringValue = self.kIllegalSexprString
             }
 
-            func onBestGuessSuccess(bestGuessView: NSTextView, label: NSTextField, guess: String) {
-                let endTime = NSDate();
-                let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
+            func onBestGuessSuccess(_ bestGuessView: NSTextView, label: NSTextField, guess: String) {
+                let endTime = Date();
+                let timeInterval: Double = endTime.timeIntervalSince(startTime);
 
                 if (guess == "illegal-sexp-in-defn" ||
                     guess == "parse-error-in-defn" ||
@@ -326,9 +326,9 @@ class RunSchemeOperation: NSOperation {
                 }
             }
 
-            func onBestGuessFailure(bestGuessView: NSTextView, label: NSTextField) {
-                let endTime = NSDate();
-                let timeInterval: Double = endTime.timeIntervalSinceDate(startTime);
+            func onBestGuessFailure(_ bestGuessView: NSTextView, label: NSTextField) {
+                let endTime = Date();
+                let timeInterval: Double = endTime.timeIntervalSince(startTime);
 
                 bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
                 setFontAndSize(bestGuessView)
@@ -340,7 +340,7 @@ class RunSchemeOperation: NSOperation {
                 self.editorWindowController.processingQueue.cancelAllOperations()
             }
 
-            func onBestGuessKilled(bestGuessView: NSTextView, label: NSTextField) {
+            func onBestGuessKilled(_ bestGuessView: NSTextView, label: NSTextField) {
                 bestGuessView.textStorage?.setAttributedString(NSAttributedString(string: "" as String))
                 setFontAndSize(bestGuessView)
 
@@ -349,7 +349,7 @@ class RunSchemeOperation: NSOperation {
             }
 
             // syntax error was caused by the main code or a test, not by the best guess!
-            func onSyntaxErrorBestGuess(bestGuessView: NSTextView, label: NSTextField) {
+            func onSyntaxErrorBestGuess(_ bestGuessView: NSTextView, label: NSTextField) {
 
                 // is this line still needed?  seems like old code
                 bestGuessView.setTextColor(self.kDefaultColor, range: NSMakeRange(0, (bestGuessView.textStorage?.length)!))
@@ -364,8 +364,8 @@ class RunSchemeOperation: NSOperation {
 
 
 
-            let datastring = NSString(data: data, encoding: NSUTF8StringEncoding) as! String
-            let errorDatastring = NSString(data: errorData, encoding: NSUTF8StringEncoding) as! String
+            let datastring = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as! String
+            let errorDatastring = NSString(data: errorData, encoding: String.Encoding.utf8.rawValue) as! String
             let taskType = self.taskType
 
             let ewc = self.editorWindowController

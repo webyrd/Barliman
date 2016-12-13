@@ -14,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var semanticsWindowController: SemanticsWindowController?
     var editorWindowController: EditorWindowController?
 
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
         
         // Create window controllers with XIB files of the same name
         let semanticsWindowController = SemanticsWindowController()
@@ -32,7 +32,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.editorWindowController = editorWindowController
     }
 
-    func applicationWillTerminate(aNotification: NSNotification) {
+    func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
         editorWindowController!.cleanup()
         semanticsWindowController!.cleanup()
