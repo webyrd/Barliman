@@ -1,0 +1,90 @@
+16 Dec 2016
+
+Explanation:
+
+This example shows a CEK machine, adapted from Matt Might's Haskell code at http://matt.might.net/articles/cek-machines/.  We run the machine forward and backward with trivial examples.
+
+This example is interesting because:
+
+(1) we run the machine both forward and backwards;
+(2) the machine uses 4 helper definitions;
+(3) the CEK machine is small-step, rather than the big-step interpreters we usually write as relations;
+(4) this implementation uses a higher-order (procedural) representation of environments (rho).
+
+
+Definitions:
+
+(define inject
+  (lambda (expr)
+    (let ((rho0 (lambda (x) (error))))
+      `(,expr ,rho0 Mt))))
+
+(define step
+  (lambda (state)
+    (match state
+       [`((Ref ,x) ,rho ,k) 
+        (match (rho x)
+           [`(Clo (,lam ,rho^))
+            `((Lam ,lam) ,rho^ ,k)])]
+       [`((,f @ ,e) ,rho ,k)
+        `(,f ,rho (Ar ,e ,rho ,k))]
+       [`((Lam ,lam) ,rho (Ar ,e ,rho^ ,k)) 
+        `(,e ,rho^ (Fn ,lam ,rho ,k))]
+       [`((Lam ,lam) ,rho (Fn (,x => ,e) ,rho^ ,k))
+        (let ((extended-rho
+               (lambda (x^)
+                 (if (equal? x x^)
+                     `(Clo (,lam ,rho))
+                     (rho^ x^))))) 
+          `(,e ,extended-rho ,k))])))
+
+(define final?
+  (lambda (state)
+    (match state
+       [`((Lam ,_) ,env Mt) #t]
+       [`,_ #f])))
+
+(define step*
+  (lambda (state)
+    (if (final? state)
+        state
+        (step* (step state)))))
+
+(define do-it
+  (lambda (expr)
+    (car (step* (inject expr)))))
+
+(define dummy
+  (lambda ()
+    (equal? 
+      (do-it '(,A @ ,B))
+      '(Lam (w => (Ref w))))))
+
+
+
+Test 1 (running forward):
+
+(do-it `((Lam (z => (Ref z))) @ (Lam (w => (Ref w)))))
+'(Lam (w => (Ref w)))
+
+
+Test 2 (using the 'dummy' definition as a hack, a la Greg, to run the CEK machine backwards):
+
+(dummy)
+#t
+
+
+For test 2, the Best Guess window shows an application that produces (Lam (w => (Ref w)) as its value:
+
+(define dummy
+  (lambda ()
+    (equal?
+      (do-it
+        '((Lam (_.0 => (Lam (w => (Ref w))))) \x40; (Lam \x40;)))
+      '(Lam (w => (Ref w))))))
+
+Side conditions:
+(absento (closure _.0) (prim _.0))
+
+
+\x40 is Chez's representation of '@', apparently.
