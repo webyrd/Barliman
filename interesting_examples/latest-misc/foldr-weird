@@ -1,0 +1,4 @@
+We can synthesize foldr from these examples:
+(foldr ',g2 ',g1 '())        ===> g1
+(foldr cons ',g4 '(,g5 ,g6)) ===> `(,g5 ,g6 . ,g4)
+(foldr equal? ',g3 '(,g3))   ===> #t
