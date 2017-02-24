@@ -8,6 +8,8 @@
          absento
          (all-defined-out))
 
+(define fold-left foldl)
+
 ;; extra stuff for racket
 ;; due mostly to samth
 (define (list-sort f l) (sort l f))
