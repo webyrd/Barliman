@@ -450,7 +450,7 @@
                       (== rator-val `(closure (lambda ,x ,body) ,env^))
                       (conde$-dfs
                         (;; Multi-argument
-                         (ext-env*o x a* env^ res)
+                         (same-length-ext-env*o x a* rands env^ res)
                          ; replacing eval-application with these may be faster with multi-level defer
                          ;(eval-expo body res val)
                          ;(eval-listo rands env a*)
@@ -734,6 +734,17 @@
        (== `((val . (,x . ,a)) . ,env) env2)
        (symbolo x)
        (ext-env*o dx* da* env2 out)))))
+
+(define (same-length-ext-env*o x* a* r* env out)
+  (conde
+    ((== '() x*) (== '() a*) (== '() r*) (== env out))
+    ((fresh (x a r dx* da* dr* env2)
+       (== `(,x . ,dx*) x*)
+       (== `(,a . ,da*) a*)
+       (== `(,r . ,dr*) a*)
+       (== `((val . (,x . ,a)) . ,env) env2)
+       (symbolo x)
+       (same-length-ext-env*o dx* da* dr* env2 out)))))
 
 (define (eval-primo prim-id val rands env)
   (project0 (prim-id val rands env)
