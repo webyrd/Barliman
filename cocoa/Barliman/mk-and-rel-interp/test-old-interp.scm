@@ -187,33 +187,54 @@
 ; (~(~A | ~B) => ~(~B | ~A))
 ; (~(A => ~B) => ~(B => ~A))
 ; (((A => (B => C)) => C) => ((B => (A => C)) => C))
-(time
-  (test 'prover-5
-    (run 1 (prf)
-      (fresh (body)
-        (== prf `((((A => (B => C)) => C) => ((B => (A => C)) => C)) () . ,body))
-        (evalo
-          `(letrec ([member?
-                      (lambda (x ls)
-                        (cond
-                          ((null? ls) #f)
-                          ((equal? (car ls) x) #t)
-                          (else (member? x (cdr ls)))))]
-                    [proof?
-                      (lambda (proof)
-                        (match proof
-                          (`(,A ,assms assumption ()) (member? A assms))
-                          (`(,B ,assms modus-ponens
-                                (((,A => ,B) ,assms ,r1 ,ants1)
-                                 (,A ,assms ,r2 ,ants2)))
-                            (and (proof? `((,A => ,B) ,assms ,r1 ,ants1))
-                                 (proof? `(,A ,assms ,r2 ,ants2))))
-                          (`((,A => ,B) ,assms conditional
-                                        ((,B (,A . ,assms) ,rule ,ants)))
-                            (proof? `(,B (,A . ,assms) ,rule ,ants)))))])
-             (proof? ',prf))
-          #t)))
-    '(#f)))
+;(time
+  ;(test 'prover-5
+    ;(run 1 (prf)
+      ;(fresh (body)
+        ;(== prf `((((A => (B => C)) => C) => ((B => (A => C)) => C)) () . ,body))
+        ;(evalo
+          ;`(letrec ([member?
+                      ;(lambda (x ls)
+                        ;(cond
+                          ;((null? ls) #f)
+                          ;((equal? (car ls) x) #t)
+                          ;(else (member? x (cdr ls)))))]
+                    ;[proof?
+                      ;(lambda (proof)
+                        ;(match proof
+                          ;(`(,A ,assms assumption ()) (member? A assms))
+                          ;(`(,B ,assms modus-ponens
+                                ;(((,A => ,B) ,assms ,r1 ,ants1)
+                                 ;(,A ,assms ,r2 ,ants2)))
+                            ;(and (proof? `((,A => ,B) ,assms ,r1 ,ants1))
+                                 ;(proof? `(,A ,assms ,r2 ,ants2))))
+                          ;(`((,A => ,B) ,assms conditional
+                                        ;((,B (,A . ,assms) ,rule ,ants)))
+                            ;(proof? `(,B (,A . ,assms) ,rule ,ants)))))])
+             ;(proof? ',prf))
+          ;#t)))
+    ;'((((((A => (B => C)) => C) => ((B => (A => C)) => C))
+        ;()
+        ;conditional
+        ;((((B => (A => C)) => C)
+          ;(((A => (B => C)) => C))
+          ;conditional
+          ;((C ((B => (A => C)) ((A => (B => C)) => C))
+              ;modus-ponens
+              ;((((A => (B => C)) => C) ((B => (A => C)) ((A => (B => C)) => C)) assumption ())
+               ;((A => (B => C))
+                ;((B => (A => C)) ((A => (B => C)) => C))
+                ;conditional
+                ;(((B => C)
+                  ;(A (B => (A => C)) ((A => (B => C)) => C))
+                  ;conditional
+                  ;((C (B A (B => (A => C)) ((A => (B => C)) => C))
+                      ;modus-ponens
+                      ;(((A => C) (B A (B => (A => C)) ((A => (B => C)) => C))
+                                 ;modus-ponens
+                                 ;(((B => (A => C)) (B A (B => (A => C)) ((A => (B => C)) => C)) assumption ())
+                                  ;(B (B A (B => (A => C)) ((A => (B => C)) => C)) assumption ())))
+                       ;(A (B A (B => (A => C)) ((A => (B => C)) => C)) assumption ())))))))))))))))))
 
 (time
   (test 'fold-right->append
