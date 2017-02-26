@@ -239,20 +239,22 @@
 (time
   (test 'fold-right->append
     (run 1 (defn)
-      (let ((g1 (gensym "g1"))
+      (let ((g0 (gensym "g0"))
+            (g1 (gensym "g1"))
             (g2 (gensym "g2"))
             (g3 (gensym "g3"))
             (g4 (gensym "g4"))
             (g5 (gensym "g5"))
             (g6 (gensym "g6")))
         (fresh (body)
+          (absento g0 defn)
           (absento g1 defn)
           (absento g2 defn)
           (absento g3 defn)
           (absento g4 defn)
           (absento g5 defn)
           (absento g6 defn)
-          (== defn `(append (lambda (xs ys) ,body)))
+          ;(== defn `(append (lambda (xs ys) ,body)))
           (evalo
             `(letrec ((fold-right
                         (lambda (f acc xs)
@@ -260,11 +262,11 @@
                             acc
                             (f (car xs) (fold-right f acc (cdr xs)))))))
                (letrec (,defn)
-                 (list (append '() '())
+                 (list (append '() ',g0)
                        (append '(,g1) '(,g2))
                        (append '(,g3 ,g4) '(,g5 ,g6)))))
-            `(() (,g1 ,g2) (,g3 ,g4 ,g5 ,g6))))))
-    '(((append (lambda (xs ys)  (fold-right cons ys xs)))))))
+            `(,g0 (,g1 ,g2) (,g3 ,g4 ,g5 ,g6))))))
+    '(((append (lambda (xs ys) (fold-right cons ys xs)))))))
 
 (time
   (test 'append->fold-right
@@ -642,77 +644,6 @@
                  (odd? '(s s))))
             (list #t #f #f #t #t #f)))))
       '((_.0))))
-
-(time
-  (test 'append-foldr-1*
-    (run 1 (defn)
-      (let ((g1 (gensym "g1"))
-            (g2 (gensym "g2"))
-            (g3 (gensym "g3"))
-            (g4 (gensym "g4"))
-            (g5 (gensym "g5"))
-            (g6 (gensym "g6"))
-            (g7 (gensym "g7")))
-        (fresh (q)
-          (absento g1 defn)
-          (absento g2 defn)
-          (absento g3 defn)
-          (absento g4 defn)
-          (absento g5 defn)
-          (absento g6 defn)
-          (absento g7 defn)
-          (== `(define append
-                 (lambda (xs ys) ,q))
-              defn)
-          (evalo `(begin
-                    (define foldr
-                      (lambda (f acc xs)
-                        (if (null? xs)
-                          acc
-                          (f (car xs) (foldr f acc (cdr xs))))))
-                    ,defn
-                    (list
-                      (append '() '())
-                      (append '(,g1) '(,g2))
-                      (append '(,g3 ,g4) '(,g5 ,g6))))
-                 (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6))))))
-    '(((define append (lambda (xs ys) (foldr cons ys xs)))))))
-
-(time
-  (test 'append-foldr-1
-    (run 1 (defn)
-      (let ((g1 (gensym "g1"))
-            (g2 (gensym "g2"))
-            (g3 (gensym "g3"))
-            (g4 (gensym "g4"))
-            (g5 (gensym "g5"))
-            (g6 (gensym "g6"))
-            (g7 (gensym "g7")))
-        (fresh (q)
-          (absento g1 defn)
-          (absento g2 defn)
-          (absento g3 defn)
-          (absento g4 defn)
-          (absento g5 defn)
-          (absento g6 defn)
-          (absento g7 defn)
-          (== `(define append
-                 (lambda (xs ys) ,q))
-              defn)
-          (evalo `(begin
-                    (define foldr
-                      (lambda (f acc xs)
-                        (if (null? xs)
-                          acc
-                          (f (car xs) (foldr f acc (cdr xs))))))
-                    (begin
-                      ,defn
-                      (list
-                        (append '() '())
-                        (append '(,g1) '(,g2))
-                        (append '(,g3 ,g4) '(,g5 ,g6)))))
-                 (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6))))))
-    '(((define append (lambda (xs ys) (foldr cons ys xs)))))))
 
 ;(time
   ;(test 'foldr-1
@@ -2087,7 +2018,7 @@
                       (reverse '(,g2 ,g3))
                       (reverse '(,g4 ,g5 ,g6)))))
                (list '() `(,g1) `(,g3 ,g2) `(,g6 ,g5 ,g4))))))
-  '(((define reverse (lambda (xs) (foldl cons '() xs)))))))
+  '(((define reverse (lambda (xs) (if (null? xs) xs (foldl cons '() xs))))))))
 
 ;(time (test 'reverse-8
   ;(run 1 (defn)
