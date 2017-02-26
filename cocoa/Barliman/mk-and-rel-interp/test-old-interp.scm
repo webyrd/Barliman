@@ -40,6 +40,146 @@
                       test-result))))
          expected-defs)))))
 
+(time
+  (test 'append-append2
+    (run 1 (defn defn2)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6"))
+            (g7 (gensym "g7")))
+        (fresh (A)
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (absento g7 defn)
+          (== `(append
+                 (lambda (xs ys)
+                   ,A))
+              defn)
+          (== `(define append2
+                 (lambda (xs ys) (foldr cons ys xs)))
+              defn2)
+          (evalo `(letrec (,defn)
+                    (begin
+                      (define foldr
+                        (lambda (f acc xs)
+                          (if (null? xs)
+                            acc
+                            (f (car xs) (foldr f acc (cdr xs))))))
+                      ,defn2
+                      (define test
+                        (lambda (xs ys)
+                          (equal? (append xs ys) (append2 xs ys))))
+                      (list
+                        (test '() '())
+                        (test '(,g1) '(,g2))
+                        (test '(,g3 ,g4) '(,g5 ,g6)))))
+                 (list #t #t #t)))))
+    '((((append
+          (lambda (xs ys)
+            (if (null? xs)
+              ys
+              (cons (car xs) (append (cdr xs) ys)))))
+        (define append2
+          (lambda (xs ys)
+            (foldr cons ys xs))))))))
+
+(time
+  (test 'foldr-from-append
+    (run 1 (defn1)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6"))
+            (g7 (gensym "g7")))
+        (fresh (defn A)
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (absento g7 defn)
+          (absento g1 defn1)
+          (absento g2 defn1)
+          (absento g3 defn1)
+          (absento g4 defn1)
+          (absento g5 defn1)
+          (absento g6 defn1)
+          (absento g7 defn1)
+          (absento 'append A)
+          (== defn `(define append
+                      (lambda (xs ys)
+                        (foldr cons ys xs))))
+          (== defn1 `(define foldr
+                       (lambda (f acc xs)
+                         ,A)))
+          (evalo `(begin
+                    ,defn1
+                    ,defn
+                    (list
+                      (append '() '())
+                      (append '(,g1) '(,g2))
+                      (append '(,g3 ,g4) '(,g5 ,g6))))
+                 (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6))))))
+    '(((define foldr
+         (lambda (f acc xs)
+           (if (null? xs)
+             acc
+             (f (car xs) (foldr f acc (cdr xs))))))))))
+
+(time
+  (test 'foldr-from-append
+    (run 1 (defn1)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6"))
+            (g7 (gensym "g7")))
+        (fresh (defn A B)
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (absento g7 defn)
+          (absento g1 defn1)
+          (absento g2 defn1)
+          (absento g3 defn1)
+          (absento g4 defn1)
+          (absento g5 defn1)
+          (absento g6 defn1)
+          (absento g7 defn1)
+          (== defn `(append
+                      (lambda (xs ys)
+                        (foldr cons ys xs))))
+          (== defn1 `(foldr
+                       (lambda (f acc xs)
+                         ,B)))
+          (evalo `(letrec (,defn1)
+                    (letrec (,defn)
+                      (list
+                        (append '() '())
+                        (append '(,g1) '(,g2))
+                        (append '(,g3 ,g4) '(,g5 ,g6)))))
+                 (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6))))))
+    '(((foldr
+         (lambda (f acc xs)
+           (if (null? xs)
+             acc
+             (f (car xs) (foldr f acc (cdr xs))))))))))
+
 (test-barliman 'quasiquote-1 () ()
   '()
   '(list `(1 2) `((cons 3 4) ,(cons 5 6)))
