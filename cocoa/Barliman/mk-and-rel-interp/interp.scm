@@ -741,7 +741,7 @@
     ((fresh (x a r dx* da* dr* env2)
        (== `(,x . ,dx*) x*)
        (== `(,a . ,da*) a*)
-       (== `(,r . ,dr*) a*)
+       (== `(,r . ,dr*) r*)
        (== `((val . (,x . ,a)) . ,env) env2)
        (symbolo x)
        (same-length-ext-env*o dx* da* dr* env2 out)))))
