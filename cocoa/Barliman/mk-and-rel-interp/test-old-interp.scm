@@ -41,6 +41,301 @@
          expected-defs)))))
 
 (time
+  (test 'prover-1
+    (run 1 (q)
+      (evalo
+        `(begin
+           (define member?
+             (lambda (x ls)
+               (cond
+                 ((null? ls) #f)
+                 ((equal? (car ls) x) #t)
+                 (else (member? x (cdr ls))))))
+           (define proof?
+             (lambda (proof)
+               (match proof
+                 (`(,A ,assms assumption ()) (member? A assms))
+                 (`(,B ,assms modus-ponens
+                       (((,A => ,B) ,assms ,r1 ,ants1)
+                        (,A ,assms ,r2 ,ants2)))
+                   (and (proof? `((,A => ,B) ,assms ,r1 ,ants1))
+                        (proof? `(,A ,assms ,r2 ,ants2))))
+                 (`((,A => ,B) ,assms conditional
+                               ((,B (,A . ,assms) ,rule ,ants)))
+                   (proof? `(,B (,A . ,assms) ,rule ,ants))))))
+           (proof? '(C (A (A => B) (B => C))
+                       modus-ponens
+                       (((B => C) (A (A => B) (B => C)) assumption ())
+                        (B (A (A => B) (B => C))
+                           modus-ponens
+                           (((A => B) (A (A => B) (B => C)) assumption ())
+                            (A (A (A => B) (B => C)) assumption ())))))))
+        q))
+    '((#t))))
+
+(time
+  (test 'prover-2
+    (run 1 (q)
+      (evalo
+        `(letrec ([member?
+                    (lambda (x ls)
+                      (cond
+                        ((null? ls) #f)
+                        ((equal? (car ls) x) #t)
+                        (else (member? x (cdr ls)))))]
+                  [proof?
+                    (lambda (proof)
+                      (match proof
+                        (`(,A ,assms assumption ()) (member? A assms))
+                        (`(,B ,assms modus-ponens
+                              (((,A => ,B) ,assms ,r1 ,ants1)
+                               (,A ,assms ,r2 ,ants2)))
+                          (and (proof? `((,A => ,B) ,assms ,r1 ,ants1))
+                               (proof? `(,A ,assms ,r2 ,ants2))))
+                        (`((,A => ,B) ,assms conditional
+                                      ((,B (,A . ,assms) ,rule ,ants)))
+                          (proof? `(,B (,A . ,assms) ,rule ,ants)))))])
+           (proof? '(C (A (A => B) (B => C))
+                       modus-ponens
+                       (((B => C) (A (A => B) (B => C)) assumption ())
+                        (B (A (A => B) (B => C))
+                           modus-ponens
+                           (((A => B) (A (A => B) (B => C)) assumption ())
+                            (A (A (A => B) (B => C)) assumption ())))))))
+        q))
+    '((#t))))
+
+(time
+  (test 'prover-3
+    (run 1 (prf)
+      (fresh (body)
+        (== prf `(C (A (A => B) (B => C)) . ,body))
+        (evalo
+          `(letrec ([member?
+                      (lambda (x ls)
+                        (cond
+                          ((null? ls) #f)
+                          ((equal? (car ls) x) #t)
+                          (else (member? x (cdr ls)))))]
+                    [proof?
+                      (lambda (proof)
+                        (match proof
+                          (`(,A ,assms assumption ()) (member? A assms))
+                          (`(,B ,assms modus-ponens
+                                (((,A => ,B) ,assms ,r1 ,ants1)
+                                 (,A ,assms ,r2 ,ants2)))
+                            (and (proof? `((,A => ,B) ,assms ,r1 ,ants1))
+                                 (proof? `(,A ,assms ,r2 ,ants2))))
+                          (`((,A => ,B) ,assms conditional
+                                        ((,B (,A . ,assms) ,rule ,ants)))
+                            (proof? `(,B (,A . ,assms) ,rule ,ants)))))])
+             (proof? ',prf))
+          #t)))
+    '(((C (A (A => B) (B => C))
+          modus-ponens
+          (((B => C) (A (A => B) (B => C)) assumption ())
+           (B (A (A => B) (B => C))
+              modus-ponens
+              (((A => B) (A (A => B) (B => C)) assumption ())
+               (A (A (A => B) (B => C)) assumption ())))))))))
+
+(time
+  (test 'prover-4
+    (run 1 (prf)
+      (fresh (body)
+        (== prf `(((A => B) => ((B => C) => (A => C))) () . ,body))
+        (evalo
+          `(letrec ([member?
+                      (lambda (x ls)
+                        (cond
+                          ((null? ls) #f)
+                          ((equal? (car ls) x) #t)
+                          (else (member? x (cdr ls)))))]
+                    [proof?
+                      (lambda (proof)
+                        (match proof
+                          (`(,A ,assms assumption ()) (member? A assms))
+                          (`(,B ,assms modus-ponens
+                                (((,A => ,B) ,assms ,r1 ,ants1)
+                                 (,A ,assms ,r2 ,ants2)))
+                            (and (proof? `((,A => ,B) ,assms ,r1 ,ants1))
+                                 (proof? `(,A ,assms ,r2 ,ants2))))
+                          (`((,A => ,B) ,assms conditional
+                                        ((,B (,A . ,assms) ,rule ,ants)))
+                            (proof? `(,B (,A . ,assms) ,rule ,ants)))))])
+             (proof? ',prf))
+          #t)))
+    '(((((A => B) => ((B => C) => (A => C)))
+        ()
+        conditional
+        ((((B => C) => (A => C))
+          ((A => B))
+          conditional
+          (((A => C)
+            ((B => C) (A => B))
+            conditional
+            ((C (A (B => C) (A => B))
+                modus-ponens
+                (((B => C) (A (B => C) (A => B)) assumption ())
+                 (B (A (B => C) (A => B))
+                    modus-ponens
+                    (((A => B) (A (B => C) (A => B)) assumption ())
+                     (A (A (B => C) (A => B)) assumption ())))))))))))))))
+
+; commutativity of &
+; ((A & B) => (B & A))
+; (~(~A | ~B) => ~(~B | ~A))
+; (~(A => ~B) => ~(B => ~A))
+; (((A => (B => C)) => C) => ((B => (A => C)) => C))
+(time
+  (test 'prover-5
+    (run 1 (prf)
+      (fresh (body)
+        (== prf `((((A => (B => C)) => C) => ((B => (A => C)) => C)) () . ,body))
+        (evalo
+          `(letrec ([member?
+                      (lambda (x ls)
+                        (cond
+                          ((null? ls) #f)
+                          ((equal? (car ls) x) #t)
+                          (else (member? x (cdr ls)))))]
+                    [proof?
+                      (lambda (proof)
+                        (match proof
+                          (`(,A ,assms assumption ()) (member? A assms))
+                          (`(,B ,assms modus-ponens
+                                (((,A => ,B) ,assms ,r1 ,ants1)
+                                 (,A ,assms ,r2 ,ants2)))
+                            (and (proof? `((,A => ,B) ,assms ,r1 ,ants1))
+                                 (proof? `(,A ,assms ,r2 ,ants2))))
+                          (`((,A => ,B) ,assms conditional
+                                        ((,B (,A . ,assms) ,rule ,ants)))
+                            (proof? `(,B (,A . ,assms) ,rule ,ants)))))])
+             (proof? ',prf))
+          #t)))
+    '(#f)))
+
+(time
+  (test 'fold-right->append
+    (run 1 (defn)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6")))
+        (fresh (body)
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (== defn `(append (lambda (xs ys) ,body)))
+          (evalo
+            `(letrec ((fold-right
+                        (lambda (f acc xs)
+                          (if (null? xs)
+                            acc
+                            (f (car xs) (fold-right f acc (cdr xs)))))))
+               (letrec (,defn)
+                 (list (append '() '())
+                       (append '(,g1) '(,g2))
+                       (append '(,g3 ,g4) '(,g5 ,g6)))))
+            `(() (,g1 ,g2) (,g3 ,g4 ,g5 ,g6))))))
+    '(((append (lambda (xs ys)  (fold-right cons ys xs)))))))
+
+(time
+  (test 'append->fold-right
+    (run 1 (defn)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6")))
+        (fresh (body)
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (== defn `(fold-right (lambda (f acc xs) ,body)))
+          (evalo
+            `(letrec (,defn)
+               (letrec ((append
+                          (lambda (xs ys)
+                            (fold-right cons ys xs))))
+                 (list (append '() '())
+                       (append '(,g1) '(,g2))
+                       (append '(,g3 ,g4) '(,g5 ,g6)))))
+            `(() (,g1 ,g2) (,g3 ,g4 ,g5 ,g6))))))
+    '(((fold-right (lambda (f acc xs) (if (null? xs) acc (f (car xs) (fold-right f acc (cdr xs))))))))))
+
+(time
+  (test 'not-so-good-append
+    (run 1 (defn)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6")))
+        (fresh ()
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (evalo
+            `(letrec (,defn)
+               (list (append '() '())
+                     (append '(,g1) '(,g2))))
+            `(() (,g1 ,g2))))))
+    '(((append (lambda (_.0 _.1) (if (null? _.1) _.1 (cons (car _.0) _.1)))) (=/= ((_.0 _.1)) ((_.0 car)) ((_.0 cons)) ((_.0 if)) ((_.0 null?)) ((_.1 car)) ((_.1 cons)) ((_.1 if)) ((_.1 null?))) (sym _.0 _.1)))))
+
+(time
+  (test 'good-append
+    (run 1 (defn)
+      (let ((g1 (gensym "g1"))
+            (g2 (gensym "g2"))
+            (g3 (gensym "g3"))
+            (g4 (gensym "g4"))
+            (g5 (gensym "g5"))
+            (g6 (gensym "g6")))
+        (fresh ()
+          (absento g1 defn)
+          (absento g2 defn)
+          (absento g3 defn)
+          (absento g4 defn)
+          (absento g5 defn)
+          (absento g6 defn)
+          (evalo
+            `(letrec (,defn)
+               (list (append '() '())
+                     (append '(,g1) '(,g2))
+                     (append '(,g3 ,g4) '(,g5 ,g6))))
+            `(() (,g1 ,g2) (,g3 ,g4 ,g5 ,g6))))))
+    '(((append (lambda (_.0 _.1) (if (null? _.0) _.1 (cons (car _.0) (append (cdr _.0) _.1))))) (=/= ((_.0 _.1)) ((_.0 append)) ((_.0 car)) ((_.0 cdr)) ((_.0 cons)) ((_.0 if)) ((_.0 null?)) ((_.1 append)) ((_.1 car)) ((_.1 cdr)) ((_.1 cons)) ((_.1 if)) ((_.1 null?))) (sym _.0 _.1)))))
+
+(time
+  (test 'bad-append
+    (run 1 (defn)
+      (evalo
+        `(letrec (,defn)
+           (list (append '() '())
+                 (append '(1) '(2))
+                 ;(append '(3 4) '(5 6))
+
+                 ))
+        `(() (1 2) ;(3 4 5 6)
+
+             )))
+    '(((append (lambda (_.0 _.1) (if (null? _.1) _.1 '(1 2)))) (=/= ((_.0 _.1)) ((_.0 if)) ((_.0 null?)) ((_.0 quote)) ((_.1 if)) ((_.1 null?)) ((_.1 quote))) (sym _.0 _.1)))))
+
+(time
   (test 'append-append2
     (run 1 (defn defn2)
       (let ((g1 (gensym "g1"))
