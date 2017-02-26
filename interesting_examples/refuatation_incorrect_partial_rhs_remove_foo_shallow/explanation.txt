@@ -91,3 +91,42 @@ Set conde1 optimization flag to true in mk/mk.scm:
 
 ;; To allow use of experimental `conde1` optimization, set this to #t.
 (define enable-conde1? #t)
+
+---------------------------------------------------------
+
+We can use `remove` rather than `remove-foo`:
+
+(define remove
+  (lambda (x ls)
+    (cond
+      [(null? ls) '()]
+      [(equal? (car ls) x) (cons ,A ,B)]
+      .
+      ,C)))
+
+
+(remove 'foo '())
+=>
+'()
+
+(remove 'foo '(foo))
+=>
+'()
+
+(remove 'foo '(,g1))
+=>
+`(,g1)
+
+(remove 'foo '(,g2 foo))
+=>
+`(,g2)
+
+(remove 'foo '(foo ,g3 foo))
+=>
+`(,g3)
+
+(remove 'foo '(foo ,g4 foo ,g5))
+=>
+`(,g4 ,g5)
+
+----------------------------------------------------------
