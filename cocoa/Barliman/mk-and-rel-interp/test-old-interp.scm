@@ -41,6 +41,123 @@
          expected-defs)))))
 
 (time
+  (test 'remove-shallow-1
+    (run 1 (q)
+      (evalo
+        `(letrec ([remove
+                    (lambda (x ls)
+                      (cond
+                        [(null? ls) '()]
+                        [(equal? (car ls) x) (remove x (cdr ls))]
+                        [else (cons (car ls) (remove x (cdr ls)))]))])
+           (list (remove 'foo '())
+                 (remove 'foo '(foo))
+                 (remove 'foo '(1))
+                 (remove 'foo '(2 foo 3))
+                 (remove 'foo '(bar foo baz (foo) foo ((quux foo) foo)))
+                 (remove 'foo '((4 foo) foo (5 (foo 6 foo)) foo 7 foo (8)))))
+        '(() () (1) (2 3) (bar baz (foo) ((quux foo) foo)) ((4 foo) (5 (foo 6 foo)) 7 (8)))))
+    '((_.0))))
+
+;(time
+  ;(test 'remove-shallow-2
+    ;(run 1 (A C)
+      ;(evalo
+        ;`(letrec ([remove
+                    ;(lambda (x ls)
+                      ;(cond
+                        ;[(null? ls) '()]
+                        ;[(equal? (car ls) x) ,A]
+                        ;.
+                        ;,C)) ])
+           ;(list (remove 'foo '())
+                 ;(remove 'foo '(foo))
+                 ;(remove 'foo '(1))
+                 ;(remove 'foo '(2 foo 3))
+                 ;(remove 'foo '(bar foo baz (foo) foo ((quux foo) foo)))
+                 ;(remove 'foo '((4 foo) foo (5 (foo 6 foo)) foo 7 foo (8)))))
+        ;'(() () (1) (2 3) (bar baz (foo) ((quux foo) foo)) ((4 foo) (5 (foo 6 foo)) 7 (8)))))
+    ;'((#t))))
+
+(time
+  (test 'remove-shallow-2
+    (run 1 (A B C)
+      (evalo
+        `(letrec ([remove
+                    (lambda (x ls)
+                      (cond
+                        [(null? ls) '()]
+                        [(equal? (car ls) x) (cons ,A ,B)]
+                        .
+                        ,C)) ])
+           (list (remove 'foo '())
+                 (remove 'foo '(foo))
+                 (remove 'foo '(1))
+                 (remove 'foo '(2 foo 3))
+                 (remove 'foo '(bar foo baz (foo) foo ((quux foo) foo)))
+                 (remove 'foo '((4 foo) foo (5 (foo 6 foo)) foo 7 foo (8)))))
+        '(() () (1) (2 3) (bar baz (foo) ((quux foo) foo)) ((4 foo) (5 (foo 6 foo)) 7 (8)))))
+    '()))
+
+(time
+  (test 'remove-deep-1
+    (run 1 (q)
+      (evalo
+        `(letrec ([remove
+                    (lambda (x ls)
+                      (cond
+                        [(null? ls) '()]
+                        [(equal? (car ls) x) (remove x (cdr ls))]
+                        [(pair? (car ls)) (cons (remove x (car ls)) (remove x (cdr ls)))]
+                        [else (cons (car ls) (remove x (cdr ls)))]))])
+           (list (remove 'foo '())
+                 (remove 'foo '(foo))
+                 (remove 'foo '(1))
+                 (remove 'foo '(2 foo 3))
+                 (remove 'foo '(bar foo baz (foo) foo ((quux foo) foo)))
+                 (remove 'foo '((4 foo) foo (5 (foo 6 foo)) foo 7 foo (8)))))
+        '(() () (1) (2 3) (bar baz () ((quux))) ((4) (5 (6)) 7 (8)))))
+    '((_.0))))
+
+;(time
+  ;(test 'remove-deep-2
+    ;(run 1 (A B)
+      ;(evalo
+        ;`(letrec ([remove
+                    ;(lambda (x ls)
+                      ;(cond
+                        ;[(null? ls) '()]
+                        ;[(equal? (car ls) x) ,A]
+                        ;[else ,B]))])
+           ;(list (remove 'foo '())
+                 ;(remove 'foo '(foo))
+                 ;(remove 'foo '(1))
+                 ;(remove 'foo '(2 foo 3))
+                 ;(remove 'foo '(bar foo baz (foo) foo ((quux foo) foo)))
+                 ;(remove 'foo '((4 foo) foo (5 (foo 6 foo)) foo 7 foo (8)))))
+        ;'(() () (1) (2 3) (bar baz () ((quux))) ((4) (5 (6)) 7 (8)))))
+    ;'((#t)))
+
+(time
+  (test 'remove-deep-2
+    (run 1 (A B)
+      (evalo
+        `(letrec ([remove
+                    (lambda (x ls)
+                      (cond
+                        [(null? ls) '()]
+                        [(equal? (car ls) x) ,A]
+                        [else (cons (car ls) ,B)]))])
+           (list (remove 'foo '())
+                 (remove 'foo '(foo))
+                 (remove 'foo '(1))
+                 (remove 'foo '(2 foo 3))
+                 (remove 'foo '(bar foo baz (foo) foo ((quux foo) foo)))
+                 (remove 'foo '((4 foo) foo (5 (foo 6 foo)) foo 7 foo (8)))))
+        '(() () (1) (2 3) (bar baz () ((quux))) ((4) (5 (6)) 7 (8)))))
+    '()))
+
+(time
   (test 'prover-1
     (run 1 (q)
       (evalo
