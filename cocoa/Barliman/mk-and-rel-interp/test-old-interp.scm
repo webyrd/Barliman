@@ -236,6 +236,30 @@
                                   ;(B (B A (B => (A => C)) ((A => (B => C)) => C)) assumption ())))
                        ;(A (B A (B => (A => C)) ((A => (B => C)) => C)) assumption ())))))))))))))))))
 
+;(time
+  ;(test 'fold-right->append-wrong
+    ;(run 1 (defn)
+      ;(fresh (body)
+        ;(absento 1 defn)
+        ;(absento 2 defn)
+        ;(absento 3 defn)
+        ;(absento 4 defn)
+        ;(absento 5 defn)
+        ;(absento 6 defn)
+        ;(== defn `(append (lambda (xs ys) ,body)))
+        ;(evalo
+          ;`(letrec ((fold-right
+                      ;(lambda (f acc xs)
+                        ;(if (null? xs)
+                          ;acc
+                          ;(f (car xs) (fold-right f acc (cdr xs)))))))
+             ;(letrec (,defn)
+               ;(list (append '() '())
+                     ;(append '(1) '(2))
+                     ;(append '(3 4) '(5 6)))))
+          ;`(() (1 2) (3 4 5 6)))))
+    ;'(((append (lambda (xs ys) (if (null? ys) ys (fold-right cons ys xs))))))))
+
 (time
   (test 'fold-right->append
     (run 1 (defn)
