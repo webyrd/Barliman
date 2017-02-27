@@ -3,7 +3,6 @@
 (load "mk/test-check.scm")
 (load "interp.scm")
 
-(set! allow-incomplete-search? #t)
 (set! enable-conde1? #t)
 
 (define-syntax test-barliman
@@ -39,6 +38,8 @@
                (evalo (cons 'begin (append program (list test-case)))
                       test-result))))
          expected-defs)))))
+
+(set! allow-incomplete-search? #f)
 
 (time
   (test 'remove-shallow-1
@@ -156,6 +157,8 @@
                  (remove 'foo '((4 foo) foo (5 (foo 6 foo)) foo 7 foo (8)))))
         '(() () (1) (2 3) (bar baz () ((quux))) ((4) (5 (6)) 7 (8)))))
     '()))
+
+(set! allow-incomplete-search? #t)
 
 (time
   (test 'prover-1
