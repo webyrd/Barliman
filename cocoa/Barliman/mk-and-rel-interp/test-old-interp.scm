@@ -319,6 +319,29 @@
     '(((append (lambda (_.0 _.1) (if (null? _.0) _.1 (cons (car _.0) (append (cdr _.0) _.1))))) (=/= ((_.0 _.1)) ((_.0 append)) ((_.0 car)) ((_.0 cdr)) ((_.0 cons)) ((_.0 if)) ((_.0 null?)) ((_.1 append)) ((_.1 car)) ((_.1 cdr)) ((_.1 cons)) ((_.1 if)) ((_.1 null?))) (sym _.0 _.1)))))
 
 (time
+  (test 'good-append-clean
+    (run 1 (defn)
+      (fresh (body)
+        (absento 1 defn)
+        (absento 2 defn)
+        (absento 3 defn)
+        (absento 4 defn)
+        (absento 5 defn)
+        (absento 6 defn)
+        (== defn `(append (lambda (xs ys) ,body)))
+        (evalo
+          `(letrec (,defn)
+             (list (append '() '())
+                   (append '(1) '(2))
+                   (append '(3 4) '(5 6))))
+          `(() (1 2) (3 4 5 6)))))
+    '(((append
+         (lambda (xs ys)
+           (if (null? xs)
+             ys
+             (cons (car xs) (append (cdr xs) ys)))))))))
+
+(time
   (test 'bad-append
     (run 1 (defn)
       (evalo
