@@ -239,108 +239,83 @@
 (time
   (test 'fold-right->append
     (run 1 (defn)
-      (let ((g0 (gensym "g0"))
-            (g1 (gensym "g1"))
-            (g2 (gensym "g2"))
-            (g3 (gensym "g3"))
-            (g4 (gensym "g4"))
-            (g5 (gensym "g5"))
-            (g6 (gensym "g6")))
-        (fresh (body)
-          (absento g0 defn)
-          (absento g1 defn)
-          (absento g2 defn)
-          (absento g3 defn)
-          (absento g4 defn)
-          (absento g5 defn)
-          (absento g6 defn)
-          ;(== defn `(append (lambda (xs ys) ,body)))
-          (evalo
-            `(letrec ((fold-right
-                        (lambda (f acc xs)
-                          (if (null? xs)
-                            acc
-                            (f (car xs) (fold-right f acc (cdr xs)))))))
-               (letrec (,defn)
-                 (list (append '() ',g0)
-                       (append '(,g1) '(,g2))
-                       (append '(,g3 ,g4) '(,g5 ,g6)))))
-            `(,g0 (,g1 ,g2) (,g3 ,g4 ,g5 ,g6))))))
+      (fresh (body)
+        (absento 0 defn)
+        (absento 1 defn)
+        (absento 2 defn)
+        (absento 3 defn)
+        (absento 4 defn)
+        (absento 5 defn)
+        (absento 6 defn)
+        (== defn `(append (lambda (xs ys) ,body)))
+        (evalo
+          `(letrec ((fold-right
+                      (lambda (f acc xs)
+                        (if (null? xs)
+                          acc
+                          (f (car xs) (fold-right f acc (cdr xs)))))))
+             (letrec (,defn)
+               (list (append '() 0)
+                     (append '(1) '(2))
+                     (append '(3 4) '(5 6)))))
+          `(0 (1 2) (3 4 5 6)))))
     '(((append (lambda (xs ys) (fold-right cons ys xs)))))))
 
 (time
   (test 'append->fold-right
     (run 1 (defn)
-      (let ((g1 (gensym "g1"))
-            (g2 (gensym "g2"))
-            (g3 (gensym "g3"))
-            (g4 (gensym "g4"))
-            (g5 (gensym "g5"))
-            (g6 (gensym "g6")))
-        (fresh (body)
-          (absento g1 defn)
-          (absento g2 defn)
-          (absento g3 defn)
-          (absento g4 defn)
-          (absento g5 defn)
-          (absento g6 defn)
-          (== defn `(fold-right (lambda (f acc xs) ,body)))
-          (evalo
-            `(letrec (,defn)
-               (letrec ((append
-                          (lambda (xs ys)
-                            (fold-right cons ys xs))))
-                 (list (append '() '())
-                       (append '(,g1) '(,g2))
-                       (append '(,g3 ,g4) '(,g5 ,g6)))))
-            `(() (,g1 ,g2) (,g3 ,g4 ,g5 ,g6))))))
+      (fresh (body)
+        (absento 1 defn)
+        (absento 2 defn)
+        (absento 3 defn)
+        (absento 4 defn)
+        (absento 5 defn)
+        (absento 6 defn)
+        (== defn `(fold-right (lambda (f acc xs) ,body)))
+        (evalo
+          `(letrec (,defn)
+             (letrec ((append
+                        (lambda (xs ys)
+                          (fold-right cons ys xs))))
+               (list (append '() '())
+                     (append '(1) '(2))
+                     (append '(3 4) '(5 6)))))
+          `(() (1 2) (3 4 5 6)))))
     '(((fold-right (lambda (f acc xs) (if (null? xs) acc (f (car xs) (fold-right f acc (cdr xs))))))))))
 
 (time
   (test 'not-so-good-append
     (run 1 (defn)
-      (let ((g1 (gensym "g1"))
-            (g2 (gensym "g2"))
-            (g3 (gensym "g3"))
-            (g4 (gensym "g4"))
-            (g5 (gensym "g5"))
-            (g6 (gensym "g6")))
-        (fresh ()
-          (absento g1 defn)
-          (absento g2 defn)
-          (absento g3 defn)
-          (absento g4 defn)
-          (absento g5 defn)
-          (absento g6 defn)
-          (evalo
-            `(letrec (,defn)
-               (list (append '() '())
-                     (append '(,g1) '(,g2))))
-            `(() (,g1 ,g2))))))
+      (fresh ()
+        (absento 1 defn)
+        (absento 2 defn)
+        (absento 3 defn)
+        (absento 4 defn)
+        (absento 5 defn)
+        (absento 6 defn)
+        (evalo
+          `(letrec (,defn)
+             (list (append '() '())
+                   (append '(1) '(2))))
+          `(() (1 2)))))
     '(((append (lambda (_.0 _.1) (if (null? _.1) _.1 (cons (car _.0) _.1)))) (=/= ((_.0 _.1)) ((_.0 car)) ((_.0 cons)) ((_.0 if)) ((_.0 null?)) ((_.1 car)) ((_.1 cons)) ((_.1 if)) ((_.1 null?))) (sym _.0 _.1)))))
 
 (time
   (test 'good-append
     (run 1 (defn)
-      (let ((g1 (gensym "g1"))
-            (g2 (gensym "g2"))
-            (g3 (gensym "g3"))
-            (g4 (gensym "g4"))
-            (g5 (gensym "g5"))
-            (g6 (gensym "g6")))
-        (fresh ()
-          (absento g1 defn)
-          (absento g2 defn)
-          (absento g3 defn)
-          (absento g4 defn)
-          (absento g5 defn)
-          (absento g6 defn)
-          (evalo
-            `(letrec (,defn)
-               (list (append '() '())
-                     (append '(,g1) '(,g2))
-                     (append '(,g3 ,g4) '(,g5 ,g6))))
-            `(() (,g1 ,g2) (,g3 ,g4 ,g5 ,g6))))))
+      (fresh ()
+        (absento 1 defn)
+        (absento 2 defn)
+        (absento 3 defn)
+        (absento 4 defn)
+        (absento 5 defn)
+        (absento 6 defn)
+        (evalo
+          `(letrec (,defn)
+             (list (append '() '())
+                   (append '(1) '(2))
+                   (append '(3 4) '(5 6))))
+          `(() (1 2) (3 4 5 6)))))
     '(((append (lambda (_.0 _.1) (if (null? _.0) _.1 (cons (car _.0) (append (cdr _.0) _.1))))) (=/= ((_.0 _.1)) ((_.0 append)) ((_.0 car)) ((_.0 cdr)) ((_.0 cons)) ((_.0 if)) ((_.0 null?)) ((_.1 append)) ((_.1 car)) ((_.1 cdr)) ((_.1 cons)) ((_.1 if)) ((_.1 null?))) (sym _.0 _.1)))))
 
 (time
@@ -349,56 +324,44 @@
       (evalo
         `(letrec (,defn)
            (list (append '() '())
-                 (append '(1) '(2))
-                 ;(append '(3 4) '(5 6))
-
-                 ))
-        `(() (1 2) ;(3 4 5 6)
-
-             )))
+                 (append '(1) '(2))))
+        `(() (1 2))))
     '(((append (lambda (_.0 _.1) (if (null? _.1) _.1 '(1 2)))) (=/= ((_.0 _.1)) ((_.0 if)) ((_.0 null?)) ((_.0 quote)) ((_.1 if)) ((_.1 null?)) ((_.1 quote))) (sym _.0 _.1)))))
 
 (time
   (test 'append-append2
     (run 1 (defn defn2)
-      (let ((g1 (gensym "g1"))
-            (g2 (gensym "g2"))
-            (g3 (gensym "g3"))
-            (g4 (gensym "g4"))
-            (g5 (gensym "g5"))
-            (g6 (gensym "g6"))
-            (g7 (gensym "g7")))
-        (fresh (A)
-          (absento g1 defn)
-          (absento g2 defn)
-          (absento g3 defn)
-          (absento g4 defn)
-          (absento g5 defn)
-          (absento g6 defn)
-          (absento g7 defn)
-          (== `(append
-                 (lambda (xs ys)
-                   ,A))
-              defn)
-          (== `(define append2
-                 (lambda (xs ys) (foldr cons ys xs)))
-              defn2)
-          (evalo `(letrec (,defn)
-                    (begin
-                      (define foldr
-                        (lambda (f acc xs)
-                          (if (null? xs)
-                            acc
-                            (f (car xs) (foldr f acc (cdr xs))))))
-                      ,defn2
-                      (define test
-                        (lambda (xs ys)
-                          (equal? (append xs ys) (append2 xs ys))))
-                      (list
-                        (test '() '())
-                        (test '(,g1) '(,g2))
-                        (test '(,g3 ,g4) '(,g5 ,g6)))))
-                 (list #t #t #t)))))
+      (fresh (A)
+        (absento 1 defn)
+        (absento 2 defn)
+        (absento 3 defn)
+        (absento 4 defn)
+        (absento 5 defn)
+        (absento 6 defn)
+        (absento 7 defn)
+        (== `(append
+               (lambda (xs ys)
+                 ,A))
+            defn)
+        (== `(define append2
+               (lambda (xs ys) (foldr cons ys xs)))
+            defn2)
+        (evalo `(letrec (,defn)
+                  (begin
+                    (define foldr
+                      (lambda (f acc xs)
+                        (if (null? xs)
+                          acc
+                          (f (car xs) (foldr f acc (cdr xs))))))
+                    ,defn2
+                    (define test
+                      (lambda (xs ys)
+                        (equal? (append xs ys) (append2 xs ys))))
+                    (list
+                      (test '() '())
+                      (test '(1) '(2))
+                      (test '(3 4) '(5 6)))))
+               (list #t #t #t))))
     '((((append
           (lambda (xs ys)
             (if (null? xs)
