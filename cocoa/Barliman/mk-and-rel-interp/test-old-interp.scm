@@ -62,7 +62,7 @@
 
 ;(time
   ;(test 'remove-shallow-2
-    ;(run 1 (A C)
+    ;(run 1 (A B C)
       ;(evalo
         ;`(letrec ([remove
                     ;(lambda (x ls)
@@ -71,13 +71,17 @@
                         ;[(equal? (car ls) x) ,A]
                         ;.
                         ;,C)) ])
-           ;(list (remove 'foo '())
+           ;(list ;(remove 'foo '())
                  ;(remove 'foo '(foo))
-                 ;(remove 'foo '(1))
-                 ;(remove 'foo '(2 foo 3))
-                 ;(remove 'foo '(bar foo baz (foo) foo ((quux foo) foo)))
-                 ;(remove 'foo '((4 foo) foo (5 (foo 6 foo)) foo 7 foo (8)))))
-        ;'(() () (1) (2 3) (bar baz (foo) ((quux foo) foo)) ((4 foo) (5 (foo 6 foo)) 7 (8)))))
+                 ;;(remove 'foo '(1))
+                 ;;(remove 'foo '(2 foo 3))
+                 ;;(remove 'foo '(bar foo baz (foo) foo ((quux foo) foo)))
+                 ;;(remove 'foo '((4 foo) foo (5 (foo 6 foo)) foo 7 foo (8)))
+                 ;))
+        ;'(;()
+          ;()
+          ;;(1) (2 3) (bar baz (foo) ((quux foo) foo)) ((4 foo) (5 (foo 6 foo)) 7 (8))
+          ;)))
     ;'((#t))))
 
 (time
@@ -122,22 +126,44 @@
 
 ;(time
   ;(test 'remove-deep-2
-    ;(run 1 (A B)
-      ;(evalo
-        ;`(letrec ([remove
-                    ;(lambda (x ls)
-                      ;(cond
-                        ;[(null? ls) '()]
-                        ;[(equal? (car ls) x) ,A]
-                        ;[else ,B]))])
-           ;(list (remove 'foo '())
-                 ;(remove 'foo '(foo))
-                 ;(remove 'foo '(1))
-                 ;(remove 'foo '(2 foo 3))
-                 ;(remove 'foo '(bar foo baz (foo) foo ((quux foo) foo)))
-                 ;(remove 'foo '((4 foo) foo (5 (foo 6 foo)) foo 7 foo (8)))))
-        ;'(() () (1) (2 3) (bar baz () ((quux))) ((4) (5 (6)) 7 (8)))))
-    ;'((#t)))
+    ;(run 1 (A B C D)
+      ;(fresh (all)
+        ;(== all `(,A ,B ,C ,D))
+        ;(absento 'bar all)
+        ;(absento 'baz all)
+        ;(absento 'quux all)
+        ;;(absento 4 all)
+        ;;(absento 5 all)
+        ;;(absento 6 all)
+        ;;(absento 7 all)
+        ;;(absento 8 all)
+        ;(evalo
+          ;`(letrec ([remove
+                      ;(lambda (x ls)
+                        ;(cond
+                          ;[(null? ls) '()]
+                          ;[(pair? (car ls)) ,A]
+                          ;[(equal? (car ls) x) ,B]
+                          ;[else (cons (car ls) ,C)]
+                          ;;[else (cons ,C ,D)]
+
+                          ;))])
+             ;(list
+               ;(remove 'foo '())
+               ;(remove 'foo '(foo))
+               ;(remove 'foo '(1))
+               ;;(remove 'foo '(2 foo 3))
+               ;;(remove 'foo '(bar foo baz (foo) foo ((quux foo) foo)))
+               ;(remove 'foo '((4 foo) foo (5 (foo 6 foo)) foo 7 foo (8)))
+
+               ;))
+          ;'(() () (1)
+            ;;(2 3)
+            ;;(bar baz () ((quux)))
+            ;((4) (5 (6)) 7 (8))
+
+            ;))))
+    ;'((#t))))
 
 (time
   (test 'remove-deep-2
@@ -384,6 +410,29 @@
   (test 'fold-right->append
     (run 1 (defn)
       (fresh (body)
+        (absento 1 defn)
+        (absento 2 defn)
+        (absento 3 defn)
+        (absento 4 defn)
+        (absento 5 defn)
+        (absento 6 defn)
+        (== defn `(append (lambda (xs ys) ,body)))
+        (evalo
+          `(letrec ((fold-right
+                      (lambda (f acc xs)
+                        (if (null? xs)
+                          acc
+                          (f (car xs) (fold-right f acc (cdr xs)))))))
+             (letrec (,defn)
+               (list (append '(1) '(2))
+                     (append '(3 4) '(5 6)))))
+          `((1 2) (3 4 5 6)))))
+    '(((append (lambda (xs ys) (fold-right cons ys xs)))))))
+
+(time
+  (test 'fold-right->append-extra
+    (run 1 (defn)
+      (fresh (body)
         (absento 0 defn)
         (absento 1 defn)
         (absento 2 defn)
@@ -399,11 +448,67 @@
                           acc
                           (f (car xs) (fold-right f acc (cdr xs)))))))
              (letrec (,defn)
-               (list (append '() 0)
+               (list (append '(0) '())
                      (append '(1) '(2))
                      (append '(3 4) '(5 6)))))
-          `(0 (1 2) (3 4 5 6)))))
+          `((0) (1 2) (3 4 5 6)))))
     '(((append (lambda (xs ys) (fold-right cons ys xs)))))))
+
+(time
+  (test 'fold-right->append-extra-2
+    (run 1 (defn)
+      (fresh (body)
+        (absento 0 defn)
+        (absento 1 defn)
+        (absento 2 defn)
+        (absento 3 defn)
+        (absento 4 defn)
+        (absento 5 defn)
+        (absento 6 defn)
+        (absento 7 defn)
+        (absento 8 defn)
+        (== defn `(append (lambda (xs ys) ,body)))
+        (evalo
+          `(letrec ((fold-right
+                      (lambda (f acc xs)
+                        (if (null? xs)
+                          acc
+                          (f (car xs) (fold-right f acc (cdr xs)))))))
+             (letrec (,defn)
+               (list (append '() '())
+                     (append '(0) '())
+                     (append '(0) '(1))
+                     (append '(2 3) '(4))
+                     (append '(5 6) '(7 8)))))
+          `(() (0) (0 1) (2 3 4) (5 6 7 8)))))
+    '(((append (lambda (xs ys) (if (null? ys) xs (fold-right cons ys xs))))))))
+
+(time
+  (test 'fold-right->append-extra-3
+    (run 1 (defn)
+      (fresh (body)
+        (absento 1 defn)
+        (absento 2 defn)
+        (absento 3 defn)
+        (absento 4 defn)
+        (== defn `(append (lambda (xs ys) ,body)))
+        (evalo
+          `(letrec ((fold-right
+                      (lambda (f acc xs)
+                        (if (null? xs)
+                          acc
+                          (f (car xs) (fold-right f acc (cdr xs)))))))
+             (letrec (,defn)
+               (list (append '() '())
+                     (append '(1) '())
+                     (append '(1) '(2))
+                     (append '(1 2) '(3 4)))))
+          `(() (1) (1 2) (1 2 3 4)))))
+    '(((append
+         (lambda (xs ys)
+           (if (null? ys)
+             xs
+             (fold-right cons ys xs))))))))
 
 (time
   (test 'append->fold-right
@@ -428,21 +533,69 @@
     '(((fold-right (lambda (f acc xs) (if (null? xs) acc (f (car xs) (fold-right f acc (cdr xs))))))))))
 
 (time
-  (test 'not-so-good-append
+  (test 'append->fold-right-extra
     (run 1 (defn)
-      (fresh ()
+      (fresh (body)
+        (absento 1 defn)
         (absento 1 defn)
         (absento 2 defn)
         (absento 3 defn)
         (absento 4 defn)
         (absento 5 defn)
         (absento 6 defn)
+        (== defn `(fold-right (lambda (f acc xs) ,body)))
+        (evalo
+          `(letrec (,defn)
+             (letrec ((append
+                        (lambda (xs ys)
+                          (if (null? ys) xs (fold-right cons ys xs)))))
+               (list (append '() 0)
+                     (append '(1) '(2))
+                     (append '(3 4) '(5 6)))))
+          `(0 (1 2) (3 4 5 6)))))
+    '(((fold-right (lambda (f acc xs) (if (null? xs) acc (f (car xs) (fold-right f acc (cdr xs))))))))))
+
+;(time
+  ;(test 'append->fold-right-extra
+    ;(run 1 (defn)
+      ;(fresh (body)
+        ;(absento 0 defn)
+        ;(absento 1 defn)
+        ;(absento 2 defn)
+        ;(absento 3 defn)
+        ;(absento 4 defn)
+        ;(absento 5 defn)
+        ;(absento 6 defn)
+        ;(== defn `(fold-right (lambda (f acc xs) ,body)))
+        ;(evalo
+          ;`(letrec (,defn)
+             ;(letrec ((append
+                        ;(lambda (xs ys)
+                          ;(if (null? ys) xs (fold-right cons ys xs)))))
+               ;(list (append '() '())
+                     ;(append '(0) '())
+                     ;(append '(1) '(2))
+                     ;(append '(3 4) '(5 6)))))
+          ;`(() (0) (1 2) (3 4 5 6)))))
+    ;'(((fold-right (lambda (f acc xs) (if (null? xs) acc (f (car xs) (fold-right f acc (cdr xs))))))))))
+
+(time
+  (test 'not-so-good-append
+    (run 1 (defn)
+      (fresh (body)
+        (absento 1 defn)
+        (absento 2 defn)
+        (== defn `(append (lambda (xs ys) ,body)))
         (evalo
           `(letrec (,defn)
              (list (append '() '())
                    (append '(1) '(2))))
           `(() (1 2)))))
-    '(((append (lambda (_.0 _.1) (if (null? _.1) _.1 (cons (car _.0) _.1)))) (=/= ((_.0 _.1)) ((_.0 car)) ((_.0 cons)) ((_.0 if)) ((_.0 null?)) ((_.1 car)) ((_.1 cons)) ((_.1 if)) ((_.1 null?))) (sym _.0 _.1)))))
+    '(((append
+         (lambda (xs ys)
+           (if (null? ys)
+             ys
+             (cons (car xs) ys))))))))
 
 (time
   (test 'good-append
@@ -452,48 +605,53 @@
         (absento 2 defn)
         (absento 3 defn)
         (absento 4 defn)
-        (absento 5 defn)
-        (absento 6 defn)
         (evalo
           `(letrec (,defn)
              (list (append '() '())
                    (append '(1) '(2))
-                   (append '(3 4) '(5 6))))
-          `(() (1 2) (3 4 5 6)))))
+                   (append '(1 2) '(3 4))))
+          `(() (1 2) (1 2 3 4)))))
     '(((append (lambda (_.0 _.1) (if (null? _.0) _.1 (cons (car _.0) (append (cdr _.0) _.1))))) (=/= ((_.0 _.1)) ((_.0 append)) ((_.0 car)) ((_.0 cdr)) ((_.0 cons)) ((_.0 if)) ((_.0 null?)) ((_.1 append)) ((_.1 car)) ((_.1 cdr)) ((_.1 cons)) ((_.1 if)) ((_.1 null?))) (sym _.0 _.1)))))
 
-(time
-  (test 'good-append-clean
-    (run 1 (defn)
-      (fresh (body)
-        (absento 1 defn)
-        (absento 2 defn)
-        (absento 3 defn)
-        (absento 4 defn)
-        (absento 5 defn)
-        (absento 6 defn)
-        (== defn `(append (lambda (xs ys) ,body)))
-        (evalo
-          `(letrec (,defn)
-             (list (append '() '())
-                   (append '(1) '(2))
-                   (append '(3 4) '(5 6))))
-          `(() (1 2) (3 4 5 6)))))
-    '(((append
-         (lambda (xs ys)
-           (if (null? xs)
-             ys
-             (cons (car xs) (append (cdr xs) ys)))))))))
+;(time
+  ;(test 'good-append-clean
+    ;(run 1 (defn)
+      ;(fresh (body)
+        ;(absento 1 defn)
+        ;(absento 2 defn)
+        ;(absento 3 defn)
+        ;(absento 4 defn)
+        ;(== defn `(append (lambda (xs ys) ,body)))
+        ;(evalo
+          ;`(letrec (,defn)
+             ;(list (append '() '())
+                   ;(append '(1) '())
+                   ;(append '(1) '(2))
+                   ;(append '(1 2) '(3 4))))
+          ;`(() (1) (1 2) (1 2 3 4)))))
+    ;'(((append
+         ;(lambda (xs ys)
+           ;(if (null? xs)
+             ;ys
+             ;(if (null? ys)
+               ;xs
+               ;(cons (car xs) (append (cdr xs) ys))))))))))
 
 (time
   (test 'bad-append
     (run 1 (defn)
-      (evalo
-        `(letrec (,defn)
-           (list (append '() '())
-                 (append '(1) '(2))))
-        `(() (1 2))))
-    '(((append (lambda (_.0 _.1) (if (null? _.1) _.1 '(1 2)))) (=/= ((_.0 _.1)) ((_.0 if)) ((_.0 null?)) ((_.0 quote)) ((_.1 if)) ((_.1 null?)) ((_.1 quote))) (sym _.0 _.1)))))
+      (fresh (body)
+        (== defn `(append (lambda (xs ys) ,body)))
+        (evalo
+          `(letrec (,defn)
+             (list (append '() '())
+                   (append '(1) '(2))))
+          `(() (1 2)))))
+    '(((append
+         (lambda (xs ys)
+           (if (null? ys)
+             ys
+             '(1 2))))))))
 
 (time
   (test 'append-append2
