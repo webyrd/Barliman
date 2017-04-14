@@ -5,7 +5,8 @@ Joint work with [Greg Rosenblatt](https://github.com/gregr).
 ---------------------------------------
 
 > He thinks less than he talks, and slower; yet he can see through a brick wall in time (as they say in Bree).
---- Gandalf the Grey, about Barliman Butterbur
+
+– Gandalf the Grey, about [Barliman Butterbur](https://en.wikipedia.org/wiki/Barliman_Butterbur).
 
 From *The Lord of the Rings: The Fellowship of the Ring* by J.R.R. Tolkien
 
@@ -52,9 +53,9 @@ Here are a few screenshots of Barliman, using the Mac implementation as of June 
 
 **Update:**  I've added a few newer screenshots from June 16, 2016.  Once Barliman stops changing as rapidly I'll update all the screenshots.
 
-**Update --- 10 October 2016:**  Please see the [interesting_examples(https://github.com/webyrd/Barliman/tree/master/interesting_examples) directory for more recent examples and screenshots.
+**Update – 10 October 2016:**  Please see the [interesting_examples](https://github.com/webyrd/Barliman/tree/master/interesting_examples) directory for more recent examples and screenshots.
 
-**Update --- 4 December 2016:**  The [Clojure/conj 2016 talk](https://www.youtube.com/watch?v=er_lLvkklsk) is currently the best source of up-to-date information on Barliman.
+**Update – 4 December 2016:**  The [Clojure/conj 2016 talk](https://www.youtube.com/watch?v=er_lLvkklsk) is currently the best source of up-to-date information on Barliman.
 
 The first screenshot shows the main editor window.  The `Scheme Definition` edit pane contains the complete (fully instantiated) and correct definition of `append`, the list concatenation function in Barliman's default "miniScheme" language.  `append` will be our simple running example in these screenshots.  The edit window also contains three tests; each test contains an input expression, and the expected value of that expression.  The `Best Guess` pane, which is not editable by the user, contains the same fully instantiated definition of `append` as in the `Scheme Definition` edit pane.
 
@@ -91,7 +92,7 @@ The text for all three tests are red, indicating that none of the tests pass.  T
 
 
 
-Screenshot 4 shows the main editor window after we have begun defining `append` in the `Scheme Definition` edit pane.  Our parentheses are not balanced --- we haven't yet typed a closing parenthesis for the `define` form.  Because of the missing parenthesis, the definition is not a legal Scheme s-expression.  The tests cannot pass, of course, since `append` isn't even an s-expression.  Barliman recognizes this, and turns the text in the `Scheme Definition` edit pane, and the text in the test edit fields, a sickly green color.
+Screenshot 4 shows the main editor window after we have begun defining `append` in the `Scheme Definition` edit pane.  Our parentheses are not balanced – we haven't yet typed a closing parenthesis for the `define` form.  Because of the missing parenthesis, the definition is not a legal Scheme s-expression.  The tests cannot pass, of course, since `append` isn't even an s-expression.  Barliman recognizes this, and turns the text in the `Scheme Definition` edit pane, and the text in the test edit fields, a sickly green color.
 
 (Future versions of Barliman should include a structured editor that will automatically insert balanced parentheses.)
 
@@ -116,13 +117,13 @@ Given the partially-specified defintion of `append` in the `Scheme Definition` e
 
 #### Screenshot 6: 
 
-![append example 6 --- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append07.jpg "append example 6 -- partially instantiated code filled in")
+![append example 6 -- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append07.jpg "append example 6 -- partially instantiated code filled in")
 
 
 
 Screenshot 7 shows an *incorrect* partial definition of `append`.  As in the previous screenshot, the partial definition of `append` contains variables representing unknown subexpressions (the `A` and `B` and `C`).  However, in this case the first argument to `cons` is incorrect.  The first argument to `cons` should be `(car l)`, as shown in screenshot 1.  Alternatively, the first argument to `cons` could be an incomplete expression containing a variable representating an unknown subexpression, such as `(car ,B)` from screenshot 6, provided that this incomplete expression is *consistent* with the expression `(car l)`.  Here, however, the first argument to `cons` is the expression `(cdr l)`.  The red text for tests 2 and 3 indicate that these tests are *incompatible* with the partial definition of `append` in the `Scheme Definition` edit pane.  That is, there are no legal miniScheme expressions that could be substituted for the variables `A`, `B`, and `C` that would make tests 2 and 3 pass.
 
-The spinning progress indicator to the upper-right of the `Best Guess` pane indicates that Barliman is trying to find expressions for variables `A`, `B`, and `C` that will make all of the tests pass.  Of course this is impossible --- Barliman should be a little smarter, and cut off the `Best Guess` computation when one of the individual tests fails.
+The spinning progress indicator to the upper-right of the `Best Guess` pane indicates that Barliman is trying to find expressions for variables `A`, `B`, and `C` that will make all of the tests pass.  Of course this is impossible – Barliman should be a little smarter, and cut off the `Best Guess` computation when one of the individual tests fails.
 
 The important thing about this example is that Barliman was able to prove that the partial definition of `append` is incorrect, without `append` being fully defined.  More precisely, the partial definition of append is inconsistent with respect to tests 1 through 3 *and* the semantics of miniScheme (which can be edited by the programmer).
 
@@ -132,7 +133,7 @@ The important thing about this example is that Barliman was able to prove that t
 
 Screenshot 8 shows another partially-instantiated, but incorrect, definition of `append`.  The base case of `append` should be `s` instead of `l`, yet all the text is in black, indicating that the individual tests are compatible with the definition so far.  The problem is that we don't have a test that exposes that this partial definition is wrong.  We'll fix this in the next screenshot.
 
-This is one danger of using tests for feedback, of course --- in general, no finite number of tests is sufficient to prove our definition is correct.  I hope that future versions of Barliman will include other ways to specify the behavior of programs, which might include specifying program properties, or providing a "reference" implementation of a function that is being redefined to perform faster, etc.
+This is one danger of using tests for feedback, of course – in general, no finite number of tests is sufficient to prove our definition is correct.  I hope that future versions of Barliman will include other ways to specify the behavior of programs, which might include specifying program properties, or providing a "reference" implementation of a function that is being redefined to perform faster, etc.
 
 #### Screenshot 8:
 
@@ -145,13 +146,13 @@ In screenshot 9 we add a new test, test 4, that shows that the base case of `app
 
 ![append example 9 -- partially instantiated code with the missing test](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_08/append20.jpg "append example 9 -- partially instantiated code with the missing test")
 
-Screenshot 10 shows a limitation of Barliman's program synthesis.  Here the partially-specified definition of `append` contains only a single variable, `A`, representing an unknown subexpression.  Ideally Barliman would quickly figure out that `A` should be the expression `(cdr l)`.  However, for this example Barliman seems to get "stuck" -- we can see the spinning progress indicators to the upper-right of the `Best Guess` pane and the `Test 2` and `Test 3` edit fields, indicating that Barliman is still "thinking".  I let Barliman run for a minute or two, but it didn't find a value for `A` in that time.  (Adding the notion of "parsimony" to Barliman, so it tries to generate the smallest terms first, might help with this example.)
+Screenshot 10 shows a limitation of Barliman's program synthesis.  Here the partially-specified definition of `append` contains only a single variable, `A`, representing an unknown subexpression.  Ideally Barliman would quickly figure out that `A` should be the expression `(cdr l)`.  However, for this example Barliman seems to get "stuck" – we can see the spinning progress indicators to the upper-right of the `Best Guess` pane and the `Test 2` and `Test 3` edit fields, indicating that Barliman is still "thinking".  I let Barliman run for a minute or two, but it didn't find a value for `A` in that time.  (Adding the notion of "parsimony" to Barliman, so it tries to generate the smallest terms first, might help with this example.)
 
-We could allow Barliman to keep thinking --- perhaps it would find the answer in five minutes, or in an hour (provided our computer has enough RAM!).  However, in practice we would probably try filling in `A` manually.  If we were to type `(cdr ,B)` in place of `,A`, Barliman would immedialy guess in the correct, trivial subexpression `l` for the variable `B`.
+We could allow Barliman to keep thinking – perhaps it would find the answer in five minutes, or in an hour (provided our computer has enough RAM!).  However, in practice we would probably try filling in `A` manually.  If we were to type `(cdr ,B)` in place of `,A`, Barliman would immedialy guess in the correct, trivial subexpression `l` for the variable `B`.
 
 This example shows how program synthesis in Barliman can be much slower than we might hope in certain cases.  However, since Barliman is a text editor, and since multicore computers with lots of RAM are now ubiquitous, I see these examples from a "glass half full" perspective.  Sometimes Barliman can help you, either by guessing the rest of your incomplete definition, or by proving that there is no completion for your partially-specified definition that is consistent with your tests.  In this case you win.  Sometimes Barliman can't help you, in which case you use it like a regular text editor.  In this case you use more CPU cyles and RAM on your machine, but otherwise edit text normally.
 
-Of course, Barliman isn't currently a particularly *good* text editor, especially compared to Emacs with paredit mode, to take one example.  This problem is only a matter of engineering --- in fact, Barliman-like functionality could be added to Emacs, or to another editor.  Or Barliman could get more sophisticated editing abilities.
+Of course, Barliman isn't currently a particularly *good* text editor, especially compared to Emacs with paredit mode, to take one example.  This problem is only a matter of engineering – in fact, Barliman-like functionality could be added to Emacs, or to another editor.  Or Barliman could get more sophisticated editing abilities.
 
 A bigger drawback is that the semantics for the language you are writing in must be specified in miniKanren.  This is fine if you are writing in a minimal Scheme subset, such as miniScheme.  This isn't so great if you want to program in full Clojure or Racket or Javascript or Ruby.  Finding ways to scale this technology is an open problem.  The solution may not be miniKanren or constraint logic programming, but rather another synthesis approach.  I don't know.  I do hope, however, that Barliman will make people think about how synthesis capabilities can be integrated into editors, especially for dynamic languages.
 
@@ -326,7 +327,7 @@ TODO:
 * think about contextual menus/right click and also drag and shift-drag.  What should these do?
 * make sure Semantics and the main Barliman windows can be reopened if the user closes them!  Currently there doesn't seem to be a way to get the window back.  Perhaps allow the user to hide the windows, but not close them?  What is the preferred Mac way?
 * for the case in which a simple function is being used to generate test inputs and answers for a more complex version of the same function, may need or want a grounder to make sure answers are fully ground.  May also want a grounder for code, esp for the best guess pane.  Although grounding code may not be necessary or ideal.
-* would be smart to only re-run Scheme processes when the Scheme code actually *changes* -- for example, white space characters outside of an S-expr shouldn't trigger re-evaluation.  One way would be to compare "before" and "after" S-exprs to see if anything has changed.  Could run a single Scheme instance and call `equal?` to see if the code has actually changed.  This could be a big win for expensive computations.
+* would be smart to only re-run Scheme processes when the Scheme code actually *changes* – for example, white space characters outside of an S-expr shouldn't trigger re-evaluation.  One way would be to compare "before" and "after" S-exprs to see if anything has changed.  Could run a single Scheme instance and call `equal?` to see if the code has actually changed.  This could be a big win for expensive computations.
 * add ability to save and load examples/tests/semantics, and include interesting examples, such as a tiny Scheme interpreter written in Scheme, state machine using mutual recursion, examples from pearls, etc.
 * add structured editor for semantics and for type inferencer (as an alternative to/in addition to the free-form editor)
 * possibly move as much work as possible into NSTasks, such as loading files.
