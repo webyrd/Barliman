@@ -74,7 +74,7 @@ Let's see how we might have gotten to the final version of `append` using Barlim
 Screenshot 2 shows the empty main editor window, immediatly after starting Barliman.  We know we want to define `append`, so in true test-drived development style we begin by writing our tests cases.
 
 
-#### Screenshot 2: 
+#### Screenshot 2:
 
 ![append example 2 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append13.jpg "append example 2 -- ")
 
@@ -86,7 +86,7 @@ The text for all three tests are red, indicating that none of the tests pass.  T
 
 (From an interface design standpoint, whether to use colors, which colors to use, which text fields to hilight, etc., are all open questions in my mind.  Over time I hope to make it much more clear exactly which part of the code is failing, and why.)
 
-#### Screenshot 3: 
+#### Screenshot 3:
 
 ![append example 3 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append09.jpg "append example 3 -- ")
 
@@ -96,7 +96,7 @@ Screenshot 4 shows the main editor window after we have begun defining `append` 
 
 (Future versions of Barliman should include a structured editor that will automatically insert balanced parentheses.)
 
-#### Screenshot 4: 
+#### Screenshot 4:
 
 ![append example 4 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append11.jpg "append example 4 -- ")
 
@@ -106,16 +106,16 @@ Screenshot 5 shows the main editor window after we have added the closing parent
 
 (Currently Barliman doesn't actually check that definitions are grammatically correct.  Rather, Barliman uses evaluation of the tests to check whether code is *semantically* legal, rather than syntactically legal.  Future versions of Barliman will probably include explicit grammars that are checked, in addition to semantic rules.)  (Update: Barliman now includes a relational parser for the miniScheme language, as is shown in the newer screenshots at the end.)
 
-#### Screenshot 5: 
+#### Screenshot 5:
 
 ![append example 5 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append10.jpg "append example 5 -- ")
 
 
 In screenshot 6 we can see that the programmer has partially specified the defintion of `append`.  The definition is a syntactally-correct s-expression, and indeed is a syntactically correct use of miniScheme's `define` form.  Importantly, the definition of `append` is only partially specified, and contains four (logic) variables (`A`, `B`, `C`, and `D`) representing unknown subexpressions.  In Barliman variables representing unknown subexpressions are single-letter upper-case variables `A` through `Z`.  (Note to Schemers: The comma (`,`) that usually occurs before these letters is necessary because the code in the `Scheme Definition` edit pane is implicitly quasiqoted.)
 
-Given the partially-specified defintion of `append` in the `Scheme Definition` edit pane, along with the three tests, Barliman is able to correctly "guess" the code corresponding to these variables.  The correct and complete definition of `append` is displayed in the `Best Guess` pane.  Barliman guesses the correct code in this case in a second or less.  All of the text in the main editor window is black, indicating that all of the code is syntactically correct, and that all three tests pass given the completed definition of `append` shown in the `Best Guess` pane. 
+Given the partially-specified defintion of `append` in the `Scheme Definition` edit pane, along with the three tests, Barliman is able to correctly "guess" the code corresponding to these variables.  The correct and complete definition of `append` is displayed in the `Best Guess` pane.  Barliman guesses the correct code in this case in a second or less.  All of the text in the main editor window is black, indicating that all of the code is syntactically correct, and that all three tests pass given the completed definition of `append` shown in the `Best Guess` pane.
 
-#### Screenshot 6: 
+#### Screenshot 6:
 
 ![append example 6 -- partially instantiated code filled in](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append07.jpg "append example 6 -- partially instantiated code filled in")
 
@@ -156,7 +156,7 @@ Of course, Barliman isn't currently a particularly *good* text editor, especiall
 
 A bigger drawback is that the semantics for the language you are writing in must be specified in miniKanren.  This is fine if you are writing in a minimal Scheme subset, such as miniScheme.  This isn't so great if you want to program in full Clojure or Racket or Javascript or Ruby.  Finding ways to scale this technology is an open problem.  The solution may not be miniKanren or constraint logic programming, but rather another synthesis approach.  I don't know.  I do hope, however, that Barliman will make people think about how synthesis capabilities can be integrated into editors, especially for dynamic languages.
 
-#### Screenshot 10: 
+#### Screenshot 10:
 
 ![append example 10 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_03/append12.jpg "append example 10 -- ")
 
@@ -174,7 +174,7 @@ Screenshot 12, like screenshot 11, shows a syntactically incorrect definition of
 
 Once again, the tests are syntactically valid, but fail, and so are shown in red text.
 
-#### Screenshot 12: 
+#### Screenshot 12:
 
 ![append example 12 -- ](https://github.com/webyrd/Barliman/blob/master/screen_shots/2016_june_16/append21.jpg "append example 12 -- ")
 
@@ -202,7 +202,7 @@ The third test, however, is syntactically incorrect.  This is because in miniSch
 
 ### Advantages of Barliman
 
-Barliman is *flexible*.  Barliman can handle operational semantics for various programming languges.  Users can add their own semantics, or modify the semantics for languages that are included with Barliman.  Barliman does not require the language be statically typed, or that the user has supplied enough tests to fully synthesize the function being defined. 
+Barliman is *flexible*.  Barliman can handle operational semantics for various programming languges.  Users can add their own semantics, or modify the semantics for languages that are included with Barliman.  Barliman does not require the language be statically typed, or that the user has supplied enough tests to fully synthesize the function being defined.
 
 Barliman is *interactive*.  Any change to the definition of a function, the corresponding tests, or even the semantics immediately re-triggers the program synthesis solver.
 
@@ -220,7 +220,7 @@ Similarly, Barliman works best for side-effect-free languages, such as a pure su
 
 I do not know how large a language, or how large a definition, Barliman can handle in practice.  I will be experimenting with this...
 
-Barliman can be resource hungry.  Given six example programs and a definition, Barliman will launch eight instances of Chez Scheme, all running in parallel.  Barliman tries to kill these processes when they are not needed, but it is possible for these processes to run for long periods of time (like, forever) and take up unbounded amounts of RAM.  
+Barliman can be resource hungry.  Given six example programs and a definition, Barliman will launch eight instances of Chez Scheme, all running in parallel.  Barliman tries to kill these processes when they are not needed, but it is possible for these processes to run for long periods of time (like, forever) and take up unbounded amounts of RAM.
 
 Barliman currently isn't a very good at standard text editing.  For example, anyone used to paredit or structured text editing will miss those features in Barliman, at least for now.  I do want to add these features to Barliman, especially since I expect they will make the synthesis aspects easier to explore.
 
@@ -368,7 +368,7 @@ LONGER TERM:
 * add abstract interpretation for miniKanren to speed up the synthesis
 * use stochastic/probabilistic extensions to miniKanren to improve synthesis capabilities.  For example, see:
 
- Eric Schkufza, Rahul Sharma, and Alex Aiken. 2013. Stochastic superoptimization. In Proceedings of the eighteenth international conference on Architectural support for programming languages and operating systems (ASPLOS '13). ACM, New York, NY, USA, 305-316. DOI=http://dx.doi.org/10.1145/2451116.2451150 
+ Eric Schkufza, Rahul Sharma, and Alex Aiken. 2013. Stochastic superoptimization. In Proceedings of the eighteenth international conference on Architectural support for programming languages and operating systems (ASPLOS '13). ACM, New York, NY, USA, 305-316. DOI=http://dx.doi.org/10.1145/2451116.2451150
 https://cs.stanford.edu/people/sharmar/pubs/asplos291-schkufza.pdf
 
 
@@ -403,7 +403,7 @@ SUSPECT IDEAS:
 INTERESTING IDEAS:
 
 * Tom Gilray suggests using a simplified intermediate representation (IR) that disallows shadowing, has `if` but not `cond`, etc.  Could have the IR be the macro expanded code.  Could possibly reverse engineer/infer macro calls that could have produced the IR.
-* Tom Gilray suggests changing the interface to just have a single editor window, which allows for definitions and for test calls/results.  I suspect this is the right way to go, although it will involve significant changes to Barliman.  Tom also suggests having arrows to the right of each logic variable, showing the current value of each variable. 
+* Tom Gilray suggests changing the interface to just have a single editor window, which allows for definitions and for test calls/results.  I suspect this is the right way to go, although it will involve significant changes to Barliman.  Tom also suggests having arrows to the right of each logic variable, showing the current value of each variable.
 * perhaps use delayed goals to implement arithmetic over floating point numbers, and other tricky operations.  If the arguments do not become instantiated enough, Barliman should be non-commital (can't synthesize code, and can't prove tests are not consistent with the code until the code is more instantiated).
 * Greg Ronsenblatt suggests dividing tests into a 'training' set and a 'test' set, as is done in machine learning to avoid overfitting.  Of course this could also lead into 'propety-based testing', generators, etc.
 * Jonas Kölker suggests synthesizing multiple definitions, or perhaps even all of the Haskell Prelude-style list functions, simultaneously, based on the relationships between the functions, and their Quickcheck-style properties.  He also suggests using properties like `reverse (xs++ys) == reverse ys ++ reverse xs` and `map f (xs++ys) == map f xs ++ map f ys` for synthesis.
