@@ -59,6 +59,8 @@ Here are a few screenshots of Barliman, using the Mac implementation as of June 
 
 **Update – 4 December 2016:**  The [Clojure/conj 2016 talk](https://www.youtube.com/watch?v=er_lLvkklsk) is currently the best source of up-to-date information on Barliman.
 
+**The following descriptions are based on an older and far less capable version.  TODO: update them.**
+
 The first screenshot shows the main editor window.  The `Scheme Definition` edit pane contains the complete (fully instantiated) and correct definition of `append`, the list concatenation function in Barliman's default "miniScheme" language.  `append` will be our simple running example in these screenshots.  The edit window also contains three tests; each test contains an input expression, and the expected value of that expression.  The `Best Guess` pane, which is not editable by the user, contains the same fully instantiated definition of `append` as in the `Scheme Definition` edit pane.
 
 All the text in the editor window is black, indicating that all the information in the editor is consistent and valid.  The definition of `append` is a valid symbolic expression (s-expression), and is indeed a syntactically valid miniScheme definition.  The test expressions and expected values are syntactically valid, and consistent with each other.
