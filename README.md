@@ -49,6 +49,8 @@ Barliman is general enough to handle multiple programming languages.  In fact, t
 
 ### Barliman in action
 
+![synthesizing append from scratch](https://github.com/webyrd/Barliman/blob/master/animations/animated-append.gif "synthesizing append from scratch")
+
 Here are a few screenshots of Barliman, using the Mac implementation as of June 4, 2016:
 
 **Update:**  I've added a few newer screenshots from June 16, 2016.  Once Barliman stops changing as rapidly I'll update all the screenshots.
