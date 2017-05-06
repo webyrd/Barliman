@@ -756,10 +756,12 @@
       [(== prim-id 'car)
        (fresh (d)
          (=/= 'closure val)
+         (=/= 'prim val)
          (eval-listo rands env `((,val . ,d))))]
       [(== prim-id 'cdr)
        (fresh (a)
          (=/= 'closure a)
+         (=/= 'prim val)
          (eval-listo rands env `((,a . ,val))))]
       [(== prim-id 'null?)
        (fresh (v)
@@ -988,7 +990,7 @@
 (define (literalo t)
   (conde1$ (((t t)))
     ((numbero t))
-    ((symbolo t) (=/= 'closure t))
+    ((symbolo t) (=/= 'closure t) (=/= 'prim t))
     ((booleano t))
     ((== '() t))))
 
@@ -1020,6 +1022,7 @@
   (fresh (val)
     (symbolo var)
     (=/= 'closure mval)
+    (=/= 'prim mval)
     (conde1 (((var var) (mval mval) (penv penv)))
       ((== mval val)
        (== penv penv-out)
@@ -1108,6 +1111,7 @@
     ((fresh (p)
        (== (list 'unquote p) quasi-p)
        (=/= 'closure mval)
+       (=/= 'prim mval)
        (p-no-match p mval penv penv-out)))
     ((fresh (a d)
        (== `(,a . ,d) quasi-p)
