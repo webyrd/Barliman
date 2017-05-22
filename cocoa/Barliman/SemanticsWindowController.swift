@@ -43,7 +43,7 @@ class SemanticsWindowController: NSWindowController {
         
         let interp_path: NSString? = bundle.path(forResource: interpFileName, ofType: "scm", inDirectory: "mk-and-rel-interp") as NSString?
         
-        let path = URL(fileURLWithPath: interp_path as! String)
+        let path = URL(fileURLWithPath: interp_path! as String)
         
         // from http://stackoverflow.com/questions/24097826/read-and-write-data-from-text-file
         do {

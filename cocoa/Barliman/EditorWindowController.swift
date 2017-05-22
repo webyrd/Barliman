@@ -418,8 +418,8 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let new_query_file_actual_alltests = "barliman-new-query-actual-alltests.scm"
 
 
-        let mk_vicare_path_string = mk_vicare_path as! String
-        let mk_path_string = mk_path as! String
+        let mk_vicare_path_string = mk_vicare_path! as String
+        let mk_path_string = mk_path! as String
 
         let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
         let load_mk_string: String = "(load \"\( mk_path_string )\")"

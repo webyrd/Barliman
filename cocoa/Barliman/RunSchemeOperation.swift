@@ -364,8 +364,8 @@ class RunSchemeOperation: Operation {
 
 
 
-            let datastring = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as! String
-            let errorDatastring = NSString(data: errorData, encoding: String.Encoding.utf8.rawValue) as! String
+            let datastring = NSString(data: data, encoding: String.Encoding.utf8.rawValue)! as String
+            let errorDatastring = NSString(data: errorData, encoding: String.Encoding.utf8.rawValue)! as String
             let taskType = self.taskType
 
             let ewc = self.editorWindowController
