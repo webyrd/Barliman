@@ -774,13 +774,15 @@
              (fresh () assign-result eval-args))))]
       [(== prim-id 'pair?)
        (fresh (v)
-         (let ((assign-true (fresh (a d) (== #t val) (== `(,a . ,d) v)))
-               (assign-false (fresh () (== #f val) (conde$
-                                                     ((== '() v))
-                                                     ((symbolo v))
-                                                     ((== #f v))
-                                                     ((== #t v))
-                                                     ((numbero v)))))
+         (let ((assign-true (fresh (a d) (== #t val) (== `(,a . ,d) v) (=/= 'closure a) (=/= 'prim a)))
+               (assign-false (fresh (d) (== #f val) (conde$
+                                                      ((== '() v))
+                                                      ((symbolo v))
+                                                      ((== #f v))
+                                                      ((== #t v))
+                                                      ((numbero v))
+                                                      ((== `(closure . ,d) v))
+                                                      ((== `(prim . ,d) v)))))
                (eval-args (eval-listo rands env `(,v))))
            (if (or (var? val) (eq? val #f))
              (fresh () eval-args (conde$ (assign-true) (assign-false)))
