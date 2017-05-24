@@ -47,6 +47,10 @@
 
     ((handle-matcho expr env val))
 
+    ((fresh (begin-body)
+       (== `(begin . ,begin-body) expr)
+       (eval-begino '() begin-body env val)))
+
     ((fresh (b* letrec-body)
        (== `(letrec ,b* ,letrec-body) expr)
        (not-in-envo 'letrec env)
@@ -103,6 +107,20 @@
          (symbolo p-name)
          (paramso x)
          (loop b*-rest `((,p-name . (lambda ,x ,body)) . ,rb*)))))))
+
+;; NOTE: rec-defs is Scheme state, not a logic term!
+(define (eval-begino rec-defs begin-body env val)
+  (conde
+    ((fresh (e)
+        (== `(,e) begin-body)
+        (if (null? rec-defs)
+          (eval-expo e env val)
+          (eval-expo `(letrec ,rec-defs ,e) env val))))
+    ((fresh (name args body begin-rest)
+        (== `((define ,name (lambda ,args ,body)) . ,begin-rest) begin-body)
+        (symbolo name)
+        (eval-begino
+          (cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
 
 (define (eval-listo expr env val)
   (conde
