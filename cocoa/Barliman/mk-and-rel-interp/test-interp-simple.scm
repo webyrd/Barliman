@@ -5,14 +5,13 @@
 
 
 ;; TODO: support more syntactic forms
-;;   multiple letrec bindings
 ;;   begin
 
 
-;(test 'letrec-keyword-reference-1
-  ;(run* (q) (evalo '(letrec ((quote (lambda x 5))) quote)
-                   ;q))
-  ;'(((closure (lambda x 5) ((letrec (rec quote lambda x 5)) (val cons prim . cons) (val car prim . car) (val cdr prim . cdr) (val null? prim . null?) (val symbol? prim . symbol?) (val not prim . not) (val equal? prim . equal?) (val list closure (lambda x x) ()))))))
+(test 'letrec-keyword-reference-1
+  (cadaar (run* (q) (evalo '(letrec ((quote (lambda x 5))) quote)
+                   q)))
+  '(lambda x 5))
 
 (test 'letrec-keyword-reference-2
   (run* (q) (evalo '(letrec ((foo (lambda x 5))) quote)
@@ -24,26 +23,26 @@
                    q))
   '((6)))
 
-;(test 'letrec-keyword-reference-4
-  ;(run* (q) (evalo '(letrec ((bar (lambda (y) quote)) (quote (lambda x x))) 6)
-                   ;q))
-  ;'((6)))
+(test 'letrec-keyword-reference-4
+  (run* (q) (evalo '(letrec ((bar (lambda (y) quote)) (quote (lambda x x))) 6)
+                   q))
+  '((6)))
 
-;(test 'letrec-keyword-reference-5
-  ;(run* (q) (evalo '(letrec ((quote (lambda x x)) (bar (lambda (y) quote))) 6)
-                   ;q))
-  ;'((6)))
+(test 'letrec-keyword-reference-5
+  (run* (q) (evalo '(letrec ((quote (lambda x x)) (bar (lambda (y) quote))) 6)
+                   q))
+  '((6)))
 
-;(printf "*** this next test will fail, since 'evalo' doesn't check the syntax of lambda bodies")
-;(test 'letrec-keyword-reference-6
-  ;(run* (q) (evalo '(letrec ((foo (lambda x x)) (bar (lambda (y) quote))) 6)
-                   ;q))
-  ;'())
+(printf "*** this next test will fail, since 'evalo' doesn't check the syntax of lambda bodies")
+(test 'letrec-keyword-reference-6
+  (run* (q) (evalo '(letrec ((foo (lambda x x)) (bar (lambda (y) quote))) 6)
+                   q))
+  '())
 
-;(test 'letrec-keyword-reference-7
-  ;(run* (q) (evalo '(letrec ((foo (lambda x x)) (bar (lambda (y) quote))) (bar 6))
-                   ;q))
-  ;'())
+(test 'letrec-keyword-reference-7
+  (run* (q) (evalo '(letrec ((foo (lambda x x)) (bar (lambda (y) quote))) (bar 6))
+                   q))
+  '())
 
 
 
@@ -86,12 +85,12 @@
 
 
 
-;(test 'letrec-with-no-bindings-1
-  ;(run* (q)
-    ;(evalo '(letrec ()
-              ;5)
-           ;q))
-  ;'((5)))
+(test 'letrec-with-no-bindings-1
+  (run* (q)
+    (evalo '(letrec ()
+              5)
+           q))
+  '((5)))
 
 ;(test 'begin-with-definitions-1
   ;(run* (q)
@@ -140,71 +139,71 @@
     (((1 2 3 4) (5)))
     (((1 2 3 4 5) ()))))
 
-;(test 'even?/odd?-1
-  ;(run* (q)
-    ;(evalo '(letrec ((even? (lambda (n)
-                              ;(if (equal? 'z n)
-                                  ;#t
-                                  ;(odd? (cdr n)))))
-                     ;(odd? (lambda (n)
-                             ;(if (equal? 'z n)
-                                 ;#f
-                                 ;(even? (cdr n))))))
-              ;(even? 'z))
-           ;q))
-  ;'((#t)))
+(test 'even?/odd?-1
+  (run* (q)
+    (evalo '(letrec ((even? (lambda (n)
+                              (if (equal? 'z n)
+                                  #t
+                                  (odd? (cdr n)))))
+                     (odd? (lambda (n)
+                             (if (equal? 'z n)
+                                 #f
+                                 (even? (cdr n))))))
+              (even? 'z))
+           q))
+  '((#t)))
 
-;(test 'even?/odd?-2
-  ;(run* (q) (evalo '(letrec ((even? (lambda (n)
-                                      ;(if (equal? 'z n)
-                                          ;#t
-                                          ;(odd? (cdr n)))))
-                             ;(odd? (lambda (n)
-                                     ;(if (equal? 'z n)
-                                         ;#f
-                                         ;(even? (cdr n))))))
-                      ;(odd? 'z))
-                   ;q))
-  ;'((#f)))
+(test 'even?/odd?-2
+  (run* (q) (evalo '(letrec ((even? (lambda (n)
+                                      (if (equal? 'z n)
+                                          #t
+                                          (odd? (cdr n)))))
+                             (odd? (lambda (n)
+                                     (if (equal? 'z n)
+                                         #f
+                                         (even? (cdr n))))))
+                      (odd? 'z))
+                   q))
+  '((#f)))
 
-;(test 'even?/odd?-3
-  ;(run* (q) (evalo '(letrec ((even? (lambda (n)
-                                      ;(if (equal? 'z n)
-                                          ;#t
-                                          ;(odd? (cdr n)))))
-                             ;(odd? (lambda (n)
-                                     ;(if (equal? 'z n)
-                                         ;#f
-                                         ;(even? (cdr n))))))
-                      ;(even? '(s . z)))
-                   ;q))
-  ;'((#f)))
+(test 'even?/odd?-3
+  (run* (q) (evalo '(letrec ((even? (lambda (n)
+                                      (if (equal? 'z n)
+                                          #t
+                                          (odd? (cdr n)))))
+                             (odd? (lambda (n)
+                                     (if (equal? 'z n)
+                                         #f
+                                         (even? (cdr n))))))
+                      (even? '(s . z)))
+                   q))
+  '((#f)))
 
-;(test 'even?/odd?-4
-  ;(run* (q) (evalo '(letrec ((even? (lambda (n)
-                                      ;(if (equal? 'z n)
-                                          ;#t
-                                          ;(odd? (cdr n)))))
-                             ;(odd? (lambda (n)
-                                     ;(if (equal? 'z n)
-                                         ;#f
-                                         ;(even? (cdr n))))))
-                      ;(even? '(s . (s . z))))
-                   ;q))
-  ;'((#t)))
+(test 'even?/odd?-4
+  (run* (q) (evalo '(letrec ((even? (lambda (n)
+                                      (if (equal? 'z n)
+                                          #t
+                                          (odd? (cdr n)))))
+                             (odd? (lambda (n)
+                                     (if (equal? 'z n)
+                                         #f
+                                         (even? (cdr n))))))
+                      (even? '(s . (s . z))))
+                   q))
+  '((#t)))
 
-;(test 'even?/odd?-5
-  ;(run* (q) (evalo '(letrec ((even? (lambda (n)
-                                       ;(if (equal? 'z n)
-                                           ;#t
-                                           ;(odd? (cdr n)))))
-                              ;(odd? (lambda (n)
-                                      ;(if (equal? 'z n)
-                                          ;#f
-                                          ;(even? (cdr n))))))
-                       ;(odd? '(s . (s . z))))
-                    ;q))
-  ;'((#f)))
+(test 'even?/odd?-5
+  (run* (q) (evalo '(letrec ((even? (lambda (n)
+                                       (if (equal? 'z n)
+                                           #t
+                                           (odd? (cdr n)))))
+                              (odd? (lambda (n)
+                                      (if (equal? 'z n)
+                                          #f
+                                          (even? (cdr n))))))
+                       (odd? '(s . (s . z))))
+                    q))
+  '((#f)))
 
 (test 'proof-letrec-1
   (run 1 (prf)

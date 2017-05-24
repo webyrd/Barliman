@@ -47,16 +47,10 @@
 
     ((handle-matcho expr env val))
 
-    ((fresh (p-name x body letrec-body)
-       ;; single-function variadic letrec version
-       (== `(letrec ((,p-name (lambda ,x ,body)))
-              ,letrec-body)
-           expr)
-       (paramso x)
+    ((fresh (b* letrec-body)
+       (== `(letrec ,b* ,letrec-body) expr)
        (not-in-envo 'letrec env)
-       (eval-expo letrec-body
-                  `((rec . ((,p-name . (lambda ,x ,body)))) . ,env)
-                  val)))
+       (eval-letreco b* letrec-body env val)))
 
     ((prim-expo expr env val))))
 
@@ -99,6 +93,16 @@
        (== `((,p-name . ,lam-expr) . ,b*-rest) b*)
        (=/= p-name x)
        (not-in-env-reco x b*-rest env)))))
+
+(define (eval-letreco b* letrec-body env val)
+  (let loop ((b* b*) (rb* '()))
+    (conde
+      ((== '() b*) (eval-expo letrec-body `((rec . ,rb*) . ,env) val))
+      ((fresh (p-name x body b*-rest)
+         (== `((,p-name (lambda ,x ,body)) . ,b*-rest) b*)
+         (symbolo p-name)
+         (paramso x)
+         (loop b*-rest `((,p-name . (lambda ,x ,body)) . ,rb*)))))))
 
 (define (eval-listo expr env val)
   (conde
