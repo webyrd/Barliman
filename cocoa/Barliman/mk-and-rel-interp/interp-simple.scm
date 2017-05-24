@@ -163,7 +163,25 @@
        (== `(,v) a*)
        (conde
          ((== '() v) (== #t val))
-         ((=/= '() v) (== #f val))))]))
+         ((=/= '() v) (== #f val))))]
+    [(== prim-id 'pair?)
+     (fresh (v)
+       (== `(,v) a*)
+       (conde
+         ((fresh (a d)
+            (== #t val)
+            (== `(,a . ,d) v)
+            (=/= 'closure a)
+            (=/= 'prim a)))
+         ((== #f val)
+          (conde
+            ((== '() v))
+            ((symbolo v))
+            ((== #f v))
+            ((== #t v))
+            ((numbero v))
+            ((fresh (d) (== `(closure . ,d) v)))
+            ((fresh (d) (== `(prim . ,d) v)))))))]))
 
 (define (prim-expo expr env val)
   (conde
@@ -236,6 +254,7 @@
                       (symbol? . (val . (prim . symbol?)))
                       (cons . (val . (prim . cons)))
                       (null? . (val . (prim . null?)))
+                      (pair? . (val . (prim . pair?)))
                       (car . (val . (prim . car)))
                       (cdr . (val . (prim . cdr)))
                       . ,empty-env))
