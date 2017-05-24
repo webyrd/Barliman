@@ -19,11 +19,7 @@
     ((fresh (x body)
        (== `(lambda ,x ,body) expr)
        (== `(closure (lambda ,x ,body) ,env) val)
-       (conde
-         ;; Variadic
-         ((symbolo x))
-         ;; Multi-argument
-         ((list-of-symbolso x)))
+       (paramso x)
        (not-in-envo 'lambda env)))
 
     ((fresh (rator x rands body env^ a* res)
@@ -56,11 +52,7 @@
        (== `(letrec ((,p-name (lambda ,x ,body)))
               ,letrec-body)
            expr)
-       (conde
-         ; Variadic
-         ((symbolo x))
-         ; Multiple argument
-         ((list-of-symbolso x)))
+       (paramso x)
        (not-in-envo 'letrec env)
        (eval-expo letrec-body
                   `((rec . ((,p-name . (lambda ,x ,body)))) . ,env)
@@ -118,15 +110,29 @@
        (eval-expo a env v-a)
        (eval-listo d env v-d)))))
 
-;; need to make sure lambdas are well formed.
-;; grammar constraints would be useful here!!!
-(define (list-of-symbolso los)
+(define (paramso params)
+  (conde
+    ; Multiple argument
+    ((list-of-paramso params))
+    ; Variadic
+    ((symbolo params))))
+
+(define (not-in-paramso x params)
+  (conde
+    ((== '() params))
+    ((fresh (a d)
+       (== `(,a . ,d) params)
+       (=/= a x)
+       (not-in-paramso x d)))))
+
+(define (list-of-paramso los)
   (conde
     ((== '() los))
     ((fresh (a d)
        (== `(,a . ,d) los)
        (symbolo a)
-       (list-of-symbolso d)))))
+       (list-of-paramso d)
+       (not-in-paramso a d)))))
 
 (define (ext-env*o x* a* env out)
   (conde
