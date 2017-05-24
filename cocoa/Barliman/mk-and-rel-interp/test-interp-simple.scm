@@ -45,6 +45,14 @@
   `((1 2) ((cons 3 4) (5 . 6)))
   `((())))
 
+(test-barliman 'let*-1 () ()
+  '()
+  '(let ((x 4))
+     (list (let ((x 5) (y (list x x))) y)
+           (let* ((x 5) (y (list x x))) y)))
+  `((4 4) (5 5))
+  `((())))
+
 
 (test 'letrec-keyword-reference-1
   (cadaar (run* (q) (evalo '(letrec ((quote (lambda x 5))) quote)
