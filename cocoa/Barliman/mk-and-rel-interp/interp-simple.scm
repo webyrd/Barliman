@@ -181,7 +181,26 @@
             ((== #t v))
             ((numbero v))
             ((fresh (d) (== `(closure . ,d) v)))
-            ((fresh (d) (== `(prim . ,d) v)))))))]))
+            ((fresh (d) (== `(prim . ,d) v)))))))]
+    [(== prim-id 'procedure?)
+     (fresh (v)
+       (== `(,v) a*)
+       (conde
+         ((== #t val)
+          (conde
+            ((fresh (d) (== `(closure . ,d) v)))
+            ((fresh (d) (== `(prim . ,d) v)))))
+         ((== #f val)
+          (conde
+            ((== '() v))
+            ((symbolo v))
+            ((== #f v))
+            ((== #t v))
+            ((numbero v))
+            ((fresh (a d)
+               (== `(,a . ,d) v)
+               (=/= 'closure a)
+               (=/= 'prim a)))))))]))
 
 (define (prim-expo expr env val)
   (conde
@@ -257,6 +276,7 @@
                       (pair? . (val . (prim . pair?)))
                       (car . (val . (prim . car)))
                       (cdr . (val . (prim . cdr)))
+                      (procedure? . (val . (prim . procedure?)))
                       . ,empty-env))
 
 (define handle-matcho
