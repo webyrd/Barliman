@@ -90,7 +90,7 @@
     ((fresh (qq-expr)
        (== (list 'quasiquote qq-expr) expr)
        (not-in-envo 'quasiquote env)
-       (eval-qq-expo qq-expr env val)))
+       (eval-qq-expo 0 qq-expr env val)))
 
     ((prim-expo expr env val))))
 
@@ -158,20 +158,29 @@
         (eval-begino
           (cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
 
-;; TODO: Match Scheme behavior for multi-level quasiquotes.
-(define (eval-qq-expo qq-expr env val)
+;; 'level' is non-relational.
+(define (eval-qq-expo level qq-expr env val)
   (conde
     ((fresh (expr)
        (== (list 'unquote expr) qq-expr)
-       (eval-expo expr env val)))
+       (if (= 0 level)
+         (eval-expo expr env val)
+         (fresh (sub-val)
+           (== (list 'unquote sub-val) val)
+           (eval-qq-expo (- level 1) expr env sub-val)))))
+    ((fresh (expr sub-val)
+       (== (list 'quasiquote expr) qq-expr)
+       (== (list 'quasiquote sub-val) val)
+       (eval-qq-expo (+ level 1) expr env sub-val)))
     ((fresh (qq-a qq-d va vd)
        (== `(,qq-a . ,qq-d) qq-expr)
        (== `(,va . ,vd) val)
        (=/= 'unquote qq-a)
+       (=/= 'quasiquote qq-a)
        (=/= closure-tag qq-a)
        (=/= prim-tag qq-a)
-       (eval-qq-expo qq-a env va)
-       (eval-qq-expo qq-d env vd)))
+       (eval-qq-expo level qq-a env va)
+       (eval-qq-expo level qq-d env vd)))
     ((== qq-expr val)
      (conde$
        ((== '() val))

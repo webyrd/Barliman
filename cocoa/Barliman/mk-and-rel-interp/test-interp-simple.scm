@@ -45,6 +45,12 @@
   `((1 2) ((cons 3 4) (5 . 6)))
   `((())))
 
+(test-barliman 'quasiquote-2 (result) ()
+  '()
+  '(list `(1 2) `((cons 3 4) ,(cons 5 6)) `(,(cons 1 2) `(,(cons 3 4) ,,(cons 5 6))))
+  result
+  '(((() ((1 2) ((cons 3 4) (5 . 6)) ((1 . 2) `(,(cons 3 4) ,(5 . 6))))))))
+
 (test-barliman 'let*-1 () ()
   '()
   '(let ((x 4))
