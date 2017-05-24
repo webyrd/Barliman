@@ -30,7 +30,7 @@
        (== `(,rator . ,rands) expr)
        ;; variadic
        (symbolo x)
-       (== `((,x . (val . ,a*)) . ,env^) res)
+       (== `((val . (,x . ,a*)) . ,env^) res)
        (eval-expo rator env `(closure (lambda ,x ,body) ,env^))
        (eval-expo body res val)
        (eval-listo rands env a*)))
@@ -63,33 +63,50 @@
          ((list-of-symbolso x)))
        (not-in-envo 'letrec env)
        (eval-expo letrec-body
-                  `((,p-name . (rec . (lambda ,x ,body))) . ,env)
+                  `((rec . ((,p-name . (lambda ,x ,body)))) . ,env)
                   val)))
 
     ((prim-expo expr env val))))
 
 (define empty-env '())
 
-(define (lookupo x env t)
-  (fresh (y b rest)
-    (== `((,y . ,b) . ,rest) env)
+(define (lookup-reco k renv x b* t)
     (conde
-      ((== x y)
+      ((== '() b*) (k))
+      ((fresh (b*-rest p-name lam-expr)
+         (== `((,p-name . ,lam-expr) . ,b*-rest) b*)
+         (conde
+           ((== p-name x) (== `(closure ,lam-expr ,renv) t))
+           ((=/= p-name x) (lookup-reco k renv x b*-rest t)))))))
+(define (lookupo x env t)
+  (conde
+    ((fresh (y b rest)
+       (== `((val . (,y . ,b)) . ,rest) env)
        (conde
-         ((== `(val . ,t) b))
-         ((fresh (lam-expr)
-            (== `(rec . ,lam-expr) b)
-            (== `(closure ,lam-expr ,env) t)))))
-      ((=/= x y)
-       (lookupo x rest t)))))
+         ((== x y) (== b t))
+         ((=/= x y) (lookupo x rest t)))))
+    ((fresh (b* rest)
+       (== `((rec . ,b*) . ,rest) env)
+       (lookup-reco (lambda () (lookupo x rest t)) env x b* t)))))
 
 (define (not-in-envo x env)
   (conde
     ((== empty-env env))
     ((fresh (y b rest)
-       (== `((,y . ,b) . ,rest) env)
-       (=/= y x)
-       (not-in-envo x rest)))))
+       (== `((val . (,y . ,b)) . ,rest) env)
+       (=/= x y)
+       (not-in-envo x rest)))
+    ((fresh (b* rest)
+       (== `((rec . ,b*) . ,rest) env)
+       (not-in-env-reco x b* rest)))))
+
+(define (not-in-env-reco x b* env)
+  (conde
+    ((== '() b*) (not-in-envo x env))
+    ((fresh (p-name lam-expr b*-rest)
+       (== `((,p-name . ,lam-expr) . ,b*-rest) b*)
+       (=/= p-name x)
+       (not-in-env-reco x b*-rest env)))))
 
 (define (eval-listo expr env val)
   (conde
@@ -117,7 +134,7 @@
     ((fresh (x a dx* da* env2)
        (== `(,x . ,dx*) x*)
        (== `(,a . ,da*) a*)
-       (== `((,x . (val . ,a)) . ,env) env2)
+       (== `((val . (,x . ,a)) . ,env) env2)
        (symbolo x)
        (ext-env*o dx* da* env2 out)))))
 
@@ -267,16 +284,16 @@
       ((=/= #f t) (eval-expo e2 env val))
       ((== #f t) (eval-expo e3 env val)))))
 
-(define initial-env `((list . (val . (closure (lambda x x) ,empty-env)))
-                      (not . (val . (prim . not)))
-                      (equal? . (val . (prim . equal?)))
-                      (symbol? . (val . (prim . symbol?)))
-                      (cons . (val . (prim . cons)))
-                      (null? . (val . (prim . null?)))
-                      (pair? . (val . (prim . pair?)))
-                      (car . (val . (prim . car)))
-                      (cdr . (val . (prim . cdr)))
-                      (procedure? . (val . (prim . procedure?)))
+(define initial-env `((val . (list . (closure (lambda x x) ,empty-env)))
+                      (val . (not . (prim . not)))
+                      (val . (equal? . (prim . equal?)))
+                      (val . (symbol? . (prim . symbol?)))
+                      (val . (cons . (prim . cons)))
+                      (val . (null? . (prim . null?)))
+                      (val . (pair? . (prim . pair?)))
+                      (val . (car . (prim . car)))
+                      (val . (cdr . (prim . cdr)))
+                      (val . (procedure? . (prim . procedure?)))
                       . ,empty-env))
 
 (define handle-matcho
@@ -326,8 +343,8 @@
   (conde
     ((== empty-env env1) (== env2 env-out))
     ((fresh (y v rest res)
-       (== `((,y . (val . ,v)) . ,rest) env1)
-       (== `((,y . (val . ,v)) . ,res) env-out)
+       (== `((val . (,y . ,v)) . ,rest) env1)
+       (== `((val . (,y . ,v)) . ,res) env-out)
        (regular-env-appendo rest env2 res)))))
 
 (define (match-clauses mval clauses env val)
@@ -350,7 +367,7 @@
       ((== mval val)
        (== penv penv-out)
        (lookupo var penv val))
-      ((== `((,var . (val . ,mval)) . ,penv) penv-out)
+      ((== `((val . (,var . ,mval)) . ,penv) penv-out)
        (not-in-envo var penv)))))
 
 (define (var-p-no-match var mval penv penv-out)
