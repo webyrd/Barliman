@@ -2,14 +2,17 @@
 ;; using the "half-closure" approach from Reynold's definitional
 ;; interpreters.
 
+(define closure-tag (gensym "#%closure"))
+(define prim-tag (gensym "#%primitive"))
+
 (define (evalo expr val)
   (eval-expo expr initial-env val))
 
 (define (eval-expo expr env val)
   (conde
     ((== `(quote ,val) expr)
-     (absento 'closure val)
-     (absento 'prim val)
+     (absento closure-tag val)
+     (absento prim-tag val)
      (not-in-envo 'quote env))
 
     ((numbero expr) (== expr val))
@@ -18,7 +21,7 @@
 
     ((fresh (x body)
        (== `(lambda ,x ,body) expr)
-       (== `(closure (lambda ,x ,body) ,env) val)
+       (== `(,closure-tag (lambda ,x ,body) ,env) val)
        (paramso x)
        (not-in-envo 'lambda env)))
 
@@ -27,21 +30,21 @@
        ;; variadic
        (symbolo x)
        (== `((val . (,x . ,a*)) . ,env^) res)
-       (eval-expo rator env `(closure (lambda ,x ,body) ,env^))
+       (eval-expo rator env `(,closure-tag (lambda ,x ,body) ,env^))
        (eval-expo body res val)
        (eval-listo rands env a*)))
 
     ((fresh (rator x* rands body env^ a* res)
        (== `(,rator . ,rands) expr)
        ;; Multi-argument
-       (eval-expo rator env `(closure (lambda ,x* ,body) ,env^))
+       (eval-expo rator env `(,closure-tag (lambda ,x* ,body) ,env^))
        (eval-listo rands env a*)
        (ext-env*o x* a* env^ res)
        (eval-expo body res val)))
 
     ((fresh (rator x* rands a* prim-id)
        (== `(,rator . ,rands) expr)
-       (eval-expo rator env `(prim . ,prim-id))
+       (eval-expo rator env `(,prim-tag . ,prim-id))
        (eval-primo prim-id a* val)
        (eval-listo rands env a*)))
 
@@ -99,7 +102,7 @@
       ((fresh (b*-rest p-name lam-expr)
          (== `((,p-name . ,lam-expr) . ,b*-rest) b*)
          (conde
-           ((== p-name x) (== `(closure ,lam-expr ,renv) t))
+           ((== p-name x) (== `(,closure-tag ,lam-expr ,renv) t))
            ((=/= p-name x) (lookup-reco k renv x b*-rest t)))))))
 (define (lookupo x env t)
   (conde
@@ -165,8 +168,8 @@
        (== `(,qq-a . ,qq-d) qq-expr)
        (== `(,va . ,vd) val)
        (=/= 'unquote qq-a)
-       (=/= 'closure qq-a)
-       (=/= 'prim qq-a)
+       (=/= closure-tag qq-a)
+       (=/= prim-tag qq-a)
        (eval-qq-expo qq-a env va)
        (eval-qq-expo qq-d env vd)))
     ((== qq-expr val)
@@ -230,13 +233,13 @@
     [(== prim-id 'car)
      (fresh (d)
        (== `((,val . ,d)) a*)
-       (=/= 'closure val)
-       (=/= 'prim val))]
+       (=/= closure-tag val)
+       (=/= prim-tag val))]
     [(== prim-id 'cdr)
      (fresh (a)
        (== `((,a . ,val)) a*)
-       (=/= 'closure a)
-       (=/= 'prim a))]
+       (=/= closure-tag a)
+       (=/= prim-tag a))]
     [(== prim-id 'not)
      (fresh (b)
        (== `(,b) a*)
@@ -271,8 +274,8 @@
          ((fresh (a d)
             (== #t val)
             (== `(,a . ,d) v)
-            (=/= 'closure a)
-            (=/= 'prim a)))
+            (=/= closure-tag a)
+            (=/= prim-tag a)))
          ((== #f val)
           (conde
             ((== '() v))
@@ -280,16 +283,16 @@
             ((== #f v))
             ((== #t v))
             ((numbero v))
-            ((fresh (d) (== `(closure . ,d) v)))
-            ((fresh (d) (== `(prim . ,d) v)))))))]
+            ((fresh (d) (== `(,closure-tag . ,d) v)))
+            ((fresh (d) (== `(,prim-tag . ,d) v)))))))]
     [(== prim-id 'procedure?)
      (fresh (v)
        (== `(,v) a*)
        (conde
          ((== #t val)
           (conde
-            ((fresh (d) (== `(closure . ,d) v)))
-            ((fresh (d) (== `(prim . ,d) v)))))
+            ((fresh (d) (== `(,closure-tag . ,d) v)))
+            ((fresh (d) (== `(,prim-tag . ,d) v)))))
          ((== #f val)
           (conde
             ((== '() v))
@@ -299,8 +302,8 @@
             ((numbero v))
             ((fresh (a d)
                (== `(,a . ,d) v)
-               (=/= 'closure a)
-               (=/= 'prim a)))))))]))
+               (=/= closure-tag a)
+               (=/= prim-tag a)))))))]))
 
 (define (prim-expo expr env val)
   (conde
@@ -367,16 +370,16 @@
       ((=/= #f t) (eval-expo e2 env val))
       ((== #f t) (eval-expo e3 env val)))))
 
-(define initial-env `((val . (list . (closure (lambda x x) ,empty-env)))
-                      (val . (not . (prim . not)))
-                      (val . (equal? . (prim . equal?)))
-                      (val . (symbol? . (prim . symbol?)))
-                      (val . (cons . (prim . cons)))
-                      (val . (null? . (prim . null?)))
-                      (val . (pair? . (prim . pair?)))
-                      (val . (car . (prim . car)))
-                      (val . (cdr . (prim . cdr)))
-                      (val . (procedure? . (prim . procedure?)))
+(define initial-env `((val . (list . (,closure-tag (lambda x x) ,empty-env)))
+                      (val . (not . (,prim-tag . not)))
+                      (val . (equal? . (,prim-tag . equal?)))
+                      (val . (symbol? . (,prim-tag . symbol?)))
+                      (val . (cons . (,prim-tag . cons)))
+                      (val . (null? . (,prim-tag . null?)))
+                      (val . (pair? . (,prim-tag . pair?)))
+                      (val . (car . (,prim-tag . car)))
+                      (val . (cdr . (,prim-tag . cdr)))
+                      (val . (procedure? . (,prim-tag . procedure?)))
                       . ,empty-env))
 
 (define handle-matcho
@@ -413,7 +416,7 @@
 (define (literalo t)
   (conde
     ((numbero t))
-    ((symbolo t) (=/= 'closure t) (=/= 'prim t))
+    ((symbolo t) (=/= closure-tag t) (=/= prim-tag t))
     ((booleano t))
     ((== '() t))))
 
@@ -444,8 +447,8 @@
 (define (var-p-match var mval penv penv-out)
   (fresh (val)
     (symbolo var)
-    (=/= 'closure mval)
-    (=/= 'prim mval)
+    (=/= closure-tag mval)
+    (=/= prim-tag mval)
     (conde
       ((== mval val)
        (== penv penv-out)
@@ -525,8 +528,8 @@
      (literalo quasi-p))
     ((fresh (p)
        (== (list 'unquote p) quasi-p)
-       (=/= 'closure mval)
-       (=/= 'prim mval)
+       (=/= closure-tag mval)
+       (=/= prim-tag mval)
        (p-no-match p mval penv penv-out)))
     ((fresh (a d)
        (== `(,a . ,d) quasi-p)

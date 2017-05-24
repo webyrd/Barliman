@@ -630,7 +630,7 @@
                 (eval-expr ',q
                            'initial-env)))
            q))
-    '((((lambda (_.0) `(,_.0 ',_.0)) '(lambda (_.0) `(,_.0 ',_.0))) (=/= ((_.0 closure)) ((_.0 prim))) (sym _.0)))))
+    `((((lambda (_.0) `(,_.0 ',_.0)) '(lambda (_.0) `(,_.0 ',_.0))) (=/= ((_.0 ,closure-tag)) ((_.0 ,prim-tag))) (sym _.0)))))
 
 
 #|
@@ -640,10 +640,10 @@
 (time
   (test "generate non-trivial quine old-fashioned way"
     (run 4 (q) (evalo q q))
-    '((_.0 (num _.0))
+    `((_.0 (num _.0))
       (#t)
       (#f)
       (((lambda (_.0) (list _.0 (list 'quote _.0)))
         '(lambda (_.0) (list _.0 (list 'quote _.0))))
-       (=/= ((_.0 closure)) ((_.0 list)) ((_.0 prim)) ((_.0 quote))) (sym _.0)))))
+       (=/= ((_.0 ,closure-tag)) ((_.0 list)) ((_.0 ,prim-tag)) ((_.0 quote))) (sym _.0)))))
 |#
