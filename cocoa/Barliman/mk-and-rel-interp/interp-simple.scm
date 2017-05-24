@@ -56,6 +56,11 @@
        (not-in-envo 'letrec env)
        (eval-letreco b* letrec-body env val)))
 
+    ((fresh (qq-expr)
+       (== (list 'quasiquote qq-expr) expr)
+       (not-in-envo 'quasiquote env)
+       (eval-qq-expo qq-expr env val)))
+
     ((prim-expo expr env val))))
 
 (define empty-env '())
@@ -121,6 +126,28 @@
         (symbolo name)
         (eval-begino
           (cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
+
+;; TODO: Match Scheme behavior for multi-level quasiquotes.
+(define (eval-qq-expo qq-expr env val)
+  (conde
+    ((fresh (expr)
+       (== (list 'unquote expr) qq-expr)
+       (eval-expo expr env val)))
+    ((fresh (qq-a qq-d va vd)
+       (== `(,qq-a . ,qq-d) qq-expr)
+       (== `(,va . ,vd) val)
+       (=/= 'unquote qq-a)
+       (=/= 'closure qq-a)
+       (=/= 'prim qq-a)
+       (eval-qq-expo qq-a env va)
+       (eval-qq-expo qq-d env vd)))
+    ((== qq-expr val)
+     (conde$
+       ((== '() val))
+       ((symbolo val))
+       ((== #f val))
+       ((== #t val))
+       ((numbero val))))))
 
 (define (eval-listo expr env val)
   (conde

@@ -39,6 +39,13 @@
          expected-defs)))))
 
 
+(test-barliman 'quasiquote-1 () ()
+  '()
+  '(list `(1 2) `((cons 3 4) ,(cons 5 6)))
+  `((1 2) ((cons 3 4) (5 . 6)))
+  `((())))
+
+
 (test 'letrec-keyword-reference-1
   (cadaar (run* (q) (evalo '(letrec ((quote (lambda x 5))) quote)
                    q)))
