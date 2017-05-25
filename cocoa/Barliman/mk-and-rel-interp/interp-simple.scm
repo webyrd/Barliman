@@ -4,6 +4,7 @@
 
 (define closure-tag (gensym "#%closure"))
 (define prim-tag (gensym "#%primitive"))
+(define undefined-tag (gensym "#%undefined"))
 
 (define (evalo expr val)
   (eval-expo expr initial-env val))
@@ -404,30 +405,18 @@
 
 (define (cond-clauseso c* env val)
   (conde
-    ((fresh (test conseq)
-       (== `((,test ,conseq)) c*)
-       (conde
-         ((== 'else test)
-          (not-in-envo 'else env)
-          ;; the "real" 'else' auxilliary keyword,
-          ;; not shadowed
-          (eval-expo conseq env val))
-         ((fresh (v)
-            (eval-expo test env v)
-            ;; if test is 'else', it must have been shadowed
-            (conde
-              ((== #f v)
-               ;; evaluate to an unspecified value!
-               (== 'unspecified val))
-              ((=/= #f v) (eval-expo conseq env val))))))
+    ((== '() c*) (== undefined-tag val))
+    ((fresh (conseq)
+       (== `((else ,conseq)) c*)
+       (not-in-envo 'else env)
        (eval-expo conseq env val)))
     ((fresh (test conseq c*-rest)
        (== `((,test ,conseq) . ,c*-rest) c*)
        (fresh (v)
          (eval-expo test env v)
          (conde
-           ((== #f v) (cond-clauseso c*-rest env val))
-           ((=/= #f v) (eval-expo conseq env val))))))))
+           ((=/= #f v) (eval-expo conseq env val))
+           ((== #f v) (cond-clauseso c*-rest env val))))))))
 
 
 (define initial-env `((val . (list . (,closure-tag (lambda x x) ,empty-env)))
