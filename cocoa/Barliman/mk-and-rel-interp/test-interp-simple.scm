@@ -59,6 +59,41 @@
   `((4 4) (5 5))
   `((())))
 
+(test 'cond-1
+  (run* (p q)
+    (evalo `(cond
+              ((null? ',p) 'nil)
+              ((not ',p) 'false)
+              ((equal? #t ',p) 'true)
+              ((number? ',p) 'num)
+              ((symbol? ',p) 'sym)
+              (else 'must-be-a-pair))
+           q))
+  '(((() nil))
+    ((#f false))
+    ((#t true))
+    ((_.0 num) (num _.0))
+    ((_.0 sym) (sym _.0))
+    (((_.0 . _.1) must-be-a-pair))))
+
+(test 'cond-2
+  (run* (p q)
+    (evalo `(let ((else #f))
+              (cond
+                ((null? ',p) 'nil)
+                ((not ',p) 'false)
+                ((equal? #t ',p) 'true)
+                ((number? ',p) 'num)
+                ((symbol? ',p) 'sym)
+                (else 'must-be-a-pair)))
+           q))
+  '(((() nil))
+    ((#f false))
+    ((#t true))
+    ((_.0 num) (num _.0))
+    ((_.0 sym) (sym _.0))
+    (((_.0 . _.1) must-be-a-pair))))
+
 
 (test 'letrec-keyword-reference-1
   (cadaar (run* (q) (evalo '(letrec ((quote (lambda x 5))) quote)
