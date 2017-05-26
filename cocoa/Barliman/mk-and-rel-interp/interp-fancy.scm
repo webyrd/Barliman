@@ -218,28 +218,25 @@
        (eval-listo d env v-d)))))
 
 (define (paramso params)
-  (conde
-    ; Multiple argument
-    ((list-of-paramso params))
-    ; Variadic
-    ((symbolo params))))
-
-(define (not-in-paramso x params)
-  (conde
-    ((== '() params))
-    ((fresh (a d)
-       (== `(,a . ,d) params)
-       (=/= a x)
-       (not-in-paramso x d)))))
-
-(define (list-of-paramso los)
-  (conde
-    ((== '() los))
-    ((fresh (a d)
-       (== `(,a . ,d) los)
-       (symbolo a)
-       (list-of-paramso d)
-       (not-in-paramso a d)))))
+  (let loop ((params params) (seen '()))
+    (define (not-seen name)
+      (let seen-loop ((seen seen))
+        (if (null? seen)
+          succeed
+          (fresh ()
+            (=/= (car seen) name)
+            (seen-loop (cdr seen))))))
+    (project0 (params)
+      (cond
+        ;; Don't bother deferring, env extension can handle the rest.
+        ((or (null? params) (var? params)) succeed)
+        ((symbol? params) (not-seen params))
+        ((pair? params)
+         (fresh ()
+           (symbolo (car params))
+           (not-seen (car params))
+           (loop (cdr params) (cons (car params) seen))))
+        (else fail)))))
 
 (define (ext-env1o x a* env out)
   (fresh ()
