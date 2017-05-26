@@ -116,7 +116,10 @@
         ((let*-primo expr env val))
         ((quasiquote-primo expr env val))
         ((cond-primo expr env val))
-        ((prim-expo expr env val)))))
+        ((boolean-primo expr env val))
+        ((and-primo expr env val))
+        ((or-primo expr env val))
+        ((if-primo expr env val)))))
   (define (gpair)
     (conde
       ((quote-primo expr env val))
@@ -131,8 +134,9 @@
       ((let*-primo expr env val))
       ((quasiquote-primo expr env val))
       ((cond-primo expr env val))
-      ;; TODO: split out boolean expressions.
-      ((prim-expo expr env val))))
+      ((and-primo expr env val))
+      ((or-primo expr env val))
+      ((if-primo expr env val))))
   (define (gapp)
     (conde
       ((app-closure-variadico expr env val))
@@ -516,13 +520,6 @@
                (== `(,a . ,d) v)
                (=/= closure-tag a)
                (=/= prim-tag a)))))))]))
-
-(define (prim-expo expr env val)
-  (conde
-    ((boolean-primo expr env val))
-    ((and-primo expr env val))
-    ((or-primo expr env val))
-    ((if-primo expr env val))))
 
 (define (boolean-primo expr env val)
   (conde
