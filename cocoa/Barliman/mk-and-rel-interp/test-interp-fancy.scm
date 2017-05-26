@@ -1,7 +1,7 @@
 (load "mk/mk-vicare.scm")
 (load "mk/mk.scm")
 (load "mk/test-check.scm")
-(load "interp-simple.scm")
+(load "interp-fancy.scm")
 
 
 (define-syntax test-barliman

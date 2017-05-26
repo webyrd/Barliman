@@ -6,95 +6,117 @@
 (define prim-tag (gensym "#%primitive"))
 (define undefined-tag (gensym "#%undefined"))
 
+
+(define (literal-expo expr env val) (== expr val))
+
+(define (quote-primo expr env val)
+  (fresh ()
+    (== `(quote ,val) expr)
+    (absento closure-tag val)
+    (absento prim-tag val)
+    (not-in-envo 'quote env)))
+
+(define (lambda-primo expr env val)
+  (fresh (x body)
+    (== `(lambda ,x ,body) expr)
+    (== `(,closure-tag (lambda ,x ,body) ,env) val)
+    (paramso x)
+    (not-in-envo 'lambda env)))
+
+(define (app-closure-variadico expr env val)
+  (fresh (rator x rands body env^ a* res)
+    (== `(,rator . ,rands) expr)
+    ;; variadic
+    (symbolo x)
+    (== `((val . (,x . ,a*)) . ,env^) res)
+    (eval-expo rator env `(,closure-tag (lambda ,x ,body) ,env^))
+    (eval-expo body res val)
+    (eval-listo rands env a*)))
+
+(define (app-closure-multi-argo expr env val)
+  (fresh (rator x* rands body env^ a* res)
+    (== `(,rator . ,rands) expr)
+    ;; Multi-argument
+    (eval-expo rator env `(,closure-tag (lambda ,x* ,body) ,env^))
+    (eval-listo rands env a*)
+    (ext-env*o x* a* env^ res)
+    (eval-expo body res val)))
+
+(define (app-primo expr env val)
+  (fresh (rator x* rands a* prim-id)
+    (== `(,rator . ,rands) expr)
+    (eval-expo rator env `(,prim-tag . ,prim-id))
+    (eval-primo prim-id a* val)
+    (eval-listo rands env a*)))
+
+(define (begin-primo expr env val)
+  (fresh (begin-body)
+    (== `(begin . ,begin-body) expr)
+    (eval-begino '() begin-body env val)))
+
+(define (letrec-primo expr env val)
+  (fresh (b* letrec-body)
+    (== `(letrec ,b* ,letrec-body) expr)
+    (not-in-envo 'letrec env)
+    (eval-letreco b* letrec-body env val)))
+
+(define (let-primo expr env val)
+  (fresh (b* body)
+    ;; TODO: ensure bound names are all different
+    (== `(let ,b* ,body) expr)
+    (not-in-envo 'let env)
+    (let loop ((b* b*) (p* '()) (rand* '()))
+      (conde
+        ((fresh (a* res)
+           (== '() b*)
+           (eval-listo rand* env a*)
+           (ext-env*o p* a* env res)
+           (eval-expo body res val)))
+        ((fresh (p rand b*-rest)
+           (== `((,p ,rand) . ,b*-rest) b*)
+           (symbolo p)
+           (loop b*-rest (cons p p*) (cons rand rand*))))))))
+
+(define (let*-primo expr env val)
+  (fresh (b* body)
+    (== `(let* ,b* ,body) expr)
+    (not-in-envo 'let env)
+    (let loop ((b* b*) (env env))
+      (conde
+        ((== '() b*) (eval-expo body env val))
+        ((fresh (p rand a b*-rest res)
+           (== `((,p ,rand) . ,b*-rest) b*)
+           (symbolo p)
+           (== `((val . (,p . ,a)) . ,env) res)
+           (loop b*-rest res)
+           (eval-expo rand env a)))))))
+
+(define (quasiquote-primo expr env val)
+  (fresh (qq-expr)
+    (== (list 'quasiquote qq-expr) expr)
+    (not-in-envo 'quasiquote env)
+    (eval-qq-expo 0 qq-expr env val)))
+
+
 (define (evalo expr val)
   (eval-expo expr initial-env val))
 
 (define (eval-expo expr env val)
   (conde
-    ((== `(quote ,val) expr)
-     (absento closure-tag val)
-     (absento prim-tag val)
-     (not-in-envo 'quote env))
-
-    ((numbero expr) (== expr val))
-
+    ((quote-primo expr env val))
+    ((numbero expr) (literal-expo expr env val))
     ((symbolo expr) (lookupo expr env val))
-
-    ((fresh (x body)
-       (== `(lambda ,x ,body) expr)
-       (== `(,closure-tag (lambda ,x ,body) ,env) val)
-       (paramso x)
-       (not-in-envo 'lambda env)))
-
-    ((fresh (rator x rands body env^ a* res)
-       (== `(,rator . ,rands) expr)
-       ;; variadic
-       (symbolo x)
-       (== `((val . (,x . ,a*)) . ,env^) res)
-       (eval-expo rator env `(,closure-tag (lambda ,x ,body) ,env^))
-       (eval-expo body res val)
-       (eval-listo rands env a*)))
-
-    ((fresh (rator x* rands body env^ a* res)
-       (== `(,rator . ,rands) expr)
-       ;; Multi-argument
-       (eval-expo rator env `(,closure-tag (lambda ,x* ,body) ,env^))
-       (eval-listo rands env a*)
-       (ext-env*o x* a* env^ res)
-       (eval-expo body res val)))
-
-    ((fresh (rator x* rands a* prim-id)
-       (== `(,rator . ,rands) expr)
-       (eval-expo rator env `(,prim-tag . ,prim-id))
-       (eval-primo prim-id a* val)
-       (eval-listo rands env a*)))
-
+    ((lambda-primo expr env val))
+    ((app-closure-variadico expr env val))
+    ((app-closure-multi-argo expr env val))
+    ((app-primo expr env val))
     ((handle-matcho expr env val))
-
-    ((fresh (begin-body)
-       (== `(begin . ,begin-body) expr)
-       (eval-begino '() begin-body env val)))
-
-    ((fresh (b* letrec-body)
-       (== `(letrec ,b* ,letrec-body) expr)
-       (not-in-envo 'letrec env)
-       (eval-letreco b* letrec-body env val)))
-
-    ((fresh (b* body)
-       (== `(let ,b* ,body) expr)
-       (not-in-envo 'let env)
-       (let loop ((b* b*) (p* '()) (rand* '()))
-         (conde
-           ((fresh (a* res)
-              (== '() b*)
-              (eval-listo rand* env a*)
-              (ext-env*o p* a* env res)
-              (eval-expo body res val)))
-           ((fresh (p rand b*-rest)
-              (== `((,p ,rand) . ,b*-rest) b*)
-              (symbolo p)
-              (loop b*-rest (cons p p*) (cons rand rand*))))))))
-
-    ((fresh (b* body)
-       (== `(let* ,b* ,body) expr)
-       (not-in-envo 'let env)
-       (let loop ((b* b*) (env env))
-         (conde
-           ((== '() b*) (eval-expo body env val))
-           ((fresh (p rand a b*-rest res)
-              (== `((,p ,rand) . ,b*-rest) b*)
-              (symbolo p)
-              (== `((val . (,p . ,a)) . ,env) res)
-              (loop b*-rest res)
-              (eval-expo rand env a)))))))
-
-    ((fresh (qq-expr)
-       (== (list 'quasiquote qq-expr) expr)
-       (not-in-envo 'quasiquote env)
-       (eval-qq-expo 0 qq-expr env val)))
-
+    ((begin-primo expr env val))
+    ((letrec-primo expr env val))
+    ((let-primo expr env val))
+    ((let*-primo expr env val))
+    ((quasiquote-primo expr env val))
     ((cond-primo expr env val))
-
     ((prim-expo expr env val))))
 
 (define empty-env '())
