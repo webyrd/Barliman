@@ -24,23 +24,18 @@
     (not-in-envo 'lambda env)))
 
 (define (app-closure-variadico expr env val)
-  (fresh (rator x rands body env^ a* res)
+  (fresh (rator x rands body env^ a*)
     (== `(,rator . ,rands) expr)
-    ;; variadic
-    (symbolo x)
-    (== `((val . (,x . ,a*)) . ,env^) res)
     (eval-expo rator env `(,closure-tag (lambda ,x ,body) ,env^))
-    (eval-expo body res val)
+    (ext-env1-evalo x a* env^ body val)
     (eval-listo rands env a*)))
 
 (define (app-closure-multi-argo expr env val)
-  (fresh (rator x* rands body env^ a* res)
+  (fresh (rator x* rands body env^ a*)
     (== `(,rator . ,rands) expr)
-    ;; Multi-argument
     (eval-expo rator env `(,closure-tag (lambda ,x* ,body) ,env^))
     (eval-listo rands env a*)
-    (ext-env*o x* a* env^ res)
-    (eval-expo body res val)))
+    (ext-env*-evalo x* rands a* env^ body val)))
 
 (define (app-primo expr env val)
   (fresh (rator x* rands a* prim-id)
@@ -70,8 +65,7 @@
         ((fresh (a* res)
            (== '() b*)
            (eval-listo rand* env a*)
-           (ext-env*o p* a* env res)
-           (eval-expo body res val)))
+           (ext-env*-evalo p* rand* a* env body val)))
         ((fresh (p rand b*-rest)
            (== `((,p ,rand) . ,b*-rest) b*)
            (symbolo p)
@@ -86,8 +80,7 @@
         ((== '() b*) (eval-expo body env val))
         ((fresh (p rand a b*-rest res)
            (== `((,p ,rand) . ,b*-rest) b*)
-           (symbolo p)
-           (== `((val . (,p . ,a)) . ,env) res)
+           (ext-env1o p a env res)
            (loop b*-rest res)
            (eval-expo rand env a)))))))
 
@@ -248,15 +241,29 @@
        (list-of-paramso d)
        (not-in-paramso a d)))))
 
-(define (ext-env*o x* a* env out)
+(define (ext-env1o x a* env out)
+  (fresh ()
+    (symbolo x)
+    (== `((val . (,x . ,a*)) . ,env) out)))
+
+;; TODO: ensure uniqueness of names here instead of in paramso.
+(define (ext-env*o-gps x* r* a* env out gk)
   (conde
-    ((== '() x*) (== '() a*) (== env out))
-    ((fresh (x a dx* da* env2)
+    ((== '() x*) (== '() r*) (== '() a*) (== env out) gk)
+    ((fresh (x r a dx* dr* da* env2)
        (== `(,x . ,dx*) x*)
+       (== `(,r . ,dr*) r*)
        (== `(,a . ,da*) a*)
        (== `((val . (,x . ,a)) . ,env) env2)
        (symbolo x)
-       (ext-env*o dx* da* env2 out)))))
+       (ext-env*o-gps dx* dr* da* env2 out gk)))))
+
+(define (ext-env1-evalo param a* env body val)
+  (fresh (res) (ext-env1o param a* env res) (eval-expo body res val)))
+
+(define (ext-env*-evalo params rand* a* env body val)
+  (fresh (res)
+    (ext-env*o-gps params rand* a* env res (eval-expo body res val))))
 
 (define (eval-primo prim-id a* val)
   (conde
