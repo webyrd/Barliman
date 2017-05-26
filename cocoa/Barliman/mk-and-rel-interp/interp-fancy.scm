@@ -7,6 +7,10 @@
 (define undefined-tag (gensym "#%undefined"))
 
 
+;; TODO: defer conde fallbacks during eager evaluation.
+;; TODO: fresh should push/pop deferred context for hierarchical binding.
+;; TODO: reverse eval-listo queuing order once deferring works.
+
 (define (literal-expo expr env val) (== expr val))
 
 (define (quote-primo expr env val)
@@ -95,12 +99,27 @@
   (eval-expo expr initial-env val))
 
 (define (eval-expo expr env val)
-  ;; If (symbolo expr), it will be looked up.  Otherwise, the conde is used.
-  (lookupo-alt
-    expr env val
+  (define (gall)
+    (lookupo-alt
+      expr env val
+      (conde
+        ((quote-primo expr env val))
+        ((numbero expr) (literal-expo expr env val))
+        ((lambda-primo expr env val))
+        ((app-closure-variadico expr env val))
+        ((app-closure-multi-argo expr env val))
+        ((app-primo expr env val))
+        ((handle-matcho expr env val))
+        ((begin-primo expr env val))
+        ((letrec-primo expr env val))
+        ((let-primo expr env val))
+        ((let*-primo expr env val))
+        ((quasiquote-primo expr env val))
+        ((cond-primo expr env val))
+        ((prim-expo expr env val)))))
+  (define (gpair)
     (conde
       ((quote-primo expr env val))
-      ((numbero expr) (literal-expo expr env val))
       ((lambda-primo expr env val))
       ((app-closure-variadico expr env val))
       ((app-closure-multi-argo expr env val))
@@ -112,7 +131,69 @@
       ((let*-primo expr env val))
       ((quasiquote-primo expr env val))
       ((cond-primo expr env val))
-      ((prim-expo expr env val)))))
+      ;; TODO: split out boolean expressions.
+      ((prim-expo expr env val))))
+  (define (gapp)
+    (conde
+      ((app-closure-variadico expr env val))
+      ((app-closure-multi-argo expr env val))
+      ((app-primo expr env val))))
+
+  (project0 (expr)
+    (cond
+      ((or (not expr) (eq? #t expr) (number? expr))
+       (literal-expo expr env val))
+      ((symbol? expr) (lookupo expr env val))
+      ((pair? expr)
+       (let ((ea (car expr)))
+         (project0 (ea)
+           (if (var? ea)
+             (gpair)
+             (case ea
+               ((quote) (quote-primo expr env val))
+               ((lambda) (lambda-primo expr env val))
+               ((if) (if-primo expr env val))
+               ((begin) (begin-primo expr env val))
+               ((letrec) (letrec-primo expr env val))
+               ((let) (let-primo expr env val))
+               ((let*) (let*-primo expr env val))
+               ((quasiquote) (quasiquote-primo expr env val))
+               ((cond) (cond-primo expr env val))
+               ((and) (and-primo expr env val))
+               ((or) (or-primo expr env val))
+               ((match) (handle-matcho expr env val))
+               (else
+                 (fresh (rator rand*)
+                   (== (cdr expr) rand*)
+                   (eval-expo ea env rator)
+                   (project0 (rator)
+                     (cond
+                       ((var? rator)
+                        ; TODO: avoid redoing rator eval
+                        (gapp))
+                       ((pair? rator)
+                        ;; Assume a procedure "pair" must have been immediately tagged.
+                        (cond
+                          ((eq? closure-tag (car rator))
+                           (fresh (params body env^ a*)
+                             (== `((lambda ,params ,body) ,env^) (cdr rator))
+                             (eval-listo rand* env a*)
+                             (project0 (params)
+                               (cond
+                                 ((var? params)
+                                  (conde
+                                    ((ext-env1-evalo params a* env^ body val))
+                                    ((ext-env*-evalo params rand* a* env^ body val))))
+                                 ((pair? params) (ext-env*-evalo params rand* a* env^ body val))
+                                 (else (ext-env1-evalo params a* env^ body val))))))
+                          ((eq? prim-tag (car rator))
+                           (fresh (a*)
+                             (eval-primo (cdr rator) a* val)
+                             (eval-listo rand* env a*)))
+                          (else fail)))
+                       (else fail))))))))))
+      ((var? expr) (gall))
+      (else fail))))
 
 (define empty-env '())
 
