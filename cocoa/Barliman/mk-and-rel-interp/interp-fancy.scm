@@ -269,15 +269,22 @@
 
 ;; TODO: ensure uniqueness of names here instead of in paramso.
 (define (ext-env*o-gps x* r* a* env out gk)
-  (conde
-    ((== '() x*) (== '() r*) (== '() a*) (== env out) gk)
-    ((fresh (x r a dx* dr* da* env2)
-       (== `(,x . ,dx*) x*)
-       (== `(,r . ,dr*) r*)
-       (== `(,a . ,da*) a*)
-       (== `((val . (,x . ,a)) . ,env) env2)
-       (symbolo x)
-       (ext-env*o-gps dx* dr* da* env2 out gk)))))
+  (define (gnil)
+    (fresh () (== '() x*) (== '() r*) (== '() a*) (== env out) gk))
+  (define (gpair)
+    (fresh (x r a dx* dr* da* env2)
+      (== `(,x . ,dx*) x*)
+      (== `(,r . ,dr*) r*)
+      (== `(,a . ,da*) a*)
+      (== `((val . (,x . ,a)) . ,env) env2)
+      (symbolo x)
+      (ext-env*o-gps dx* dr* da* env2 out gk)))
+  (project0 (x* r* a*)
+    (cond
+      ((or (null? x*) (null? r*) (null? a*)) (gnil))
+      ((or (pair? x*) (pair? r*) (pair? a*)) (gpair))
+      ((and (var? x*) (var? r*) (var? a*)) (conde ((gnil)) ((gpair))))
+      (else fail))))
 
 (define (ext-env1-evalo param a* env body val)
   (fresh (res) (ext-env1o param a* env res) (eval-expo body res val)))
