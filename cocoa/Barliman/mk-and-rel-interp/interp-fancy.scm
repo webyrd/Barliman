@@ -95,22 +95,24 @@
   (eval-expo expr initial-env val))
 
 (define (eval-expo expr env val)
-  (conde
-    ((quote-primo expr env val))
-    ((numbero expr) (literal-expo expr env val))
-    ((symbolo expr) (lookupo expr env val))
-    ((lambda-primo expr env val))
-    ((app-closure-variadico expr env val))
-    ((app-closure-multi-argo expr env val))
-    ((app-primo expr env val))
-    ((handle-matcho expr env val))
-    ((begin-primo expr env val))
-    ((letrec-primo expr env val))
-    ((let-primo expr env val))
-    ((let*-primo expr env val))
-    ((quasiquote-primo expr env val))
-    ((cond-primo expr env val))
-    ((prim-expo expr env val))))
+  ;; If (symbolo expr), it will be looked up.  Otherwise, the conde is used.
+  (lookupo-alt
+    expr env val
+    (conde
+      ((quote-primo expr env val))
+      ((numbero expr) (literal-expo expr env val))
+      ((lambda-primo expr env val))
+      ((app-closure-variadico expr env val))
+      ((app-closure-multi-argo expr env val))
+      ((app-primo expr env val))
+      ((handle-matcho expr env val))
+      ((begin-primo expr env val))
+      ((letrec-primo expr env val))
+      ((let-primo expr env val))
+      ((let*-primo expr env val))
+      ((quasiquote-primo expr env val))
+      ((cond-primo expr env val))
+      ((prim-expo expr env val)))))
 
 (define empty-env '())
 
@@ -138,9 +140,9 @@
       ((var? b*) (conde ((== '() b*) (k)) ((gpair))))
       (else fail))))
 
-(define (lookupo x env t)
+(define (lookupo-alt x env t galt)
   (define (gtest y b rest)
-    (conde ((== x y) (== b t)) ((=/= x y) (lookupo x rest t))))
+    (conde ((== x y) (== b t)) ((=/= x y) (lookupo-alt x rest t galt))))
   (define (gval)
     (fresh (y b rest)
       (== `((val . (,y . ,b)) . ,rest) env)
@@ -148,8 +150,8 @@
   (define (grec)
     (fresh (b* rest)
       (== `((rec . ,b*) . ,rest) env)
-      (lookup-reco (lambda () (lookupo x rest t)) env x b* t)))
-  (define (gdefault) (conde ((gval)) ((grec))))
+      (lookup-reco (lambda () (lookupo-alt x rest t galt)) env x b* t)))
+  (define (gdefault) (conde ((gval)) ((grec)) ((== '() env) galt)))
   (project0 (env)
     (cond
       ((pair? env)
@@ -167,12 +169,16 @@
                          (== `((val . (,y . ,b)) . ,rest) env)
                          (project0 (x y)
                            (if (and (symbol? x) (symbol? y))
-                             (if (eq? x y) (== b t) (lookupo x rest t))
+                             (if (eq? x y)
+                               (== b t)
+                               (lookupo-alt x rest t galt))
                              (gtest y b rest)))))
                       ((rec) (grec))
                       (else fail))))))
              (else (gdefault))))))
       (else (gdefault)))))
+
+(define (lookupo x env t) (lookupo-alt x env t fail))
 
 (define (not-in-envo x env)
   (define (gval)
