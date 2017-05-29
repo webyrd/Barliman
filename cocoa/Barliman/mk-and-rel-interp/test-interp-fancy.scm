@@ -91,8 +91,8 @@
     ((#f false))
     ((#t true))
     ((_.0 num) (num _.0))
-    (((_.0 . _.1) ,undefined-tag))
-    ((_.0 sym) (sym _.0))))
+    ((_.0 sym) (sym _.0))
+    (((_.0 . _.1) ,undefined-tag))))
 
 
 (test 'letrec-keyword-reference-1
