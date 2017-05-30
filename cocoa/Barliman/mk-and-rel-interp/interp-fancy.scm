@@ -373,13 +373,20 @@
 
 (define (eval-letreco b* letrec-body env val)
   (let loop ((b* b*) (rb* '()))
-    (conde
-      ((== '() b*) (eval-expo letrec-body `((rec . ,rb*) . ,env) val))
-      ((fresh (p-name x body b*-rest)
-         (== `((,p-name (lambda ,x ,body)) . ,b*-rest) b*)
-         (symbolo p-name)
-         (paramso x)
-         (loop b*-rest `((,p-name . (lambda ,x ,body)) . ,rb*)))))))
+    (define (gdefs)
+      (fresh (p-name x body b*-rest)
+        (== `((,p-name (lambda ,x ,body)) . ,b*-rest) b*)
+        (symbolo p-name)
+        (paramso x)
+        (loop b*-rest `((,p-name . (lambda ,x ,body)) . ,rb*))))
+    (project0 (b*)
+      (cond
+        ((null? b*) (eval-expo letrec-body `((rec . ,rb*) . ,env) val))
+        ((pair? b*) (gdefs))
+        (else
+          (conde
+            ((== '() b*) (eval-expo letrec-body `((rec . ,rb*) . ,env) val))
+            ((gdefs))))))))
 
 ;; NOTE: rec-defs is Scheme state, not a logic term!
 (define (eval-begino rec-defs begin-body env val)
