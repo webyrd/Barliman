@@ -383,17 +383,27 @@
 
 ;; NOTE: rec-defs is Scheme state, not a logic term!
 (define (eval-begino rec-defs begin-body env val)
-  (conde
-    ((fresh (e)
-        (== `(,e) begin-body)
-        (if (null? rec-defs)
-          (eval-expo e env val)
-          (eval-expo `(letrec ,rec-defs ,e) env val))))
-    ((fresh (name args body begin-rest)
-        (== `((define ,name (lambda ,args ,body)) . ,begin-rest) begin-body)
-        (symbolo name)
-        (eval-begino
-          (cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
+  (define (gbody e)
+    (if (null? rec-defs)
+      (eval-expo e env val)
+      (eval-expo `(letrec ,rec-defs ,e) env val)))
+  (define (gdefine e begin-rest)
+    (fresh (name args body)
+      (== `(define ,name (lambda ,args ,body)) e)
+      (symbolo name)
+      (eval-begino
+        (cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))
+  (fresh (e begin-rest)
+    (== `(,e . ,begin-rest) begin-body)
+    (project0 (begin-rest)
+      (cond
+        ((null? begin-rest) (gbody e))
+        ((pair? begin-rest) (gdefine e begin-rest))
+        ((var? begin-rest)
+         (conde
+           ((== '() begin-rest) (gbody e))
+           ((gdefine e begin-rest))))
+        (else fail)))))
 
 ;; 'level' is non-relational.
 (define (eval-qq-expo level qq-expr env val)
