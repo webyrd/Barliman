@@ -214,10 +214,27 @@
                (state-depth st)
                (cons goal (state-deferred st)))
         (goal st)))))
+(define state-deferred-defer*
+  (lambda (st goals)
+    (let ((deferred (state-deferred st)))
+      (if deferred
+        (state (state-S st)
+               (state-C st)
+               (state-depth st)
+               (append goals (state-deferred st)))
+        ((resume goals) st)))))
+(define (resume goals)
+  (if (null? goals)
+    unit
+    (fold-left (lambda (g0 g1)
+                 (lambda (st)
+                   (bind (g0 st) g1)))
+               (car goals) (cdr goals))))
 (define state-deferred-resume
   (lambda (st)
     (let ((deferred (state-deferred st)))
       (if (and deferred (pair? deferred))
+        ;; TODO: fix this once conde1 is obsolete.
         ((fold-left (lambda (g1 g0)
                       (lambda (st)
                         (bind (g0 st) g1)))
@@ -225,6 +242,22 @@
                     deferred)
          (state (state-S st) (state-C st) (state-depth st) #f))
         st))))
+(define (state-deferred-set st deferred)
+  (state (state-S st) (state-C st) (state-depth st) deferred))
+(define (state-deferred-clear st) (state-deferred-set st '()))
+
+(define-syntax let-deferred
+  (syntax-rules ()
+    ((_ (deferred g0 gs ...) body ...)
+     (lambda (st)
+       (let ((saved (state-deferred st)))
+         (bind*-depth
+           (state-deferred-clear st) g0 gs ...
+           (lambda (st)
+             (let ((deferred (state-deferred st)))
+               (bind*-depth (state-deferred-set st saved) body ...)))))))))
+(define (defer goal) (lambda (st) (state-deferred-defer st goal)))
+(define (defer* gs) (lambda (st) (state-deferred-defer* st gs)))
 
 (define (empty-state) (state empty-subst empty-C 0 (and enable-conde1? '())))
 
