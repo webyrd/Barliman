@@ -134,13 +134,20 @@
     (== `(let* ,b* ,body) expr)
     (not-in-envo 'let env)
     (let loop ((b* b*) (env env))
-      (conde
-        ((== '() b*) (eval-expo body env val))
-        ((fresh (p rand a b*-rest res)
-           (== `((,p ,rand) . ,b*-rest) b*)
-           (ext-env1o p a env res)
-           (loop b*-rest res)
-           (eval-expo rand env a)))))))
+      (define (gpair)
+        (fresh (p rand a b*-rest res)
+          (== `((,p ,rand) . ,b*-rest) b*)
+          (ext-env1o p a env res)
+          (loop b*-rest res)
+          (eval-expo rand env a)))
+      (project0 (b*)
+        (cond
+          ((null? b*) (eval-expo body env val))
+          ((pair? b*) (gpair))
+          (else
+            (conde
+              ((== '() b*) (eval-expo body env val))
+              ((gpair)))))))))
 
 (define (quasiquote-primo expr env val)
   (fresh (qq-expr)
