@@ -399,11 +399,10 @@
       (cond
         ((null? begin-rest) (gbody e))
         ((pair? begin-rest) (gdefine e begin-rest))
-        ((var? begin-rest)
-         (conde
-           ((== '() begin-rest) (gbody e))
-           ((gdefine e begin-rest))))
-        (else fail)))))
+        (else
+          (conde
+            ((== '() begin-rest) (gbody e))
+            ((gdefine e begin-rest))))))))
 
 ;; 'level' is non-relational.
 (define (eval-qq-expo level qq-expr env val)
