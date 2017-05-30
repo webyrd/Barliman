@@ -456,14 +456,17 @@
        ((numbero val))))))
 
 (define (eval-listo expr env val)
-  (conde
-    ((== '() expr)
-     (== '() val))
-    ((fresh (a d v-a v-d)
-       (== `(,a . ,d) expr)
-       (== `(,v-a . ,v-d) val)
-       (eval-expo a env v-a)
-       (eval-listo d env v-d)))))
+  (define (gpair)
+    (fresh (a d v-a v-d)
+      (== `(,a . ,d) expr)
+      (== `(,v-a . ,v-d) val)
+      (eval-expo a env v-a)
+      (eval-listo d env v-d)))
+  (project0 (expr)
+    (cond
+      ((null? expr) (== '() val))
+      ((pair? expr) (gpair))
+      (else (conde ((== '() expr) (== '() val)) ((gpair)))))))
 
 (define (paramso params)
   (let loop ((params params) (seen '()))
