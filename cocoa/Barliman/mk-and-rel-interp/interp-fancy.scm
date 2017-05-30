@@ -151,7 +151,7 @@
       (else
         (fresh (p-name lam-expr b*-rest)
           (== `((,p-name . ,lam-expr) . ,b*-rest) b*)
-          (project (p-name)
+          (project0 (p-name)
             (cond
               ((eq? p-name x) (gk-else))
               ((var? p-name)
@@ -279,7 +279,7 @@
       ((pair? b*)
        (fresh (b*-rest p-name lam-expr)
          (== `((,p-name . ,lam-expr) . ,b*-rest) b*)
-         (project (x p-name)
+         (project0 (x p-name)
            (if (and (symbol? x) (symbol? p-name))
              (if (eq? x p-name)
                (== `(,closure-tag ,lam-expr ,renv) t)
