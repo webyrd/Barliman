@@ -53,6 +53,7 @@
 
     ((fresh (begin-body)
        (== `(begin . ,begin-body) expr)
+       (not-in-envo 'begin env)
        (eval-begino '() begin-body env val)))
 
     ((fresh (b* letrec-body)

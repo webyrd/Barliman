@@ -98,6 +98,7 @@
 (define (begin-primo expr env val)
   (fresh (begin-body)
     (== `(begin . ,begin-body) expr)
+    (not-in-envo 'begin env)
     (eval-begino '() begin-body env val)))
 
 (define (letrec-primo expr env val)

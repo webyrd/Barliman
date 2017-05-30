@@ -476,6 +476,7 @@
     ;; specifically for purposes of Barliman.
     (1 1 (fresh (begin-body)
        (== `(begin . ,begin-body) expr)
+       (not-in-envo 'begin env)
        (eval-begino '() begin-body env val)))
 
     (1 1 (fresh (b* letrec-body)
