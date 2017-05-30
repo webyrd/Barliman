@@ -720,9 +720,14 @@
     (== `(if ,e1 ,e2 ,e3) expr)
     (not-in-envo 'if env)
     (eval-expo e1 env t)
-    (conde
-      ((=/= #f t) (eval-expo e2 env val))
-      ((== #f t) (eval-expo e3 env val)))))
+    (project0 (t)
+      (cond
+        ((var? t)
+         (conde
+           ((=/= #f t) (eval-expo e2 env val))
+           ((== #f t) (eval-expo e3 env val))))
+        ((not t) (eval-expo e3 env val))
+        (else (eval-expo e2 env val))))))
 
 (define (cond-primo expr env val)
   (fresh (c c*)
