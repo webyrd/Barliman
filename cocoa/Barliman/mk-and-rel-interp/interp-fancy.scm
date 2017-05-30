@@ -683,20 +683,37 @@
     (oro e* env val)))
 
 (define (oro e* env val)
-  (conde
-    ((== '() e*) (== #f val))
-    ((fresh (e)
-       (== `(,e) e*)
-       (eval-expo e env val)))
-    ((fresh (e1 e2 e-rest v)
-       (== `(,e1 ,e2 . ,e-rest) e*)
-       (conde
-         ((=/= #f v)
-          (== v val)
-          (eval-expo e1 env v))
-         ((== #f v)
-          (eval-expo e1 env v)
-          (oro `(,e2 . ,e-rest) env val)))))))
+  (define (gmulti)
+    (fresh (e1 e2 e-rest v)
+      (== `(,e1 ,e2 . ,e-rest) e*)
+      (eval-expo e1 env v)
+      (project0 (v)
+        (cond
+          ((var? v)
+           (conde
+             ((=/= #f v) (== v val))
+             ((== #f v) (oro `(,e2 . ,e-rest) env val))))
+          ((not v) (oro `(,e2 . ,e-rest) env val))
+          (else (== v val))))))
+  (project0 (e*)
+    (cond
+      ((null? e*) (== #f val))
+      ((pair? e*)
+       (fresh (ea ed)
+         (== `(,ea . ,ed) e*)
+         (project0 (ed)
+           (cond
+             ((null? ed) (eval-expo ea env val))
+             ((pair? ed) (gmulti))
+             (else
+               (conde
+                 ((fresh (e) (== `(,e) e*) (eval-expo e env val)))
+                 ((gmulti))))))))
+      (else
+        (conde
+          ((== '() e*) (== #f val))
+          ((fresh (e) (== `(,e) e*) (eval-expo e env val)))
+          ((gmulti)))))))
 
 (define (if-primo expr env val)
   (fresh (e1 e2 e3 t)
