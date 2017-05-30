@@ -736,19 +736,48 @@
     (cond-clauseso `(,c . ,c*) env val)))
 
 (define (cond-clauseso c* env val)
-  (conde
-    ((== '() c*) (== undefined-tag val))
-    ((fresh (conseq)
-       (== `((else ,conseq)) c*)
-       (not-in-envo 'else env)
-       (eval-expo conseq env val)))
-    ((fresh (test conseq c*-rest)
-       (== `((,test ,conseq) . ,c*-rest) c*)
-       (fresh (v)
-         (eval-expo test env v)
-         (conde
-           ((=/= #f v) (eval-expo conseq env val))
-           ((== #f v) (cond-clauseso c*-rest env val))))))))
+  (define (gelse)
+    (fresh (conseq)
+      (== `((else ,conseq)) c*)
+      (not-in-envo 'else env)
+      (eval-expo conseq env val)))
+  (define (gtest)
+    (fresh (test conseq c*-rest)
+      (== `((,test ,conseq) . ,c*-rest) c*)
+      (fresh (v)
+        (eval-expo test env v)
+        (project0 (v)
+          (cond
+            ((var? v)
+             (conde
+               ((=/= #f v) (eval-expo conseq env val))
+               ((== #f v) (cond-clauseso c*-rest env val))))
+            ((not v) (cond-clauseso c*-rest env val))
+            (else (eval-expo conseq env val)))))))
+  (project0 (c*)
+    (cond
+      ((null? c*) (== undefined-tag val))
+      ((pair? c*)
+       (fresh (test conseq cd)
+         (== `((,test ,conseq) . ,cd) c*)
+         (project0 (cd)
+           (cond
+             ((null? cd)
+              (project0 (test)
+                (if (eq? 'else test)
+                  (case-bound-symbolo
+                    test env
+                    (lambda () (conde ((gelse)) ((gtest))))
+                    (lambda () (eval-expo conseq env val))
+                    (lambda () (gtest)))
+                  (gtest))))
+             ((pair? cd) (gtest))
+             (else (conde ((gelse)) ((gtest))))))))
+      (else
+        (conde
+          ((== '() c*) (== undefined-tag val))
+          ((gelse))
+          ((gtest)))))))
 
 
 (define initial-env `((val . (list . (,closure-tag (lambda x x) ,empty-env)))
