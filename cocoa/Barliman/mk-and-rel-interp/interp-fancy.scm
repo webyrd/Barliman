@@ -386,7 +386,7 @@
   (define (gbody e)
     (if (null? rec-defs)
       (eval-expo e env val)
-      (eval-expo `(letrec ,rec-defs ,e) env val)))
+      (eval-letreco rec-defs e env val)))
   (define (gdefine e begin-rest)
     (fresh (name args body)
       (== `(define ,name (lambda ,args ,body)) e)

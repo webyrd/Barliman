@@ -155,7 +155,7 @@
         (== `(,e) begin-body)
         (if (null? rec-defs)
           (eval-expo e env val)
-          (eval-expo `(letrec ,rec-defs ,e) env val))))
+          (eval-letreco rec-defs e env val))))
     ((fresh (name args body begin-rest)
         (== `((define ,name (lambda ,args ,body)) . ,begin-rest) begin-body)
         (symbolo name)
