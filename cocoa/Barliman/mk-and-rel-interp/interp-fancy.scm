@@ -574,15 +574,20 @@
   (define (gsymbol?)
     (fresh (v)
       (== `(,v) a*)
-      (conde
-        ((== #t val) (symbolo v))
-        ((== #f val)
-         (conde
-           ((== '() v))
-           ((== #f v))
-           ((== #t v))
-           ((numbero v))
-           ((fresh (a d) (== `(,a . ,d) v))))))))
+      (project0 (v)
+        (cond
+          ((var? v)
+           (conde
+             ((== #t val) (symbolo v))
+             ((== #f val)
+              (conde
+                ((== '() v))
+                ((== #f v))
+                ((== #t v))
+                ((numbero v))
+                ((fresh (a d) (== `(,a . ,d) v)))))))
+          ((symbol? v) (== #t val))
+          (else (== #f val))))))
   (define (gnumber?)
     (fresh (v)
       (== `(,v) a*)
