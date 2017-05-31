@@ -563,9 +563,14 @@
   (define (gequal?)
     (fresh (v1 v2)
       (== `(,v1 ,v2) a*)
-      (conde
-        ((== v1 v2) (== #t val))
-        ((=/= v1 v2) (== #f val)))))
+      (lambda (st)
+        ((let ((st0 (state-with-scope st nonlocal-scope)))
+           (let ((==? ((== v1 v2) st0)) (=/=? ((=/= v1 v2) st0)))
+             (if ==?
+               (if =/=?
+                 (conde ((== v1 v2) (== #t val)) ((=/= v1 v2) (== #f val)))
+                 (fresh () (== v1 v2) (== #t val)))
+               (fresh () (=/= v1 v2) (== #f val))))) st))))
   (define (gsymbol?)
     (fresh (v)
       (== `(,v) a*)
