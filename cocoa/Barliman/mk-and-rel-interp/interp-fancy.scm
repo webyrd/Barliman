@@ -882,6 +882,8 @@
                       (val . (procedure? . (,prim-tag . procedure?)))
                       . ,empty-env))
 
+;; TODO: make these as eager as possible.
+
 (define handle-matcho
   (lambda  (expr env val)
     (fresh (against-expr mval clause clauses)
@@ -934,15 +936,71 @@
        (regular-env-appendo rest env2 res)))))
 
 (define (match-clauses mval clauses env val)
-  (fresh (p result-expr d penv)
+  (fresh (p result-expr d)
     (== `((,p ,result-expr) . ,d) clauses)
-    (conde
-      ((fresh (env^)
-         (p-match p mval '() penv)
-         (regular-env-appendo penv env env^)
-         (eval-expo result-expr env^ val)))
-      ((p-no-match p mval '() penv)
-       (match-clauses mval d env val)))))
+    (p-clauseo p mval '()
+               (lambda (_)
+                 (conde
+                   ((fresh (env^ penv)
+                      (p-match p mval '() penv)
+                      (regular-env-appendo penv env env^)
+                      (eval-expo result-expr env^ val)))
+                   ((fresh (penv)
+                      (p-no-match p mval '() penv)
+                      (match-clauses mval d env val)))))
+               (lambda (penv)
+                 (fresh (env^)
+                   (regular-env-appendo penv env env^)
+                   (eval-expo result-expr env val)))
+               (lambda (_) (match-clauses mval d env val)))))
+
+(define (p-clauseo p mval penv gk-unknown gk-match gk-no-match)
+  (project0 (p mval)
+    (cond
+      ((or (var? p) (var? mval)) (gk-unknown penv))
+      ((or (number? p) (boolean? p))
+       (if (eqv? p mval) (gk-match penv) (gk-no-match penv)))
+      ((symbol? p)
+       (case-bound-symbolo
+         x penv (lambda () (gk-unknown penv))
+         (lambda ()
+           (fresh (penv-out)
+             (== `((val . (,var . ,mval)) . ,penv) penv-out)
+             (gk-match penv-out)))
+         (lambda ()
+           (fresh (val)
+             (lookupo p penv val)
+             (project0 (val)
+               (if (var? val)
+                 (gk-unknown penv)
+                 ;; TODO: immediate equality check.
+                 (gk-unknown penv)
+                 ;(gk-match penv)
+                 ;(gk-no-match penv)
+                 ))))))
+      ((pair? p)
+       (fresh (pa pd)
+         (== `(,pa . ,pd) p)
+         (project0 (pa)
+           (cond
+             ((eq? 'quote pa)
+              (fresh (datum)
+                (== `(quote ,datum) p)
+                (project0 (datum)
+                  (if (var? datum)
+                    (gk-unknown penv)
+                    ;; TODO: immediate equality check.
+                    (gk-unknown penv)
+                    ;(gk-match penv)
+                    ;(gk-no-match penv)
+                    ))))
+             ;; TODO: predicate, quasiquote
+             ;((eq? '? pa)
+             ;)
+             ;((eq? 'quasiquote pa)
+             ;)
+             (else (gk-unknown penv))))))
+      (else fail))))
 
 (define (var-p-match var mval penv penv-out)
   (fresh (val)
