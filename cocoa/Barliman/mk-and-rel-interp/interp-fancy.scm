@@ -591,15 +591,20 @@
   (define (gnumber?)
     (fresh (v)
       (== `(,v) a*)
-      (conde
-        ((== #t val) (numbero v))
-        ((== #f val)
-         (conde
-           ((== '() v))
-           ((== #f v))
-           ((== #t v))
-           ((symbolo v))
-           ((fresh (a d) (== `(,a . ,d) v))))))))
+      (project0 (v)
+        (cond
+          ((var? v)
+           (conde
+             ((== #t val) (numbero v))
+             ((== #f val)
+              (conde
+                ((== '() v))
+                ((== #f v))
+                ((== #t v))
+                ((symbolo v))
+                ((fresh (a d) (== `(,a . ,d) v)))))))
+          ((number? v) (== #t val))
+          (else (== #f val))))))
   (define (gnull?)
     (fresh (v)
       (== `(,v) a*)
