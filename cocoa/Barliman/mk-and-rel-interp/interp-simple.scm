@@ -242,7 +242,9 @@
     [(== prim-id 'cons)
      (fresh (a d)
        (== `(,a ,d) a*)
-       (== `(,a . ,d) val))]
+       (== `(,a . ,d) val)
+       (=/= closure-tag a)
+       (=/= prim-tag a))]
     [(== prim-id 'car)
      (fresh (d)
        (== `((,val . ,d)) a*)

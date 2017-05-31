@@ -754,6 +754,8 @@
       [(== prim-id 'cons)
        (fresh (a d)
          (== `(,a . ,d) val)
+         (=/= 'closure a)
+         (=/= 'prim a)
          (eval-listo rands env `(,a ,d)))]
       [(== prim-id 'car)
        (fresh (d)
