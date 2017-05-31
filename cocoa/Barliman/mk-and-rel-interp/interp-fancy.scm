@@ -608,9 +608,11 @@
   (define (gnull?)
     (fresh (v)
       (== `(,v) a*)
-      (conde
-        ((== '() v) (== #t val))
-        ((=/= '() v) (== #f val)))))
+      (project0 (v)
+        (cond
+          ((var? v) (conde ((== '() v) (== #t val)) ((=/= '() v) (== #f val))))
+          ((null? v) (== #t val))
+          (else (== #f val))))))
   (define (gpair?)
     (fresh (v)
       (== `(,v) a*)
