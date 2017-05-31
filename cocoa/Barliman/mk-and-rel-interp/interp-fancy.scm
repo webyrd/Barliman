@@ -655,22 +655,43 @@
   (define (gprocedure?)
     (fresh (v)
       (== `(,v) a*)
-      (conde
-        ((== #t val)
-         (conde
-           ((fresh (d) (== `(,closure-tag . ,d) v)))
-           ((fresh (d) (== `(,prim-tag . ,d) v)))))
-        ((== #f val)
-         (conde
-           ((== '() v))
-           ((symbolo v))
-           ((== #f v))
-           ((== #t v))
-           ((numbero v))
-           ((fresh (a d)
-              (== `(,a . ,d) v)
-              (=/= closure-tag a)
-              (=/= prim-tag a))))))))
+      (project0 (v)
+        (cond
+          ((var? v)
+           (conde
+             ((== #t val)
+              (conde
+                ((fresh (d) (== `(,closure-tag . ,d) v)))
+                ((fresh (d) (== `(,prim-tag . ,d) v)))))
+             ((== #f val)
+              (conde
+                ((== '() v))
+                ((symbolo v))
+                ((== #f v))
+                ((== #t v))
+                ((numbero v))
+                ((fresh (a d)
+                   (== `(,a . ,d) v)
+                   (=/= closure-tag a)
+                   (=/= prim-tag a)))))))
+          ((pair? v)
+           (fresh (a d)
+             (== `(,a . ,d) v)
+             (project0 (a)
+               (cond
+                 ((var? a)
+                  (conde
+                    ((== #t val)
+                     (conde
+                       ((== `(,closure-tag . ,d) v))
+                       ((== `(,prim-tag . ,d) v))))
+                    ((fresh ()
+                       (== #f val)
+                       (=/= closure-tag a)
+                       (=/= prim-tag a)))))
+                 ((or (eq? closure-tag a) (eq? prim-tag a)) (== #t val))
+                 (else (== #t val))))))
+          (else (== #f val))))))
 
   (project0 (prim-id)
     (if (var? prim-id)
