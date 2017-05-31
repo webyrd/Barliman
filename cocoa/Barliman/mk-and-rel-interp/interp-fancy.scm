@@ -554,9 +554,12 @@
   (define (gnot)
     (fresh (b)
       (== `(,b) a*)
-      (conde
-        ((=/= #f b) (== #f val))
-        ((== #f b) (== #t val)))))
+      (project0 (b)
+        (cond
+          ((var? b)
+           (conde ((=/= #f b) (== #f val)) ((== #f b) (== #t val))))
+          ((not b) (== #t val))
+          (else (== #f val))))))
   (define (gequal?)
     (fresh (v1 v2)
       (== `(,v1 ,v2) a*)
