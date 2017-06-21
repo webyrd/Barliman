@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+echo '(ans-allTests)' >out.scm
+cat .io.livecode.ch/header.txt out.scm .io.livecode.ch/footer.txt >answer.scm
+
+echo '(load "cocoa/Barliman/mk-and-rel-interp/mk/mk-vicare.scm")' >load.scm
+echo '(load "cocoa/Barliman/mk-and-rel-interp/mk/mk.scm")' >>load.scm
+echo '(load "cocoa/Barliman/mk-and-rel-interp/interp.scm")' >>load.scm
+
+cat load.scm $2 answer.scm >script.scm
+
+scheme cocoa/Barliman/mk-and-rel-interp/mk/mk-vicare.scm cocoa/Barliman/mk-and-rel-interp/mk/mk.scm cocoa/Barliman/mk-and-rel-interp/interp.scm --script script.scm
