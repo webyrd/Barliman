@@ -1,0 +1,154 @@
+{% extends "base_livecode.html" %}
+
+{% block title %}Barliman{% endblock %}
+
+{% block content %}
+
+<h2>Editor</h2>
+
+<div class="live norun" id="editor">
+(define ,A
+  (lambda ,B
+,C))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<h2>Examples</h2>
+
+<h3>1</h3>
+<div class="live norun" id="ex1">
+(appendo '() '5)</div>
+
+<div class="live norun" id="run1">
+5</div>
+
+<h3>2</h3>
+<div class="live norun" id="ex2">
+(appendo '(a) '6)	</div>
+
+<div class="live norun" id="run2">
+'(a . 6)</div>
+
+<h3>3</h3>
+<div class="live norun" id="ex3">
+(appendo '(e f) '(g h))</div>
+
+<div class="live norun" id="run3">
+'(e f g h)</div>
+
+<h3>4</h3>
+<div class="live norun" id="ex4">
+</div>
+
+<div class="live norun" id="run4">
+</div>
+
+<h3>5</h3>
+<div class="live norun" id="ex5">
+</div>
+
+<div class="live norun" id="run5">
+</div>
+
+<h3>6</h3>
+<div class="live norun" id="ex6">
+</div>
+
+<div class="live norun" id="run6">
+</div>
+
+<h2>Run</h2>
+
+<div class="hidden">
+<div class="live" id="query1">
+(define (ans-allTests)
+  (define (results)
+       (run 1 (defns)
+         (let ((g1 (gensym "g1"))
+               (g2 (gensym "g2"))
+               (g3 (gensym "g3"))
+               (g4 (gensym "g4"))
+               (g5 (gensym "g5"))
+               (g6 (gensym "g6"))
+               (g7 (gensym "g7"))
+               (g8 (gensym "g8"))
+               (g9 (gensym "g9"))
+               (g10 (gensym "g10"))
+               (g11 (gensym "g11"))
+               (g12 (gensym "g12"))
+               (g13 (gensym "g13"))
+               (g14 (gensym "g14"))
+               (g15 (gensym "g15"))
+               (g16 (gensym "g16"))
+               (g17 (gensym "g17"))
+               (g18 (gensym "g18"))
+               (g19 (gensym "g19"))
+               (g20 (gensym "g20")))
+           (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
+             (fresh (defn-list)
+
+
+        (== `( (define ,A
+  (lambda ,B
+    ,C)) ) defn-list)
+
+        (absento g1 defn-list)
+        (absento g2 defn-list)
+        (absento g3 defn-list)
+        (absento g4 defn-list)
+        (absento g4 defn-list)
+        (absento g5 defn-list)
+        (absento g6 defn-list)
+        (absento g7 defn-list)
+        (absento g8 defn-list)
+        (absento g9 defn-list)
+        (absento g10 defn-list)
+        (absento g11 defn-list)
+        (absento g12 defn-list)
+        (absento g13 defn-list)
+        (absento g14 defn-list)
+        (absento g15 defn-list)
+        (absento g16 defn-list)
+        (absento g17 defn-list)
+        (absento g18 defn-list)
+        (absento g19 defn-list)
+        (absento g20 defn-list))
+
+(== `(
+</div>
+
+<div class ="live hidden" id="query2">
+) defns) (appendo defns `(((lambda x x)
+</div>
+
+<div class="live hidden" id="query3">
+)) begin-body) (evalo `(begin . ,begin-body) (list
+</div>
+
+<div class="live hidden" id="query4">
+))))))
+(let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+  (if (null? results-fast)
+    (begin (set! allow-incomplete-search? #f) (results))
+    results-fast)))
+</div>
+</div>
+
+<div class="live" id="run" data-lib="query1 editor query2 ex1 ex2 ex3 ex4 ex5 ex6 query3 run1 run2 run3 run4 run5 run6 query4">
+</div>
+
+{% endblock %}
