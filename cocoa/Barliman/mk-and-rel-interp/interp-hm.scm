@@ -31,7 +31,11 @@
       ((fresh (b* body)
          (== `(letrec ,b* ,body) exp)
          (not-in-envo 'letrec env)
-         (eval-letreco b* body env ty val))))))
+         (eval-letreco b* body env ty val)))
+      ((fresh (b* body)
+         (== `(let ,b* ,body) exp)
+         (not-in-envo 'let env)
+         (eval-leto b* body env ty val))))))
 
 (define :-expo
   (lambda (exp env ty)
@@ -49,7 +53,11 @@
       ((fresh (b* body)
          (== `(letrec ,b* ,body) exp)
          (not-in-envo 'letrec env)
-         (:-letreco b* body env ty))))))
+         (:-letreco b* body env ty)))
+      ((fresh (b* body)
+         (== `(let ,b* ,body) exp)
+         (not-in-envo 'let env)
+         (:-leto b* body env ty))))))
 
 (define :-lambdao
   (lambda (x body env ty)
@@ -83,6 +91,17 @@
            (symbolo x)
            (loop b*-rest `((,p-name . (lambda (,x) ,body)) . ,rb*))))))))
 
+(define :-leto
+  (lambda (b* body env ty)
+    (let loop ((b* b*) (rb* '()))
+      (conde
+        ((== '() b*) (:-expo body `((let . ,rb*) . ,env) ty))
+        ((fresh (x e a tyx b*-rest)
+           (== `((,x ,e) . ,b*-rest) b*)
+           (symbolo x)
+           (:-expo e env tyx)
+           (loop b*-rest `((,x ,e . ,a) . ,rb*))))))))
+
 (define eval-letreco
   (lambda (b* letrec-body env ty val)
     (let loop ((b* b*) (rb* '()))
@@ -93,6 +112,17 @@
            (symbolo p-name)
            (symbolo x)
            (loop b*-rest `((,p-name . (lambda (,x) ,body)) . ,rb*))))))))
+
+(define eval-leto
+  (lambda (b* let-body env ty val)
+    (let loop ((b* b*) (rb* '()))
+      (conde
+        ((== '() b*) (eval-expo let-body `((let . ,rb*) . ,env) ty val))
+        ((fresh (x e tyx a b*-rest)
+           (== `((,x ,e) . ,b*-rest) b*)
+           (symbolo x)
+           (eval-expo e env tyx a)
+           (loop b*-rest `((,x . ,a) . ,rb*))))))))
 
 (define not-in-env-letreco
   (lambda (rest x b*)
@@ -126,6 +156,14 @@
             (== `(-> ,typ ,tybody) ty)
             (:-expo body `((lambda (,p ,typ . ,vunknown)) . ,renv) tybody)))
          ((=/= p-name x) (lookup-letreco rest renv x b*-rest ty val)))))))
+(define (lookup-leto rest x b* ty val)
+  (conde
+    ((== '() b*) (lookupo x rest ty val))
+    ((fresh (b*-rest y be bv)
+       (== `((,y ,be . ,bv) . ,b*-rest) b*)
+       (conde
+         ((== y x) (== bv val) (:-expo be rest ty))
+         ((=/= y x) (lookup-leto rest x b*-rest ty val)))))))
 (define lookupo
   (lambda (x env ty val)
     (conde
@@ -136,4 +174,7 @@
            ((=/= y x) (lookupo x rest ty val)))))
       ((fresh (rest b*)
          (== `((letrec . ,b*) . ,rest) env)
-         (lookup-letreco rest env x b* ty val))))))
+         (lookup-letreco rest env x b* ty val)))
+      ((fresh (rest b*)
+         (== `((let . ,b*) . ,rest) env)
+         (lookup-leto rest x b* ty val))))))
