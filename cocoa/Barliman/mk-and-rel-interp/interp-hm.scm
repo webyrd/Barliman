@@ -35,7 +35,13 @@
       ((fresh (b* body)
          (== `(let ,b* ,body) exp)
          (not-in-envo 'let env)
-         (eval-leto b* body env ty val))))))
+         (eval-leto b* body env ty val)))
+      ((fresh (datum)
+         (== `(quote ,datum) exp)
+         (not-in-envo 'quote env)
+         (absento closure-tag datum)
+         (eval-quoteo datum ty val)))
+      ((eval-literalo exp ty val)))))
 
 (define :-expo
   (lambda (exp env ty)
@@ -57,7 +63,26 @@
       ((fresh (b* body)
          (== `(let ,b* ,body) exp)
          (not-in-envo 'let env)
-         (:-leto b* body env ty))))))
+         (:-leto b* body env ty)))
+      ((fresh (datum)
+         (== `(quote ,datum) exp)
+         (not-in-envo 'quote env)
+         (absento closure-tag datum)
+         (:-quoteo datum ty)))
+      ((:-literalo exp ty)))))
+
+(define :-literalo
+  (lambda (datum ty)
+    (conde
+      ((numbero datum) (== 'num ty))
+      ((== #t datum) (== 'bool ty))
+      ((== #f datum) (== 'bool ty)))))
+
+(define :-quoteo
+  (lambda (datum ty)
+    (cond
+      ((symbolo datum) (== 'sym ty))
+      ((:-literalo datum ty)))))
 
 (define :-lambdao
   (lambda (x body env ty)
@@ -101,6 +126,19 @@
            (symbolo x)
            (:-expo e env tyx)
            (loop b*-rest `((,x ,e . ,a) . ,rb*))))))))
+
+(define eval-literalo
+  (lambda (datum ty val)
+    (conde
+      ((numbero datum) (== 'num ty) (== datum val))
+      ((== #t datum) (== 'bool ty) (== #t val))
+      ((== #f datum) (== 'bool ty) (== #f val)))))
+
+(define eval-quoteo
+  (lambda (datum ty val)
+    (cond
+      ((symbolo datum) (== 'sym ty) (== datum val))
+      ((eval-literalo datum ty val)))))
 
 (define eval-letreco
   (lambda (b* letrec-body env ty val)
