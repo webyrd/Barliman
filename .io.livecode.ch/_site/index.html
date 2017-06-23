@@ -2,6 +2,18 @@
 
 {% block title %}Barliman{% endblock %}
 
+{% block head_extra %}
+{{ super() }}
+<style type="text/css">
+.red {
+  border:2px solid red;
+}
+.green {
+  border:2px solid green;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 
 <h2>Editor</h2>
@@ -29,46 +41,59 @@
 
 <h2>Examples</h2>
 
+<div id="test1">
 <h3>1</h3>
+
 <div class="live norun" id="ex1">
-(appendo '() '5)</div>
+(append '() '5)</div>
 
 <div class="live norun" id="run1">
 5</div>
+</div>
 
+<div id="test2">
 <h3>2</h3>
 <div class="live norun" id="ex2">
-(appendo '(a) '6)	</div>
+(append '(a) '6)	</div>
 
 <div class="live norun" id="run2">
 '(a . 6)</div>
+</div>
 
+<div id="test3">
 <h3>3</h3>
 <div class="live norun" id="ex3">
-(appendo '(e f) '(g h))</div>
+(append '(e f) '(g h))</div>
 
 <div class="live norun" id="run3">
 '(e f g h)</div>
+</div>
 
+<div id="test4">
 <h3>4</h3>
 <div class="live norun" id="ex4">
 </div>
 
 <div class="live norun" id="run4">
 </div>
+</div>
 
+<div id="test5">
 <h3>5</h3>
 <div class="live norun" id="ex5">
 </div>
 
 <div class="live norun" id="run5">
 </div>
+</div>
 
+<div id="test6">
 <h3>6</h3>
 <div class="live norun" id="ex6">
 </div>
 
 <div class="live norun" id="run6">
+</div>
 </div>
 
 <h2>Run</h2>
@@ -146,9 +171,51 @@
     (begin (set! allow-incomplete-search? #f) (results))
     results-fast)))
 </div>
+
+<div class="live" id="run-1" data-lib="query1 editor query2 ex1 query3 run1 query4"></div>
+<div class="live" id="run-2" data-lib="query1 editor query2 ex2 query3 run2 query4"></div>
+<div class="live" id="run-3" data-lib="query1 editor query2 ex3 query3 run3 query4"></div>
+<div class="live" id="run-4" data-lib="query1 editor query2 ex4 query3 run4 query4"></div>
+<div class="live" id="run-5" data-lib="query1 editor query2 ex5 query3 run5 query4"></div>
+<div class="live" id="run-6" data-lib="query1 editor query2 ex6 query3 run6 query4"></div>
+
 </div>
 
 <div class="live" id="run" data-lib="query1 editor query2 ex1 ex2 ex3 ex4 ex5 ex6 query3 run1 run2 run3 run4 run5 run6 query4">
 </div>
 
+{% endblock %}
+
+{% block body_extra %}
+{{ super() }}
+<script>
+$(function() {
+  for (var i=1; i<=6; i++) {
+    (function(i) {
+    $('#output-run-'+i).bind('contentchanged', function() {
+      var data = $('#output-run-'+i).text();
+      var c = (data.trim() == '()') ? 'red' : 'green';
+      $('#test'+i).addClass(c);
+      editors['ex'+i].on('change', function() {
+        $('#test'+i).removeClass(c);
+      })
+      editors['run'+i].on('change', function() {
+        $('#test'+i).removeClass(c);
+      });
+      editors['editor'].on('change', function() {
+        $('#test'+i).removeClass(c);
+      });
+    });
+    })(i);
+  }
+  $('#output-run').bind('contentchanged', function() {
+    var data = $('#output-run').text();
+    if (data.trim() == '()') {
+      for (var i=1; i<=6; i++) {
+        $('#check-run-'+i).click();
+      }
+    }
+  });
+});
+</script>
 {% endblock %}
