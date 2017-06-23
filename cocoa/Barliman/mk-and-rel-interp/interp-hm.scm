@@ -170,6 +170,14 @@
          (== `((,p-name . ,rhs) . ,b*-rest) b*)
          (=/= p-name x)
          (not-in-env-letreco rest x b*-rest))))))
+(define not-in-env-leto
+  (lambda (rest x b*)
+    (conde
+      ((== '() b*) (not-in-envo x rest))
+      ((fresh (b*-rest p rhs)
+         (== `((,p . ,rhs) . ,b*-rest) b*)
+         (=/= p x)
+         (not-in-env-leto rest x b*-rest))))))
 (define not-in-envo
   (lambda (x env)
     (conde
@@ -180,7 +188,10 @@
          (not-in-envo x rest)))
       ((fresh (rest b*)
          (== `((letrec . ,b*) . ,rest) env)
-         (not-in-env-letreco rest x b*))))))
+         (not-in-env-letreco rest x b*)))
+      ((fresh (rest b*)
+         (== `((let . ,b*) . ,rest) env)
+         (not-in-env-leto rest x b*))))))
 
 (define (lookup-letreco rest renv x b* ty val)
   (conde
