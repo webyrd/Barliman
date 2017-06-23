@@ -190,6 +190,7 @@
 {{ super() }}
 <script>
 $(function() {
+  $('#editor-run').addClass('hidden');
   for (var i=1; i<=6; i++) {
     (function(i) {
     $('#output-run-'+i).bind('contentchanged', function() {
