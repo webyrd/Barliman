@@ -57,7 +57,7 @@
        (not-in-envo 'quote env)
        (absento closure-tag val)
        (eval-quoteo ty val))
-      ((eval-literalo exp ty val)))))
+      ((== exp val) (eval-literalo ty val)))))
 
 (define :-expo
   (lambda (exp env ty)
