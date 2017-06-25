@@ -130,15 +130,6 @@
       (== `(-> ,tyx ,tybody) ty)
       (:-expo body `((lambda (,x ,tyx . ,v)) . ,env) tybody))))
 
-(define :-letrec-envo
-  (lambda (b* env)
-    (conde
-      ((== '() b*))
-      ((fresh (p-name x body mty rb* rty*)
-         (== `((,p-name ,mty . (lambda (,x) ,body)) . ,rb*) b*)
-         (:-lambdao x body env mty)
-         (:-letrec-envo rb* env))))))
-
 (define :-letreco
   (lambda (b* letrec-body env ty)
     (let loop ((b* b*) (rb* '()))
@@ -148,10 +139,7 @@
            (== `((letrec-poly . ,rb*) . ,env) renv)
            (== `((letrec-mono . ,mrb*) . ,env) mrenv)
            (letrec-monomorphizeo env rb* mrenv)
-           (:-letrec-envo mrb* mrenv)
-           ;; TODO: polymorphic body.
-           ;(:-expo letrec-body renv ty)
-           (:-expo letrec-body mrenv ty)))
+           (:-expo letrec-body renv ty)))
         ((fresh (p-name x body b*-rest)
            (== `((,p-name (lambda (,x) ,body)) . ,b*-rest) b*)
            (symbolo p-name)
@@ -245,10 +233,20 @@
          (== `((let . ,b*) . ,rest) env)
          (not-in-env-leto rest x b*))))))
 
+(define :-letrec-envo
+  (lambda (b* env)
+    (conde
+      ((== '() b*))
+      ((fresh (p-name x body mty rb* rty*)
+         (== `((,p-name ,mty . (lambda (,x) ,body)) . ,rb*) b*)
+         (:-lambdao x body env mty)
+         (:-letrec-envo rb* env))))))
 (define (letrec-monomorphizeo rest b* renv)
   (let loop ((b* b*) (rb* '()))
     (conde
-      ((== '() b*) (== `((letrec-mono . ,rb*) . ,rest) renv))
+      ((== '() b*)
+       (== `((letrec-mono . ,rb*) . ,rest) renv)
+       (:-letrec-envo rb* renv))
       ((fresh (b*-rest p-name mty lam-expr)
          (== `((,p-name . ,lam-expr) . ,b*-rest) b*)
          (loop b*-rest `((,p-name ,mty . ,lam-expr) . ,rb*)))))))
@@ -265,16 +263,15 @@
 (define (lookup-letrec-polyo rest all-b* x b* ty val)
   (conde
     ((== '() b*) (lookupo x rest ty val))
-    ((fresh (b*-rest p-name p body typ tybody mrenv)
+    ((fresh (b*-rest p-name p body mrenv)
        (== `((,p-name . (lambda (,p) ,body)) . ,b*-rest) b*)
        (conde
-         ((fresh (vunknown)
-            (== p-name x)
-            (== `(,closure-tag ,p ,body ,mrenv) val)
-            (== `(-> ,typ ,tybody) ty)
-            (letrec-monomorphizeo rest all-b* mrenv)
-            (:-expo body `((lambda (,p ,typ . ,vunknown)) . ,mrenv) tybody)))
-         ((=/= p-name x) (lookup-letrec-polyo rest all-b* x b*-rest ty val)))))))
+         ((== p-name x)
+          (== `(,closure-tag ,p ,body ,mrenv) val)
+          (letrec-monomorphizeo rest all-b* mrenv)
+          (:-lambdao p body mrenv ty))
+         ((=/= p-name x)
+          (lookup-letrec-polyo rest all-b* x b*-rest ty val)))))))
 (define (lookup-leto rest x b* ty val)
   (conde
     ((== '() b*) (lookupo x rest ty val))

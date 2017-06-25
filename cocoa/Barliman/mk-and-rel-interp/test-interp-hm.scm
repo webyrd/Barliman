@@ -29,34 +29,48 @@
     (:o '(letrec ((id (lambda (x) x))) id) type))
   '(((-> _.0 _.0))))
 
-;; TODO: support polymorphism in letrec body.
-;(test 'letrec-2
-  ;(run* (type)
-    ;(:o '(letrec ((id (lambda (x) x))) (id id)) type))
-  ;'(((-> _.0 _.0))))
+(test 'letrec-2
+  (run* (type)
+    (:o '(letrec ((id (lambda (x) x))) (id id)) type))
+  '(((-> _.0 _.0))))
 
 (test 'letrec-3
+  (run* (type)
+    (:o '(letrec ((id (lambda (x) x))) (lambda (y) (id y))) type))
+  '(((-> _.0 _.0))))
+
+(test 'letrec-4
+  (run* (type)
+    (:o '(letrec ((id (lambda (x) x))) (lambda (y) (id (id y)))) type))
+  '(((-> _.0 _.0))))
+
+(test 'letrec-5
+  (run* (type)
+    (:o '(letrec ((id (lambda (x) x))) (lambda (y) ((id id) y))) type))
+  '(((-> _.0 _.0))))
+
+(test 'letrec-6
   (run* (type)
     (:o '(letrec ((fix (lambda (f) (f (lambda (x) ((fix f) x))))))
            fix)
         type))
   '(((-> (-> (-> _.0 _.1) (-> _.0 _.1)) (-> _.0 _.1)))))
 
-(test 'letrec-4
+(test 'letrec-7
   (run* (type)
     (:o '(letrec ((fix (lambda (f) (f (lambda (x) ((fix f) x))))))
            (lambda (g) (fix g)))
         type))
   '(((-> (-> (-> _.0 _.1) (-> _.0 _.1)) (-> _.0 _.1)))))
 
-(test 'letrec-5
+(test 'letrec-8
   (run* (type)
     (:o '(letrec ((fix (lambda (f) (lambda (x) ((f (fix f)) x)))))
            fix)
         type))
   '(((-> (-> (-> _.0 _.1) (-> _.0 _.1)) (-> _.0 _.1)))))
 
-(test 'letrec-6
+(test 'letrec-9
   (run* (type)
     (:o '(letrec ((fix (lambda (f) (f (fix f)))))
            fix)
