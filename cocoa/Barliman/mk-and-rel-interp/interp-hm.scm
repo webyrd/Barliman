@@ -174,12 +174,16 @@
          (eval-quoteo td d)))
       ((eval-literalo ty val)))))
 
-;; TODO: update for mono/poly.
 (define eval-letreco
   (lambda (b* letrec-body env ty val)
     (let loop ((b* b*) (rb* '()))
       (conde
-        ((== '() b*) (eval-expo letrec-body `((letrec . ,rb*) . ,env) ty val))
+        ((fresh (renv mrenv mrb*)
+           (== '() b*)
+           (== `((letrec-poly . ,rb*) . ,env) renv)
+           (== `((letrec-mono . ,mrb*) . ,env) mrenv)
+           (letrec-monomorphizeo env rb* mrenv)
+           (eval-expo letrec-body renv ty val)))
         ((fresh (p-name x body b*-rest)
            (== `((,p-name (lambda (,x) ,body)) . ,b*-rest) b*)
            (symbolo p-name)
