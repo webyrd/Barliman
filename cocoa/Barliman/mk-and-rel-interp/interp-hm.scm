@@ -239,7 +239,7 @@
          (== `((letrec-mono . ,b*) . ,rest) env)
          (not-in-env-letreco rest x b*)))
       ((fresh (rest b*)
-         (== `((letrec-polyo . ,b*) . ,rest) env)
+         (== `((letrec-poly . ,b*) . ,rest) env)
          (not-in-env-letreco rest x b*)))
       ((fresh (rest b*)
          (== `((let . ,b*) . ,rest) env)
