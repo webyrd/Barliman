@@ -195,7 +195,7 @@
            (== `((,x ,e) . ,b*-rest) b*)
            (symbolo x)
            (eval-expo e env tyx a)
-           (loop b*-rest `((,x . ,a) . ,rb*))))))))
+           (loop b*-rest `((,x ,e . ,a) . ,rb*))))))))
 
 (define not-in-env-letreco
   (lambda (rest x b*)
