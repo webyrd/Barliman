@@ -206,3 +206,147 @@
   (run* (type val) (evalo '(cdr (cons 1 (cons 'x (cons #t (cons #f '())))))
                           type val))
   '((((cons sym (cons bool (cons bool ()))) (x #t #f)))))
+
+(time
+  (test 'quine-1
+    (run 1 (expr ty)
+      (== '((lambda (x)
+              (cons x (cons (cons 'quote (cons x '())) '())))
+            '(lambda (x)
+               (cons x (cons (cons 'quote (cons x '())) '()))))
+          expr)
+      (evalo expr ty expr))
+    '(((((lambda (x)
+           (cons x (cons (cons 'quote (cons x '())) '())))
+         '(lambda (x)
+            (cons x (cons (cons 'quote (cons x '())) '()))))
+        (cons
+          (cons
+            sym
+            (cons
+              (cons sym ())
+              (cons
+                (cons
+                  sym
+                  (cons
+                    sym
+                    (cons
+                      (cons
+                        sym
+                        (cons
+                          (cons
+                            sym
+                            (cons
+                              (cons sym (cons sym ()))
+                              (cons
+                                (cons
+                                  sym
+                                  (cons sym (cons (cons sym (cons () ())) ())))
+                                ())))
+                          (cons (cons sym (cons () ())) ())))
+                      ())))
+                ())))
+          (cons
+            (cons
+              sym
+              (cons
+                (cons
+                  sym
+                  (cons
+                    (cons sym ())
+                    (cons
+                      (cons
+                        sym
+                        (cons
+                          sym
+                          (cons
+                            (cons
+                              sym
+                              (cons
+                                (cons
+                                  sym
+                                  (cons
+                                    (cons sym (cons sym ()))
+                                    (cons
+                                      (cons
+                                        sym
+                                        (cons
+                                          sym
+                                          (cons (cons sym (cons () ())) ())))
+                                      ())))
+                                (cons (cons sym (cons () ())) ())))
+                            ())))
+                      ())))
+                ()))
+            ())))))))
+
+;; This is too slow.
+;(time
+  ;(test 'quine-2
+    ;(run 1 (expr)
+      ;(fresh (ty)
+        ;(== '(cons
+               ;(cons
+                 ;sym
+                 ;(cons
+                   ;(cons sym ())
+                   ;(cons
+                     ;(cons
+                       ;sym
+                       ;(cons
+                         ;sym
+                         ;(cons
+                           ;(cons
+                             ;sym
+                             ;(cons
+                               ;(cons
+                                 ;sym
+                                 ;(cons
+                                   ;(cons sym (cons sym ()))
+                                   ;(cons
+                                     ;(cons
+                                       ;sym
+                                       ;(cons sym (cons (cons sym (cons () ())) ())))
+                                     ;())))
+                               ;(cons (cons sym (cons () ())) ())))
+                           ;())))
+                     ;())))
+               ;(cons
+                 ;(cons
+                   ;sym
+                   ;(cons
+                     ;(cons
+                       ;sym
+                       ;(cons
+                         ;(cons sym ())
+                         ;(cons
+                           ;(cons
+                             ;sym
+                             ;(cons
+                               ;sym
+                               ;(cons
+                                 ;(cons
+                                   ;sym
+                                   ;(cons
+                                     ;(cons
+                                       ;sym
+                                       ;(cons
+                                         ;(cons sym (cons sym ()))
+                                         ;(cons
+                                           ;(cons
+                                             ;sym
+                                             ;(cons
+                                               ;sym
+                                               ;(cons (cons sym (cons () ())) ())))
+                                           ;())))
+                                     ;(cons (cons sym (cons () ())) ())))
+                                 ;())))
+                           ;())))
+                     ;()))
+                 ;()))
+            ;ty)
+        ;(evalo expr ty expr)))
+    ;'((((lambda (x)
+          ;(cons x (cons (cons 'quote (cons x '())) '())))
+        ;'(lambda (x)
+           ;(cons x (cons (cons 'quote (cons x '())) '()))))))))
