@@ -8,6 +8,9 @@
 (define evalo
   (lambda (exp type val)
     (eval-expo exp '() type val)))
+(define eval:o
+  (lambda (exp type val)
+    (fresh () (evalo exp type val) (:o exp type))))
 (define :o
   (lambda (exp type) (:-expo exp '() type)))
 
@@ -24,8 +27,7 @@
          (== `(lambda (,x) ,body) exp)
          (== `(,closure-tag ,x ,body ,env) val)
          (symbolo x)
-         (not-in-envo 'lambda env)
-         (:-lambdao x body env ty)))
+         (not-in-envo 'lambda env)))
       ((fresh (b* body)
          (== `(letrec ,b* ,body) exp)
          (not-in-envo 'letrec env)
@@ -56,8 +58,7 @@
          (eval-expo c env tc `(,a . ,val))))
       ((== `(quote ,val) exp)
        (not-in-envo 'quote env)
-       (absento closure-tag val)
-       (eval-quoteo ty val))
+       (absento closure-tag val))
       ((== exp val) (eval-literalo ty val)))))
 
 (define :-expo
@@ -162,18 +163,6 @@
       ((== 'num ty) (numbero val))
       ((== 'bool ty) (== #t val))
       ((== 'bool ty) (== #f val)))))
-
-(define eval-quoteo
-  (lambda (ty val)
-    (conde
-      ((== 'sym ty) (symbolo val))
-      ((== '() ty) (== '() val))
-      ((fresh (a d ta td)
-         (== `(,a . ,d) val)
-         (== `(cons ,ta ,td) ty)
-         (eval-quoteo ta a)
-         (eval-quoteo td d)))
-      ((eval-literalo ty val)))))
 
 (define eval-letreco
   (lambda (b* letrec-body env ty val)

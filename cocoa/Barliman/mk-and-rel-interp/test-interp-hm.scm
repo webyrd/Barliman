@@ -96,58 +96,58 @@
 
 (test 'eval-lambda-1
   (run* (type val)
-    (evalo '((lambda (id) id) (lambda (x) x)) type val))
+    (eval:o '((lambda (id) id) (lambda (x) x)) type val))
   `((((-> _.0 _.0) (,closure-tag x x ())))))
 
 (test 'eval-lambda-2
   (run* (type val)
-    (evalo '((lambda (id) (id id)) (lambda (x) x)) type val))
+    (eval:o '((lambda (id) (id id)) (lambda (x) x)) type val))
   ;; Failure is expected because simulating let with lambda loses polymorphism.
   '())
 
 (test 'eval-let-1
   (run* (type val)
-    (evalo '(let ((id (lambda (x) x))) id) type val))
+    (eval:o '(let ((id (lambda (x) x))) id) type val))
   `((((-> _.0 _.0) (,closure-tag x x ())))))
 
 (test 'eval-let-2
   (run* (type val)
-    (evalo '(let ((id (lambda (x) x))) (id id)) type val))
+    (eval:o '(let ((id (lambda (x) x))) (id id)) type val))
   `((((-> _.0 _.0) (,closure-tag x x ())))))
 
 (test 'eval-letrec-1
   (run* (type val)
-    (evalo '(letrec ((id (lambda (x) x))) id) type val))
+    (eval:o '(letrec ((id (lambda (x) x))) id) type val))
   `((((-> _.0 _.0)
       (,closure-tag x x ((letrec-mono (id (-> _.1 _.1) lambda (x) x))))))))
 
 (test 'eval-letrec-2
   (run* (type val)
-    (evalo '(letrec ((id (lambda (x) x))) (id id)) type val))
+    (eval:o '(letrec ((id (lambda (x) x))) (id id)) type val))
   `((((-> _.0 _.0)
       (,closure-tag x x ((letrec-mono (id (-> _.1 _.1) lambda (x) x))))))))
 
 (test 'eval-letrec-3
   (run* (type val)
-    (evalo '(letrec ((id (lambda (x) x))) (lambda (y) (id y))) type val))
+    (eval:o '(letrec ((id (lambda (x) x))) (lambda (y) (id y))) type val))
   `((((-> _.0 _.0)
       (,closure-tag y (id y) ((letrec-poly (id lambda (x) x))))))))
 
 (test 'eval-letrec-4
   (run* (type val)
-    (evalo '(letrec ((id (lambda (x) x))) (lambda (y) (id (id y)))) type val))
+    (eval:o '(letrec ((id (lambda (x) x))) (lambda (y) (id (id y)))) type val))
   `((((-> _.0 _.0)
       (,closure-tag y (id (id y)) ((letrec-poly (id lambda (x) x))))))))
 
 (test 'eval-letrec-5
   (run* (type val)
-    (evalo '(letrec ((id (lambda (x) x))) (lambda (y) ((id id) y))) type val))
+    (eval:o '(letrec ((id (lambda (x) x))) (lambda (y) ((id id) y))) type val))
   `((((-> _.0 _.0)
       (,closure-tag y ((id id) y) ((letrec-poly (id lambda (x) x))))))))
 
 (test 'eval-letrec-6
   (run* (type val)
-    (evalo '(letrec ((fix (lambda (f) (f (lambda (x) ((fix f) x))))))
+    (eval:o '(letrec ((fix (lambda (f) (f (lambda (x) ((fix f) x))))))
               fix)
            type val))
   `((((-> (-> (-> _.0 _.1) (-> _.0 _.1)) (-> _.0 _.1))
@@ -158,7 +158,7 @@
 
 (test 'eval-letrec-7
   (run* (type val)
-    (evalo '(letrec ((fix (lambda (f) (f (lambda (x) ((fix f) x))))))
+    (eval:o '(letrec ((fix (lambda (f) (f (lambda (x) ((fix f) x))))))
               (lambda (g) (fix g)))
            type val))
   `((((-> (-> (-> _.0 _.1) (-> _.0 _.1)) (-> _.0 _.1))
@@ -168,7 +168,7 @@
 
 (test 'eval-letrec-8
   (run* (type val)
-    (evalo '(letrec ((fix (lambda (f) (lambda (x) ((f (fix f)) x)))))
+    (eval:o '(letrec ((fix (lambda (f) (lambda (x) ((f (fix f)) x)))))
               fix)
            type val))
   `((((-> (-> (-> _.0 _.1) (-> _.0 _.1)) (-> _.0 _.1))
@@ -179,7 +179,7 @@
 
 (test 'eval-letrec-9
   (run* (type val)
-    (evalo '(letrec ((fix (lambda (f) (f (fix f)))))
+    (eval:o '(letrec ((fix (lambda (f) (f (fix f)))))
               fix)
            type val))
   `((((-> (-> _.0 _.0) _.0)
@@ -189,21 +189,21 @@
                             lambda (f) (f (fix f))))))))))
 
 (test 'eval-data-1
-  (run* (type val) (evalo ''(1 . (x #t #f)) type val))
+  (run* (type val) (eval:o ''(1 . (x #t #f)) type val))
   '((((cons num (cons sym (cons bool (cons bool ())))) (1 x #t #f)))))
 
 (test 'eval-data-2
-  (run* (type val) (evalo '(cons 1 (cons 'x (cons #t (cons #f '()))))
+  (run* (type val) (eval:o '(cons 1 (cons 'x (cons #t (cons #f '()))))
                           type val))
   '((((cons num (cons sym (cons bool (cons bool ())))) (1 x #t #f)))))
 
 (test 'eval-data-3
-  (run* (type val) (evalo '(car (cons 1 (cons 'x (cons #t (cons #f '())))))
+  (run* (type val) (eval:o '(car (cons 1 (cons 'x (cons #t (cons #f '())))))
                           type val))
   '(((num 1))))
 
 (test 'eval-data-4
-  (run* (type val) (evalo '(cdr (cons 1 (cons 'x (cons #t (cons #f '())))))
+  (run* (type val) (eval:o '(cdr (cons 1 (cons 'x (cons #t (cons #f '())))))
                           type val))
   '((((cons sym (cons bool (cons bool ()))) (x #t #f)))))
 
@@ -215,7 +215,7 @@
             '(lambda (x)
                (cons x (cons (cons 'quote (cons x '())) '()))))
           expr)
-      (evalo expr ty expr))
+      (eval:o expr ty expr))
     '(((((lambda (x)
            (cons x (cons (cons 'quote (cons x '())) '())))
          '(lambda (x)
@@ -280,7 +280,7 @@
                 ()))
             ())))))))
 
-;; This is too slow.
+;; This is too slow normally.  Disable let, letrec, car, and cdr for fast success.
 ;(time
   ;(test 'quine-2
     ;(run 1 (expr)
@@ -345,11 +345,13 @@
                      ;()))
                  ;()))
             ;ty)
-        ;(evalo expr ty expr)))
-    ;'((((lambda (x)
-          ;(cons x (cons (cons 'quote (cons x '())) '())))
-        ;'(lambda (x)
-           ;(cons x (cons (cons 'quote (cons x '())) '()))))))))
+        ;(eval:o expr ty expr)))
+    ;'((((lambda (_.0)
+          ;(cons _.0 (cons (cons 'quote (cons _.0 '())) '())))
+        ;'(lambda (_.0)
+           ;(cons _.0 (cons (cons 'quote (cons _.0 '())) '()))))
+       ;(=/= ((_.0 cons)) ((_.0 quote)))
+       ;(sym _.0)))))
 
 
 ;; Tests from: http://kanren.cvs.sourceforge.net/kanren/kanren/mini/type-inference.scm
