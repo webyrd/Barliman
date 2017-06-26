@@ -350,3 +350,92 @@
           ;(cons x (cons (cons 'quote (cons x '())) '())))
         ;'(lambda (x)
            ;(cons x (cons (cons 'quote (cons x '())) '()))))))))
+
+
+;; Tests from: http://kanren.cvs.sourceforge.net/kanren/kanren/mini/type-inference.scm
+;; Turn off letrec statements in :o to run these tests successfully.
+
+;; Some examples from Djinn: inferring morphisms of the continuation monad.
+
+;(define (cont a) `(-> (-> ,a r) r))
+
+;; Deriving the type of return and call/cc in the continuation monad:
+;;    Djinn> returnC ? a -> C a
+;;    returnC :: a -> C a
+;;    returnC x1 x2 = x2 x1
+
+;(time
+  ;(test 'cont-return
+    ;(run 1 (q) (:o q `(-> a ,(cont 'a))))
+    ;'(((lambda (_.0) (lambda (_.1) (_.1 _.0)))
+       ;(=/= ((_.0 _.1)) ((_.0 lambda))) (sym _.0 _.1)))))
+
+;;    Djinn> bindC ? C a -> (a -> C b) -> C b
+;;    bindC :: C a -> (a -> C b) -> C b
+;;    bindC x1 x2 x3 = x1 (\ c15 -> x2 c15 (\ c17 -> x3 c17))
+
+;(time
+  ;(test 'cont-bind
+    ;(run 1 (q)
+      ;(fresh (x1 x2 _) (== `(lambda (,x1) (lambda (,x2) ,_)) q)
+        ;(:o q `(-> ,(cont 'a) (-> (-> a ,(cont 'b)) ,(cont 'b))))))
+    ;'(((lambda (_.0)
+         ;(lambda (_.1)
+           ;(lambda (_.2) (_.0 (lambda (_.3) ((_.1 _.3) _.2))))))
+       ;(=/= ((_.0 _.1)) ((_.0 _.2)) ((_.0 lambda)) ((_.1 _.2)) ((_.1 _.3))
+            ;((_.1 lambda)) ((_.2 _.3)) ((_.2 lambda)))
+       ;(sym _.0 _.1 _.2 _.3)))))
+
+;;    Djinn> type C a = (a -> r) -> r
+;;    Djinn> callCC ? ((a -> C b) -> C a) -> C a
+;;    callCC x1 x2 = x1 (\ c15 _ -> x2 c15) (\ c11 -> x2 c11)
+
+;(time
+  ;(test 'cont-call/cc
+    ;(run 1 (q)
+      ;(fresh (x1 x2 _) (== `(lambda (,x1) (lambda (,x2) ,_)) q)
+        ;(:o q `(-> (-> (-> a ,(cont 'b)) ,(cont 'a)) ,(cont 'a)))))
+    ;'(((lambda (_.0)
+         ;(lambda (_.1)
+           ;((lambda (_.2) (_.2 _.1))
+            ;(_.0 (lambda (_.3) (lambda (_.4) (_.1 _.3)))))))
+       ;(=/= ((_.0 _.1)) ((_.0 lambda)) ((_.1 _.2)) ((_.1 _.3)) ((_.1 _.4))
+            ;((_.1 lambda)) ((_.3 _.4)) ((_.3 lambda)))
+       ;(sym _.0 _.1 _.2 _.3 _.4)))))
+
+
+;;; Inferring the expressions for shift and reset
+
+;(define (cont2 a r) `(-> (-> ,a ,r) ,r))
+
+;;; reset
+
+;(time
+  ;(test 'cont2-reset
+    ;(run 1 (q)
+      ;(fresh (x1 x2 _) (== q `(lambda (,x1) (lambda (,x2) ,_)))
+        ;(:o q `(-> ,(cont2 'a 'a) ,(cont2 'a 'r)))))
+    ;'(((lambda (_.0)
+         ;(lambda (_.1)
+           ;(_.1 (_.0 (lambda (_.2) _.2)))))
+       ;(=/= ((_.0 _.1)) ((_.0 lambda)) ((_.1 lambda)))
+       ;(sym _.0 _.1 _.2)))))
+
+;;; shift
+;;; This one takes forever.  Limiting expressions to only variables, lambdas,
+;;; and applications improves performance dramatically.
+
+;(time
+  ;(test 'cont2-shift
+    ;(run 1 (q)
+      ;(fresh (x1 x2 _) (== q `(lambda (,x1) (lambda (,x2) ,_)))
+        ;(:o q `(-> (-> (-> a ,(cont2 'b 'r)) ,(cont2 'b 'b)) ,(cont2 'a 'b)))))
+    ;'(((lambda (_.0)
+         ;(lambda (_.1)
+           ;((lambda (_.2)
+              ;(_.2 (lambda (_.3) _.3)))
+            ;(_.0 (lambda (_.4)
+                   ;(lambda (_.5) (_.5 (_.1 _.4))))))))
+       ;(=/= ((_.0 _.1)) ((_.0 lambda)) ((_.1 _.4)) ((_.1 _.5)) ((_.1 lambda))
+            ;((_.2 lambda)) ((_.4 _.5)) ((_.4 lambda)))
+       ;(sym _.0 _.1 _.2 _.3 _.4 _.5)))))
