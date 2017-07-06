@@ -75,7 +75,7 @@ Let's see how we might have gotten to the final version of `append` using Barlim
 
 
 
-Screenshot 2 shows the empty main editor window, immediatly after starting Barliman.  We know we want to define `append`, so in true test-drived development style we begin by writing our tests cases.
+Screenshot 2 shows the empty main editor window, immediately after starting Barliman.  We know we want to define `append`, so in true test-drived development style we begin by writing our tests cases.
 
 
 #### Screenshot 2:
