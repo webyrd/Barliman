@@ -115,3 +115,25 @@
         ((not datum) type-false)
         ((eq? #t datum) type-true)
         (else (error 'datum->type-tag (format "unexpected datum: ~s" datum)))))
+
+(define (zip-with f xss) (apply map f xss))
+(define (zip xss) (zip-with list xss))
+
+(define (env->type env)
+  (if (null? env) '()
+    (append (env-rib->type env (car env)) (env->type (cdr env)))))
+(define (env-rib->type renv rib)
+  (if (eq? 'val (car rib)) (list (env-val->type (cdr rib)))
+    (env-rec->type renv (cdr rib))))
+(define (env-val->type val) (cons (car val) (datum->type (cdr val))))
+(define (env-rec->type renv rec)
+  ;; TODO: build detailed procedure types.
+  (map (lambda (b) (cons (car b) type-procedure-top)) rec))
+
+;; TODO: ideally we wouldn't repeat work for shared env tails.
+(define (env*->type env*)
+  (define et* (map env->type env*))
+  (define name* (map car (car et*)))
+  (define type** (map (lambda (t*) (map cdr t*)) et*))
+  (define type* (map type-union (zip type**)))
+  (zip-with cons (list name* type*)))
