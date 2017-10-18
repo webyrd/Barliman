@@ -100,8 +100,9 @@
 (define (type-intersection ts) (foldl type-intersection2 type-top ts))
 (define (type-union ts) (foldl type-union2 type-bottom ts))
 
-;; TODO: this tag definition probably belongs somewhere else.
+;; TODO: these definitions probably belong somewhere else.
 (define procedure-tag (gensym "#%procedure"))
+(define (closure-new lam cenv) `(,procedure-tag ,lam ,cenv))
 
 (define (datum->type datum)
   (cond ((var? datum) type-top)
@@ -119,17 +120,21 @@
 (define (zip-with f xss) (apply map f xss))
 (define (zip xss) (zip-with list xss))
 
-(define (env->type env)
-  (if (null? env) '()
-    (append (env-rib->type env (car env)) (env->type (cdr env)))))
-(define (env-rib->type renv rib)
-  (if (eq? 'val (car rib)) (list (env-val->type (cdr rib)))
-    (env-rec->type renv (cdr rib))))
-(define (env-val->type val) (cons (car val) (datum->type (cdr val))))
-(define (env-rec->type renv rec)
-  ;; TODO: build detailed procedure types.
-  (map (lambda (b) (cons (car b) type-procedure-top)) rec))
+(define (env-flatten env-raw)
+  (let loop ((env env-raw) (seen '()))
+    (if (null? env) '()
+      (let ((rib (car env)))
+        (if (eq? 'val (car rib))
+          (if (member (cadr rib) seen) (loop (cdr env) seen)
+            (cons (cdr rib) (loop (cdr env) (cons (cadr rib) seen))))
+          (let rec-loop ((rec (cdr rib)) (seen seen))
+            (if (null? rec) (loop (cdr env) seen)
+              (if (member (caar rec) seen) (rec-loop (cdr rec) seen)
+                (cons (cons (caar rec) (closure-new (cdar rec) env))
+                      (rec-loop (cdr rec) (cons (caar rec) seen)))))))))))
 
+(define (env->type env)
+  (map (lambda (b) (cons (car b) (datum->type (cdr b)))) env))
 ;; TODO: ideally we wouldn't repeat work for shared env tails.
 (define (env*->type env*)
   (define et* (map env->type env*))
