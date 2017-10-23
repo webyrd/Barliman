@@ -142,3 +142,52 @@
   (define type** (map (lambda (t*) (map cdr t*)) et*))
   (define type* (map type-union (zip type**)))
   (zip-with cons (list name* type*)))
+
+
+;; TODO:
+;; Flag whether any env identifiers are logic variables.
+;;   If so, may need to perform a =/= pass to guarantee unshadowed primitives.
+;; Determine which primitive syntactic forms and operators are available.
+
+;; If none of the analysis solutions to a parallel evalo problem suffice, it's probably because there's an unusual constraint.  Move this problem to a failure queue, to retry with normal search after all remaining analysis problems are attempted.
+
+;; TODO: parallel env analysis
+;;   useful procedure applications (extension of basic data units)
+;;   useful (partitioning) conditions
+;;     optional: simple rules for "pair + one other type" conditions
+;;       e.g., "pair + null" may mean we prefer checking "null?" over "pair?"
+
+(define (basic-data* env* result*)
+  ;; Memoize/cache basic-data of a given result type, for type-based lookup.
+
+
+  ;; Subdivide these by type in some cases?
+  ;;   predicates only useful when result* type is exactly: (union #t #f)
+  ;;   cons only useful when result* type is exactly: (single pair)
+
+  ;; number n ::= ...
+  ;; symbol s ::= ...
+  ;; literal l ::= (l . l) | n | s | () | #f | #t
+  ;; extracted e ::= variable | (car e) | (cdr e)
+  ;; predicate ::= (equal? e e) | (procedure? e) | (pair? e) | (number? e)
+  ;;             | (symbol? e) | (null? e) | (not e)
+  ;;             | (equal? #t e) | (equal? n e) | (equal? s e)
+  ;; built ::= e | predicate
+  ;;         | (cons built built) | (cons built literal) | (cons literal built)
+  ;; all ::= built | literal
+  ;;
+  ;; NOTE: predicates are only interesting if their results differ across
+  ;; environments (some produce #t, some #f).
+
+  #f
+  )
+
+
+;; TODO: expression typing for conditional branch lookahead
+
+;; TODO: primitive result types:
+;; pair -> top: car cdr
+;; top -> top -> pair: cons
+;; [-> top] top -> boolean: not equal? symbol? number? null? pair? procedure?
+;;
+;; missing primitives: apply: top -> pair -> top
