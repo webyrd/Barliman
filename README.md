@@ -202,6 +202,12 @@ The third test, however, is syntactically incorrect.  This is because in miniSch
 
 ---------------------------------------
 
+## Running Barliman from Source
+
+To build and run Barliman on Mac, open `Barliman/cocoa/Barliman.xcodeproj` in Xcode, and click the run button.
+
+---------------------------------------
+
 ## Advantages and limitations of Barliman
 
 ### Advantages of Barliman
