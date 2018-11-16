@@ -1,6 +1,313 @@
 (load "chez-load-interp.scm")
 (load "mk/test-check.scm")
 
+(time
+  (test "synthesize all of append, using actual Barliman code, with a skeleton"
+     (let ()
+       (define (ans-allTests)
+         (define (results)
+           (run 1 (defns)
+             (let ((g1 (gensym "g1"))
+                   (g2 (gensym "g2"))
+                   (g3 (gensym "g3"))
+                   (g4 (gensym "g4"))
+                   (g5 (gensym "g5"))
+                   (g6 (gensym "g6"))
+                   (g7 (gensym "g7"))
+                   (g8 (gensym "g8"))
+                   (g9 (gensym "g9"))
+                   (g10 (gensym "g10"))
+                   (g11 (gensym "g11"))
+                   (g12 (gensym "g12"))
+                   (g13 (gensym "g13"))
+                   (g14 (gensym "g14"))
+                   (g15 (gensym "g15"))
+                   (g16 (gensym "g16"))
+                   (g17 (gensym "g17"))
+                   (g18 (gensym "g18"))
+                   (g19 (gensym "g19"))
+                   (g20 (gensym "g20")))
+               (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
+                 (fresh (defn-list)
+               
+                   (== defns defn-list)
+               
+                   (absento g1 defn-list)
+                   (absento g2 defn-list)
+                   (absento g3 defn-list)
+                   (absento g4 defn-list)
+                   (absento g4 defn-list)
+                   (absento g5 defn-list)
+                   (absento g6 defn-list)
+                   (absento g7 defn-list)
+                   (absento g8 defn-list)
+                   (absento g9 defn-list)
+                   (absento g10 defn-list)
+                   (absento g11 defn-list)
+                   (absento g12 defn-list)
+                   (absento g13 defn-list)
+                   (absento g14 defn-list)
+                   (absento g15 defn-list)
+                   (absento g16 defn-list)
+                   (absento g17 defn-list)
+                   (absento g18 defn-list)
+                   (absento g19 defn-list)
+                   (absento g20 defn-list))
+
+                 ;; skeleton
+                 (== `((define append
+                         (lambda (l s)
+                           (if (null? ,A)
+                               ,B
+                               ,C))))
+                     defns)
+
+                 ;; constraint/side-condition to help prune search space
+                 (symbolo A)
+                 
+                 
+                 (appendo defns
+                          `(((lambda x x)
+
+                             ;; example inputs
+                             (append '() '())
+                             (append '(,g1) '(,g2))
+                             (append '(,g3 ,g4) '(,g5 ,g6))
+
+                             ))
+                          begin-body)
+                 (evalo `(begin . ,begin-body)
+                        (list
+                         
+                         ;; example outputs
+                         '()
+                         `(,g1 ,g2)
+                         `(,g3 ,g4 ,g5 ,g6)
+                         
+                         ))))))
+         (let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+           (if (null? results-fast)
+               (begin (set! allow-incomplete-search? #f) (results))
+               results-fast)))
+
+       (ans-allTests))
+
+     ;; result!
+     '((((define append
+           (lambda (l s)
+             (if (null? l)
+                 s
+                 (cons (car l)
+                       (append (cdr l) s)))))))))
+ )
+
+(time
+  (test "synthesize all of append, using actual Barliman code, with a single variable representing the entire program"
+     (let ()
+       (define (ans-allTests)
+         (define (results)
+           (run 1 (defns)
+             (let ((g1 (gensym "g1"))
+                   (g2 (gensym "g2"))
+                   (g3 (gensym "g3"))
+                   (g4 (gensym "g4"))
+                   (g5 (gensym "g5"))
+                   (g6 (gensym "g6"))
+                   (g7 (gensym "g7"))
+                   (g8 (gensym "g8"))
+                   (g9 (gensym "g9"))
+                   (g10 (gensym "g10"))
+                   (g11 (gensym "g11"))
+                   (g12 (gensym "g12"))
+                   (g13 (gensym "g13"))
+                   (g14 (gensym "g14"))
+                   (g15 (gensym "g15"))
+                   (g16 (gensym "g16"))
+                   (g17 (gensym "g17"))
+                   (g18 (gensym "g18"))
+                   (g19 (gensym "g19"))
+                   (g20 (gensym "g20")))
+               (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
+                 (fresh (defn-list)
+
+               
+                   (== `( ,A ) defn-list)
+               
+                   (absento g1 defn-list)
+                   (absento g2 defn-list)
+                   (absento g3 defn-list)
+                   (absento g4 defn-list)
+                   (absento g4 defn-list)
+                   (absento g5 defn-list)
+                   (absento g6 defn-list)
+                   (absento g7 defn-list)
+                   (absento g8 defn-list)
+                   (absento g9 defn-list)
+                   (absento g10 defn-list)
+                   (absento g11 defn-list)
+                   (absento g12 defn-list)
+                   (absento g13 defn-list)
+                   (absento g14 defn-list)
+                   (absento g15 defn-list)
+                   (absento g16 defn-list)
+                   (absento g17 defn-list)
+                   (absento g18 defn-list)
+                   (absento g19 defn-list)
+                   (absento g20 defn-list))
+             
+                 (== `(,A) defns) (appendo defns `(((lambda x x) (append '() '()) (append '(,g1) '(,g2)) (append '(,g3 ,g4) '(,g5 ,g6))    )) begin-body) (evalo `(begin . ,begin-body) (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6)    ))))))
+         (let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+           (if (null? results-fast)
+               (begin (set! allow-incomplete-search? #f) (results))
+               results-fast)))
+
+       (ans-allTests))
+
+     '((((define append
+           (lambda (_.0 _.1)
+             (if (null? _.0)
+                 _.1
+                 (cons (car _.0) (append (cdr _.0) _.1))))))
+        (=/= ((_.0 _.1)) ((_.0 append)) ((_.0 car)) ((_.0 cdr))
+             ((_.0 cons)) ((_.0 if)) ((_.0 null?)) ((_.1 append))
+             ((_.1 car)) ((_.1 cdr)) ((_.1 cons)) ((_.1 if))
+             ((_.1 null?)))
+        (sym _.0 _.1))))
+ )
+
+;; synthesize all of append
+(let ()
+  (define (ans-allTests)
+    (define (results)
+      (run 1 (defns)
+        (let ((g1 (gensym "g1"))
+              (g2 (gensym "g2"))
+              (g3 (gensym "g3"))
+              (g4 (gensym "g4"))
+              (g5 (gensym "g5"))
+              (g6 (gensym "g6"))
+              (g7 (gensym "g7"))
+              (g8 (gensym "g8"))
+              (g9 (gensym "g9"))
+              (g10 (gensym "g10"))
+              (g11 (gensym "g11"))
+              (g12 (gensym "g12"))
+              (g13 (gensym "g13"))
+              (g14 (gensym "g14"))
+              (g15 (gensym "g15"))
+              (g16 (gensym "g16"))
+              (g17 (gensym "g17"))
+              (g18 (gensym "g18"))
+              (g19 (gensym "g19"))
+              (g20 (gensym "g20")))
+          (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
+            (fresh (defn-list)
+
+               
+              (== `( (define ,A
+                       (lambda ,B
+                         ,C)) ) defn-list)
+               
+              (absento g1 defn-list)
+              (absento g2 defn-list)
+              (absento g3 defn-list)
+              (absento g4 defn-list)
+              (absento g4 defn-list)
+              (absento g5 defn-list)
+              (absento g6 defn-list)
+              (absento g7 defn-list)
+              (absento g8 defn-list)
+              (absento g9 defn-list)
+              (absento g10 defn-list)
+              (absento g11 defn-list)
+              (absento g12 defn-list)
+              (absento g13 defn-list)
+              (absento g14 defn-list)
+              (absento g15 defn-list)
+              (absento g16 defn-list)
+              (absento g17 defn-list)
+              (absento g18 defn-list)
+              (absento g19 defn-list)
+              (absento g20 defn-list))
+             
+            (== `((define ,A
+                    (lambda ,B
+                      ,C))) defns) (appendo defns `(((lambda x x) (append '() '()) (append '(,g1) '(,g2)) (append '(,g3 ,g4) '(,g5 ,g6))    )) begin-body) (evalo `(begin . ,begin-body) (list '() `(,g1 ,g2) `(,g3 ,g4 ,g5 ,g6)    ))))))
+    (let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+      (if (null? results-fast)
+          (begin (set! allow-incomplete-search? #f) (results))
+          results-fast)))
+
+  (time (ans-allTests)))
+
+#!eof
+
+(time (test "append-gensym-full-synthesis"
+        (run 1 (defn)
+          (let ((g1 (gensym "g1"))
+                (g2 (gensym "g2"))
+                (g3 (gensym "g3"))
+                (g4 (gensym "g4"))
+                (g5 (gensym "g5"))
+                (g6 (gensym "g6")))            
+            (fresh (A B C)
+              (absento g1 defn)
+              (absento g2 defn)
+              (absento g3 defn)
+              (absento g4 defn)
+              (absento g5 defn)
+              (absento g6 defn)
+              (== `(define append
+                     (lambda (l s)
+                       (if (null? l) s (cons (car l) (append (cdr l) s)))))
+                  defn)
+              (evalo `(begin
+                        ,defn
+                        (cons (append '() '())
+                              (cons (append '(,g1) '(,g2))
+                                    (cons (append '(,g3 ,g4) '(,g5 ,g6))
+                                          '()))))
+                     `(()
+                       (,g1 ,g2)
+                       (,g3 ,g4 ,g5 ,g6))))))
+        '(((define append
+             (lambda (l s)
+               (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
+
+
+(time (test "append-gensym-full-synthesis"
+        (run 1 (defn)
+          (let ((g1 (gensym "g1"))
+                (g2 (gensym "g2"))
+                (g3 (gensym "g3"))
+                (g4 (gensym "g4"))
+                (g5 (gensym "g5"))
+                (g6 (gensym "g6")))            
+            (fresh (A B C)
+              (absento g1 defn)
+              (absento g2 defn)
+              (absento g3 defn)
+              (absento g4 defn)
+              (absento g5 defn)
+              (absento g6 defn)
+              (== `(define ,A
+                     (lambda ,B
+                       ,C))
+                  defn)
+              (evalo `(begin
+                        ,defn
+                        (cons (append '() '())
+                              (cons (append '(,g1) '(,g2))
+                                    (cons (append '(,g3 ,g4) '(,g5 ,g6))
+                                          '()))))
+                     `(()
+                       (,g1 ,g2)
+                       (,g3 ,g4 ,g5 ,g6))))))
+        '(((define append
+             (lambda (l s)
+               (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
+
+
 
 (test 'letrec-keyword-reference-1
   (run* (q) (evalo '(letrec ((quote (lambda x 5))) quote)
