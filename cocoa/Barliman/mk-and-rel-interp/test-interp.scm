@@ -178,7 +178,18 @@
                      defns)
 
                  ;; constraints/side-conditions
+                 ;; aggressive:
                  (== `(,C a x) B)
+
+                 ;; if aggressive but wrong...
+                 ;; (== `(,C a l) B)
+                 ;; ... better hope the system can eventually invent a solution like:
+                 ;; (== `(lambda (a ignore) (equal? ,D ,E)) C)
+
+                 ;; alternative approach, less constrained:
+                 ;; (== `(,C ,D ,E) B)
+                 ;; (symbolo D)
+                 ;; (symbolo E)
                                   
                  (appendo defns
                           `(((lambda x x)
