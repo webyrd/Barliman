@@ -55,14 +55,7 @@
                    (absento g20 defn-list))
 
                  ;; skeleton
-                 (== `((define dan-member?
-                         (lambda (x l)
-                           (if (null? l)
-                               #f
-                               (if (equal? (car l) x)
-                                   #t
-                                   (dan-member? x (cdr l))))))
-                       (define member? ;; predicate: two base cases, plus recursion
+                 (== `((define member? ;; predicate: two base cases, plus recursion
                          (lambda (x l) ;; must recur on l, since x is an atom
                            (if (null? l)
                                #f ;; predicate, so base cases should be #f/#t
@@ -75,7 +68,6 @@
                      defns)
 
                  ;; constraints/side-conditions
-                 (absento 'dan-member? B)
                  
                  
                  (appendo defns
@@ -109,14 +101,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define dan-member?
-           (lambda (x l)
-             (if (null? l)
-                 #f
-                 (if (equal? (car l) x)
-                     #t
-                     (dan-member? x (cdr l))))))
-         (define member?
+     '((((define member?
            (lambda (x l)
              (if (null? l)
                  #f
