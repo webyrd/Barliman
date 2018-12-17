@@ -127,6 +127,259 @@
                        (member? x d))))))))))
  )
 
+(time
+  (test "synthesize member? with a skeleton, 2 holes, dan-member?"
+     (let ()
+       (define (ans-allTests)
+         (define (results)
+           (run 1 (defns)
+             (let ((g1 (gensym "g1"))
+                   (g2 (gensym "g2"))
+                   (g3 (gensym "g3"))
+                   (g4 (gensym "g4"))
+                   (g5 (gensym "g5"))
+                   (g6 (gensym "g6"))
+                   (g7 (gensym "g7"))
+                   (g8 (gensym "g8"))
+                   (g9 (gensym "g9"))
+                   (g10 (gensym "g10"))
+                   (g11 (gensym "g11"))
+                   (g12 (gensym "g12"))
+                   (g13 (gensym "g13"))
+                   (g14 (gensym "g14"))
+                   (g15 (gensym "g15"))
+                   (g16 (gensym "g16"))
+                   (g17 (gensym "g17"))
+                   (g18 (gensym "g18"))
+                   (g19 (gensym "g19"))
+                   (g20 (gensym "g20")))
+               (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
+                 (fresh (defn-list)
+               
+                   (== defns defn-list)
+               
+                   (absento g1 defn-list)
+                   (absento g2 defn-list)
+                   (absento g3 defn-list)
+                   (absento g4 defn-list)
+                   (absento g4 defn-list)
+                   (absento g5 defn-list)
+                   (absento g6 defn-list)
+                   (absento g7 defn-list)
+                   (absento g8 defn-list)
+                   (absento g9 defn-list)
+                   (absento g10 defn-list)
+                   (absento g11 defn-list)
+                   (absento g12 defn-list)
+                   (absento g13 defn-list)
+                   (absento g14 defn-list)
+                   (absento g15 defn-list)
+                   (absento g16 defn-list)
+                   (absento g17 defn-list)
+                   (absento g18 defn-list)
+                   (absento g19 defn-list)
+                   (absento g20 defn-list))
+
+                 ;; skeleton
+                 (== `((define dan-member?
+                         (lambda (x l)
+                           (if (null? l)
+                               #f
+                               (if (equal? (car l) x)
+                                   #t
+                                   (dan-member? x (cdr l))))))
+                       (define member? ;; predicate: two base cases, plus recursion
+                         (lambda (x l) ;; must recur on l, since x is an atom
+                           (if ,A
+                               #f ;; predicate, so base cases should be #f/#t
+                               (let ((a (car l)) ;; simulate pattern matching on l
+                                     (d (cdr l)))
+                                 (if ,B ;; haven't used 'x' or 'a'—both should appear!
+                                     #t ;; predicate, so base cases should be #f/#t
+                                     (dan-member? x d) ;; recur on d—gets closer to base case
+                                     ))))))
+                     defns)
+
+                 ;; constraints/side-conditions
+                 (absento 'dan-member? A)
+                 (absento 'dan-member? B)
+                 
+                 
+                 (appendo defns
+                          `(((lambda x x)
+
+                             ;; example inputs
+                             (member? ',g1 '())
+                             (member? ',g1 '(,g1))                            
+                             (member? ',g1 '(,g2))
+                             (member? ',g1 '(,g2 ,g1 ,g3 ,g4))
+                             (member? ',g1 '(,g1 ,g2))
+                             (member? ',g1 '(,g2 ,g3 ,g4 ,g5))
+                             
+                             ))
+                          begin-body)
+                 (evalo `(begin . ,begin-body)
+                        (list                         
+                         ;; example outputs
+                         #f
+                         #t
+                         #f
+                         #t
+                         #t
+                         #f                         
+                         ))))))
+         (let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+           (if (null? results-fast)
+               (begin (set! allow-incomplete-search? #f) (results))
+               results-fast)))
+
+       (ans-allTests))
+
+     ;; result!
+     '((((define dan-member?
+           (lambda (x l)
+             (if (null? l)
+                 #f
+                 (if (equal? (car l) x)
+                     #t
+                     (dan-member? x (cdr l))))))
+         (define member?
+           (lambda (x l)
+             (if (null? l)
+                 #f
+                 (let ((a (car l))
+                       (d (cdr l)))
+                   (if (equal? a x)
+                       #t
+                       (dan-member? x d))))))))))
+ )
+
+(time
+  (test "synthesize member? with a skeleton, 2 holes"
+     (let ()
+       (define (ans-allTests)
+         (define (results)
+           (run 1 (defns)
+             (let ((g1 (gensym "g1"))
+                   (g2 (gensym "g2"))
+                   (g3 (gensym "g3"))
+                   (g4 (gensym "g4"))
+                   (g5 (gensym "g5"))
+                   (g6 (gensym "g6"))
+                   (g7 (gensym "g7"))
+                   (g8 (gensym "g8"))
+                   (g9 (gensym "g9"))
+                   (g10 (gensym "g10"))
+                   (g11 (gensym "g11"))
+                   (g12 (gensym "g12"))
+                   (g13 (gensym "g13"))
+                   (g14 (gensym "g14"))
+                   (g15 (gensym "g15"))
+                   (g16 (gensym "g16"))
+                   (g17 (gensym "g17"))
+                   (g18 (gensym "g18"))
+                   (g19 (gensym "g19"))
+                   (g20 (gensym "g20")))
+               (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
+                 (fresh (defn-list)
+               
+                   (== defns defn-list)
+               
+                   (absento g1 defn-list)
+                   (absento g2 defn-list)
+                   (absento g3 defn-list)
+                   (absento g4 defn-list)
+                   (absento g4 defn-list)
+                   (absento g5 defn-list)
+                   (absento g6 defn-list)
+                   (absento g7 defn-list)
+                   (absento g8 defn-list)
+                   (absento g9 defn-list)
+                   (absento g10 defn-list)
+                   (absento g11 defn-list)
+                   (absento g12 defn-list)
+                   (absento g13 defn-list)
+                   (absento g14 defn-list)
+                   (absento g15 defn-list)
+                   (absento g16 defn-list)
+                   (absento g17 defn-list)
+                   (absento g18 defn-list)
+                   (absento g19 defn-list)
+                   (absento g20 defn-list))
+
+                 ;; skeleton
+                 (== `((define dan-member?
+                         (lambda (x l)
+                           (if (null? l)
+                               #f
+                               (if (equal? (car l) x)
+                                   #t
+                                   (dan-member? x (cdr l))))))
+                       (define member? ;; predicate: two base cases, plus recursion
+                         (lambda (x l) ;; must recur on l, since x is an atom
+                           (if ,A
+                               #f ;; predicate, so base cases should be #f/#t
+                               (let ((a (car l)) ;; simulate pattern matching on l
+                                     (d (cdr l)))
+                                 (if ,B ;; haven't used 'x' or 'a'—both should appear!
+                                     #t ;; predicate, so base cases should be #f/#t
+                                     (member? x d) ;; recur on d—gets closer to base case
+                                     ))))))
+                     defns)
+
+                 ;; constraints/side-conditions
+                 (absento 'dan-member? A)
+                 (absento 'dan-member? B)
+                 
+                 
+                 (appendo defns
+                          `(((lambda x x)
+
+                             ;; example inputs
+                             (member? ',g1 '())
+                             (member? ',g1 '(,g1))                            
+                             (member? ',g1 '(,g2))
+                             (member? ',g1 '(,g2 ,g1 ,g3 ,g4))
+                             (member? ',g1 '(,g1 ,g2))
+                             (member? ',g1 '(,g2 ,g3 ,g4 ,g5))
+                             
+                             ))
+                          begin-body)
+                 (evalo `(begin . ,begin-body)
+                        (list                         
+                         ;; example outputs
+                         #f
+                         #t
+                         #f
+                         #t
+                         #t
+                         #f                         
+                         ))))))
+         (let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+           (if (null? results-fast)
+               (begin (set! allow-incomplete-search? #f) (results))
+               results-fast)))
+
+       (ans-allTests))
+
+     ;; result!
+     '((((define dan-member?
+           (lambda (x l)
+             (if (null? l)
+                 #f
+                 (if (equal? (car l) x)
+                     #t
+                     (dan-member? x (cdr l))))))
+         (define member?
+           (lambda (x l)
+             (if (null? l)
+                 #f
+                 (let ((a (car l))
+                       (d (cdr l)))
+                   (if (equal? a x)
+                       #t
+                       (member? x d))))))))))
+ )
 
 (time
   (test "synthesize all of append, using actual Barliman code, with a skeleton"
