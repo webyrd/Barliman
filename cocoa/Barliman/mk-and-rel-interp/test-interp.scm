@@ -2,6 +2,341 @@
 (load "mk/test-check.scm")
 
 (time
+  (test "synthesize shuffle with a skeleton, 1 hole, partial recursion"
+     (let ()
+       (define (ans-allTests)
+         (define (results)
+           (run 1 (defns)
+             (let ((g1 (gensym "g1"))
+                   (g2 (gensym "g2"))
+                   (g3 (gensym "g3"))
+                   (g4 (gensym "g4"))
+                   (g5 (gensym "g5"))
+                   (g6 (gensym "g6"))
+                   (g7 (gensym "g7"))
+                   (g8 (gensym "g8"))
+                   (g9 (gensym "g9"))
+                   (g10 (gensym "g10"))
+                   (g11 (gensym "g11"))
+                   (g12 (gensym "g12"))
+                   (g13 (gensym "g13"))
+                   (g14 (gensym "g14"))
+                   (g15 (gensym "g15"))
+                   (g16 (gensym "g16"))
+                   (g17 (gensym "g17"))
+                   (g18 (gensym "g18"))
+                   (g19 (gensym "g19"))
+                   (g20 (gensym "g20")))
+               (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
+                 (fresh (defn-list)
+               
+                   (== defns defn-list)
+               
+                   (absento g1 defn-list)
+                   (absento g2 defn-list)
+                   (absento g3 defn-list)
+                   (absento g4 defn-list)
+                   (absento g4 defn-list)
+                   (absento g5 defn-list)
+                   (absento g6 defn-list)
+                   (absento g7 defn-list)
+                   (absento g8 defn-list)
+                   (absento g9 defn-list)
+                   (absento g10 defn-list)
+                   (absento g11 defn-list)
+                   (absento g12 defn-list)
+                   (absento g13 defn-list)
+                   (absento g14 defn-list)
+                   (absento g15 defn-list)
+                   (absento g16 defn-list)
+                   (absento g17 defn-list)
+                   (absento g18 defn-list)
+                   (absento g19 defn-list)
+                   (absento g20 defn-list))
+
+                 ;; skeleton
+                 (== `((define shuffle
+                         (lambda (l1 l2) 
+                           (if (null? l1)
+                               '()
+                               (let ((a1 (car l1))
+                                     (d1 (cdr l1)))
+                                 (if (null? l2) 
+                                     '()
+				     (let ((a2 (car l2)) 
+					   (d2 (cdr l2)))
+				       ,C)
+                                     ))))))
+                     defns)
+
+                 ;; constraints/side-conditions
+		 (conde
+		  [(== `(shuffle d1 d2) C)]
+		  [(fresh (f args)
+			  (== `(let ((v (shuffle d1 d2))) (,f . ,args))
+			      C)
+			  (symbolo f))]
+		  
+		  [(fresh (e e* args)
+			  (== `(let ((v (shuffle d1 d2))) ((,e . ,e*). ,args))
+			      C))] 
+		  
+		  )
+
+		 
+                 (appendo defns
+                          `(((lambda x x)
+
+                             ;; example inputs
+                             (shuffle '() '())
+                             (shuffle '() '(a))
+			     (shuffle '(a) '())
+			     (shuffle '(a) '(b))
+			     (shuffle '(cat) '(dog))
+			     (shuffle '(a c) '(b d))
+			     (shuffle '(cat neko) '(fox kitsune))
+			     (shuffle '(a c e) '(b d f))
+                             ))
+                          begin-body)
+                 (evalo `(begin . ,begin-body)
+                        (list                         
+                         ;; example outputs
+                         '()
+                         '()
+			 '()
+                         '(a b)
+			 '(cat dog )
+                         '(a b c d)
+			 '(cat fox neko kitsune)
+			 '(a b c d e f)
+                         ))))))
+         (let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+           (if (null? results-fast)
+               (begin (set! allow-incomplete-search? #f) (results))
+               results-fast)))
+
+       (ans-allTests))
+
+     ;; result!
+     '((((define shuffle (lambda (l1 l2) (if (null? l1) '() (let ((a1 (car l1)) (d1 (cdr l1))) (if (null? l2) '() (let ((a2 (car l2)) (d2 (cdr l2))) (cons a1 (cons a2 (shuffle d1 d2)))))))))))))
+ )
+
+
+(time
+  (test "synthesize shuffle with a skeleton, 1 hole"
+     (let ()
+       (define (ans-allTests)
+         (define (results)
+           (run 1 (defns)
+             (let ((g1 (gensym "g1"))
+                   (g2 (gensym "g2"))
+                   (g3 (gensym "g3"))
+                   (g4 (gensym "g4"))
+                   (g5 (gensym "g5"))
+                   (g6 (gensym "g6"))
+                   (g7 (gensym "g7"))
+                   (g8 (gensym "g8"))
+                   (g9 (gensym "g9"))
+                   (g10 (gensym "g10"))
+                   (g11 (gensym "g11"))
+                   (g12 (gensym "g12"))
+                   (g13 (gensym "g13"))
+                   (g14 (gensym "g14"))
+                   (g15 (gensym "g15"))
+                   (g16 (gensym "g16"))
+                   (g17 (gensym "g17"))
+                   (g18 (gensym "g18"))
+                   (g19 (gensym "g19"))
+                   (g20 (gensym "g20")))
+               (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
+                 (fresh (defn-list)
+               
+                   (== defns defn-list)
+               
+                   (absento g1 defn-list)
+                   (absento g2 defn-list)
+                   (absento g3 defn-list)
+                   (absento g4 defn-list)
+                   (absento g4 defn-list)
+                   (absento g5 defn-list)
+                   (absento g6 defn-list)
+                   (absento g7 defn-list)
+                   (absento g8 defn-list)
+                   (absento g9 defn-list)
+                   (absento g10 defn-list)
+                   (absento g11 defn-list)
+                   (absento g12 defn-list)
+                   (absento g13 defn-list)
+                   (absento g14 defn-list)
+                   (absento g15 defn-list)
+                   (absento g16 defn-list)
+                   (absento g17 defn-list)
+                   (absento g18 defn-list)
+                   (absento g19 defn-list)
+                   (absento g20 defn-list))
+
+                 ;; skeleton
+                 (== `((define shuffle
+                         (lambda (l1 l2) 
+                           (if (null? l1)
+                               '()
+                               (let ((a1 (car l1))
+                                     (d1 (cdr l1)))
+                                 (if (null? l2) 
+                                     '()
+				     (let ((a2 (car l2)) 
+					   (d2 (cdr l2)))
+				       ,C)
+                                     ))))))
+                     defns)
+
+                 ;; constraints/side-conditions
+                                  
+                 (appendo defns
+                          `(((lambda x x)
+
+                             ;; example inputs
+                             (shuffle '() '())
+                             (shuffle '() '(a))
+			     (shuffle '(a) '())
+			     (shuffle '(a) '(b))
+			     (shuffle '(cat) '(dog))
+			     (shuffle '(a c) '(b d))
+			     (shuffle '(cat neko) '(fox kitsune))
+			     (shuffle '(a c e) '(b d f))
+                             ))
+                          begin-body)
+                 (evalo `(begin . ,begin-body)
+                        (list                         
+                         ;; example outputs
+                         '()
+                         '()
+			 '()
+                         '(a b)
+			 '(cat dog )
+                         '(a b c d)
+			 '(cat fox neko kitsune)
+			 '(a b c d e f)
+                         ))))))
+         (let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+           (if (null? results-fast)
+               (begin (set! allow-incomplete-search? #f) (results))
+               results-fast)))
+
+       (ans-allTests))
+
+     ;; result!
+     '((((define shuffle (lambda (l1 l2) (if (null? l1) '() (let ((a1 (car l1)) (d1 (cdr l1))) (if (null? l2) '() (let ((a2 (car l2)) (d2 (cdr l2))) (cons a1 (cons a2 (shuffle d1 d2)))))))))))))
+ )
+
+(time
+  (test "synthesize shuffle with a skeleton"
+     (let ()
+       (define (ans-allTests)
+         (define (results)
+           (run 1 (defns)
+             (let ((g1 (gensym "g1"))
+                   (g2 (gensym "g2"))
+                   (g3 (gensym "g3"))
+                   (g4 (gensym "g4"))
+                   (g5 (gensym "g5"))
+                   (g6 (gensym "g6"))
+                   (g7 (gensym "g7"))
+                   (g8 (gensym "g8"))
+                   (g9 (gensym "g9"))
+                   (g10 (gensym "g10"))
+                   (g11 (gensym "g11"))
+                   (g12 (gensym "g12"))
+                   (g13 (gensym "g13"))
+                   (g14 (gensym "g14"))
+                   (g15 (gensym "g15"))
+                   (g16 (gensym "g16"))
+                   (g17 (gensym "g17"))
+                   (g18 (gensym "g18"))
+                   (g19 (gensym "g19"))
+                   (g20 (gensym "g20")))
+               (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
+                 (fresh (defn-list)
+               
+                   (== defns defn-list)
+               
+                   (absento g1 defn-list)
+                   (absento g2 defn-list)
+                   (absento g3 defn-list)
+                   (absento g4 defn-list)
+                   (absento g4 defn-list)
+                   (absento g5 defn-list)
+                   (absento g6 defn-list)
+                   (absento g7 defn-list)
+                   (absento g8 defn-list)
+                   (absento g9 defn-list)
+                   (absento g10 defn-list)
+                   (absento g11 defn-list)
+                   (absento g12 defn-list)
+                   (absento g13 defn-list)
+                   (absento g14 defn-list)
+                   (absento g15 defn-list)
+                   (absento g16 defn-list)
+                   (absento g17 defn-list)
+                   (absento g18 defn-list)
+                   (absento g19 defn-list)
+                   (absento g20 defn-list))
+
+                 ;; skeleton
+                 (== `((define shuffle
+                         (lambda (l1 l2) 
+                           (if (null? l1)
+                               ,A 
+                               (let ((a1 (car l1))
+                                     (d1 (cdr l1)))
+                                 (if (null? l2) 
+                                     ,B 
+				     (let ((a2 (car l2)) 
+					   (d2 (cdr l2)))
+				       ,C)
+                                     ))))))
+                     defns)
+
+                 ;; constraints/side-conditions
+                                  
+                 (appendo defns
+                          `(((lambda x x)
+
+                             ;; example inputs
+                             (shuffle '() '())
+                             (shuffle '() '(a))
+			     (shuffle '(a) '())
+			     (shuffle '(a) '(b))
+			     (shuffle '(cat) '(dog))
+			     (shuffle '(a c) '(b d))
+			     (shuffle '(cat neko) '(fox kitsune))
+			     (shuffle '(a c e) '(b d f))
+                             ))
+                          begin-body)
+                 (evalo `(begin . ,begin-body)
+                        (list                         
+                         ;; example outputs
+                         '()
+                         '()
+			 '()
+                         '(a b)
+			 '(cat dog )
+                         '(a b c d)
+			 '(cat fox neko kitsune)
+			 '(a b c d e f)
+                         ))))))
+         (let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+           (if (null? results-fast)
+               (begin (set! allow-incomplete-search? #f) (results))
+               results-fast)))
+
+       (ans-allTests))
+
+     ;; result!
+     '((((define shuffle (lambda (l1 l2) (if (null? l1) l1 (let ((a1 (car l1)) (d1 (cdr l1))) (if (null? l2) l2 (let ((a2 (car l2)) (d2 (cdr l2))) (cons a1 (cons a2 (shuffle d1 d2)))))))))))))
+ )
+
+(time
   (test "synthesize member? with a skeleton, if-test hole"
      (let ()
        (define (ans-allTests)
