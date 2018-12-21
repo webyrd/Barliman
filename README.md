@@ -1,6 +1,8 @@
 # Barliman
 
-Joint work with [Greg Rosenblatt](https://github.com/gregr).
+Barliman 4.3 is joint work with [Greg Rosenblatt](https://github.com/gregr).
+
+A new version of Barliman is under development, with collaborators in alphabetical order:  Michael Ballantyne, Will Byrd, Greg Rosenblatt, Kanae Tsushima, Rob Zinkov.  Coming soon!  :)
 
 ---------------------------------------
 
