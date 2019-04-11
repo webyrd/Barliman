@@ -53,10 +53,10 @@
 		891E43071CE6FD8D003C3333 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		891E430C1CE6FD8D003C3333 /* Barliman.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Barliman.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		891E43101CE6FD8D003C3333 /* BarlimanUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarlimanUITests.swift; sourceTree = "<group>"; };
-		891E43121CE6FD8D003C3333 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		891E43221CE7098D003C3333 /* EditorWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
 		891E43231CE7098D003C3333 /* EditorWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorWindowController.xib; sourceTree = "<group>"; };
 		89393D361D0C1BB30067D19A /* SchemeEditorTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = SchemeEditorTextView.swift; sourceTree = "<group>"; tabWidth = 4; };
+		89963B22225F6663009B1D50 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89B081511CF195F5007E6ABA /* mk-and-rel-interp */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "mk-and-rel-interp"; sourceTree = "<group>"; };
 		89C405A51CF426BE009970A7 /* RunSchemeOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunSchemeOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -138,7 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				891E43101CE6FD8D003C3333 /* BarlimanUITests.swift */,
-				891E43121CE6FD8D003C3333 /* Info.plist */,
+				89963B22225F6663009B1D50 /* Info.plist */,
 			);
 			path = BarlimanUITests;
 			sourceTree = "<group>";
