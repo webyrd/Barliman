@@ -228,7 +228,7 @@ class RunSchemeOperation: Operation {
             func setFontAndSize(_ bestGuessView: NSTextView) {
                 bestGuessView.textStorage?.addAttribute(NSFontAttributeName,
                     value: NSFont(name: EditorWindowController.fontName(), size: EditorWindowController.fontSize())!,
-                    range: NSMakeRange(0, bestGuessView.string!.characters.count))
+                    range: NSMakeRange(0, bestGuessView.string!.count))
             }
             
             func onTestCompletion(_ inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField, datastring: String) {

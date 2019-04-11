@@ -90,7 +90,7 @@ class SchemeEditorTextView: NSTextView {
 
     
     fileprivate
-    static let variables = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".characters.map { "," + String($0) }
+    static let variables = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".map { "," + String($0) }
 
     func getNextUnusedLogicVar(_ str: String) -> String {
         //adapted from http://stackoverflow.com/questions/24034043/how-do-i-check-if-a-string-contains-another-string-in-swift

@@ -177,7 +177,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
         let load_mk_string: String = "(load \"\( mk_path_string )\")"
 
-        let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
+        let definitionText = schemeDefinitionView.textStorage!.string
 
         let querySimple: String =   makeQueryString(definitionText,
                                                     body: ",_",
@@ -231,7 +231,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
             + out5 + " "
             + out6 + " "
 
-        let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
+        let definitionText = schemeDefinitionView.textStorage!.string
 
         // get the path to the application's bundle, so we can load the query string files
         let bundle = Bundle.main
@@ -426,7 +426,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         let interp_string: String = semanticsWindowController!.getInterpreterCode()
 
-        let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
+        let definitionText = schemeDefinitionView.textStorage!.string
 
 
         let querySimpleForMondoSchemeContents: String = makeQuerySimpleForMondoSchemeFileString(interp_string,
