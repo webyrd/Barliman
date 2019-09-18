@@ -77,8 +77,7 @@
   (run* (q) (evalo '(let ((x 5)) (sub1 (sub1 x))) q))
   '((3)))
 
-(time
-  (test "factorial-fully-ground"
+(time-test "factorial-fully-ground"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -167,10 +166,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-fully-ground-b"
+(time-test "factorial-fully-ground-b"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -259,10 +256,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-4e"
+(time-test "factorial-synthesis-4e"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -302,10 +297,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-4d"
+(time-test "factorial-synthesis-4d"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -345,10 +338,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-0"
+(time-test "factorial-synthesis-0"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -437,10 +428,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-0b"
+(time-test "factorial-synthesis-0b"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -529,10 +518,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-0c"
+(time-test "factorial-synthesis-0c"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -621,7 +608,6 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
 #;(time-test "factorial-synthesis-0e"
      (let ()
