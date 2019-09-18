@@ -1992,7 +1992,6 @@
                    (if (equal? a x)
                        #t
                        (member? x d))))))))))
- )
 
 (time-test "synthesize member? with a skeleton, if-test hole, boolean holes with constraints"
      (let ()
