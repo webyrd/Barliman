@@ -2,79 +2,80 @@
 (load "mk/smt.scm")
 ;;(load "clpsmt-miniKanren/z3-driver.scm")
 (load "clpsmt-miniKanren/z3-server.scm")
+(load "clpsmt-miniKanren/test-check.scm")
 (load "mk/test-check.scm")
 
-(time (test "eval 7"
-        (run* (q) (evalo '7 q))
-        '((7))))
+(time-test  "eval 7"
+  (run* (q) (evalo '7 q))
+  '((7)))
 
-(time (test "eval (+ 3 4)"
-        (run* (q) (evalo '(+ 3 4) q))
-        '((7))))
+(time-test "eval (+ 3 4)"
+  (run* (q) (evalo '(+ 3 4) q))
+  '((7)))
 
-(time (test "eval (zero? 0)"
-        (run* (q) (evalo '(zero? 0) q))
-        '((#t))))
+(time-test "eval (zero? 0)"
+  (run* (q) (evalo '(zero? 0) q))
+  '((#t)))
 
-(time (test "eval (zero? 5)"
-        (run* (q) (evalo '(zero? 5) q))
-        '((#f))))
+(time-test "eval (zero? 5)"
+  (run* (q) (evalo '(zero? 5) q))
+  '((#f)))
 
-#;(time (test "eval (zero? (- (* 2 3) (+ 1 5)))"
-        (run* (q) (evalo '(zero? (- (* 2 3) (+ 1 5))) q))
-        '((#t))))
+#;(time-test "eval (zero? (- (* 2 3) (+ 1 5)))"
+    (run* (q) (evalo '(zero? (- (* 2 3) (+ 1 5))) q))
+    '((#t)))
 
-#;(time (test "eval (zero? (- (* 2 3) (+ 1 4)))"
-        (run* (q) (evalo '(zero? (- (* 2 3) (+ 1 4))) q))
-        '((#f))))
+#;(time-test "eval (zero? (- (* 2 3) (+ 1 4)))"
+    (run* (q) (evalo '(zero? (- (* 2 3) (+ 1 4))) q))
+    '((#f)))
 
-#;(time (test "eval (= 0 0)"
-        (run* (q) (evalo '(= 0 0) q))
-        '((#t))))
+#;(time-test "eval (= 0 0)"
+    (run* (q) (evalo '(= 0 0) q))
+    '((#t)))
 
-#;(time (test "eval (= 1 0)"
-        (run* (q) (evalo '(= 1 0) q))
-        '((#f))))
+#;(time-test "eval (= 1 0)"
+    (run* (q) (evalo '(= 1 0) q))
+    '((#f)))
 
-(time (test "eval ((lambda (x) x) 0)"
-        (run* (q) (evalo '((lambda (x) x) 0) q))
-        '((0))))
+(time-test "eval ((lambda (x) x) 0)"
+  (run* (q) (evalo '((lambda (x) x) 0) q))
+  '((0)))
 
-(time (test "eval (let ((x 0)) x)"
-        (run* (q) (evalo '(let ((x 0)) x) q))
-        '((0))))
+(time-test "eval (let ((x 0)) x)"
+  (run* (q) (evalo '(let ((x 0)) x) q))
+  '((0)))
 
-(time (test "eval (let ((x 0)) (cons x x))"
-        (run* (q) (evalo '(let ((x 0)) (cons x x)) q))
-        '(((0 . 0)))))
+(time-test "eval (let ((x 0)) (cons x x))"
+  (run* (q) (evalo '(let ((x 0)) (cons x x)) q))
+  '(((0 . 0))))
 
-(time (test "eval ((lambda (x) (+ x 1)) 0)"
-        (run* (q) (evalo '((lambda (x) (+ x 1)) 0) q))
-        '((1))))
+(time-test "eval ((lambda (x) (+ x 1)) 0)"
+  (run* (q) (evalo '((lambda (x) (+ x 1)) 0) q))
+  '((1)))
 
-(time (test "eval (let ((x 5)) (+ x 3))"
-        (run* (q) (evalo '(let ((x 5)) (+ x 3)) q))
-        '((8))))
+(time-test "eval (let ((x 5)) (+ x 3))"
+  (run* (q) (evalo '(let ((x 5)) (+ x 3)) q))
+  '((8)))
 
-#;(time (test "eval ((lambda (x) (= x 0)) 0)"
+#;(time-test "eval ((lambda (x) (= x 0)) 0)"
         (run* (q) (evalo '((lambda (x) (= x 0)) 0) q))
-        '((#t))))
+        '((#t)))
 
-#;(time (test "eval (let ((x 0)) (= x 0))"
+#;(time-test "eval (let ((x 0)) (= x 0))"
         (run* (q) (evalo '(let ((x 0)) (= x 0)) q))
-        '((#t))))
+        '((#t)))
 
-#;(time (test "eval (let ((x 5)) (- x 3))"
+#;(time-test "eval (let ((x 5)) (- x 3))"
         (run* (q) (evalo '(let ((x 5)) (- x 3)) q))
-        '((2))))
+        '((2)))
 
-(time (test "eval (let ((x 5)) (sub1 x))"
-        (run* (q) (evalo '(let ((x 5)) (sub1 x)) q))
-        '((4))))
+(time-test "eval (let ((x 5)) (sub1 x))"
+  (run* (q) (evalo '(let ((x 5)) (sub1 x)) q))
+  '((4)))
 
-(time (test "eval (let ((x 5)) (sub1 (sub1 x)))"
-        (run* (q) (evalo '(let ((x 5)) (sub1 (sub1 x))) q))
-        '((3))))
+(time-test "eval (let ((x 5)) (sub1 (sub1 x)))"
+  (run* (q) (evalo '(let ((x 5)) (sub1 (sub1 x))) q))
+  '((3)))
 
 (time
   (test "factorial-fully-ground"
@@ -2634,70 +2635,70 @@
 
 #!eof
 
-(time (test "append-gensym-full-synthesis"
-        (run 1 (defn)
-          (let ((g1 (gensym "g1"))
-                (g2 (gensym "g2"))
-                (g3 (gensym "g3"))
-                (g4 (gensym "g4"))
-                (g5 (gensym "g5"))
-                (g6 (gensym "g6")))            
-            (fresh (A B C)
-              (absento g1 defn)
-              (absento g2 defn)
-              (absento g3 defn)
-              (absento g4 defn)
-              (absento g5 defn)
-              (absento g6 defn)
-              (== `(define append
-                     (lambda (l s)
-                       (if (null? l) s (cons (car l) (append (cdr l) s)))))
-                  defn)
-              (evalo `(begin
-                        ,defn
-                        (cons (append '() '())
-                              (cons (append '(,g1) '(,g2))
-                                    (cons (append '(,g3 ,g4) '(,g5 ,g6))
-                                          '()))))
-                     `(()
-                       (,g1 ,g2)
-                       (,g3 ,g4 ,g5 ,g6))))))
-        '(((define append
-             (lambda (l s)
-               (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
+(time-test "append-gensym-full-synthesis"
+  (run 1 (defn)
+    (let ((g1 (gensym "g1"))
+          (g2 (gensym "g2"))
+          (g3 (gensym "g3"))
+          (g4 (gensym "g4"))
+          (g5 (gensym "g5"))
+          (g6 (gensym "g6")))            
+      (fresh (A B C)
+        (absento g1 defn)
+        (absento g2 defn)
+        (absento g3 defn)
+        (absento g4 defn)
+        (absento g5 defn)
+        (absento g6 defn)
+        (== `(define append
+               (lambda (l s)
+                 (if (null? l) s (cons (car l) (append (cdr l) s)))))
+            defn)
+        (evalo `(begin
+                  ,defn
+                  (cons (append '() '())
+                        (cons (append '(,g1) '(,g2))
+                              (cons (append '(,g3 ,g4) '(,g5 ,g6))
+                                    '()))))
+               `(()
+                 (,g1 ,g2)
+                 (,g3 ,g4 ,g5 ,g6))))))
+  '(((define append
+       (lambda (l s)
+         (if (null? l) s (cons (car l) (append (cdr l) s))))))))
 
 
-(time (test "append-gensym-full-synthesis"
-        (run 1 (defn)
-          (let ((g1 (gensym "g1"))
-                (g2 (gensym "g2"))
-                (g3 (gensym "g3"))
-                (g4 (gensym "g4"))
-                (g5 (gensym "g5"))
-                (g6 (gensym "g6")))            
-            (fresh (A B C)
-              (absento g1 defn)
-              (absento g2 defn)
-              (absento g3 defn)
-              (absento g4 defn)
-              (absento g5 defn)
-              (absento g6 defn)
-              (== `(define ,A
-                     (lambda ,B
-                       ,C))
-                  defn)
-              (evalo `(begin
-                        ,defn
-                        (cons (append '() '())
-                              (cons (append '(,g1) '(,g2))
-                                    (cons (append '(,g3 ,g4) '(,g5 ,g6))
-                                          '()))))
-                     `(()
-                       (,g1 ,g2)
-                       (,g3 ,g4 ,g5 ,g6))))))
-        '(((define append
-             (lambda (l s)
-               (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
+(time-test "append-gensym-full-synthesis"
+  (run 1 (defn)
+    (let ((g1 (gensym "g1"))
+          (g2 (gensym "g2"))
+          (g3 (gensym "g3"))
+          (g4 (gensym "g4"))
+          (g5 (gensym "g5"))
+          (g6 (gensym "g6")))            
+      (fresh (A B C)
+        (absento g1 defn)
+        (absento g2 defn)
+        (absento g3 defn)
+        (absento g4 defn)
+        (absento g5 defn)
+        (absento g6 defn)
+        (== `(define ,A
+               (lambda ,B
+                 ,C))
+            defn)
+        (evalo `(begin
+                  ,defn
+                  (cons (append '() '())
+                        (cons (append '(,g1) '(,g2))
+                              (cons (append '(,g3 ,g4) '(,g5 ,g6))
+                                    '()))))
+               `(()
+                 (,g1 ,g2)
+                 (,g3 ,g4 ,g5 ,g6))))))
+  '(((define append
+       (lambda (l s)
+         (if (null? l) s (cons (car l) (append (cdr l) s))))))))
 
 
 
@@ -3001,188 +3002,188 @@
            q))
   '(((1 2 3 4 5))))
 
-(time (test 'begin-append-missing-first-recursive-arg-1
-        (run 1 (q)
-          (evalo `(begin
-                    (define append
-                      (lambda (l s)
-                        (if (null? l)
-                            s
-                            (cons (car l)
-                                  (append ,q s)))))
-                    (append '(1 2 3) '(4 5)))
-                 '(1 2 3 4 5)))
-        '(((cdr l)))))
+(time-test 'begin-append-missing-first-recursive-arg-1
+  (run 1 (q)
+    (evalo `(begin
+              (define append
+                (lambda (l s)
+                  (if (null? l)
+                      s
+                      (cons (car l)
+                            (append ,q s)))))
+              (append '(1 2 3) '(4 5)))
+           '(1 2 3 4 5)))
+  '(((cdr l))))
 
-(time (test 'begin-append-missing-first-recursive-arg-gensym-1
-        (run 1 (q)
-          (let ((g1 (gensym "g1"))
-                (g2 (gensym "g2"))
-                (g3 (gensym "g3"))
-                (g4 (gensym "g4"))
-                (g5 (gensym "g5")))
-            (fresh (defn)
-              (absento g1 defn)
-              (absento g2 defn)
-              (absento g3 defn)
-              (absento g4 defn)
-              (absento g5 defn)
-              (== `(define append
-                     (lambda (l s)
-                       (if (null? l)
-                           s
-                           (cons (car l)
-                                 (append ,q s)))))
-                  defn)
-              (evalo `(begin
-                        ,defn
-                        (append '(,g1 ,g2 ,g3) '(,g4 ,g5)))
-                     `(,g1 ,g2 ,g3 ,g4 ,g5)))))
-        '(((cdr l)))))
+(time-test 'begin-append-missing-first-recursive-arg-gensym-1
+  (run 1 (q)
+    (let ((g1 (gensym "g1"))
+          (g2 (gensym "g2"))
+          (g3 (gensym "g3"))
+          (g4 (gensym "g4"))
+          (g5 (gensym "g5")))
+      (fresh (defn)
+        (absento g1 defn)
+        (absento g2 defn)
+        (absento g3 defn)
+        (absento g4 defn)
+        (absento g5 defn)
+        (== `(define append
+               (lambda (l s)
+                 (if (null? l)
+                     s
+                     (cons (car l)
+                           (append ,q s)))))
+            defn)
+        (evalo `(begin
+                  ,defn
+                  (append '(,g1 ,g2 ,g3) '(,g4 ,g5)))
+               `(,g1 ,g2 ,g3 ,g4 ,g5)))))
+  '(((cdr l))))
 
-(time (test 'begin-append-missing-second-recursive-arg-1
-        (run 1 (q)
-          (evalo `(begin
-                    (define append
-                      (lambda (l s)
-                        (if (null? l)
-                            s
-                            (cons (car l)
-                                  (append (cdr l) ,q)))))
-                    (append '(1 2 3) '(4 5)))
-                 '(1 2 3 4 5)))
-        '((s))))
+(time-test 'begin-append-missing-second-recursive-arg-1
+  (run 1 (q)
+    (evalo `(begin
+              (define append
+                (lambda (l s)
+                  (if (null? l)
+                      s
+                      (cons (car l)
+                            (append (cdr l) ,q)))))
+              (append '(1 2 3) '(4 5)))
+           '(1 2 3 4 5)))
+  '((s)))
 
-(time (test 'begin-append-missing-second-recursive-arg-gensym-1
-        (run 1 (q)
-          (let ((g1 (gensym "g1"))
-                (g2 (gensym "g2"))
-                (g3 (gensym "g3"))
-                (g4 (gensym "g4"))
-                (g5 (gensym "g5")))
-            (fresh (defn)
-              (absento g1 defn)
-              (absento g2 defn)
-              (absento g3 defn)
-              (absento g4 defn)
-              (absento g5 defn)
-              (== `(define append
-                     (lambda (l s)
-                       (if (null? l)
-                           s
-                           (cons (car l)
-                                 (append (cdr l) ,q)))))
-                  defn)
-              (evalo `(begin
-                        ,defn
-                        (append '(,g1 ,g2 ,g3) '(,g4 ,g5)))
-                     `(,g1 ,g2 ,g3 ,g4 ,g5)))))
-        '((s))))
+(time-test 'begin-append-missing-second-recursive-arg-gensym-1
+  (run 1 (q)
+    (let ((g1 (gensym "g1"))
+          (g2 (gensym "g2"))
+          (g3 (gensym "g3"))
+          (g4 (gensym "g4"))
+          (g5 (gensym "g5")))
+      (fresh (defn)
+        (absento g1 defn)
+        (absento g2 defn)
+        (absento g3 defn)
+        (absento g4 defn)
+        (absento g5 defn)
+        (== `(define append
+               (lambda (l s)
+                 (if (null? l)
+                     s
+                     (cons (car l)
+                           (append (cdr l) ,q)))))
+            defn)
+        (evalo `(begin
+                  ,defn
+                  (append '(,g1 ,g2 ,g3) '(,g4 ,g5)))
+               `(,g1 ,g2 ,g3 ,g4 ,g5)))))
+  '((s)))
 
-(time (test "append-gensym-synthesis-with-cons-1"
-        (run 1 (defn)
-          (let ((g1 (gensym "g1"))
-                (g2 (gensym "g2"))
-                (g3 (gensym "g3"))
-                (g4 (gensym "g4"))
-                (g5 (gensym "g5"))
-                (g6 (gensym "g6"))
-                (g7 (gensym "g7")))
-            (fresh (a b c d e f g)
-              (absento g1 defn)
-              (absento g2 defn)
-              (absento g3 defn)
-              (absento g4 defn)
-              (absento g5 defn)
-              (absento g6 defn)
-              (absento g7 defn)
-              (symbolo a)
-              (symbolo c)
-              (== `(define append
-                     (lambda (l s)
-                       (if (null? l)
-                           s
-                           (cons (car l)
-                                 (append (,a ,b) ,c)))))
-                  defn)
-              (evalo `(begin
-                        ,defn
-                        (cons (append '() '())
-                              (cons (append '(,g6) '(,g7))
-                                    (cons (append '(,g1 ,g2 ,g3) '(,g4 ,g5))
-                                          '()))))
-                     `(()
-                       (,g6 ,g7)
-                       (,g1 ,g2 ,g3 ,g4 ,g5))))))
-        '(((define append
-             (lambda (l s)
-               (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
+(time-test "append-gensym-synthesis-with-cons-1"
+  (run 1 (defn)
+    (let ((g1 (gensym "g1"))
+          (g2 (gensym "g2"))
+          (g3 (gensym "g3"))
+          (g4 (gensym "g4"))
+          (g5 (gensym "g5"))
+          (g6 (gensym "g6"))
+          (g7 (gensym "g7")))
+      (fresh (a b c d e f g)
+        (absento g1 defn)
+        (absento g2 defn)
+        (absento g3 defn)
+        (absento g4 defn)
+        (absento g5 defn)
+        (absento g6 defn)
+        (absento g7 defn)
+        (symbolo a)
+        (symbolo c)
+        (== `(define append
+               (lambda (l s)
+                 (if (null? l)
+                     s
+                     (cons (car l)
+                           (append (,a ,b) ,c)))))
+            defn)
+        (evalo `(begin
+                  ,defn
+                  (cons (append '() '())
+                        (cons (append '(,g6) '(,g7))
+                              (cons (append '(,g1 ,g2 ,g3) '(,g4 ,g5))
+                                    '()))))
+               `(()
+                 (,g6 ,g7)
+                 (,g1 ,g2 ,g3 ,g4 ,g5))))))
+  '(((define append
+       (lambda (l s)
+         (if (null? l) s (cons (car l) (append (cdr l) s))))))))
 
-(time (test "append-gensym-synthesis-with-list-1"
-        (run 1 (defn)
-          (let ((g1 (gensym "g1"))
-                (g2 (gensym "g2"))
-                (g3 (gensym "g3"))
-                (g4 (gensym "g4"))
-                (g5 (gensym "g5"))
-                (g6 (gensym "g6"))
-                (g7 (gensym "g7")))
-            (fresh (a b c d e f g)
-              (absento g1 defn)
-              (absento g2 defn)
-              (absento g3 defn)
-              (absento g4 defn)
-              (absento g5 defn)
-              (absento g6 defn)
-              (absento g7 defn)
-              (symbolo a)
-              (symbolo c)
-              (== `(define append
-                     (lambda (l s)
-                       (if (null? l)
-                           s
-                           (cons (car l)
-                                 (append (,a ,b) ,c)))))
-                  defn)
-              (evalo `(begin
-                        ,defn
-                        (list (append '() '())
-                              (append '(,g6) '(,g7))
-                              (append '(,g1 ,g2 ,g3) '(,g4 ,g5))))
-                     `(()
-                       (,g6 ,g7)
-                       (,g1 ,g2 ,g3 ,g4 ,g5))))))
-        '(((define append
-            (lambda (l s)
-              (if (null? l) s (cons (car l) (append (cdr l) s)))))))))
+(time-test "append-gensym-synthesis-with-list-1"
+  (run 1 (defn)
+    (let ((g1 (gensym "g1"))
+          (g2 (gensym "g2"))
+          (g3 (gensym "g3"))
+          (g4 (gensym "g4"))
+          (g5 (gensym "g5"))
+          (g6 (gensym "g6"))
+          (g7 (gensym "g7")))
+      (fresh (a b c d e f g)
+        (absento g1 defn)
+        (absento g2 defn)
+        (absento g3 defn)
+        (absento g4 defn)
+        (absento g5 defn)
+        (absento g6 defn)
+        (absento g7 defn)
+        (symbolo a)
+        (symbolo c)
+        (== `(define append
+               (lambda (l s)
+                 (if (null? l)
+                     s
+                     (cons (car l)
+                           (append (,a ,b) ,c)))))
+            defn)
+        (evalo `(begin
+                  ,defn
+                  (list (append '() '())
+                        (append '(,g6) '(,g7))
+                        (append '(,g1 ,g2 ,g3) '(,g4 ,g5))))
+               `(()
+                 (,g6 ,g7)
+                 (,g1 ,g2 ,g3 ,g4 ,g5))))))
+  '(((define append
+       (lambda (l s)
+         (if (null? l) s (cons (car l) (append (cdr l) s))))))))
 
 #|
-;;; doesn't come back even after 25 minutes
-(time (test 'begin-append-missing-both-recursive-args-gensym-1
-        (run 1 (q r)
-          (let ((g1 (gensym "g1"))
-                (g2 (gensym "g2"))
-                (g3 (gensym "g3"))
-                (g4 (gensym "g4"))
-                (g5 (gensym "g5")))
-            (fresh (defn)
-              (absento g1 defn)
-              (absento g2 defn)
-              (absento g3 defn)
-              (absento g4 defn)
-              (absento g5 defn)
-              (== `(define append
-                     (lambda (l s)
-                       (if (null? l)
-                           s
-                           (cons (car l)
-                                 (append ,q ,r)))))
-                  defn)
-              (evalo `(begin
-                        ,defn
-                        (append '(,g1 ,g2 ,g3) '(,g4 ,g5)))
-                     `(,g1 ,g2 ,g3 ,g4 ,g5)))))
-        '((((cdr l) s)))))
+;;; old timing:  doesn't come back even after 25 minutes
+(time-test 'begin-append-missing-both-recursive-args-gensym-1 ;
+(run 1 (q r)                            ;
+(let ((g1 (gensym "g1"))                ;
+(g2 (gensym "g2"))                      ;
+(g3 (gensym "g3"))                      ;
+(g4 (gensym "g4"))                      ;
+(g5 (gensym "g5")))                     ;
+(fresh (defn)                           ;
+(absento g1 defn)                       ;
+(absento g2 defn)                       ;
+(absento g3 defn)                       ;
+(absento g4 defn)                       ;
+(absento g5 defn)                       ;
+(== `(define append                     ;
+(lambda (l s)                           ;
+(if (null? l)                           ;
+s                                       ;
+(cons (car l)                           ;
+(append ,q ,r)))))                      ;
+defn)                                   ;
+(evalo `(begin                          ;
+,defn                                   ;
+(append '(,g1 ,g2 ,g3) '(,g4 ,g5)))     ;
+`(,g1 ,g2 ,g3 ,g4 ,g5)))))              ;
+'((((cdr l) s))))                       ;
 |#
 
 (test "check quine"
@@ -3219,7 +3220,7 @@
   (list (list '((lambda (x) `(,x ',x)) '(lambda (x) `(,x ',x))))))
 
 
-;;; this test used to take ~5 minutes
+;;; old timing: this test used to take ~5 minutes
 (printf "*** 'generate quine using Scheme-in-Scheme' test takes ~~12 minutes to run under Chez! ***\n")
 (time
   (test "generate quine using Scheme-in-Scheme"
