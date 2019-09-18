@@ -537,9 +537,7 @@
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
-;;; slooow
-#;(time
-  (test "factorial-synthesis-0e"
+#;(time-test "factorial-synthesis-0e"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -628,10 +626,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-1"
+(time-test "factorial-synthesis-1"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -720,10 +716,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-2"
+(time-test "factorial-synthesis-2"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -812,10 +806,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-2b"
+(time-test "factorial-synthesis-2b"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -898,10 +890,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-3b"
+(time-test "factorial-synthesis-3b"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -984,10 +974,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-3"
+(time-test "factorial-synthesis-3"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -1076,10 +1064,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-4c"
+(time-test "factorial-synthesis-4c"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -1117,10 +1103,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-4b"
+(time-test "factorial-synthesis-4b"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -1203,10 +1187,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-5b"
+(time-test "factorial-synthesis-5b"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -1289,10 +1271,8 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
-(time
-  (test "factorial-synthesis-4"
+(time-test "factorial-synthesis-4"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -1381,12 +1361,10 @@
 
      ;; result!
      '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
- )
 
 #!eof
 
-(time
-  (test "synthesize shuffle with a skeleton, 1 hole, partial recursion"
+(time-test "synthesize shuffle with a skeleton, 1 hole, partial recursion"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -1503,11 +1481,9 @@
 
      ;; result!
      '((((define shuffle (lambda (l1 l2) (if (null? l1) '() (let ((a1 (car l1)) (d1 (cdr l1))) (if (null? l2) '() (let ((a2 (car l2)) (d2 (cdr l2))) (cons a1 (cons a2 (shuffle d1 d2)))))))))))))
- )
 
 
-(time
-  (test "synthesize shuffle with a skeleton, 1 hole"
+(time-test "synthesize shuffle with a skeleton, 1 hole"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -1611,10 +1587,8 @@
 
      ;; result!
      '((((define shuffle (lambda (l1 l2) (if (null? l1) '() (let ((a1 (car l1)) (d1 (cdr l1))) (if (null? l2) '() (let ((a2 (car l2)) (d2 (cdr l2))) (cons a1 (cons a2 (shuffle d1 d2)))))))))))))
- )
 
-(time
-  (test "synthesize shuffle with a skeleton"
+(time-test "synthesize shuffle with a skeleton"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -1718,10 +1692,8 @@
 
      ;; result!
      '((((define shuffle (lambda (l1 l2) (if (null? l1) l1 (let ((a1 (car l1)) (d1 (cdr l1))) (if (null? l2) l2 (let ((a2 (car l2)) (d2 (cdr l2))) (cons a1 (cons a2 (shuffle d1 d2)))))))))))))
- )
 
-(time
-  (test "synthesize member? with a skeleton, if-test hole"
+(time-test "synthesize member? with a skeleton, if-test hole"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -1828,10 +1800,8 @@
                    (if (equal? a x)
                        #t
                        (member? x d))))))))))
- )
 
-(time
-  (test "synthesize member? with a skeleton, if-test hole with 'a' and 'x' as fixed arguments"
+(time-test "synthesize member? with a skeleton, if-test hole with 'a' and 'x' as fixed arguments"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -1952,8 +1922,7 @@
                        (member? x d))))))))))
  )
 
-(time
-  (test "synthesize member? with a skeleton, if-test hole, boolean holes with constraints"
+(time-test "synthesize member? with a skeleton, if-test hole, boolean holes with constraints"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -2064,11 +2033,9 @@
                    (if (equal? a x)
                        #t
                        (member? x d))))))))))
- )
 
 ;; this one takes a very long time if we remove type information from the boolean holes
-(time
-  (test "synthesize member? with a skeleton, if-test hole, boolean holes no constraints"
+(time-test "synthesize member? with a skeleton, if-test hole, boolean holes no constraints"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -2179,10 +2146,8 @@
                    (if (equal? a x)
                        #t
                        (member? x d))))))))))
- )
 
-(time
-  (test "synthesize member? with a skeleton, 2 holes, dan-member?"
+(time-test "synthesize member? with a skeleton, 2 holes, dan-member?"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -2306,10 +2271,8 @@
                    (if (equal? a x)
                        #t
                        (dan-member? x d))))))))))
- )
 
-(time
-  (test "synthesize member? with a skeleton, 2 holes"
+(time-test "synthesize member? with a skeleton, 2 holes"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -2433,10 +2396,8 @@
                    (if (equal? a x)
                        #t
                        (member? x d))))))))))
- )
 
-(time
-  (test "synthesize all of append, using actual Barliman code, with a skeleton"
+(time-test "synthesize all of append, using actual Barliman code, with a skeleton"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -2533,10 +2494,8 @@
                  s
                  (cons (car l)
                        (append (cdr l) s)))))))))
- )
 
-(time
-  (test "synthesize all of append, using actual Barliman code, with a single variable representing the entire program"
+(time-test "synthesize all of append, using actual Barliman code, with a single variable representing the entire program"
      (let ()
        (define (ans-allTests)
          (define (results)
@@ -2607,7 +2566,6 @@
              ((_.1 car)) ((_.1 cdr)) ((_.1 cons)) ((_.1 if))
              ((_.1 null?)))
         (sym _.0 _.1))))
- )
 
 ;; synthesize all of append
 (let ()
