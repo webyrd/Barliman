@@ -771,6 +771,11 @@
        (fresh (n1 n2)
          (numbero n1)
          (numbero n2)
+         (conde
+           [(== prim-id '/)
+            ;; don't allow division by 0
+            (=/= 0 n2)]
+           [(=/= prim-id '/)])
          (numbero val)
          (eval-listo rands env `(,n1 ,n2))
          (z/assert `(= ,val (,prim-id ,n1 ,n2))))]
