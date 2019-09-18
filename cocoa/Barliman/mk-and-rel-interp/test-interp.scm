@@ -134,7 +134,7 @@
                          (lambda (n) 
                            (if (zero? n)
                                1
-                               (* n (! (- n 1)))))))
+                               (* n (! (sub1 n)))))))
                      defns)
 		 
                  (appendo defns
@@ -165,7 +165,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
 (time
@@ -226,7 +226,7 @@
                          (lambda (n) 
                            (if (zero? n)
                                1
-                               (* n (! (- n 1)))))))
+                               (* n (! (sub1 n)))))))
                      defns)
 		 
                  (appendo defns
@@ -257,7 +257,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
 (time
@@ -318,7 +318,7 @@
                          (lambda (n)
                            (if (zero? n)
                                1
-                               (* ,A (! (- n 1)))))))
+                               (* ,A (! (sub1 n)))))))
                      defns)
 		 
                  (appendo defns
@@ -349,7 +349,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
 (time
@@ -441,7 +441,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
 (time
@@ -533,7 +533,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
 ;;; slooow
@@ -626,7 +626,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
 (time
@@ -687,7 +687,7 @@
                          (lambda (n) 
                            (if (zero? n)
                                ,A
-                               (* n (! (- n 1)))))))
+                               (* n (! (sub1 n)))))))
                      defns)
 		 
                  (appendo defns
@@ -718,7 +718,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
 (time
@@ -779,7 +779,7 @@
                          (lambda (n) 
                            (if (= ,A ,B)
                                1
-                               (* n (! (- n 1)))))))
+                               (* n (! (sub1 n)))))))
                      defns)
 		 
                  (appendo defns
@@ -810,7 +810,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
 (time
@@ -871,7 +871,7 @@
                          (lambda (n) 
                            (if (= ,A ,B)
                                1
-                               (* n (! (- n 1)))))))
+                               (* n (! (sub1 n)))))))
                      defns)
 		 
                  (appendo defns
@@ -896,7 +896,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
 (time
@@ -957,7 +957,7 @@
                          (lambda (n) 
                            (if ,A
                                1
-                               (* n (! (- n 1)))))))
+                               (* n (! (sub1 n)))))))
                      defns)
 		 
                  (appendo defns
@@ -982,7 +982,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
 (time
@@ -1043,7 +1043,7 @@
                          (lambda (n) 
                            (if ,A
                                1
-                               (* n (! (- n 1)))))))
+                               (* n (! (sub1 n)))))))
                      defns)
 		 
                  (appendo defns
@@ -1074,7 +1074,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
 (time
@@ -1160,7 +1160,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
 (time
@@ -1252,7 +1252,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
  )
 
 #!eof

@@ -779,6 +779,7 @@
       [(== prim-id 'sub1)
        (fresh (n1)
          (numbero n1)
+         (numbero val)
          (let ((assign-result (z/assert `(= ,val (- ,n1 1))))
                (eval-args (eval-listo rands env `(,n1))))
            (if (var? val)
