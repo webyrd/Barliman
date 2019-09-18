@@ -1079,6 +1079,47 @@
  )
 
 (time
+  (test "factorial-synthesis-4c"
+     (let ()
+       (define (ans-allTests)
+         (define (results)
+           (run 1 (defns)
+             (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
+                                
+               ;; skeleton
+               (== `((define !
+                       (lambda (n) 
+                         (if (zero? n)
+                             1
+                             (* n (! ,A))))))
+                   defns)
+		 
+               (appendo defns
+                        `(((lambda x x)
+
+                           ;; example inputs
+                           (! 0)
+                           (! 5)
+                           ))
+                        begin-body)
+               (evalo `(begin . ,begin-body)
+                      (list                         
+                       ;; example outputs
+                       1
+		       120
+                       )))))
+         (let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+           (if (null? results-fast)
+               (begin (set! allow-incomplete-search? #f) (results))
+               results-fast)))
+
+       (ans-allTests))
+
+     ;; result!
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
+ )
+
+(time
   (test "factorial-synthesis-4b"
      (let ()
        (define (ans-allTests)
