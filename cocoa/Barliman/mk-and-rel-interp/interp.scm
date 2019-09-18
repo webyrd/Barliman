@@ -401,6 +401,7 @@
                             (val . (equal? . (prim . equal?)))
                             ;;
                             (val . (zero? . (prim . zero?)))
+                            (val . (sub1 . (prim . sub1)))
                             (val . (+ . (prim . +)))
                             (val . (- . (prim . -)))
                             (val . (* . (prim . *)))
@@ -765,15 +766,24 @@
     (conde$ ;1$ (((prim-id prim-id)))
 
       [(== prim-id 'zero?)
-       (fresh (v)
-         (numbero v)
+       (fresh (n1)
+         (numbero n1)
          (let ((assign-result (conde$
-                               ((== #t val) (z/assert `(= ,v 0)))
-                               ((== #f val) (z/assert `(not (= ,v 0))))))
-               (eval-args (eval-listo rands env `(,v))))
+                               ((== #t val) (z/assert `(= ,n1 0)))
+                               ((== #f val) (z/assert `(not (= ,n1 0))))))
+               (eval-args (eval-listo rands env `(,n1))))
            (if (var? val)
                (fresh () eval-args assign-result)
                (fresh () assign-result eval-args))))]
+
+      [(== prim-id 'sub1)
+       (fresh (n1)
+         (numbero n1)
+         (let ((assign-result (z/assert `(= ,val (- ,n1 1))))
+               (eval-args (eval-listo rands env `(,n1))))
+           (if (var? val)
+               (fresh () eval-args assign-result)
+               (fresh () assign-result eval-args))))]      
      
       [(conde
          [(== prim-id '+)]
@@ -1030,6 +1040,7 @@
 (define initial-env `(
                       ;;
                       (val . (zero? . (prim . zero?)))
+                      (val . (sub1 . (prim . sub1)))
                       (val . (+ . (prim . +)))
                       (val . (- . (prim . -)))
                       (val . (* . (prim . *)))

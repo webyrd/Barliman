@@ -68,6 +68,14 @@
         (run* (q) (evalo '(let ((x 5)) (- x 3)) q))
         '((2))))
 
+(time (test "eval (let ((x 5)) (sub1 x))"
+        (run* (q) (evalo '(let ((x 5)) (sub1 x)) q))
+        '((4))))
+
+(time (test "eval (let ((x 5)) (sub1 (sub1 x)))"
+        (run* (q) (evalo '(let ((x 5)) (sub1 (sub1 x))) q))
+        '((3))))
+
 (time
   (test "factorial-fully-ground"
      (let ()
