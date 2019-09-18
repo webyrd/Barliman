@@ -48,6 +48,10 @@
         (run* (q) (evalo '(let ((x 0)) (= x 0)) q))
         '((#t))))
 
+(time (test "eval (let ((x 5)) (- x 3))"
+        (run* (q) (evalo '(let ((x 5)) (- x 3)) q))
+        '((2))))
+
 (time
   (test "factorial-fully-ground"
      (let ()
