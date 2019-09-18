@@ -399,6 +399,17 @@
                             (val . (cons . (prim . cons)))
                             (val . (not . (prim . not)))
                             (val . (equal? . (prim . equal?)))
+                            ;;
+                            (val . (+ . (prim . +)))
+                            (val . (- . (prim . -)))
+                            (val . (* . (prim . *)))
+                            (val . (/ . (prim . /)))
+                            (val . (= . (prim . =)))
+                            (val . (> . (prim . >)))
+                            (val . (>= . (prim . >=)))
+                            (val . (< . (prim . <)))
+                            (val . (<= . (prim . <=)))                      
+                            ;;
                             (val . (list . (closure (lambda x x) ,empty-env)))
                             . ,empty-env))
 
@@ -751,6 +762,32 @@
 (define (eval-primo prim-id val rands env)
   (project0 (prim-id val rands env)
     (conde$ ;1$ (((prim-id prim-id)))
+
+      [(conde
+         [(== prim-id '+)]
+         [(== prim-id '-)]
+         [(== prim-id '*)]
+         [(== prim-id '/)])
+       (fresh (n1 n2)
+         (numbero n1)
+         (numbero n2)
+         (numbero val)
+         (eval-listo rands env `(,n1 ,n2))
+         (z/assert `(= ,val (,prim-id ,n1 ,n2))))]
+      [(conde
+         [(== prim-id '=)]
+         [(== prim-id '>)]
+         [(== prim-id '>=)]
+         [(== prim-id '<)]
+         [(== prim-id '<=)])
+       (fresh (n1 n2)
+         (numbero n1)
+         (numbero n2)
+         (eval-listo rands env `(,n1 ,n2))
+         (conde
+           [(== #t val) (z/assert `(,prim-id ,n1 ,n2))]
+           [(== #f val) (z/assert `(not (,prim-id ,n1 ,n2)))]))]
+     
       [(== prim-id 'cons)
        (fresh (a d)
          (== `(,a . ,d) val)
@@ -858,8 +895,9 @@
            (if (var? val)
              (fresh () eval-args assign-result)
              (fresh () assign-result eval-args))))]
-      ;[(== prim-id 'list)
-       ;(eval-listo rands env val)]
+      
+      ;;[(== prim-id 'list)
+      ;;(eval-listo rands env val)]
       )))
 
 (define (prim-expo expr env val)
@@ -971,7 +1009,19 @@
            ((== #f v) (cond-clauseso c*-rest env val))
            ((condition-true v) (eval-expo conseq env val))))))))
 
-(define initial-env `((val . (cons . (prim . cons)))
+(define initial-env `(
+                      ;;
+                      (val . (+ . (prim . +)))
+                      (val . (- . (prim . -)))
+                      (val . (* . (prim . *)))
+                      (val . (/ . (prim . /)))
+                      (val . (= . (prim . =)))
+                      (val . (> . (prim . >)))
+                      (val . (>= . (prim . >=)))
+                      (val . (< . (prim . <)))
+                      (val . (<= . (prim . <=)))                      
+                      ;;
+                      (val . (cons . (prim . cons)))
                       (val . (car . (prim . car)))
                       (val . (cdr . (prim . cdr)))
                       (val . (null? . (prim . null?)))
@@ -981,7 +1031,7 @@
                       (val . (procedure? . (prim . procedure?)))
                       (val . (not . (prim . not)))
                       (val . (equal? . (prim . equal?)))
-                      (val . (list . (closure (lambda x x) ,empty-env)))
+                      (val . (list . (closure (lambda x x) ,empty-env)))                      
                       . ,empty-env))
 
 (define handle-matcho

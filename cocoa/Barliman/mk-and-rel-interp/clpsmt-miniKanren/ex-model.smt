@@ -1,0 +1,5 @@
+(declare-fun x0 () Int)
+(assert (= x0 0))
+(check-sat)
+(get-model)
+(exit)

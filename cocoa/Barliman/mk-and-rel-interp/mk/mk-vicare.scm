@@ -207,7 +207,7 @@
 ; Performance with the tries is usually about the same and
 ; can be much better for huge substitutions.
 
-#|
+
 (define empty-subst-map '())
 
 (define subst-map-length length)
@@ -225,7 +225,7 @@
   (cons (cons var val) S))
 
 (define subst-map-eq? eq?)
-|#
+
 
 
 ; Constraint store representation
@@ -237,7 +237,8 @@
     (state (state-S st)
            (t:bind (var-idx v) c (state-C st))
            (state-depth st)
-           (state-deferred st))))
+           (state-deferred st)
+           (state-M st))))
 
 (define lookup-c
   (lambda (v st)
@@ -251,7 +252,7 @@
 (define remove-c
   (lambda (v st)
     (let ((res (t:bind (var-idx v) empty-c (state-C st))))
-      (state (state-S st) res (state-depth st) (state-deferred st)))))
+      (state (state-S st) res (state-depth st) (state-deferred st) (state-M st)))))
 
 
 ; Misc. missing functions
