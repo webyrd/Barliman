@@ -85,8 +85,7 @@
   (lambda (e)
     (fresh ()
       (z/ `(assert ,e))
-      ;;z/check
-      )))
+      z/check)))
 
 (define add-model
   (lambda (m s)

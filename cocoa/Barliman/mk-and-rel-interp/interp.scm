@@ -424,9 +424,7 @@
 
 ;;; interpreter
 (define (evalo expr val)
-  (fresh ()
-    (eval-expo expr initial-env val)
-    z/check))
+  (eval-expo expr initial-env val))
 
 (define (eval-expo expr env val)
   (try-lookup-before expr env val (eval-expo-rest expr env val)))
@@ -771,8 +769,8 @@
        (fresh (n1)
          (numbero n1)
          (let ((assign-result (conde$
-                               ((== #t val) (z/assert `(= ,n1 0)) z/check)
-                               ((== #f val) (z/assert `(not (= ,n1 0))) z/check)))
+                               ((== #t val) (z/assert `(= ,n1 0)))
+                               ((== #f val) (z/assert `(not (= ,n1 0))))))
                (eval-args (eval-listo rands env `(,n1))))
            (if (var? val)
                (fresh () eval-args assign-result)
