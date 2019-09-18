@@ -403,14 +403,14 @@
                             (val . (zero? . (prim . zero?)))
                             (val . (sub1 . (prim . sub1)))
                             (val . (+ . (prim . +)))
-                            (val . (- . (prim . -)))
+                            ;;(val . (- . (prim . -)))
                             (val . (* . (prim . *)))
-                            (val . (/ . (prim . /)))
-                            (val . (= . (prim . =)))
-                            (val . (> . (prim . >)))
-                            (val . (>= . (prim . >=)))
-                            (val . (< . (prim . <)))
-                            (val . (<= . (prim . <=)))                      
+                            ;;(val . (/ . (prim . /)))
+                            ;;(val . (= . (prim . =)))
+                            ;;(val . (> . (prim . >)))
+                            ;;(val . (>= . (prim . >=)))
+                            ;;(val . (< . (prim . <)))
+                            ;;(val . (<= . (prim . <=)))                      
                             ;;
                             (val . (list . (closure (lambda x x) ,empty-env)))
                             . ,empty-env))
@@ -788,13 +788,14 @@
      
       [(conde
          [(== prim-id '+)]
-         [(== prim-id '-)]
+         ;; [(== prim-id '-)]
          [(== prim-id '*)]
-         [(== prim-id '/)])
+         ;; [(== prim-id '/)]
+         )
        (fresh (n1 n2)
          (numbero n1)
          (numbero n2)
-         (conde
+         #;(conde
            [(== prim-id '/)
             ;; don't allow division by 0
             (=/= 0 n2)]
@@ -802,12 +803,13 @@
          (numbero val)
          (eval-listo rands env `(,n1 ,n2))
          (z/assert `(= ,val (,prim-id ,n1 ,n2))))]
-      [(conde
-         [(== prim-id '=)]
-         [(== prim-id '>)]
-         [(== prim-id '>=)]
+      #;[(conde
+         ;;[(== prim-id '=)]
+         ;;[(== prim-id '>)]
+         ;;[(== prim-id '>=)]
          [(== prim-id '<)]
-         [(== prim-id '<=)])
+         ;;[(== prim-id '<=)]
+         )
        (fresh (n1 n2)
          (numbero n1)
          (numbero n2)
@@ -1043,14 +1045,14 @@
                       (val . (zero? . (prim . zero?)))
                       (val . (sub1 . (prim . sub1)))
                       (val . (+ . (prim . +)))
-                      (val . (- . (prim . -)))
+                      ;;(val . (- . (prim . -)))
                       (val . (* . (prim . *)))
-                      (val . (/ . (prim . /)))
-                      (val . (= . (prim . =)))
-                      (val . (> . (prim . >)))
-                      (val . (>= . (prim . >=)))
-                      (val . (< . (prim . <)))
-                      (val . (<= . (prim . <=)))                      
+                      ;;(val . (/ . (prim . /)))
+                      ;;(val . (= . (prim . =)))
+                      ;;(val . (> . (prim . >)))
+                      ;;(val . (>= . (prim . >=)))
+                      ;;(val . (< . (prim . <)))
+                      ;;(val . (<= . (prim . <=)))                      
                       ;;
                       (val . (cons . (prim . cons)))
                       (val . (car . (prim . car)))
