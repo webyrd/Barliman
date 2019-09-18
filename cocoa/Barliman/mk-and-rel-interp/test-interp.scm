@@ -12,6 +12,22 @@
         (run* (q) (evalo '(+ 3 4) q))
         '((7))))
 
+(time (test "eval (zero? 0)"
+        (run* (q) (evalo '(zero? 0) q))
+        '((#t))))
+
+(time (test "eval (zero? 5)"
+        (run* (q) (evalo '(zero? 5) q))
+        '((#f))))
+
+(time (test "eval (zero? (- (* 2 3) (+ 1 5)))"
+        (run* (q) (evalo '(zero? (- (* 2 3) (+ 1 5))) q))
+        '((#t))))
+
+(time (test "eval (zero? (- (* 2 3) (+ 1 4)))"
+        (run* (q) (evalo '(zero? (- (* 2 3) (+ 1 4))) q))
+        '((#f))))
+
 (time (test "eval (= 0 0)"
         (run* (q) (evalo '(= 0 0) q))
         '((#t))))
@@ -108,7 +124,7 @@
                  ;; skeleton
                  (== `((define !
                          (lambda (n) 
-                           (if (= n 0)
+                           (if (zero? n)
                                1
                                (* n (! (- n 1)))))))
                      defns)
@@ -141,7 +157,99 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (= n 0) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+ )
+
+(time
+  (test "factorial-fully-ground-b"
+     (let ()
+       (define (ans-allTests)
+         (define (results)
+           (run 1 (defns)
+             (let ((g1 (gensym "g1"))
+                   (g2 (gensym "g2"))
+                   (g3 (gensym "g3"))
+                   (g4 (gensym "g4"))
+                   (g5 (gensym "g5"))
+                   (g6 (gensym "g6"))
+                   (g7 (gensym "g7"))
+                   (g8 (gensym "g8"))
+                   (g9 (gensym "g9"))
+                   (g10 (gensym "g10"))
+                   (g11 (gensym "g11"))
+                   (g12 (gensym "g12"))
+                   (g13 (gensym "g13"))
+                   (g14 (gensym "g14"))
+                   (g15 (gensym "g15"))
+                   (g16 (gensym "g16"))
+                   (g17 (gensym "g17"))
+                   (g18 (gensym "g18"))
+                   (g19 (gensym "g19"))
+                   (g20 (gensym "g20")))
+               (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
+                 (fresh (defn-list)
+               
+                   (== defns defn-list)
+               
+                   (absento g1 defn-list)
+                   (absento g2 defn-list)
+                   (absento g3 defn-list)
+                   (absento g4 defn-list)
+                   (absento g4 defn-list)
+                   (absento g5 defn-list)
+                   (absento g6 defn-list)
+                   (absento g7 defn-list)
+                   (absento g8 defn-list)
+                   (absento g9 defn-list)
+                   (absento g10 defn-list)
+                   (absento g11 defn-list)
+                   (absento g12 defn-list)
+                   (absento g13 defn-list)
+                   (absento g14 defn-list)
+                   (absento g15 defn-list)
+                   (absento g16 defn-list)
+                   (absento g17 defn-list)
+                   (absento g18 defn-list)
+                   (absento g19 defn-list)
+                   (absento g20 defn-list))
+
+                 ;; skeleton
+                 (== `((define !
+                         (lambda (n) 
+                           (if (zero? n)
+                               1
+                               (* n (! (- n 1)))))))
+                     defns)
+		 
+                 (appendo defns
+                          `(((lambda x x)
+
+                             ;; example inputs
+                             (! 0)
+                             (! 1)
+                             (! 2)
+                             (! 3)
+                             (! 5)
+                             ))
+                          begin-body)
+                 (evalo `(begin . ,begin-body)
+                        (list                         
+                         ;; example outputs
+                         1
+                         1
+                         2
+                         6
+			 120
+                         ))))))
+         (let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+           (if (null? results-fast)
+               (begin (set! allow-incomplete-search? #f) (results))
+               results-fast)))
+
+       (ans-allTests))
+
+     ;; result!
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
  )
 
 (time
@@ -199,8 +307,8 @@
 
                  ;; skeleton
                  (== `((define !
-                         (lambda (n) 
-                           (if (= n 0)
+                         (lambda (n)
+                           (if (zero? n)
                                1
                                (* ,A (! (- n 1)))))))
                      defns)
@@ -233,7 +341,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (= n 0) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
  )
 
 (time
@@ -292,7 +400,7 @@
                  ;; skeleton
                  (== `((define !
                          (lambda (n) 
-                           (if (= n 0)
+                           (if (zero? n)
                                1
                                (* n (! (- ,A 1)))))))
                      defns)
@@ -325,11 +433,10 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (= n 0) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
  )
 
-;; Very slowwww
-#;(time
+(time
   (test "factorial-synthesis-0c"
      (let ()
        (define (ans-allTests)
@@ -385,7 +492,100 @@
                  ;; skeleton
                  (== `((define !
                          (lambda (n) 
-                           (if (= n 0)
+                           (if (zero? n)
+                               1
+                               (* n (! (- ,A 1)))))))
+                     defns)
+		 
+                 (appendo defns
+                          `(((lambda x x)
+
+                             ;; example inputs
+                             (! 0)
+                             (! 1)
+                             (! 2)
+                             (! 3)
+                             (! 5)
+                             ))
+                          begin-body)
+                 (evalo `(begin . ,begin-body)
+                        (list                         
+                         ;; example outputs
+                         1
+                         1
+                         2
+                         6
+			 120
+                         ))))))
+         (let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+           (if (null? results-fast)
+               (begin (set! allow-incomplete-search? #f) (results))
+               results-fast)))
+
+       (ans-allTests))
+
+     ;; result!
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+ )
+
+;;; slooow
+#;(time
+  (test "factorial-synthesis-0e"
+     (let ()
+       (define (ans-allTests)
+         (define (results)
+           (run 1 (defns)
+             (let ((g1 (gensym "g1"))
+                   (g2 (gensym "g2"))
+                   (g3 (gensym "g3"))
+                   (g4 (gensym "g4"))
+                   (g5 (gensym "g5"))
+                   (g6 (gensym "g6"))
+                   (g7 (gensym "g7"))
+                   (g8 (gensym "g8"))
+                   (g9 (gensym "g9"))
+                   (g10 (gensym "g10"))
+                   (g11 (gensym "g11"))
+                   (g12 (gensym "g12"))
+                   (g13 (gensym "g13"))
+                   (g14 (gensym "g14"))
+                   (g15 (gensym "g15"))
+                   (g16 (gensym "g16"))
+                   (g17 (gensym "g17"))
+                   (g18 (gensym "g18"))
+                   (g19 (gensym "g19"))
+                   (g20 (gensym "g20")))
+               (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
+                 (fresh (defn-list)
+               
+                   (== defns defn-list)
+               
+                   (absento g1 defn-list)
+                   (absento g2 defn-list)
+                   (absento g3 defn-list)
+                   (absento g4 defn-list)
+                   (absento g4 defn-list)
+                   (absento g5 defn-list)
+                   (absento g6 defn-list)
+                   (absento g7 defn-list)
+                   (absento g8 defn-list)
+                   (absento g9 defn-list)
+                   (absento g10 defn-list)
+                   (absento g11 defn-list)
+                   (absento g12 defn-list)
+                   (absento g13 defn-list)
+                   (absento g14 defn-list)
+                   (absento g15 defn-list)
+                   (absento g16 defn-list)
+                   (absento g17 defn-list)
+                   (absento g18 defn-list)
+                   (absento g19 defn-list)
+                   (absento g20 defn-list))
+
+                 ;; skeleton
+                 (== `((define !
+                         (lambda (n) 
+                           (if (zero? n)
                                1
                                (* n (! (- ,A ,B)))))))
                      defns)
@@ -418,7 +618,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (= n 0) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
  )
 
 (time
@@ -477,7 +677,7 @@
                  ;; skeleton
                  (== `((define !
                          (lambda (n) 
-                           (if (= n 0)
+                           (if (zero? n)
                                ,A
                                (* n (! (- n 1)))))))
                      defns)
@@ -510,7 +710,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (= n 0) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
  )
 
 (time
@@ -602,7 +802,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (= n 0) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
  )
 
 (time
@@ -688,7 +888,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (= n 0) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
  )
 
 (time
@@ -774,7 +974,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (= n 0) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
  )
 
 (time
@@ -866,7 +1066,93 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (= n 0) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
+ )
+
+(time
+  (test "factorial-synthesis-4b"
+     (let ()
+       (define (ans-allTests)
+         (define (results)
+           (run 1 (defns)
+             (let ((g1 (gensym "g1"))
+                   (g2 (gensym "g2"))
+                   (g3 (gensym "g3"))
+                   (g4 (gensym "g4"))
+                   (g5 (gensym "g5"))
+                   (g6 (gensym "g6"))
+                   (g7 (gensym "g7"))
+                   (g8 (gensym "g8"))
+                   (g9 (gensym "g9"))
+                   (g10 (gensym "g10"))
+                   (g11 (gensym "g11"))
+                   (g12 (gensym "g12"))
+                   (g13 (gensym "g13"))
+                   (g14 (gensym "g14"))
+                   (g15 (gensym "g15"))
+                   (g16 (gensym "g16"))
+                   (g17 (gensym "g17"))
+                   (g18 (gensym "g18"))
+                   (g19 (gensym "g19"))
+                   (g20 (gensym "g20")))
+               (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z begin-body)
+                 (fresh (defn-list)
+               
+                   (== defns defn-list)
+               
+                   (absento g1 defn-list)
+                   (absento g2 defn-list)
+                   (absento g3 defn-list)
+                   (absento g4 defn-list)
+                   (absento g4 defn-list)
+                   (absento g5 defn-list)
+                   (absento g6 defn-list)
+                   (absento g7 defn-list)
+                   (absento g8 defn-list)
+                   (absento g9 defn-list)
+                   (absento g10 defn-list)
+                   (absento g11 defn-list)
+                   (absento g12 defn-list)
+                   (absento g13 defn-list)
+                   (absento g14 defn-list)
+                   (absento g15 defn-list)
+                   (absento g16 defn-list)
+                   (absento g17 defn-list)
+                   (absento g18 defn-list)
+                   (absento g19 defn-list)
+                   (absento g20 defn-list))
+                 
+                 ;; skeleton
+                 (== `((define !
+                         (lambda (n) 
+                           (if (zero? n)
+                               1
+                               (* n (! ,A))))))
+                     defns)
+		 
+                 (appendo defns
+                          `(((lambda x x)
+
+                             ;; example inputs
+                             (! 0)
+                             (! 5)
+                             ))
+                          begin-body)
+                 (evalo `(begin . ,begin-body)
+                        (list                         
+                         ;; example outputs
+                         1
+			 120
+                         ))))))
+         (let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+           (if (null? results-fast)
+               (begin (set! allow-incomplete-search? #f) (results))
+               results-fast)))
+
+       (ans-allTests))
+
+     ;; result!
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
  )
 
 (time
@@ -925,7 +1211,7 @@
                  ;; skeleton
                  (== `((define !
                          (lambda (n) 
-                           (if (= n 0)
+                           (if (zero? n)
                                1
                                (* n (! ,A))))))
                      defns)
@@ -958,7 +1244,7 @@
        (ans-allTests))
 
      ;; result!
-     '((((define ! (lambda (n) (if (= n 0) 1 (* n (! (- n 1))))))))))
+     '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (- n 1))))))))))
  )
 
 #!eof
