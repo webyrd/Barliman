@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControlTextEditingDelegate {
+class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControlTextEditingDelegate, NSTextDelegate {
 
     // Making these views weak references seems to cause a runtime error.  Why?
     @IBOutlet var schemeDefinitionView: NSTextView!
