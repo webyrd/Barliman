@@ -19,17 +19,17 @@ class SchemeEditorTextView: NSTextView {
     override func keyDown(with event: NSEvent) {
         Swift.print("----------------   keyDown: \(event.keyCode) ")
         
-        if ((event.keyCode == 0x31) && (event.modifierFlags.contains(NSEventModifierFlags.control))) {
+        if ((event.keyCode == 0x31) && (event.modifierFlags.contains(NSEvent.ModifierFlags.control))) {
             // space was entered while holding the 'control' key
             Swift.print("---------------- space + control")
 
-            let oldString : String = (self.string)!
-            // Swift.print("undo keydown oldString: \( oldString )")
+            let oldString : String = (self.string)
+            Swift.print("undo keydown oldString: \( oldString )")
             
             let unusedLogicVarString : String = getNextUnusedLogicVar(oldString)
             
             let newPartialString : NSMutableAttributedString = NSMutableAttributedString(string: unusedLogicVarString,
-                                                                                   attributes: [NSFontAttributeName:NSFont(
+                                                                                         attributes: [NSAttributedString.Key.font:NSFont(
                                                                                    name: EditorWindowController.fontName(),
                                                                                    size: EditorWindowController.fontSize())!])
             
@@ -101,3 +101,4 @@ class SchemeEditorTextView: NSTextView {
     }
 
 }
+

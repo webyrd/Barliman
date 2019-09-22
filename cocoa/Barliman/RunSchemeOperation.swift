@@ -40,9 +40,9 @@ class RunSchemeOperation: Operation {
 
         super.cancel()
 
-        // print("&&& killing process \( task.processIdentifier )")
+        print("&&& killing process \( task.processIdentifier )")
         task.terminate()
-        // print("&&& killed process")
+        print("&&& killed process")
 
     }
 
@@ -172,7 +172,7 @@ class RunSchemeOperation: Operation {
     override func main() {
 
         if self.isCancelled {
-            // print("*** cancelled immediately! ***\n")
+            print("*** cancelled immediately! ***\n")
             return
         }
 
@@ -203,8 +203,11 @@ class RunSchemeOperation: Operation {
         task.standardError = errorPipe
 
         // Launch the Chez Scheme process, with the miniKanren query
+        print("*** launching Scheme process\n")
+        print("*** launchPath: \( String(describing: task.launchPath) )\n")
+        print("*** arguments: \( String(describing: task.arguments) )\n")
         task.launch()
-        // print("*** launched process \( task.processIdentifier )")
+        print("*** launched process \( task.processIdentifier )\n")
 
 
         let outputFileHandle = outputPipe.fileHandleForReading
@@ -226,9 +229,9 @@ class RunSchemeOperation: Operation {
         OperationQueue.main.addOperation {
 
             func setFontAndSize(_ bestGuessView: NSTextView) {
-                bestGuessView.textStorage?.addAttribute(NSFontAttributeName,
+                bestGuessView.textStorage?.addAttribute(NSAttributedString.Key.font,
                     value: NSFont(name: EditorWindowController.fontName(), size: EditorWindowController.fontSize())!,
-                    range: NSMakeRange(0, bestGuessView.string!.count))
+                    range: NSMakeRange(0, bestGuessView.string.count))
             }
             
             func onTestCompletion(_ inputField: NSTextField, outputField: NSTextField, spinner: NSProgressIndicator, label: NSTextField, datastring: String) {
@@ -448,7 +451,7 @@ class RunSchemeOperation: Operation {
             } else {
                 // the query wasn't even a legal s-expression, according to Chez!
                 if self.taskType == "simple" {
-                    // print("exitStatus = \( exitStatus )")
+                    print("exitStatus = \( exitStatus )")
                     self.illegalSexpInDefn()
                 }
 
@@ -480,3 +483,4 @@ class RunSchemeOperation: Operation {
         }
     }
 }
+

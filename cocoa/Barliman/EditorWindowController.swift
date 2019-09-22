@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class EditorWindowController: NSWindowController, NSSplitViewDelegate {
+class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControlTextEditingDelegate {
 
     // Making these views weak references seems to cause a runtime error.  Why?
     @IBOutlet var schemeDefinitionView: NSTextView!
@@ -157,7 +157,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         setupRunCodeFromEditPaneTimer()
     }
 
-    override func controlTextDidChange(_ aNotification: Notification) {
+    func controlTextDidChange(_ aNotification: Notification) {
         // NSTextField text changed
         print("@@@@@@@@@@@@@@@@@@@ controlTextDidChange")
 
@@ -367,7 +367,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     }
 
 
-    func runCodeFromEditPane() {
+    @objc func runCodeFromEditPane() {
 
         // The text in the code pane changed!  Launch a new Scheme task to evaluate the new expression...
 
@@ -732,7 +732,14 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         // create the operations that will be placed in the operation queue
 
-
+        
+        print("==== pathQuerySimpleForMondoSchemeFile: \( String(describing: pathQuerySimpleForMondoSchemeFile) )")
+        print("==== pathSimple: \( String(describing: pathNewSimple) )")
+        print("==== schemeScriptPathStringNewSimple: \( String(describing: schemeScriptPathStringNewSimple) )")
+        print("==== pathNewTest1: \( String(describing: pathNewTest1) )")
+        print("==== pathNewActualTest1: \( String(describing: pathNewActualTest1) )")
+        
+        
         let runSchemeOpSimple = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewSimple, taskType: "simple")
 
         let runSchemeOpTest1 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewTest1, taskType: "test1")
@@ -811,3 +818,4 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         }
     }
 }
+

@@ -3,80 +3,42 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		372DE8181D4E4D47009725E1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372DE8171D4E4D47009725E1 /* Extensions.swift */; };
-		890FC1B01CFC071600D1FD73 /* SemanticsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890FC1AF1CFC071600D1FD73 /* SemanticsWindowController.swift */; };
-		890FC1B41CFC097200D1FD73 /* SemanticsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 890FC1B31CFC097200D1FD73 /* SemanticsWindowController.xib */; };
-		891E42F61CE6FD8D003C3333 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E42F51CE6FD8D003C3333 /* AppDelegate.swift */; };
-		891E42F81CE6FD8D003C3333 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 891E42F71CE6FD8D003C3333 /* Assets.xcassets */; };
-		891E42FB1CE6FD8D003C3333 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 891E42F91CE6FD8D003C3333 /* MainMenu.xib */; };
-		891E43061CE6FD8D003C3333 /* BarlimanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43051CE6FD8D003C3333 /* BarlimanTests.swift */; };
-		891E43111CE6FD8D003C3333 /* BarlimanUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43101CE6FD8D003C3333 /* BarlimanUITests.swift */; };
-		891E43241CE7098D003C3333 /* EditorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891E43221CE7098D003C3333 /* EditorWindowController.swift */; };
-		891E43251CE7098D003C3333 /* EditorWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 891E43231CE7098D003C3333 /* EditorWindowController.xib */; };
-		89393D371D0C1BB30067D19A /* SchemeEditorTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89393D361D0C1BB30067D19A /* SchemeEditorTextView.swift */; };
-		89B081521CF195F5007E6ABA /* mk-and-rel-interp in Resources */ = {isa = PBXBuildFile; fileRef = 89B081511CF195F5007E6ABA /* mk-and-rel-interp */; };
-		89C405A61CF426BE009970A7 /* RunSchemeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C405A51CF426BE009970A7 /* RunSchemeOperation.swift */; };
+		8911EF6E2337862A005655BF /* EditorWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8911EF6D2337862A005655BF /* EditorWindowController.xib */; };
+		8911EF7023378636005655BF /* SemanticsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8911EF6F23378636005655BF /* SemanticsWindowController.xib */; };
+		8911EF722337863E005655BF /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8911EF712337863E005655BF /* MainMenu.xib */; };
+		8990E00E23377330006B96B5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E00D23377330006B96B5 /* AppDelegate.swift */; };
+		8990E01023377330006B96B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8990E00F23377330006B96B5 /* Assets.xcassets */; };
+		8990E01C23377499006B96B5 /* SemanticsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E01B23377499006B96B5 /* SemanticsWindowController.swift */; };
+		8990E01E23377516006B96B5 /* EditorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E01D23377516006B96B5 /* EditorWindowController.swift */; };
+		8990E02023377589006B96B5 /* SchemeEditorTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E01F23377589006B96B5 /* SchemeEditorTextView.swift */; };
+		8990E02223377706006B96B5 /* RunSchemeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E02123377706006B96B5 /* RunSchemeOperation.swift */; };
+		8990E02423377749006B96B5 /* mk-and-rel-interp in Resources */ = {isa = PBXBuildFile; fileRef = 8990E02323377748006B96B5 /* mk-and-rel-interp */; };
+		8990E026233777CF006B96B5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E025233777CF006B96B5 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		891E43021CE6FD8D003C3333 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 891E42EA1CE6FD8C003C3333 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 891E42F11CE6FD8C003C3333;
-			remoteInfo = Barliman;
-		};
-		891E430D1CE6FD8D003C3333 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 891E42EA1CE6FD8C003C3333 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 891E42F11CE6FD8C003C3333;
-			remoteInfo = Barliman;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		372DE8171D4E4D47009725E1 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; tabWidth = 4; };
-		890FC1AF1CFC071600D1FD73 /* SemanticsWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SemanticsWindowController.swift; sourceTree = "<group>"; };
-		890FC1B31CFC097200D1FD73 /* SemanticsWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SemanticsWindowController.xib; sourceTree = "<group>"; };
-		891E42F21CE6FD8C003C3333 /* Barliman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barliman.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		891E42F51CE6FD8D003C3333 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		891E42F71CE6FD8D003C3333 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		891E42FA1CE6FD8D003C3333 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		891E42FC1CE6FD8D003C3333 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		891E43011CE6FD8D003C3333 /* Barliman.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Barliman.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		891E43051CE6FD8D003C3333 /* BarlimanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarlimanTests.swift; sourceTree = "<group>"; };
-		891E43071CE6FD8D003C3333 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		891E430C1CE6FD8D003C3333 /* Barliman.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Barliman.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		891E43101CE6FD8D003C3333 /* BarlimanUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarlimanUITests.swift; sourceTree = "<group>"; };
-		891E43221CE7098D003C3333 /* EditorWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
-		891E43231CE7098D003C3333 /* EditorWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorWindowController.xib; sourceTree = "<group>"; };
-		89393D361D0C1BB30067D19A /* SchemeEditorTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = SchemeEditorTextView.swift; sourceTree = "<group>"; tabWidth = 4; };
-		89963B22225F6663009B1D50 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		89B081511CF195F5007E6ABA /* mk-and-rel-interp */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "mk-and-rel-interp"; sourceTree = "<group>"; };
-		89C405A51CF426BE009970A7 /* RunSchemeOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunSchemeOperation.swift; sourceTree = "<group>"; };
+		8911EF6D2337862A005655BF /* EditorWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorWindowController.xib; sourceTree = "<group>"; };
+		8911EF6F23378636005655BF /* SemanticsWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SemanticsWindowController.xib; sourceTree = "<group>"; };
+		8911EF712337863E005655BF /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
+		8990E00A23377330006B96B5 /* Barliman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barliman.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8990E00D23377330006B96B5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8990E00F23377330006B96B5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8990E01423377330006B96B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8990E01523377330006B96B5 /* Barliman.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Barliman.entitlements; sourceTree = "<group>"; };
+		8990E01B23377499006B96B5 /* SemanticsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemanticsWindowController.swift; sourceTree = "<group>"; };
+		8990E01D23377516006B96B5 /* EditorWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
+		8990E01F23377589006B96B5 /* SchemeEditorTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeEditorTextView.swift; sourceTree = "<group>"; };
+		8990E02123377706006B96B5 /* RunSchemeOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunSchemeOperation.swift; sourceTree = "<group>"; };
+		8990E02323377748006B96B5 /* mk-and-rel-interp */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "mk-and-rel-interp"; sourceTree = "<group>"; };
+		8990E025233777CF006B96B5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		891E42EF1CE6FD8C003C3333 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		891E42FE1CE6FD8D003C3333 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		891E43091CE6FD8D003C3333 /* Frameworks */ = {
+		8990E00723377330006B96B5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -86,73 +48,52 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		891E42E91CE6FD8C003C3333 = {
+		8990E00123377330006B96B5 = {
 			isa = PBXGroup;
 			children = (
-				891E42F41CE6FD8C003C3333 /* Barliman */,
-				891E43041CE6FD8D003C3333 /* BarlimanTests */,
-				891E430F1CE6FD8D003C3333 /* BarlimanUITests */,
-				891E42F31CE6FD8C003C3333 /* Products */,
+				8990E00C23377330006B96B5 /* Barliman */,
+				8990E00B23377330006B96B5 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		891E42F31CE6FD8C003C3333 /* Products */ = {
+		8990E00B23377330006B96B5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				891E42F21CE6FD8C003C3333 /* Barliman.app */,
-				891E43011CE6FD8D003C3333 /* Barliman.xctest */,
-				891E430C1CE6FD8D003C3333 /* Barliman.xctest */,
+				8990E00A23377330006B96B5 /* Barliman.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		891E42F41CE6FD8C003C3333 /* Barliman */ = {
+		8990E00C23377330006B96B5 /* Barliman */ = {
 			isa = PBXGroup;
 			children = (
-				891E42F51CE6FD8D003C3333 /* AppDelegate.swift */,
-				891E42F71CE6FD8D003C3333 /* Assets.xcassets */,
-				891E42F91CE6FD8D003C3333 /* MainMenu.xib */,
-				891E42FC1CE6FD8D003C3333 /* Info.plist */,
-				891E43221CE7098D003C3333 /* EditorWindowController.swift */,
-				89393D361D0C1BB30067D19A /* SchemeEditorTextView.swift */,
-				372DE8171D4E4D47009725E1 /* Extensions.swift */,
-				891E43231CE7098D003C3333 /* EditorWindowController.xib */,
-				890FC1AF1CFC071600D1FD73 /* SemanticsWindowController.swift */,
-				890FC1B31CFC097200D1FD73 /* SemanticsWindowController.xib */,
-				89B081511CF195F5007E6ABA /* mk-and-rel-interp */,
-				89C405A51CF426BE009970A7 /* RunSchemeOperation.swift */,
+				8990E00D23377330006B96B5 /* AppDelegate.swift */,
+				8990E00F23377330006B96B5 /* Assets.xcassets */,
+				8911EF712337863E005655BF /* MainMenu.xib */,
+				8990E01423377330006B96B5 /* Info.plist */,
+				8990E01D23377516006B96B5 /* EditorWindowController.swift */,
+				8911EF6D2337862A005655BF /* EditorWindowController.xib */,
+				8990E01F23377589006B96B5 /* SchemeEditorTextView.swift */,
+				8990E025233777CF006B96B5 /* Extensions.swift */,
+				8990E01B23377499006B96B5 /* SemanticsWindowController.swift */,
+				8911EF6F23378636005655BF /* SemanticsWindowController.xib */,
+				8990E02323377748006B96B5 /* mk-and-rel-interp */,
+				8990E02123377706006B96B5 /* RunSchemeOperation.swift */,
+				8990E01523377330006B96B5 /* Barliman.entitlements */,
 			);
 			path = Barliman;
-			sourceTree = "<group>";
-		};
-		891E43041CE6FD8D003C3333 /* BarlimanTests */ = {
-			isa = PBXGroup;
-			children = (
-				891E43051CE6FD8D003C3333 /* BarlimanTests.swift */,
-				891E43071CE6FD8D003C3333 /* Info.plist */,
-			);
-			path = BarlimanTests;
-			sourceTree = "<group>";
-		};
-		891E430F1CE6FD8D003C3333 /* BarlimanUITests */ = {
-			isa = PBXGroup;
-			children = (
-				891E43101CE6FD8D003C3333 /* BarlimanUITests.swift */,
-				89963B22225F6663009B1D50 /* Info.plist */,
-			);
-			path = BarlimanUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		891E42F11CE6FD8C003C3333 /* Barliman */ = {
+		8990E00923377330006B96B5 /* Barliman */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 891E43151CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "Barliman" */;
+			buildConfigurationList = 8990E01823377330006B96B5 /* Build configuration list for PBXNativeTarget "Barliman" */;
 			buildPhases = (
-				891E42EE1CE6FD8C003C3333 /* Sources */,
-				891E42EF1CE6FD8C003C3333 /* Frameworks */,
-				891E42F01CE6FD8C003C3333 /* Resources */,
+				8990E00623377330006B96B5 /* Sources */,
+				8990E00723377330006B96B5 /* Frameworks */,
+				8990E00823377330006B96B5 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -160,192 +101,92 @@
 			);
 			name = Barliman;
 			productName = Barliman;
-			productReference = 891E42F21CE6FD8C003C3333 /* Barliman.app */;
+			productReference = 8990E00A23377330006B96B5 /* Barliman.app */;
 			productType = "com.apple.product-type.application";
-		};
-		891E43001CE6FD8D003C3333 /* BarlimanTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 891E43181CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "BarlimanTests" */;
-			buildPhases = (
-				891E42FD1CE6FD8D003C3333 /* Sources */,
-				891E42FE1CE6FD8D003C3333 /* Frameworks */,
-				891E42FF1CE6FD8D003C3333 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				891E43031CE6FD8D003C3333 /* PBXTargetDependency */,
-			);
-			name = BarlimanTests;
-			productName = BarlimanTests;
-			productReference = 891E43011CE6FD8D003C3333 /* Barliman.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		891E430B1CE6FD8D003C3333 /* BarlimanUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 891E431B1CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "BarlimanUITests" */;
-			buildPhases = (
-				891E43081CE6FD8D003C3333 /* Sources */,
-				891E43091CE6FD8D003C3333 /* Frameworks */,
-				891E430A1CE6FD8D003C3333 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				891E430E1CE6FD8D003C3333 /* PBXTargetDependency */,
-			);
-			name = BarlimanUITests;
-			productName = BarlimanUITests;
-			productReference = 891E430C1CE6FD8D003C3333 /* Barliman.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		891E42EA1CE6FD8C003C3333 /* Project object */ = {
+		8990E00223377330006B96B5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 1010;
-				ORGANIZATIONNAME = "William E. Byrd";
+				LastSwiftUpdateCheck = 1100;
+				LastUpgradeCheck = 1100;
+				ORGANIZATIONNAME = "William Byrd";
 				TargetAttributes = {
-					891E42F11CE6FD8C003C3333 = {
-						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0820;
-					};
-					891E43001CE6FD8D003C3333 = {
-						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0820;
-						TestTargetID = 891E42F11CE6FD8C003C3333;
-					};
-					891E430B1CE6FD8D003C3333 = {
-						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0820;
-						TestTargetID = 891E42F11CE6FD8C003C3333;
+					8990E00923377330006B96B5 = {
+						CreatedOnToolsVersion = 11.0;
 					};
 				};
 			};
-			buildConfigurationList = 891E42ED1CE6FD8C003C3333 /* Build configuration list for PBXProject "Barliman" */;
-			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			buildConfigurationList = 8990E00523377330006B96B5 /* Build configuration list for PBXProject "Barliman" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 891E42E91CE6FD8C003C3333;
-			productRefGroup = 891E42F31CE6FD8C003C3333 /* Products */;
+			mainGroup = 8990E00123377330006B96B5;
+			productRefGroup = 8990E00B23377330006B96B5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				891E42F11CE6FD8C003C3333 /* Barliman */,
-				891E43001CE6FD8D003C3333 /* BarlimanTests */,
-				891E430B1CE6FD8D003C3333 /* BarlimanUITests */,
+				8990E00923377330006B96B5 /* Barliman */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		891E42F01CE6FD8C003C3333 /* Resources */ = {
+		8990E00823377330006B96B5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89B081521CF195F5007E6ABA /* mk-and-rel-interp in Resources */,
-				890FC1B41CFC097200D1FD73 /* SemanticsWindowController.xib in Resources */,
-				891E42F81CE6FD8D003C3333 /* Assets.xcassets in Resources */,
-				891E42FB1CE6FD8D003C3333 /* MainMenu.xib in Resources */,
-				891E43251CE7098D003C3333 /* EditorWindowController.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		891E42FF1CE6FD8D003C3333 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		891E430A1CE6FD8D003C3333 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				8990E01023377330006B96B5 /* Assets.xcassets in Resources */,
+				8911EF722337863E005655BF /* MainMenu.xib in Resources */,
+				8911EF7023378636005655BF /* SemanticsWindowController.xib in Resources */,
+				8990E02423377749006B96B5 /* mk-and-rel-interp in Resources */,
+				8911EF6E2337862A005655BF /* EditorWindowController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		891E42EE1CE6FD8C003C3333 /* Sources */ = {
+		8990E00623377330006B96B5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				891E43241CE7098D003C3333 /* EditorWindowController.swift in Sources */,
-				372DE8181D4E4D47009725E1 /* Extensions.swift in Sources */,
-				890FC1B01CFC071600D1FD73 /* SemanticsWindowController.swift in Sources */,
-				891E42F61CE6FD8D003C3333 /* AppDelegate.swift in Sources */,
-				89C405A61CF426BE009970A7 /* RunSchemeOperation.swift in Sources */,
-				89393D371D0C1BB30067D19A /* SchemeEditorTextView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		891E42FD1CE6FD8D003C3333 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				891E43061CE6FD8D003C3333 /* BarlimanTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		891E43081CE6FD8D003C3333 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				891E43111CE6FD8D003C3333 /* BarlimanUITests.swift in Sources */,
+				8990E00E23377330006B96B5 /* AppDelegate.swift in Sources */,
+				8990E026233777CF006B96B5 /* Extensions.swift in Sources */,
+				8990E02023377589006B96B5 /* SchemeEditorTextView.swift in Sources */,
+				8990E02223377706006B96B5 /* RunSchemeOperation.swift in Sources */,
+				8990E01C23377499006B96B5 /* SemanticsWindowController.swift in Sources */,
+				8990E01E23377516006B96B5 /* EditorWindowController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		891E43031CE6FD8D003C3333 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 891E42F11CE6FD8C003C3333 /* Barliman */;
-			targetProxy = 891E43021CE6FD8D003C3333 /* PBXContainerItemProxy */;
-		};
-		891E430E1CE6FD8D003C3333 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 891E42F11CE6FD8C003C3333 /* Barliman */;
-			targetProxy = 891E430D1CE6FD8D003C3333 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		891E42F91CE6FD8D003C3333 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				891E42FA1CE6FD8D003C3333 /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
-		891E43131CE6FD8D003C3333 /* Debug */ = {
+		8990E01623377330006B96B5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
@@ -357,14 +198,14 @@
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -378,29 +219,34 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		891E43141CE6FD8D003C3333 /* Release */ = {
+		8990E01723377330006B96B5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
@@ -412,14 +258,14 @@
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -427,133 +273,73 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;
 		};
-		891E43161CE6FD8D003C3333 /* Debug */ = {
+		8990E01923377330006B96B5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Barliman/Barliman.entitlements;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Barliman/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.Barliman;
-				PRODUCT_NAME = Barliman;
-				SWIFT_VERSION = 3.0;
+				INFOPLIST_FILE = Barliman/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Barliman.Barliman;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		891E43171CE6FD8D003C3333 /* Release */ = {
+		8990E01A23377330006B96B5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Barliman/Barliman.entitlements;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Barliman/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.Barliman;
-				PRODUCT_NAME = Barliman;
-				SWIFT_VERSION = 3.0;
-			};
-			name = Release;
-		};
-		891E43191CE6FD8D003C3333 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = BarlimanTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.BarlimanTests;
-				PRODUCT_NAME = Barliman;
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Barliman.app/Contents/MacOS/Barliman";
-			};
-			name = Debug;
-		};
-		891E431A1CE6FD8D003C3333 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = BarlimanTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.BarlimanTests;
-				PRODUCT_NAME = Barliman;
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Barliman.app/Contents/MacOS/Barliman";
-			};
-			name = Release;
-		};
-		891E431C1CE6FD8D003C3333 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = BarlimanUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.BarlimanUITests;
-				PRODUCT_NAME = Barliman;
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = Barliman;
-			};
-			name = Debug;
-		};
-		891E431D1CE6FD8D003C3333 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = BarlimanUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.webyrd.BarlimanUITests;
-				PRODUCT_NAME = Barliman;
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = Barliman;
+				INFOPLIST_FILE = Barliman/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Barliman.Barliman;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		891E42ED1CE6FD8C003C3333 /* Build configuration list for PBXProject "Barliman" */ = {
+		8990E00523377330006B96B5 /* Build configuration list for PBXProject "Barliman" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				891E43131CE6FD8D003C3333 /* Debug */,
-				891E43141CE6FD8D003C3333 /* Release */,
+				8990E01623377330006B96B5 /* Debug */,
+				8990E01723377330006B96B5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		891E43151CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "Barliman" */ = {
+		8990E01823377330006B96B5 /* Build configuration list for PBXNativeTarget "Barliman" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				891E43161CE6FD8D003C3333 /* Debug */,
-				891E43171CE6FD8D003C3333 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		891E43181CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "BarlimanTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				891E43191CE6FD8D003C3333 /* Debug */,
-				891E431A1CE6FD8D003C3333 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		891E431B1CE6FD8D003C3333 /* Build configuration list for PBXNativeTarget "BarlimanUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				891E431C1CE6FD8D003C3333 /* Debug */,
-				891E431D1CE6FD8D003C3333 /* Release */,
+				8990E01923377330006B96B5 /* Debug */,
+				8990E01A23377330006B96B5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 891E42EA1CE6FD8C003C3333 /* Project object */;
+	rootObject = 8990E00223377330006B96B5 /* Project object */;
 }
