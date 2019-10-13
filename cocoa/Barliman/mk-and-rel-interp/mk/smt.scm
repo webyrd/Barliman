@@ -58,6 +58,24 @@
           (if (eq? unbound (subst-map-lookup v S))
               (subst-map-add S v (reify-v-name v))
               S)))))
+
+(define walkr
+  (lambda (u S)
+    (if (var? u)
+      (let ((val (subst-map-lookup u S)))
+        (if (eq? val unbound)
+          u
+          (walkr val S)))
+      u)))
+(define walkr*
+  (lambda (v S)
+    (let ((v (walkr v S)))
+      (cond
+        ((var? v) v)
+        ((pair? v)
+         (cons (walkr* (car v) S) (walkr* (cdr v) S)))
+        (else v)))))
+
 (define z/reify-SM
   (lambda (M . args)
     (let ((no_walk? (and (not (null? args)) (car args))))
@@ -68,7 +86,7 @@
                (vs (vars M '()))
                (S (reify-M vs m-subst-map))
                (_ (set! m-subst-map S))
-               (M (walk* M (subst S nonlocal-scope)))
+               (M (walkr* M S))
                (dd-M (partition declare-datatypes? M))
                (dd (car dd-M))
                (M (cdr dd-M))
@@ -135,7 +153,7 @@
   (lambda (line)
     (lambdag@ (st)
       (let ((M (cons line (state-M st))))
-        (state (state-S st) (state-C st) (state-depth st) (state-deferred st) M)))))
+        (state-with-M st M)))))
 
 (define assumption-count 0)
 (define (fresh-assumption)
@@ -179,16 +197,14 @@
   (set! m-subst-map empty-subst-map))
 
 (define add-model
-  (lambda (m s)
+  (lambda (m)
     (lambdag@ (st)
       (if (null? m)
           st
-          (bind
-           (let ((b (assq (caar m) s)))
-             (if b
-                 ((== (cdr b) (cdar m)) st)
-                 st))
-           (add-model (cdr m) s))))))
+          (bind*
+           st
+           (== (caar m) (cdar m))
+           (add-model (cdr m)))))))
 
 (define assert-neg-model
   (lambda (m)
@@ -206,18 +222,19 @@
     (let ((M (state-M st)))
       (if (null? M)
           st
-          (let* ([a (last-assumption (state-M st))])
+          (let ([a (last-assumption (state-M st))])
             (if (not (check-sat-assuming a '()))
                 #f
                 (let ([rs (map (lambda (x) (cons (reify-v-name x) x)) (cdr (assq a relevant-vars)))])
                   ((let loop ()
                      (lambdag@ (st)
                        (let ((m (get-model-inc)))
-                         (let ((m (filter (lambda (x) (assq (car x) rs)) m)))
+                         (let ((m (map (lambda (x) (cons (cdr (assq (car x) rs)) (cdr x))) (filter (lambda (x) (assq (car x) rs)) m))))
                            (let ((st (state-with-scope st (new-scope))))
                              (mplus*
-                              ((add-model m rs)
-                               (state (state-S st) (state-C st) (state-depth st) (state-deferred st) '()))
+                              (bind*
+                               (state-with-M st '())
+                               (add-model m))
                               (bind*
                                st
                                (assert-neg-model m)

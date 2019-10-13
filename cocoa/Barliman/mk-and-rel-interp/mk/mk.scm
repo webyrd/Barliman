@@ -213,6 +213,9 @@
 (define state-depth (lambda (st) (caddr st)))
 (define state-deferred (lambda (st) (cadddr st)))
 (define state-M (lambda (st) (car (cddddr st))))
+(define state-with-M
+  (lambda (st M)
+    (state (state-S st) (state-C st) (state-depth st) (state-deferred st) M)))
 (define state-depth-set
   (lambda (st depth)
     (state (state-S st) (state-C st) depth (state-deferred st) (state-M st))))
