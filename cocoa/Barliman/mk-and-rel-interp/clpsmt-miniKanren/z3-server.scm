@@ -26,11 +26,18 @@
           #t
           (if (eq? r 'unsat)
               #f
-              (error 'read-sat "unknown"))))))
+              (if (eq? r 'unknown)
+                  (begin
+                    (printf "read-sat: unknown\n")
+                    ;;(call-z3 '((pop)))
+                    #f)
+                  (error 'read-sat (format "~a" r))))))))
 
 (define call-z3
   (lambda (xs)
-    (for-each (lambda (x) (fprintf z3-out "~a\n" x)) xs)
+    (for-each (lambda (x)
+                ;;(printf "~a\n" x)
+                (fprintf z3-out "~a\n" x)) xs)
     (flush-output-port z3-out)))
 
 (define check-sat

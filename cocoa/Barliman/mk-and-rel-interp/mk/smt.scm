@@ -106,8 +106,15 @@
             M)
            vs))))))
 
+(define (get-assumptions a)
+  (let ((pos (assq a assumption-chains)))
+    (map (lambda (b)
+           (if (memq b pos)
+               b
+               `(not ,b)))
+         (reverse all-assumptions))))
 (define (check-sat-assuming a xs)
-  (call-z3 `(,@xs (check-sat-assuming (,a))))
+  (call-z3 `(,@xs (check-sat-assuming ,(get-assumptions a))))
   (read-sat))
 
 (define (take-until p xs)
@@ -174,25 +181,28 @@
   (lambda (e . args)
     (let ((no_walk? (and (not (null? args)) (car args))))
       (lambdag@ (st)
-        (let ((a1 (fresh-assumption))
-              (a2 (fresh-assumption)))
+        (let ((a1 (fresh-assumption)))
           (let ((a0 (last-assumption (state-M st))))
-            (let ((rs (if (eq? a0 'true) '()  (cdr (assq a0 relevant-vars)))))
-              (set! relevant-vars (cons (cons a2 rs)
-                                        relevant-vars))
+            (let ((rs (if (eq? a0 'true) '()  (cdr (assq a0 relevant-vars))))
+                  (as (if (eq? a0 'true) '() (assq a0 assumption-chains))))
+              (set! relevant-vars (cons (cons a1 rs) relevant-vars))
+              (set! assumption-chains (cons (cons a1 as) assumption-chains))
+              (set! all-assumptions (cons a1 all-assumptions))
               (bind*
                st
-               (z/ `(declare-const ,a2 Bool))
                (z/ `(declare-const ,a1 Bool))
                (z/ `(assert (=> ,a1 ,e)))
-               (z/ `(assert (=> ,a2 (and ,a0 ,a1))))
-               (z/check a2 no_walk?)))))))))
+               (z/check a1 no_walk?)))))))))
 
 (define relevant-vars '())
+(define assumption-chains '())
+(define all-assumptions '())
 (define (z/reset!)
   (call-z3 '((reset)))
   (set! decls '())
   (set! relevant-vars '())
+  (set! assumption-chains '())
+  (set! all-assumptions '())
   (set! assumption-count 0)
   (set! m-subst-map empty-subst-map))
 
@@ -223,20 +233,22 @@
       (if (null? M)
           st
           (let ([a (last-assumption (state-M st))])
-            (if (not (check-sat-assuming a '()))
-                #f
-                (let ([rs (map (lambda (x) (cons (reify-v-name x) x)) (cdr (assq a relevant-vars)))])
-                  ((let loop ()
-                     (lambdag@ (st)
-                       (let ((m (get-model-inc)))
-                         (let ((m (map (lambda (x) (cons (cdr (assq (car x) rs)) (cdr x))) (filter (lambda (x) (assq (car x) rs)) m))))
-                           (let ((st (state-with-scope st (new-scope))))
-                             (mplus*
-                              (bind*
-                               (state-with-M st '())
-                               (add-model m))
-                              (bind*
-                               st
-                               (assert-neg-model m)
-                               (loop))))))))
-                   st))))))))
+            (if (eq? a 'true)
+                st
+                (if (not (check-sat-assuming a '()))
+                    #f
+                    (let ([rs (map (lambda (x) (cons (reify-v-name x) x)) (cdr (assq a relevant-vars)))])
+                      ((let loop ()
+                         (lambdag@ (st)
+                           (let ((m (get-model-inc)))
+                             (let ((m (map (lambda (x) (cons (cdr (assq (car x) rs)) (cdr x))) (filter (lambda (x) (assq (car x) rs)) m))))
+                               (let ((st (state-with-scope st (new-scope))))
+                                 (mplus*
+                                  (bind*
+                                   (state-with-M st '())
+                                   (add-model m))
+                                  (bind*
+                                   st
+                                   (assert-neg-model m)
+                                   (loop))))))))
+                       st)))))))))
