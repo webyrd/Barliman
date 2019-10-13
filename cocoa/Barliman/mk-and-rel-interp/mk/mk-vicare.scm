@@ -207,7 +207,7 @@
 ; Performance with the tries is usually about the same and
 ; can be much better for huge substitutions.
 
-
+#|
 (define empty-subst-map '())
 
 (define subst-map-length length)
@@ -225,7 +225,7 @@
   (cons (cons var val) S))
 
 (define subst-map-eq? eq?)
-
+|#
 
 
 ; Constraint store representation
