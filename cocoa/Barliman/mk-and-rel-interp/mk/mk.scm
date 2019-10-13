@@ -417,6 +417,7 @@
 (define-syntax run
   (syntax-rules ()
     ((_ n (q) g0 g ...)
+     (z/reset!)
      (take n
        (inc
          ((fresh (q) g0 g ... state-deferred-resume z/purge
