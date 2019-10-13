@@ -233,6 +233,72 @@
   '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
 
 (time-test
+ "fib-forward-1"
+ (Barliman
+  () ()
+  (lambda (n)
+    (if (zero? n) n
+    (if (zero? (sub1 n)) n
+    (+ (! (sub1 n)) (! (sub1 (sub1 n)))))))
+  '(0 1 2 3 4 5 6)
+  '(0 1 1 2 3 5 8))
+  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
+
+(time-test
+ "fib-synthesis-1"
+ (Barliman
+  () (A)
+  (lambda (n)
+    (if (zero? n) ,A
+    (if (zero? (sub1 n)) n
+    (+ (! (sub1 n)) (! (sub1 (sub1 n)))))))
+  '(0 1 2 3 4 5 6)
+  '(0 1 1 2 3 5 8))
+  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
+
+(time-test
+ "fib-synthesis-2"
+ (Barliman
+  () (A B)
+  (lambda (n)
+    (if (zero? n) ,A
+    (if (zero? (sub1 n)) ,B
+    (+ (! (sub1 n)) (! (sub1 (sub1 n)))))))
+  '(0 1 2 3 4 5 6)
+  '(0 1 1 2 3 5 8))
+  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
+
+#!eof
+
+(time-test
+ "fib-synthesis-3"
+ (Barliman
+  () (A)
+  (lambda (n)
+    (if (zero? n) n
+    (if (zero? (sub1 n)) n
+    (+ (! ,A) (! (sub1 (sub1 n)))))))
+  '(0 1 2 3 4 5 6)
+  '(0 1 1 2 3 5 8))
+  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
+
+#!eof
+
+(time-test
+ "fib-synthesis-3"
+ (Barliman
+  () (A B C)
+  (lambda (n)
+    (if (zero? n) ,A
+    (if (zero? (sub1 n)) ,B
+    (+ (! (sub1 n)) (! ,C)))))
+  '(0 1 2 3 4 5 6)
+  '(0 1 1 2 3 5 8))
+  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
+
+#!eof
+
+(time-test
  "factorial-synthesis-4c"
  (Barliman
    () (A)

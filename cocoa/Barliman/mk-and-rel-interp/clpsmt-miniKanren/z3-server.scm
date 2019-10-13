@@ -22,7 +22,11 @@
   (lambda ()
     (z3-check-in!)
     (let ([r (read z3-in)])
-      (eq? r 'sat))))
+      (if (eq? r 'sat)
+          #t
+          (if (eq? r 'unsat)
+              #f
+              (error 'read-sat "unknown"))))))
 
 (define call-z3
   (lambda (xs)
