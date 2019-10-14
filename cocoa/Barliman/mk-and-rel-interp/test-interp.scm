@@ -410,7 +410,6 @@
   '(1 1 2 6 24))
  '((((define ! (lambda (n) (if (zero? n) 1 (* (! (sub1 n)) n))))))))
 
-#|  ;; Slooww
 (time-test
  "factorial-synthesis-nova-4g3"
  (Barliman
@@ -422,7 +421,6 @@
   '(0 2 3 4)
   '(1 2 6 24))
  '((((define ! (lambda (n) (if (zero? n) 1 (* (! (sub1 n)) n))))))))
-|#
 
 (time-test
  "factorial-synthesis-4d"
