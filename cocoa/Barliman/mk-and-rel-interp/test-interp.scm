@@ -1,7 +1,7 @@
 (load "chez-load-interp.scm")
 (load "mk/smt.scm")
-;;(load "clpsmt-miniKanren/z3-driver.scm")
 (load "clpsmt-miniKanren/z3-server.scm")
+;;(load "clpsmt-miniKanren/cvc4-server.scm")
 (load "clpsmt-miniKanren/test-check.scm")
 (load "mk/test-check.scm")
 
