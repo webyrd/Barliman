@@ -77,6 +77,7 @@
   (run* (q) (evalo '(let ((x 5)) (sub1 (sub1 x))) q))
   '((3)))
 
+
 (define-syntax Barliman
   (syntax-rules ()
     [(_ (g ...) (A ...) def inputs outputs)
@@ -111,6 +112,243 @@
                results-fast)))
 
        (ans-allTests))]))
+
+
+(test "append-nova-1"
+  (run* (defn)
+    (letrec ((presento (lambda (t1 t2)
+                         (conde
+                           ((== t1 t2))
+                           ((fresh (a d)
+                              (=/= t1 t2)
+                              (== (cons a d) t2)
+                              (conde
+                                ((presento t1 a))
+                                ((absento t1 a)
+                                 (presento t1 d)))))))))
+      (fresh (A B C)
+        (evalo `(letrec ((append
+                          (lambda (l s)
+                            (if (null? l)
+                                s
+                                (cons (car l)
+                                      (append (cdr l) s))))))
+                  (list (append '() '())
+                        (append '(a) '(b))
+                        (append '(c) '(d))
+                        (append '(e f) '(g h))))
+               '(()
+                 (a b)
+                 (c d)
+                 (e f g h))))))
+  '((_.0)))
+
+(test "append-nova-2"
+  (run* (defn)
+    (letrec ((presento (lambda (t1 t2)
+                         (conde
+                           ((== t1 t2))
+                           ((fresh (a d)
+                              (=/= t1 t2)
+                              (== (cons a d) t2)
+                              (conde
+                                ((presento t1 a))
+                                ((absento t1 a)
+                                 (presento t1 d)))))))))
+      (fresh (A B C)
+        (== `(lambda (l s)
+               (if (null? l)
+                   s
+                   (cons (car l)
+                         (append (cdr l) s))))
+            defn)
+        (evalo `(letrec ((append
+                          ,defn))
+                  (list (append '() '())
+                        (append '(a) '(b))
+                        (append '(c) '(d))
+                        (append '(e f) '(g h))))
+               '(()
+                 (a b)
+                 (c d)
+                 (e f g h))))))
+  '(((lambda (l s)
+       (if (null? l)
+           s
+           (cons (car l)
+                 (append (cdr l) s)))))))
+
+#|
+;;; why is this so slowwwwww??
+(time-test "append-nova-4b"
+  (run* (defn)
+    (let ((g1 (gensym "g1"))
+          (g2 (gensym "g2"))
+          (g3 (gensym "g3"))
+          (g4 (gensym "g4"))
+          (g5 (gensym "g5"))
+          (g6 (gensym "g6"))
+          (g7 (gensym "g7")))
+      (fresh (A B C D)
+        (absento g1 defn)
+        (absento g2 defn)
+        (absento g3 defn)
+        (absento g4 defn)
+        (absento g5 defn)
+        (absento g6 defn)
+        (absento g7 defn)
+
+        (== `(lambda (l s)
+               (if (null? l)
+                   ,A
+                   (cons (car l) (append (cdr l) s))))
+            defn)
+        (evalo `(letrec ((append
+                          ,defn))
+                  (list (append '() '())
+                        (append '(,g1) '(,g2))
+                        (append '(,g3 ,g4) '(,g5 ,g6))))
+               `(()
+                 (,g1 ,g2)
+                 (,g3 ,g4 ,g5 ,g6)))
+        )))
+  '(((lambda (l s)
+       (if (null? l)
+           s
+           (cons (car l)
+                 (append (cdr l) s)))))))
+|#
+
+#|
+;; why is this so slow??
+(time-test "append-nova-3b"
+  (run* (defn)
+    (let ((g1 (gensym "g1"))
+          (g2 (gensym "g2"))
+          (g3 (gensym "g3"))
+          (g4 (gensym "g4"))
+          (g5 (gensym "g5"))
+          (g6 (gensym "g6"))
+          (g7 (gensym "g7")))
+      (fresh (A B C D)
+        (absento g1 defn)
+        (absento g2 defn)
+        (absento g3 defn)
+        (absento g4 defn)
+        (absento g5 defn)
+        (absento g6 defn)
+        (absento g7 defn)
+
+        ;(symbolo B)
+        ;(== 's A)
+        ;(symbolo A)
+        (== `(cons (car l) ,B) C)
+        
+        (== `(lambda (l s)
+               (if (null? l)
+                   ,A
+                   ((lambda (,B) ,C) (append (cdr l) s))))
+            defn)
+        (evalo `(letrec ((append
+                          ,defn))
+                  (list (append '() '())
+                        (append '(,g1) '(,g2))
+                        (append '(,g3 ,g4) '(,g5 ,g6))))
+               `(()
+                 (,g1 ,g2)
+                 (,g3 ,g4 ,g5 ,g6)))
+        )))
+  '(((lambda (l s)
+       (if (null? l)
+           s
+           ((lambda (_.0) (cons (car l) _.0))
+            (append (cdr l) s))))
+     (=/= ((_.0 car)) ((_.0 cons)) ((_.0 l)))
+     (sym _.0))))
+|#
+
+#|
+;; why is this so slow???
+(time-test "append-nova-3a"
+  (run* (defn)
+    (fresh (A B C D)
+      (absento 'a defn)
+      (absento 'b defn)
+      (absento 'c defn)
+      (absento 'd defn)
+      (symbolo B)
+      ;(== 's A)
+      (symbolo A)
+      (== `(cons (car l) ,B) C)
+      (== `(lambda (l s)
+             (if (null? l)
+                 ,A
+                 ((lambda (,B) ,C) (append (cdr l) s))))
+          defn)
+      (evalo `(letrec ((append
+                        ,defn))
+                (list (append '() '())
+                      (append '(a) '(b))
+                      (append '(c) '(d))
+                      (append '(e f) '(g h))))
+             '(()
+               (a b)
+               (c d)
+               (e f g h)))
+      ))
+  '(((lambda (l s)
+       (if (null? l)
+           s
+           ((lambda (_.0) (cons (car l) _.0))
+            (append (cdr l) s))))
+     (=/= ((_.0 car)) ((_.0 cons)) ((_.0 l)))
+     (sym _.0))))
+|#
+
+#|
+;; Why is this so slow?
+(time-test "append-nova-3b"
+  (run* (defn)
+    (letrec ((presento (lambda (t1 t2)
+                         (conde
+                           ((== t1 t2))
+                           ((fresh (a d)
+                              (=/= t1 t2)
+                              (== (cons a d) t2)
+                              (conde
+                                ((presento t1 a))
+                                ((absento t1 a)
+                                 (presento t1 d)))))))))
+      (fresh (A B C D)
+        ;(symbolo B)
+        ;(== 's A)
+        (symbolo A)
+        (== `(cons (car l) ,B) C)
+        (== `(lambda (l s)
+               (if (null? l)
+                   ,A
+                   ((lambda (,B) ,C) (append (cdr l) s))))
+            defn)
+        (evalo `(letrec ((append
+                          ,defn))
+                  (list (append '() '())
+                        (append '(a) '(b))
+                        (append '(c) '(d))
+                        (append '(e f) '(g h))))
+               '(()
+                 (a b)
+                 (c d)
+                 (e f g h)))
+        )))
+  '(((lambda (l s)
+       (if (null? l)
+           s
+           ((lambda (_.0) (cons (car l) _.0))
+            (append (cdr l) s))))
+     (=/= ((_.0 car)) ((_.0 cons)) ((_.0 l)))
+     (sym _.0))))
+|#
+
 
 (time-test
  "factorial-fully-ground"
