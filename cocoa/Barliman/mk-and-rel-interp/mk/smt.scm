@@ -95,18 +95,13 @@
                (R (cdr ds-R))
                (ds (filter-redundant-declares ds ds))
                (_ (set! decls (append (map cadr ds) decls)))
-               (ds-LG (partition (lambda (x) (and (eq? (car x) 'declare-const)
-                                             (eq? (caddr x) 'Bool)))
-                                 ds))
-               (dc (map (lambda (x) `(declare-fun ,x () Int))
+               (dc (map (lambda (x) `(declare-const ,x Int))
                         (filter undeclared? (map reify-v-name vs)))))
           (list
+           dd
            (append
-            dd
+            ds
             dc
-            (cdr ds-LG))
-           (append
-            (car ds-LG)
             R)
            vs))))))
 
@@ -118,7 +113,7 @@
                `(not ,b)))
          (reverse all-assumptions))))
 (define (check-sat-assuming a m)
-  (replay-if-needed m)
+  (replay-if-needed a m)
   (call-z3 `((check-sat-assuming ,(get-assumptions a))))
   (read-sat))
 
@@ -157,43 +152,56 @@
   (lambda (lines)
     (lambdag@ (st)
       (begin
-        (replay-if-needed (state-M st))
         (call-z3 lines)
         (set! local-buffer (append local-buffer lines))
         (let ((M (append (reverse lines) (state-M st))))
           (state-with-M st M))))))
-(define (replay-if-needed m)
-  (let ((r (take-while (lambda (x) (not (member x local-buffer))) m)))
+(define (replay-if-needed a m)
+  (let ((r (filter (lambda (x) (not (member x local-buffer))) m)))
     (unless (null? r)
       (let ((lines (reverse r)))
-        (set! all-assumptions
-              (append (map cadr (filter declares? lines))
-                      all-assumptions))
-        (call-z3 lines)
-        (set! local-buffer (append local-buffer lines))))))
+        (let ((new-decls  (filter (lambda (x)
+                                    (and (declares? x)
+                                         (not (eq? (caddr x) 'Bool))))
+                                  lines))
+              (new-assumptions (filter (lambda (x)
+                                         (and (declares? x)
+                                              (eq? (caddr x) 'Bool)))
+                                       lines))
+              (other-lines (filter (lambda (x) (not (declares? x))) lines)))
+          (let* ((undeclared-decls (filter (lambda (x) (undeclared? (cadr x))) new-decls))
+                 (actual-lines (append undeclared-decls new-assumptions other-lines)))
+            (let* ((rs (filter undeclared? (map reify-v-name (cdr (assq a relevant-vars)))))
+                   (undeclared-rs (map (lambda (x) `(declare-const ,x Int)) rs))
+                   (actual-lines (append undeclared-rs actual-lines)))
+              (set! all-assumptions (append (map cadr new-assumptions) all-assumptions))
+              (call-z3 actual-lines)
+              (set! local-buffer (append local-buffer actual-lines)))))))))
 
 (define (z/check m a no_walk?)
   (lambdag@ (st)
-    (let ((r ((z/reify-SM m no_walk?) st)))
-      (z/global (car r))
-      (bind*
-       st
-       (z/local (cadr r))
-       (lambdag@ (st)
-         (if (check-sat-assuming a (state-M st))
-             (begin
-               (let ((p (assq a relevant-vars)))
-                 (set-cdr! p (append (caddr r) (cdr p))))
-               ((let loop ((vs (caddr r)))
-                  (lambdag@ (st)
-                    (if (null? vs)
-                        st
-                        (bind*
-                         st
-                         (z/varo (car vs))
-                         (loop (cdr vs))))))
-                st))
-             #f))))))
+    (begin
+      (replay-if-needed (last-assumption (state-M st)) (state-M st))
+      (let ((r ((z/reify-SM m no_walk?) st)))
+        (z/global (car r))
+        (bind*
+         st
+         (z/local (cadr r))
+         (lambdag@ (st)
+           (if (check-sat-assuming a (state-M st))
+               (begin
+                 (let ((p (assq a relevant-vars)))
+                   (set-cdr! p (append (caddr r) (cdr p))))
+                 ((let loop ((vs (caddr r)))
+                    (lambdag@ (st)
+                      (if (null? vs)
+                          st
+                          (bind*
+                           st
+                           (z/varo (car vs))
+                           (loop (cdr vs))))))
+                  st))
+               #f)))))))
 
 (define (z/ line)
   (lambdag@ (st)
@@ -203,9 +211,9 @@
 
 (define assumption-count 0)
 (define (fresh-assumption)
-  (when (and (= (remainder assumption-count 1000) 0)
+  (when (and (= (remainder assumption-count 100) 0)
              (> assumption-count 0))
-    (printf "gc z3...\n")
+    ;;(printf "gc z3...\n")
     (z/gc!))
   (set! assumption-count (+ assumption-count 1))
   (string->symbol (format #f "_a~d" assumption-count)))
@@ -254,6 +262,7 @@
 (define (z/gc!)
   (call-z3 '((reset)))
   (call-z3 global-buffer)
+  (set! decls '())
   (set! local-buffer '())
   (set! all-assumptions '()))
 

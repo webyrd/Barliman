@@ -532,133 +532,6 @@
    '(1 120))
  '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
 
-(time-test
- "fib-forward-1"
- (Barliman
-  () ()
-  (lambda (n)
-    (if (zero? n) n
-    (if (zero? (sub1 n)) n
-    (+ (! (sub1 n)) (! (sub1 (sub1 n)))))))
-  '(0 1 2 3 4 5 6)
-  '(0 1 1 2 3 5 8))
-  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
-
-(time-test
- "fib-synthesis-1"
- (Barliman
-  () (A)
-  (lambda (n)
-    (if (zero? n) ,A
-    (if (zero? (sub1 n)) n
-    (+ (! (sub1 n)) (! (sub1 (sub1 n)))))))
-  '(0 1 2 3 4 5 6)
-  '(0 1 1 2 3 5 8))
-  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
-
-(time-test
- "fib-synthesis-2"
- (Barliman
-  () (A B)
-  (lambda (n)
-    (if (zero? n) ,A
-    (if (zero? (sub1 n)) ,B
-    (+ (! (sub1 n)) (! (sub1 (sub1 n)))))))
-  '(0 1 2 3 4 5 6)
-  '(0 1 1 2 3 5 8))
-  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
-
-
-(time-test
- "factorial-synthesis-nova-4h"
- (Barliman
-  () (A B)
-  (lambda (n) 
-    (if (zero? n)
-        1
-        ,A))
-  '(0 1 3 4)
-  '(1 1 6 24))
- '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
-
-(printf "this test takes almost 10 minutes!\n")
-(time-test
- "factorial-synthesis-nova-4i"
- (Barliman
-  () (A)
-  (lambda (n) 
-    ,A)
-  '(0 1 3 4)
-  '(1 1 6 24))
- '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
-
-#| ;; Runs out of memory on Will's laptop
-(time-test
- "factorial-synthesis-nova-4j"
- (Barliman
-  () (A)
-  ,A
-  '(0 1 3 4)
-  '(1 1 6 24))
- '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
-|#
-
-#!eof
-
-(time-test
- "fib-synthesis-3"
- (Barliman
-  () (A)
-  (lambda (n)
-    (if (zero? n) n
-        (if (zero? (sub1 n)) n
-            (+ (! ,A) (! (sub1 (sub1 n)))))))
-  '(0 1 2 3 4 5 6)
-  '(0 1 1 2 3 5 8))
-  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
-
-#!eof
-
-(time-test
- "fib-synthesis-3"
- (Barliman
-  () (A B C)
-  (lambda (n)
-    (if (zero? n) ,A
-        (if (zero? (sub1 n)) ,B
-            (+ (! (sub1 n)) (! ,C)))))
-  '(0 1 2 3 4 5 6)
-  '(0 1 1 2 3 5 8))
-  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
-
-#!eof
-
-(time-test
- "factorial-synthesis-5b"
- (Barliman
-   () (A B)
-   (lambda (n) 
-     (if ,A
-         1
-         (* n (! ,B))))
-   '(0 5)
-   '(1 120))
- '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
-
-(time-test
- "factorial-synthesis-4"
- (Barliman
-   () (A)
-   (lambda (n) 
-     (if (zero? n)
-         1
-         (* n (! ,A))))
-  '(0 1 2 3 5)
-  '(1 1 2 6 120))
- '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
-
-#!eof
-
 (time-test "synthesize shuffle with a skeleton, 1 hole, partial recursion"
      (let ()
        (define (ans-allTests)
@@ -2563,3 +2436,131 @@ defn)                                   ;
         '(lambda (_.0) (list _.0 (list 'quote _.0))))
        (=/= ((_.0 closure)) ((_.0 list)) ((_.0 prim)) ((_.0 quote))) (sym _.0)))))
 |#
+
+
+(time-test
+ "fib-forward-1"
+ (Barliman
+  () ()
+  (lambda (n)
+    (if (zero? n) n
+    (if (zero? (sub1 n)) n
+    (+ (! (sub1 n)) (! (sub1 (sub1 n)))))))
+  '(0 1 2 3 4 5 6)
+  '(0 1 1 2 3 5 8))
+  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
+
+(time-test
+ "fib-synthesis-1"
+ (Barliman
+  () (A)
+  (lambda (n)
+    (if (zero? n) ,A
+    (if (zero? (sub1 n)) n
+    (+ (! (sub1 n)) (! (sub1 (sub1 n)))))))
+  '(0 1 2 3 4 5 6)
+  '(0 1 1 2 3 5 8))
+  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
+
+(time-test
+ "fib-synthesis-2"
+ (Barliman
+  () (A B)
+  (lambda (n)
+    (if (zero? n) ,A
+    (if (zero? (sub1 n)) ,B
+    (+ (! (sub1 n)) (! (sub1 (sub1 n)))))))
+  '(0 1 2 3 4 5 6)
+  '(0 1 1 2 3 5 8))
+  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
+
+
+(time-test
+ "factorial-synthesis-nova-4h"
+ (Barliman
+  () (A B)
+  (lambda (n) 
+    (if (zero? n)
+        1
+        ,A))
+  '(0 1 3 4)
+  '(1 1 6 24))
+ '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
+
+(printf "this test takes almost 10 minutes!\n")
+(time-test
+ "factorial-synthesis-nova-4i"
+ (Barliman
+  () (A)
+  (lambda (n) 
+    ,A)
+  '(0 1 3 4)
+  '(1 1 6 24))
+ '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
+
+#| ;; Runs out of memory on Will's laptop
+(time-test
+ "factorial-synthesis-nova-4j"
+ (Barliman
+  () (A)
+  ,A
+  '(0 1 3 4)
+  '(1 1 6 24))
+ '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
+|#
+
+#!eof
+
+(time-test
+ "fib-synthesis-3"
+ (Barliman
+  () (A)
+  (lambda (n)
+    (if (zero? n) n
+        (if (zero? (sub1 n)) n
+            (+ (! ,A) (! (sub1 (sub1 n)))))))
+  '(0 1 2 3 4 5 6)
+  '(0 1 1 2 3 5 8))
+  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
+
+#!eof
+
+(time-test
+ "fib-synthesis-3"
+ (Barliman
+  () (A B C)
+  (lambda (n)
+    (if (zero? n) ,A
+        (if (zero? (sub1 n)) ,B
+            (+ (! (sub1 n)) (! ,C)))))
+  '(0 1 2 3 4 5 6)
+  '(0 1 1 2 3 5 8))
+  '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
+
+#!eof
+
+(time-test
+ "factorial-synthesis-5b"
+ (Barliman
+   () (A B)
+   (lambda (n) 
+     (if ,A
+         1
+         (* n (! ,B))))
+   '(0 5)
+   '(1 120))
+ '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
+
+(time-test
+ "factorial-synthesis-4"
+ (Barliman
+   () (A)
+   (lambda (n) 
+     (if (zero? n)
+         1
+         (* n (! ,A))))
+  '(0 1 2 3 5)
+  '(1 1 2 6 120))
+ '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
+
+#!eof

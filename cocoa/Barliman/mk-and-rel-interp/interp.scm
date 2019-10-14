@@ -1041,6 +1041,11 @@
            ((condition-true v) (eval-expo conseq env val))))))))
 
 (define initial-env `(
+                      (val . (cons . (prim . cons)))
+                      (val . (car . (prim . car)))
+                      (val . (cdr . (prim . cdr)))
+                      (val . (null? . (prim . null?)))
+
                       ;;
                       (val . (zero? . (prim . zero?)))
                       (val . (sub1 . (prim . sub1)))
@@ -1054,10 +1059,7 @@
                       ;;(val . (< . (prim . <)))
                       ;;(val . (<= . (prim . <=)))                      
                       ;;
-                      (val . (cons . (prim . cons)))
-                      (val . (car . (prim . car)))
-                      (val . (cdr . (prim . cdr)))
-                      (val . (null? . (prim . null?)))
+                      
                       (val . (pair? . (prim . pair?)))
                       (val . (symbol? . (prim . symbol?)))
                       (val . (number? . (prim . number?)))
