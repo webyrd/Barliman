@@ -128,7 +128,7 @@
  "factorial-synthesis-4e"
  (Barliman
   () (A)
-  (lambda (n) 
+  (lambda (n)
     (if (zero? n)
         1
         (* n ,A)))
@@ -140,7 +140,7 @@
  "factorial-synthesis-nova-4f"
  (Barliman
   () (A)
-  (lambda (n) 
+  (lambda (n)
     (if (zero? n)
         1
         (* n ,A)))
@@ -152,7 +152,7 @@
  "factorial-synthesis-nova-4g"
  (Barliman
   () (A B)
-  (lambda (n) 
+  (lambda (n)
     (if (zero? n)
         1
         (* ,A ,B)))
@@ -164,7 +164,7 @@
  "factorial-synthesis-nova-4g2"
  (Barliman
   () (A B)
-  (lambda (n) 
+  (lambda (n)
     (if (zero? n)
         1
         (* ,A ,B)))
@@ -177,7 +177,7 @@
  "factorial-synthesis-nova-4g3"
  (Barliman
   () (A B)
-  (lambda (n) 
+  (lambda (n)
     (if (zero? n)
         1
         (* ,A ,B)))
@@ -190,7 +190,7 @@
  "factorial-synthesis-4d"
  (Barliman
   () (A)
-  (lambda (n) 
+  (lambda (n)
     (if (zero? n)
         1
         (* n ,A)))
@@ -362,8 +362,8 @@
   () (A)
   (lambda (n)
     (if (zero? n) n
-    (if (zero? (sub1 n)) n
-    (+ (! ,A) (! (sub1 (sub1 n)))))))
+        (if (zero? (sub1 n)) n
+            (+ (! ,A) (! (sub1 (sub1 n)))))))
   '(0 1 2 3 4 5 6)
   '(0 1 1 2 3 5 8))
   '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
@@ -376,8 +376,8 @@
   () (A B C)
   (lambda (n)
     (if (zero? n) ,A
-    (if (zero? (sub1 n)) ,B
-    (+ (! (sub1 n)) (! ,C)))))
+        (if (zero? (sub1 n)) ,B
+            (+ (! (sub1 n)) (! ,C)))))
   '(0 1 2 3 4 5 6)
   '(0 1 1 2 3 5 8))
   '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
