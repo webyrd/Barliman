@@ -1797,8 +1797,6 @@
 
   (time (ans-allTests)))
 
-#!eof
-
 (time-test "append-gensym-full-synthesis"
   (run 1 (defn)
     (let ((g1 (gensym "g1"))
@@ -2418,7 +2416,6 @@ defn)                                   ;
                            'initial-env)))
            q))
     '((((lambda (_.0) `(,_.0 ',_.0)) '(lambda (_.0) `(,_.0 ',_.0))) (=/= ((_.0 closure)) ((_.0 prim))) (sym _.0)))))
-
 
 #|
 ;;; This test used to take 2 minutes.  With pull request #2 (Prioritize symbol lookup)
