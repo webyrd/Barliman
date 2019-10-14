@@ -137,6 +137,56 @@
  '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
 
 (time-test
+ "factorial-synthesis-nova-4f"
+ (Barliman
+  () (A)
+  (lambda (n) 
+    (if (zero? n)
+        1
+        (* n ,A)))
+  '(0 1 3 4)
+  '(1 1 6 24))
+ '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
+
+(time-test
+ "factorial-synthesis-nova-4g"
+ (Barliman
+  () (A B)
+  (lambda (n) 
+    (if (zero? n)
+        1
+        (* ,A ,B)))
+  '(0 1 3 4)
+  '(1 1 6 24))
+ '((((define ! (lambda (n) (if (zero? n) 1 (* (! (sub1 n)) n))))))))
+
+(time-test
+ "factorial-synthesis-nova-4g2"
+ (Barliman
+  () (A B)
+  (lambda (n) 
+    (if (zero? n)
+        1
+        (* ,A ,B)))
+  '(0 1 2 3 4)
+  '(1 1 2 6 24))
+ '((((define ! (lambda (n) (if (zero? n) 1 (* (! (sub1 n)) n))))))))
+
+#|  ;; Slooww
+(time-test
+ "factorial-synthesis-nova-4g3"
+ (Barliman
+  () (A B)
+  (lambda (n) 
+    (if (zero? n)
+        1
+        (* ,A ,B)))
+  '(0 2 3 4)
+  '(1 2 6 24))
+ '((((define ! (lambda (n) (if (zero? n) 1 (* (! (sub1 n)) n))))))))
+|#
+
+(time-test
  "factorial-synthesis-4d"
  (Barliman
   () (A)
@@ -279,6 +329,30 @@
   '(0 1 2 3 4 5 6)
   '(0 1 1 2 3 5 8))
   '((((define ! (lambda (n) (if (zero? n) n (if (zero? (sub1 n)) n (+ (! (sub1 n)) (! (sub1 (sub1 n))))))))))))
+
+
+(time-test
+ "factorial-synthesis-nova-4h"
+ (Barliman
+  () (A B)
+  (lambda (n) 
+    (if (zero? n)
+        1
+        ,A))
+  '(0 1 3 4)
+  '(1 1 6 24))
+ '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
+
+(printf "this test takes almost 10 minutes!\n")
+(time-test
+ "factorial-synthesis-nova-4i"
+ (Barliman
+  () (A)
+  (lambda (n) 
+    ,A)
+  '(0 1 3 4)
+  '(1 1 6 24))
+ '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
 
 #!eof
 
