@@ -95,14 +95,19 @@
                (R (cdr ds-R))
                (ds (filter-redundant-declares ds ds))
                (_ (set! decls (append (map cadr ds) decls)))
+               (ds-LG (partition (lambda (x) (and (eq? (car x) 'declare-const)
+                                             (eq? (caddr x) 'Bool)))
+                                 ds))
                (dc (map (lambda (x) `(declare-fun ,x () Int))
                         (filter undeclared? (map reify-v-name vs)))))
           (list
            (append
             dd
             dc
-            ds)
-           R
+            (cdr ds-LG))
+           (append
+            (car ds-LG)
+            R)
            vs))))))
 
 (define (get-assumptions a)
@@ -161,7 +166,9 @@
   (let ((r (take-while (lambda (x) (not (member x local-buffer))) m)))
     (unless (null? r)
       (let ((lines (reverse r)))
-        ;;(printf "adding lines ~a\n" lines)
+        (set! all-assumptions
+              (append (map cadr (filter declares? lines))
+                      all-assumptions))
         (call-z3 lines)
         (set! local-buffer (append local-buffer lines))))))
 
@@ -247,7 +254,8 @@
 (define (z/gc!)
   (call-z3 '((reset)))
   (call-z3 global-buffer)
-  (set! local-buffer '()))
+  (set! local-buffer '())
+  (set! all-assumptions '()))
 
 (define add-model
   (lambda (m)
