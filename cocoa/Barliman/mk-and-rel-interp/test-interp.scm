@@ -354,6 +354,17 @@
   '(1 1 6 24))
  '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
 
+#| ;; Runs out of memory on Will's laptop
+(time-test
+ "factorial-synthesis-nova-4j"
+ (Barliman
+  () (A)
+  ,A
+  '(0 1 3 4)
+  '(1 1 6 24))
+ '((((define ! (lambda (n) (if (zero? n) 1 (* n (! (sub1 n))))))))))
+|#
+
 #!eof
 
 (time-test
