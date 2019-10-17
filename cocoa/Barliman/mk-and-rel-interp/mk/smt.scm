@@ -131,15 +131,53 @@
           (cons (car xs) (take-while p (cdr xs)))
           '())))
 
+(define (smt-ok? st x)
+  (let ((x (walk* x st)))
+    (or (number? x)
+        (and (var? x)
+             (let ((c (lookup-c x st)))
+               (c-M c))))))
+
+(define (filter-smt-ok? st D)
+  (filter
+   (lambda (cs)
+     (for-all (lambda (ds)
+                (and (smt-ok? st (car ds)) (smt-ok? st (cdr ds))))
+              cs))
+   D))
+
+(define (add-smt-disequality st D)
+  (let ((as (filter-smt-ok? st D)))
+    (if (not (null? as))
+        (z/assert
+         `(and
+           ,@(map
+              (lambda (cs)
+                `(or
+                  ,@(map
+                     (lambda (ds)
+                       `(not (= ,(car ds) ,(cdr ds))))
+                     cs)))
+              as))
+         #t)
+        (lambdag@ (st) st))))
+
 (define z/varo
   (lambda (u)
     (lambdag@ (st)
       (let ((term (walk u (state-S st))))
         (if (var? term)
             (let* ((c (lookup-c term st))
-                   (M (c-M c)))
-              (if M st
-                  (set-c term (c-with-M c #t) st)))
+                   (M (c-M c))
+                   (D (c-D c)))
+              (bind*
+               st
+               (lambdag@ (st)
+                 (if M st
+                     (set-c term (c-with-M c #t) st)))
+               (if (or M (null? D))
+                   (lambdag@ (st) st)
+                   (lambdag@ (st) ((add-smt-disequality st D) st)))))
             st)))))
 
 (define global-buffer '())
@@ -152,8 +190,8 @@
   (lambda (lines)
     (lambdag@ (st)
       (begin
-        (call-z3 lines)
         (set! local-buffer (append local-buffer lines))
+        (call-z3 lines)
         (let ((M (append (reverse lines) (state-M st))))
           (state-with-M st M))))))
 (define (replay-if-needed a m)
@@ -170,13 +208,14 @@
                                        lines))
               (other-lines (filter (lambda (x) (not (declares? x))) lines)))
           (let* ((undeclared-decls (filter (lambda (x) (undeclared? (cadr x))) new-decls))
-                 (actual-lines (append undeclared-decls new-assumptions other-lines)))
+                 (undeclared-assumptions (filter (lambda (x) (undeclared? (cadr x))) new-assumptions))
+                 (actual-lines (append undeclared-decls undeclared-assumptions other-lines)))
             (let* ((rs (filter undeclared? (map reify-v-name (cdr (assq a relevant-vars)))))
                    (undeclared-rs (map (lambda (x) `(declare-const ,x Int)) rs))
                    (actual-lines (append undeclared-rs actual-lines)))
-              (set! all-assumptions (append (map cadr new-assumptions) all-assumptions))
-              (call-z3 actual-lines)
-              (set! local-buffer (append local-buffer actual-lines)))))))))
+              (set! all-assumptions (append (map cadr undeclared-assumptions) all-assumptions))
+              (set! local-buffer (append local-buffer actual-lines))
+              (call-z3 actual-lines))))))))
 
 (define (z/check m a no_walk?)
   (lambdag@ (st)
@@ -188,7 +227,7 @@
          st
          (z/local (cadr r))
          (lambdag@ (st)
-           (if (check-sat-assuming a (state-M st))
+           (if (and a (check-sat-assuming a (state-M st)))
                (begin
                  (let ((p (assq a relevant-vars)))
                    (set-cdr! p (append (caddr r) (cdr p))))
@@ -198,16 +237,14 @@
                           st
                           (bind*
                            st
+                           (numbero (car vs))
                            (z/varo (car vs))
                            (loop (cdr vs))))))
                   st))
-               #f)))))))
+               (if a #f st))))))))
 
 (define (z/ line)
-  (lambdag@ (st)
-    (begin
-      (z/global (list line))
-      st)))
+  (z/check (list line) #f #t))
 
 (define assumption-count 0)
 (define (fresh-assumption)
@@ -263,8 +300,8 @@
   (call-z3 '((reset)))
   (call-z3 global-buffer)
   (set! decls '())
-  (set! local-buffer '())
-  (set! all-assumptions '()))
+  (set! all-assumptions '())
+  (set! local-buffer '()))
 
 (define add-model
   (lambda (m)

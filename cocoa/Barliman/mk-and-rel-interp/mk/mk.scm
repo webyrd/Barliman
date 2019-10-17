@@ -626,8 +626,11 @@
 
 (define (add-to-D st v d)
   (let* ((c (lookup-c v st))
-         (c^ (c-with-D c (cons d (c-D c)))))
-    (set-c v c^ st)))
+         (D^ (cons d (c-D c)))
+         (c^ (c-with-D c D^)))
+    (bind*
+     (set-c v c^ st)
+     (add-smt-disequality st D^))))
 
 (define =/=*
   (lambda (S+)
