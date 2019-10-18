@@ -1,3 +1,14 @@
+(define empty-ap-map empty-subst-map)
+(define assumption->int
+  (lambda (a)
+    (let ((s (symbol->string a)))
+      (string->number (substring s 2 (string-length s))))))
+(define ap-map-lookup
+  (lambda (u S)
+    (data-val (t:lookup (assumption->int u) S))))
+(define (ap-map-add S var val)
+  (t:bind (assumption->int var) val S))
+
 (define partition
   (lambda (p xs)
     (cons (filter p xs)
@@ -106,7 +117,7 @@
            vs))))))
 
 (define (get-assumptions a)
-  (let ((pos (assq a assumption-chains)))
+  (let ((pos (ap-map-lookup a assumption-chains)))
     (map (lambda (b)
            (if (memq b pos)
                b
@@ -210,7 +221,7 @@
           (let* ((undeclared-decls (filter (lambda (x) (undeclared? (cadr x))) new-decls))
                  (undeclared-assumptions (filter (lambda (x) (undeclared? (cadr x))) new-assumptions))
                  (actual-lines (append undeclared-decls undeclared-assumptions other-lines)))
-            (let* ((rs (filter undeclared? (map reify-v-name (cdr (assq a relevant-vars)))))
+            (let* ((rs (filter undeclared? (map reify-v-name (ap-map-lookup a relevant-vars))))
                    (undeclared-rs (map (lambda (x) `(declare-const ,x Int)) rs))
                    (actual-lines (append undeclared-rs actual-lines)))
               (set! all-assumptions (append (map cadr undeclared-assumptions) all-assumptions))
@@ -229,8 +240,8 @@
          (lambdag@ (st)
            (if (and a (check-sat-assuming a (state-M st)))
                (begin
-                 (let ((p (assq a relevant-vars)))
-                   (set-cdr! p (append (caddr r) (cdr p))))
+                 (let ((rs (ap-map-lookup a relevant-vars)))
+                   (set! relevant-vars (ap-map-add relevant-vars a (append (caddr r) rs))))
                  ((let loop ((vs (caddr r)))
                     (lambdag@ (st)
                       (if (null? vs)
@@ -271,10 +282,10 @@
       (lambdag@ (st)
         (let ((a1 (fresh-assumption)))
           (let ((a0 (last-assumption (state-M st))))
-            (let ((rs (if (eq? a0 'true) '()  (cdr (assq a0 relevant-vars))))
-                  (as (if (eq? a0 'true) '() (assq a0 assumption-chains))))
-              (set! relevant-vars (cons (cons a1 rs) relevant-vars))
-              (set! assumption-chains (cons (cons a1 as) assumption-chains))
+            (let ((rs (if (eq? a0 'true) '()  (ap-map-lookup a0 relevant-vars)))
+                  (as (if (eq? a0 'true) '() (ap-map-lookup a0 assumption-chains))))
+              (set! relevant-vars (ap-map-add relevant-vars a1 rs))
+              (set! assumption-chains (ap-map-add assumption-chains a1 (cons a1 as)))
               (set! all-assumptions (cons a1 all-assumptions))
               (bind*
                st
@@ -283,14 +294,14 @@
                         a1
                         no_walk?)))))))))
 
-(define relevant-vars '())
-(define assumption-chains '())
+(define relevant-vars empty-ap-map)
+(define assumption-chains empty-ap-map)
 (define all-assumptions '())
 (define (z/reset!)
   (call-z3 '((reset)))
   (set! decls '())
-  (set! relevant-vars '())
-  (set! assumption-chains '())
+  (set! relevant-vars empty-ap-map)
+  (set! assumption-chains empty-ap-map)
   (set! all-assumptions '())
   (set! assumption-count 0)
   (set! m-subst-map empty-subst-map)
@@ -334,7 +345,7 @@
                 st
                 (if (not (check-sat-assuming a (state-M st)))
                     #f
-                    (let ([rs (map (lambda (x) (cons (reify-v-name x) x)) (cdr (assq a relevant-vars)))])
+                    (let ([rs (map (lambda (x) (cons (reify-v-name x) x)) (ap-map-lookup a relevant-vars))])
                       ((let loop ()
                          (lambdag@ (st)
                            (let ((m (get-model-inc)))
