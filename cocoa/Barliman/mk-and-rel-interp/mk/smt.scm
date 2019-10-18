@@ -132,7 +132,7 @@
           '())))
 
 (define (smt-ok? st x)
-  (let ((x (walk* x st)))
+  (let ((x (walk* x (state-S st))))
     (or (number? x)
         (and (var? x)
              (let ((c (lookup-c x st)))

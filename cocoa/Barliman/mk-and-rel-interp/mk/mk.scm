@@ -625,12 +625,13 @@
 (define numbero (type-constraint number? 'numbero))
 
 (define (add-to-D st v d)
+  (and
   (let* ((c (lookup-c v st))
          (D^ (cons d (c-D c)))
          (c^ (c-with-D c D^)))
     (bind*
      (set-c v c^ st)
-     (add-smt-disequality st D^))))
+     (add-smt-disequality st D^)))))
 
 (define =/=*
   (lambda (S+)
