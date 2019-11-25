@@ -3,8 +3,8 @@
 //  Barliman
 //
 //  Created by Adam Nemecek on 7/31/16.
-//  Copyright © 2016 William E. Byrd. All rights reserved.
-//
+//  Copyright © 2016 William E. Byrd.
+//  Released under MIT License (see LICENSE file)
 
 import Foundation
 
