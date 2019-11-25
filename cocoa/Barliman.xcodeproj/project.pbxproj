@@ -8,11 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		8911EF6E2337862A005655BF /* EditorWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8911EF6D2337862A005655BF /* EditorWindowController.xib */; };
-		8911EF7023378636005655BF /* SemanticsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8911EF6F23378636005655BF /* SemanticsWindowController.xib */; };
 		8911EF722337863E005655BF /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8911EF712337863E005655BF /* MainMenu.xib */; };
 		8990E00E23377330006B96B5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E00D23377330006B96B5 /* AppDelegate.swift */; };
 		8990E01023377330006B96B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8990E00F23377330006B96B5 /* Assets.xcassets */; };
-		8990E01C23377499006B96B5 /* SemanticsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E01B23377499006B96B5 /* SemanticsWindowController.swift */; };
 		8990E01E23377516006B96B5 /* EditorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E01D23377516006B96B5 /* EditorWindowController.swift */; };
 		8990E02023377589006B96B5 /* SchemeEditorTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E01F23377589006B96B5 /* SchemeEditorTextView.swift */; };
 		8990E02223377706006B96B5 /* RunSchemeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E02123377706006B96B5 /* RunSchemeOperation.swift */; };
@@ -22,14 +20,12 @@
 
 /* Begin PBXFileReference section */
 		8911EF6D2337862A005655BF /* EditorWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorWindowController.xib; sourceTree = "<group>"; };
-		8911EF6F23378636005655BF /* SemanticsWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SemanticsWindowController.xib; sourceTree = "<group>"; };
 		8911EF712337863E005655BF /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		8990E00A23377330006B96B5 /* Barliman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barliman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8990E00D23377330006B96B5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8990E00F23377330006B96B5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8990E01423377330006B96B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8990E01523377330006B96B5 /* Barliman.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Barliman.entitlements; sourceTree = "<group>"; };
-		8990E01B23377499006B96B5 /* SemanticsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemanticsWindowController.swift; sourceTree = "<group>"; };
 		8990E01D23377516006B96B5 /* EditorWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
 		8990E01F23377589006B96B5 /* SchemeEditorTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeEditorTextView.swift; sourceTree = "<group>"; };
 		8990E02123377706006B96B5 /* RunSchemeOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunSchemeOperation.swift; sourceTree = "<group>"; };
@@ -75,8 +71,6 @@
 				8911EF6D2337862A005655BF /* EditorWindowController.xib */,
 				8990E01F23377589006B96B5 /* SchemeEditorTextView.swift */,
 				8990E025233777CF006B96B5 /* Extensions.swift */,
-				8990E01B23377499006B96B5 /* SemanticsWindowController.swift */,
-				8911EF6F23378636005655BF /* SemanticsWindowController.xib */,
 				8990E02323377748006B96B5 /* mk-and-rel-interp */,
 				8990E02123377706006B96B5 /* RunSchemeOperation.swift */,
 				8990E01523377330006B96B5 /* Barliman.entitlements */,
@@ -144,7 +138,6 @@
 			files = (
 				8990E01023377330006B96B5 /* Assets.xcassets in Resources */,
 				8911EF722337863E005655BF /* MainMenu.xib in Resources */,
-				8911EF7023378636005655BF /* SemanticsWindowController.xib in Resources */,
 				8990E02423377749006B96B5 /* mk-and-rel-interp in Resources */,
 				8911EF6E2337862A005655BF /* EditorWindowController.xib in Resources */,
 			);
@@ -161,7 +154,6 @@
 				8990E026233777CF006B96B5 /* Extensions.swift in Sources */,
 				8990E02023377589006B96B5 /* SchemeEditorTextView.swift in Sources */,
 				8990E02223377706006B96B5 /* RunSchemeOperation.swift in Sources */,
-				8990E01C23377499006B96B5 /* SemanticsWindowController.swift in Sources */,
 				8990E01E23377516006B96B5 /* EditorWindowController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

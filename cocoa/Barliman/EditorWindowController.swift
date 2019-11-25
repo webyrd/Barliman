@@ -55,10 +55,10 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControl
 
     var runCodeFromEditPaneTimer: Timer?
 
-    var semanticsWindowController: SemanticsWindowController?
-
     // keep track of the operation that runs all the tests together, in case we need to cancel it
     var schemeOperationAllTests: RunSchemeOperation?
+    
+    var interpreter_code: String?
 
     let processingQueue: OperationQueue = OperationQueue()
     
@@ -114,6 +114,30 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControl
         
         // from http://stackoverflow.com/questions/28001996/setting-minimum-width-of-nssplitviews
         self.definitionAndBestGuessSplitView.delegate = self
+        
+        loadInterpreterCode("interp")
+    }
+    
+    func loadInterpreterCode(_ interpFileName: String) {
+        // get the path to the application's bundle, so we can load the interpreter file
+        let bundle = Bundle.main
+        
+        let interp_path: NSString? = bundle.path(forResource: interpFileName, ofType: "scm", inDirectory: "mk-and-rel-interp") as NSString?
+        
+        let path = URL(fileURLWithPath: interp_path! as String)
+        
+        // from http://stackoverflow.com/questions/24097826/read-and-write-data-from-text-file
+        do {
+            let text = try NSString(contentsOf: path, encoding: String.Encoding.utf8.rawValue)
+            interpreter_code = text as String
+        }
+        catch {
+            print("Oh noes!  Can't load interpreter for Semantics Window!")
+        }
+    }
+    
+    func getInterpreterCode() -> String {
+        return interpreter_code!
     }
     
     // from http://stackoverflow.com/questions/28001996/setting-minimum-width-of-nssplitviews
@@ -424,7 +448,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControl
         let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
         let load_mk_string: String = "(load \"\( mk_path_string )\")"
 
-        let interp_string: String = semanticsWindowController!.getInterpreterCode()
+        let interp_string: String = getInterpreterCode()
 
         let definitionText = schemeDefinitionView.textStorage!.string
 
