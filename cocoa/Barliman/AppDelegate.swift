@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Barliman
 //
-//  Created by William Byrd on 5/14/16.
+//  Created by William E. Byrd on 5/14/16.
 //  Copyright © 2016 William E. Byrd.
 //  Released under MIT License (see LICENSE file)
 
