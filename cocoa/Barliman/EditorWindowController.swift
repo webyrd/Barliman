@@ -535,72 +535,62 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControl
         let newTest6QueryString: String
         let newAlltestsQueryString: String
 
+        // Barliman used to save temporary files to the user's Documents directory, which is naughty
+        // (and under macOS Cataline requires explicit user permission).
+        //
+        // Instead, save the temporary files to a temporary directory.
+        //
+        // adapted from https://nshipster.com/temporary-files/
+        let tmpDirectoryURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
 
-        if let dir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true).first {
+        let fullSimpleQueryForMondoSchemeFilePath = tmpDirectoryURL.appendingPathComponent("barliman-query-simple-for-mondo-scheme-file.scm")
+        let localSimpleQueryForMondoSchemeFilePath = fullSimpleQueryForMondoSchemeFilePath.path
 
-            let fullSimpleQueryForMondoSchemeFilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-query-simple-for-mondo-scheme-file.scm")
-            let localSimpleQueryForMondoSchemeFilePath = fullSimpleQueryForMondoSchemeFilePath.path
+        let fullNewQueryActualTest1FilePath = tmpDirectoryURL.appendingPathComponent("barliman-new-query-actual-test1.scm")
+        let localNewQueryActualTest1FilePath = fullNewQueryActualTest1FilePath.path
 
-            let fullNewQueryActualTest1FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test1.scm")
-            let localNewQueryActualTest1FilePath = fullNewQueryActualTest1FilePath.path
+        let fullNewQueryActualTest2FilePath = tmpDirectoryURL.appendingPathComponent("barliman-new-query-actual-test2.scm")
+        let localNewQueryActualTest2FilePath = fullNewQueryActualTest2FilePath.path
 
-            let fullNewQueryActualTest2FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test2.scm")
-            let localNewQueryActualTest2FilePath = fullNewQueryActualTest2FilePath.path
+        let fullNewQueryActualTest3FilePath = tmpDirectoryURL.appendingPathComponent("barliman-new-query-actual-test3.scm")
+        let localNewQueryActualTest3FilePath = fullNewQueryActualTest3FilePath.path
 
-            let fullNewQueryActualTest3FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test3.scm")
-            let localNewQueryActualTest3FilePath = fullNewQueryActualTest3FilePath.path
+        let fullNewQueryActualTest4FilePath = tmpDirectoryURL.appendingPathComponent("barliman-new-query-actual-test4.scm")
+        let localNewQueryActualTest4FilePath = fullNewQueryActualTest4FilePath.path
 
-            let fullNewQueryActualTest4FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test4.scm")
-            let localNewQueryActualTest4FilePath = fullNewQueryActualTest4FilePath.path
+        let fullNewQueryActualTest5FilePath = tmpDirectoryURL.appendingPathComponent("barliman-new-query-actual-test5.scm")
+        let localNewQueryActualTest5FilePath = fullNewQueryActualTest5FilePath.path
 
-            let fullNewQueryActualTest5FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test5.scm")
-            let localNewQueryActualTest5FilePath = fullNewQueryActualTest5FilePath.path
+        let fullNewQueryActualTest6FilePath = tmpDirectoryURL.appendingPathComponent("barliman-new-query-actual-test6.scm")
+        let localNewQueryActualTest6FilePath = fullNewQueryActualTest6FilePath.path
 
-            let fullNewQueryActualTest6FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test6.scm")
-            let localNewQueryActualTest6FilePath = fullNewQueryActualTest6FilePath.path
+        let fullNewQueryActualAlltestsFilePath = tmpDirectoryURL.appendingPathComponent("barliman-new-query-actual-alltests.scm")
+        let localNewQueryActualAlltestsFilePath = fullNewQueryActualAlltestsFilePath.path
 
-            let fullNewQueryActualAlltestsFilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-alltests.scm")
-            let localNewQueryActualAlltestsFilePath = fullNewQueryActualAlltestsFilePath.path
+        let loadFileString =
+            "(define simple-query-for-mondo-file-path \"\( localSimpleQueryForMondoSchemeFilePath )\")"
 
+        newSimpleQueryString = loadFileString + "\n\n" + new_simple_query_template_string
 
-
-            let loadFileString =
-                "(define simple-query-for-mondo-file-path \"\( localSimpleQueryForMondoSchemeFilePath )\")"
-
-            newSimpleQueryString = loadFileString + "\n\n" + new_simple_query_template_string
-
-            newAlltestsQueryString =
-                loadFileString + "\n\n" +
-                "(define actual-query-file-path \"\( localNewQueryActualAlltestsFilePath )\")" + "\n\n" +
-                new_alltests_query_template_string
+        newAlltestsQueryString =
+            loadFileString + "\n\n" +
+            "(define actual-query-file-path \"\( localNewQueryActualAlltestsFilePath )\")" + "\n\n" +
+            new_alltests_query_template_string
 
 
-            func makeNewTestNQueryString(_ n: Int, actualQueryFilePath: String) -> String {
-                return loadFileString + "\n\n" +
-                    "(define actual-query-file-path \"\( actualQueryFilePath )\")" + "\n\n" +
-                    "(define (test-query-fn) (query-val-test\( n )))" + "\n\n\n" +
-                    new_test_query_template_string
-            }
-
-            newTest1QueryString = makeNewTestNQueryString(1, actualQueryFilePath: localNewQueryActualTest1FilePath)
-            newTest2QueryString = makeNewTestNQueryString(2, actualQueryFilePath: localNewQueryActualTest2FilePath)
-            newTest3QueryString = makeNewTestNQueryString(3, actualQueryFilePath: localNewQueryActualTest3FilePath)
-            newTest4QueryString = makeNewTestNQueryString(4, actualQueryFilePath: localNewQueryActualTest4FilePath)
-            newTest5QueryString = makeNewTestNQueryString(5, actualQueryFilePath: localNewQueryActualTest5FilePath)
-            newTest6QueryString = makeNewTestNQueryString(6, actualQueryFilePath: localNewQueryActualTest6FilePath)
-
-        } else {
-            print("!!!!!  LOAD_ERROR -- can't find Document directory\n")
-
-            newSimpleQueryString = ""
-            newTest1QueryString = ""
-            newTest2QueryString = ""
-            newTest3QueryString = ""
-            newTest4QueryString = ""
-            newTest5QueryString = ""
-            newTest6QueryString = ""
-            newAlltestsQueryString = ""
+        func makeNewTestNQueryString(_ n: Int, actualQueryFilePath: String) -> String {
+            return loadFileString + "\n\n" +
+                "(define actual-query-file-path \"\( actualQueryFilePath )\")" + "\n\n" +
+                "(define (test-query-fn) (query-val-test\( n )))" + "\n\n\n" +
+                new_test_query_template_string
         }
+
+        newTest1QueryString = makeNewTestNQueryString(1, actualQueryFilePath: localNewQueryActualTest1FilePath)
+        newTest2QueryString = makeNewTestNQueryString(2, actualQueryFilePath: localNewQueryActualTest2FilePath)
+        newTest3QueryString = makeNewTestNQueryString(3, actualQueryFilePath: localNewQueryActualTest3FilePath)
+        newTest4QueryString = makeNewTestNQueryString(4, actualQueryFilePath: localNewQueryActualTest4FilePath)
+        newTest5QueryString = makeNewTestNQueryString(5, actualQueryFilePath: localNewQueryActualTest5FilePath)
+        newTest6QueryString = makeNewTestNQueryString(6, actualQueryFilePath: localNewQueryActualTest6FilePath)
 
 
         let in1 = (processTest1 ? test1InputField.stringValue : "")
@@ -652,58 +642,56 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControl
         var pathNewActualAlltests: URL!
 
 
-        // write the temporary file containing the query to the user's Document directory.  This seems a bit naughty.  Where is the right place to put this?  In ~/.barliman, perhaps?
-        if let dir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true).first {
+        // write the temporary file containing the query to the temp directory
 
-            pathQuerySimpleForMondoSchemeFile = URL(fileURLWithPath: dir).appendingPathComponent(query_simple_for_mondo_scheme_file)
-
-
-            pathNewSimple = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_simple)
-
-            pathNewTest1 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test1)
-            pathNewTest2 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test2)
-            pathNewTest3 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test3)
-            pathNewTest4 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test4)
-            pathNewTest5 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test5)
-            pathNewTest6 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test6)
-            pathNewAlltests = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_alltests)
-
-            pathNewActualTest1 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test1)
-            pathNewActualTest2 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test2)
-            pathNewActualTest3 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test3)
-            pathNewActualTest4 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test4)
-            pathNewActualTest5 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test5)
-            pathNewActualTest6 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test6)
-            pathNewActualAlltests = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_alltests)
-
-            // write the query files
-            do {
-
-                try querySimpleForMondoSchemeContents.write(to: pathQuerySimpleForMondoSchemeFile, atomically: false, encoding: String.Encoding.utf8)
+        pathQuerySimpleForMondoSchemeFile = tmpDirectoryURL.appendingPathComponent(query_simple_for_mondo_scheme_file)
 
 
-                try newSimpleQueryString.write(to: pathNewSimple, atomically: false, encoding: String.Encoding.utf8)
+        pathNewSimple = tmpDirectoryURL.appendingPathComponent(new_query_file_simple)
 
-                try newTest1QueryString.write(to: pathNewTest1, atomically: false, encoding: String.Encoding.utf8)
-                try newTest2QueryString.write(to: pathNewTest2, atomically: false, encoding: String.Encoding.utf8)
-                try newTest3QueryString.write(to: pathNewTest3, atomically: false, encoding: String.Encoding.utf8)
-                try newTest4QueryString.write(to: pathNewTest4, atomically: false, encoding: String.Encoding.utf8)
-                try newTest5QueryString.write(to: pathNewTest5, atomically: false, encoding: String.Encoding.utf8)
-                try newTest6QueryString.write(to: pathNewTest6, atomically: false, encoding: String.Encoding.utf8)
-                try newAlltestsQueryString.write(to: pathNewAlltests, atomically: false, encoding: String.Encoding.utf8)
+        pathNewTest1 = tmpDirectoryURL.appendingPathComponent(new_query_file_test1)
+        pathNewTest2 = tmpDirectoryURL.appendingPathComponent(new_query_file_test2)
+        pathNewTest3 = tmpDirectoryURL.appendingPathComponent(new_query_file_test3)
+        pathNewTest4 = tmpDirectoryURL.appendingPathComponent(new_query_file_test4)
+        pathNewTest5 = tmpDirectoryURL.appendingPathComponent(new_query_file_test5)
+        pathNewTest6 = tmpDirectoryURL.appendingPathComponent(new_query_file_test6)
+        pathNewAlltests = tmpDirectoryURL.appendingPathComponent(new_query_file_alltests)
 
-                try newTest1ActualQueryString.write(to: pathNewActualTest1, atomically: false, encoding: String.Encoding.utf8)
-                try newTest2ActualQueryString.write(to: pathNewActualTest2, atomically: false, encoding: String.Encoding.utf8)
-                try newTest3ActualQueryString.write(to: pathNewActualTest3, atomically: false, encoding: String.Encoding.utf8)
-                try newTest4ActualQueryString.write(to: pathNewActualTest4, atomically: false, encoding: String.Encoding.utf8)
-                try newTest5ActualQueryString.write(to: pathNewActualTest5, atomically: false, encoding: String.Encoding.utf8)
-                try newTest6ActualQueryString.write(to: pathNewActualTest6, atomically: false, encoding: String.Encoding.utf8)
-                try newAlltestsActualQueryString.write(to: pathNewActualAlltests, atomically: false, encoding: String.Encoding.utf8)
-            }
-            catch {
-                // this error handling could be better!  :)
-                print("couldn't write to query files")
-            }
+        pathNewActualTest1 = tmpDirectoryURL.appendingPathComponent(new_query_file_actual_test1)
+        pathNewActualTest2 = tmpDirectoryURL.appendingPathComponent(new_query_file_actual_test2)
+        pathNewActualTest3 = tmpDirectoryURL.appendingPathComponent(new_query_file_actual_test3)
+        pathNewActualTest4 = tmpDirectoryURL.appendingPathComponent(new_query_file_actual_test4)
+        pathNewActualTest5 = tmpDirectoryURL.appendingPathComponent(new_query_file_actual_test5)
+        pathNewActualTest6 = tmpDirectoryURL.appendingPathComponent(new_query_file_actual_test6)
+        pathNewActualAlltests = tmpDirectoryURL.appendingPathComponent(new_query_file_actual_alltests)
+
+        // write the query files
+        do {
+
+            try querySimpleForMondoSchemeContents.write(to: pathQuerySimpleForMondoSchemeFile, atomically: false, encoding: String.Encoding.utf8)
+
+
+            try newSimpleQueryString.write(to: pathNewSimple, atomically: false, encoding: String.Encoding.utf8)
+
+            try newTest1QueryString.write(to: pathNewTest1, atomically: false, encoding: String.Encoding.utf8)
+            try newTest2QueryString.write(to: pathNewTest2, atomically: false, encoding: String.Encoding.utf8)
+            try newTest3QueryString.write(to: pathNewTest3, atomically: false, encoding: String.Encoding.utf8)
+            try newTest4QueryString.write(to: pathNewTest4, atomically: false, encoding: String.Encoding.utf8)
+            try newTest5QueryString.write(to: pathNewTest5, atomically: false, encoding: String.Encoding.utf8)
+            try newTest6QueryString.write(to: pathNewTest6, atomically: false, encoding: String.Encoding.utf8)
+            try newAlltestsQueryString.write(to: pathNewAlltests, atomically: false, encoding: String.Encoding.utf8)
+
+            try newTest1ActualQueryString.write(to: pathNewActualTest1, atomically: false, encoding: String.Encoding.utf8)
+            try newTest2ActualQueryString.write(to: pathNewActualTest2, atomically: false, encoding: String.Encoding.utf8)
+            try newTest3ActualQueryString.write(to: pathNewActualTest3, atomically: false, encoding: String.Encoding.utf8)
+            try newTest4ActualQueryString.write(to: pathNewActualTest4, atomically: false, encoding: String.Encoding.utf8)
+            try newTest5ActualQueryString.write(to: pathNewActualTest5, atomically: false, encoding: String.Encoding.utf8)
+            try newTest6ActualQueryString.write(to: pathNewActualTest6, atomically: false, encoding: String.Encoding.utf8)
+            try newAlltestsActualQueryString.write(to: pathNewActualAlltests, atomically: false, encoding: String.Encoding.utf8)
+        }
+        catch {
+            // this error handling could be better!  :)
+            print("couldn't write to query files")
         }
 
 
