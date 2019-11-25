@@ -816,6 +816,8 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControl
         } else {
             resetTestUI(test6StatusLabel, inputField: test6InputField, outputField: test6ExpectedOutputField)
         }
+        
+        schemeDefinitionView.needsDisplay = true
     }
 }
 

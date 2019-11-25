@@ -182,6 +182,7 @@ class RunSchemeOperation: Operation {
 
     func runSchemeCode() {
 
+        editorWindowController.schemeDefinitionView.needsDisplay = true
         startSpinner()
         thinkingColorAndLabel()
 
@@ -224,6 +225,7 @@ class RunSchemeOperation: Operation {
         let exitStatus = task.terminationStatus
 
         stopSpinner()
+        editorWindowController.schemeDefinitionView.needsDisplay = true
 
         // update the user interface, which *must* be done through the main thread
         OperationQueue.main.addOperation {
