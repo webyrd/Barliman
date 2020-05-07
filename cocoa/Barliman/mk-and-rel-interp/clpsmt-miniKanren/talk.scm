@@ -133,6 +133,14 @@
       (z/assert `(= ,x (+ ,y 1)))))
   '((1 0) (2 1) (3 2)))
 
+(test "basic-conde-1"
+  (run* (q)
+    (conde
+      ((z/assert `(> ,q 0))
+       (z/assert `(< ,q 2)))
+      ((z/assert `(= ,q 2)))))
+  '(2 1))
+
 (define faco
   (lambda (n out)
     (conde ((z/assert `(= ,n 0))

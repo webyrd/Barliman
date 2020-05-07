@@ -178,6 +178,10 @@
        (numbero a1)
        (numbero a2)
        (numbero val)
+       (conde
+         ((== prim-id '/)
+          (z/assert `(not (= ,a2 0))))
+         ((=/= prim-id '/)))
        (z/assert `(= ,val (,prim-id ,a1 ,a2))))]
     [(conde
        [(== prim-id '=)]

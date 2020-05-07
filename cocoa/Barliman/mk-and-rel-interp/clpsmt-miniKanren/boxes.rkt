@@ -1,10 +1,10 @@
 #lang racket
 
-(require "mk.rkt")
-(do-defer-smt-checks!)
+(require "../faster-miniKanren/mk.rkt")
+;;(do-defer-smt-checks!)
 (require graphics/graphics)
 
-(provide (all-from-out "mk.rkt")
+(provide (all-from-out "../faster-miniKanren/mk.rkt")
          (all-defined-out))
 
 (define (is-boxo b x y w h)

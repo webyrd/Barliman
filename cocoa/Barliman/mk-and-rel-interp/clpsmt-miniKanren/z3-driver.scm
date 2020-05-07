@@ -1,11 +1,15 @@
 (define z3-counter-check-sat 0)
 (define z3-counter-get-model 0)
 
+(define log-all-calls #f)
+
 (define read-sat
   (lambda (fn)
     (let ([p (open-input-file fn)])
       (let ([r (read p)])
         (close-input-port p)
+	(when (eq? r 'unknown)
+	  (printf "unknown\n"))
         (eq? r 'sat)))))
 
 (define call-z3
@@ -21,6 +25,9 @@
       ;; (system "sed -i '' 's/bitvec-/#b/g' out.smt")
       
       (let ((r (system "z3 out.smt >out.txt")))
+        (when log-all-calls
+          (system (format "cp out.smt out~d.smt" (+ z3-counter-check-sat z3-counter-get-model)))
+          (system (format "cp out.txt out~d.txt" (+ z3-counter-check-sat z3-counter-get-model))))
         (system "sed -i '' 's/#b/bitvec-/g' out.txt")
         (when (not (= r 0))
           (error 'call-z3 "error in z3 out.smt > out.txt"))))))

@@ -1,6 +1,8 @@
 (define z3-counter-check-sat 0)
 (define z3-counter-get-model 0)
 
+(define log-all-calls #f)
+
 (define-values (z3-out z3-in z3-err z3-p)
   (open-process-ports "z3 -in" 'block (native-transcoder)))
 (define (z3-reset!)
@@ -22,11 +24,23 @@
   (lambda ()
     (z3-check-in!)
     (let ([r (read z3-in)])
-      (eq? r 'sat))))
+      (when log-all-calls (printf ";; ~a\n" r))
+      (if (eq? r 'sat)
+          #t
+          (if (eq? r 'unsat)
+              #f
+              (if (eq? r 'unknown)
+                  (begin
+                    (printf "read-sat: unknown\n")
+                    ;;(call-z3 '((pop)))
+                    #f)
+                  (error 'read-sat (format "~a" r))))))))
 
 (define call-z3
   (lambda (xs)
-    (for-each (lambda (x) (fprintf z3-out "~a\n" x)) xs)
+    (for-each (lambda (x)
+                (when log-all-calls (printf "~a\n" x))
+                (fprintf z3-out "~a\n" x)) xs)
     (flush-output-port z3-out)))
 
 (define check-sat
@@ -38,6 +52,7 @@
 (define read-model
   (lambda ()
     (let ([m (read z3-in)])
+      (when log-all-calls (printf "~a\n" m))
       (map (lambda (x)
              (cons (cadr x)
                    (if (null? (caddr x))

@@ -10,14 +10,35 @@
 (clp-bouncing-ball-var-direction 'forward)
 |#
 
-(require "mk.rkt")
+(require "../faster-miniKanren/mk.rkt")
 (require graphics/graphics)
 
-(provide (all-from-out "mk.rkt")
+(provide (all-from-out "../faster-miniKanren/mk.rkt")
          (all-defined-out))
 
-(do-defer-smt-checks!)
-(when get-next-model? (toggle-get-next-model?!))
+;(do-defer-smt-checks!)
+;(when get-next-model? (toggle-get-next-model?!))
+
+(define z/purge
+  (lambdag@ (st)
+    (let ((M (state-M st)))
+      (if (null? M)
+          st
+          (let ([a (last-assumption (state-M st))])
+            (if (eq? a 'true)
+                st
+                (if (not (check-sat-assuming a (state-M st)))
+                    #f
+                    (let ([rs (map (lambda (x) (cons (reify-v-name x) x)) (cdr (assq a relevant-vars)))])
+                      ((let loop ()
+                         (lambdag@ (st)
+                           (let ((m (get-model-inc)))
+                             (let ((m (map (lambda (x) (cons (cdr (assq (car x) rs)) (cdr x))) (filter (lambda (x) (assq (car x) rs)) m))))
+                               (let ((st (state-with-scope st (new-scope))))
+                                 (bind*
+                                  (state-with-M st '())
+                                  (add-model m)))))))
+                       st)))))))))
 
 (define pi 3.14159)
 (define two-pi (* pi 2))
