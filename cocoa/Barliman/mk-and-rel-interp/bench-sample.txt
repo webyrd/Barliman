@@ -1,0 +1,138 @@
+Testing "eval 7"
+(time (run* (q) ...))
+    no collections
+    0.000092872s elapsed cpu time
+    0.000092000s elapsed real time
+    37504 bytes allocated
+Testing "eval (+ 3 4)"
+(time (run* (q) ...))
+    no collections
+    0.000248330s elapsed cpu time
+    0.047579000s elapsed real time
+    186800 bytes allocated
+Testing "eval (zero? 0)"
+(time (run* (q) ...))
+    no collections
+    0.000135238s elapsed cpu time
+    0.035406000s elapsed real time
+    112960 bytes allocated
+Testing "eval (zero? 5)"
+(time (run* (q) ...))
+    no collections
+    0.000144754s elapsed cpu time
+    0.035469000s elapsed real time
+    112944 bytes allocated
+Testing "eval ((lambda (x) x) 0)"
+(time (run* (q) ...))
+    no collections
+    0.000124471s elapsed cpu time
+    0.000124000s elapsed real time
+    275776 bytes allocated
+Testing "eval (let ((x 0)) x)"
+(time (run* (q) ...))
+    no collections
+    0.000091217s elapsed cpu time
+    0.000091000s elapsed real time
+    170704 bytes allocated
+Testing "eval (let ((x 0)) (cons x x))"
+(time (run* (q) ...))
+    no collections
+    0.000125829s elapsed cpu time
+    0.000126000s elapsed real time
+    248240 bytes allocated
+Testing "eval ((lambda (x) (+ x 1)) 0)"
+(time (run* (q) ...))
+    no collections
+    0.000309406s elapsed cpu time
+    0.046005000s elapsed real time
+    480368 bytes allocated
+Testing "eval (let ((x 5)) (+ x 3))"
+(time (run* (q) ...))
+    no collections
+    0.000321254s elapsed cpu time
+    0.047291000s elapsed real time
+    322656 bytes allocated
+Testing "eval (let ((x 5)) (sub1 x))"
+(time (run* (q) ...))
+    no collections
+    0.000367756s elapsed cpu time
+    0.048450000s elapsed real time
+    255296 bytes allocated
+Testing "eval (let ((x 5)) (sub1 (sub1 x)))"
+(time (run* (q) ...))
+    no collections
+    0.000455059s elapsed cpu time
+    0.062740000s elapsed real time
+    368224 bytes allocated
+Testing "factorial-fully-ground"
+(time (Barliman () ...))
+    32 collections
+    0.048805393s elapsed cpu time, including 0.003980241s collecting
+    0.702076000s elapsed real time, including 0.004037000s collecting
+    273955088 bytes allocated, including 280602480 bytes reclaimed
+Testing "factorial-synthesis-4e"
+(time (Barliman () ...))
+    108 collections
+    0.518815387s elapsed cpu time, including 0.051941787s collecting
+    16.361824000s elapsed real time, including 0.052151000s collecting
+    915047008 bytes allocated, including 903737584 bytes reclaimed
+Testing "factorial-synthesis-4d"
+(time (Barliman () ...))
+    108 collections
+    0.544891845s elapsed cpu time, including 0.057299654s collecting
+    17.246065000s elapsed real time, including 0.057525000s collecting
+    915702880 bytes allocated, including 909408976 bytes reclaimed
+Testing "factorial-synthesis-0"
+(time (Barliman () ...))
+    68 collections
+    0.091114073s elapsed cpu time, including 0.002188995s collecting
+    1.310699000s elapsed real time, including 0.002293000s collecting
+    578918528 bytes allocated, including 577804032 bytes reclaimed
+Testing "factorial-synthesis-0b"
+(time (Barliman () ...))
+    77 collections
+    0.149736066s elapsed cpu time, including 0.005332650s collecting
+    2.912414000s elapsed real time, including 0.005522000s collecting
+    653980976 bytes allocated, including 649275392 bytes reclaimed
+Testing "factorial-synthesis-1"
+(time (Barliman () ...))
+    32 collections
+    0.042888632s elapsed cpu time, including 0.000706554s collecting
+    0.717618000s elapsed real time, including 0.000748000s collecting
+    273018112 bytes allocated, including 270332720 bytes reclaimed
+Testing "factorial-synthesis-2"
+(time (Barliman () ...))
+    159 collections
+    0.226518139s elapsed cpu time, including 0.009313616s collecting
+    2.164133000s elapsed real time, including 0.009586000s collecting
+    1338281760 bytes allocated, including 1345599136 bytes reclaimed
+Testing "factorial-synthesis-2"
+(time (Barliman () ...))
+    53 collections
+    0.068685148s elapsed cpu time, including 0.001367036s collecting
+    0.882756000s elapsed real time, including 0.001430000s collecting
+    450036368 bytes allocated, including 447380640 bytes reclaimed
+Testing "factorial-synthesis-3b"
+(time (Barliman () ...))
+    120 collections
+    0.171189244s elapsed cpu time, including 0.007268588s collecting
+    1.457725000s elapsed real time, including 0.007523000s collecting
+    1011481056 bytes allocated, including 1012347760 bytes reclaimed
+Testing "factorial-synthesis-3"
+(time (Barliman () ...))
+    71 collections
+    0.109434100s elapsed cpu time, including 0.003624001s collecting
+    1.787656000s elapsed real time, including 0.003723000s collecting
+    604494752 bytes allocated, including 598872192 bytes reclaimed
+Testing "factorial-synthesis-4c"
+(time (Barliman () ...))
+    188 collections
+    0.751659414s elapsed cpu time, including 0.073565807s collecting
+    18.716403000s elapsed real time, including 0.073906000s collecting
+    1586765696 bytes allocated, including 1576704256 bytes reclaimed
+Testing "factorial-synthesis-5b"
+(time (Barliman () ...))
+    9388 collections
+    22.592958279s elapsed cpu time, including 4.552594907s collecting
+    207.901074000s elapsed real time, including 4.567871000s collecting
+    79205543136 bytes allocated, including 79137721632 bytes reclaimed
