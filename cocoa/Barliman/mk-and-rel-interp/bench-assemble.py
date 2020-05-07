@@ -1,5 +1,6 @@
 #benchmarks = {"incremental push/pop unknowns" : "bench-incu.txt", "incremental": "bench-inc.txt", "naive set":"bench-naive.txt"}
-benchmarks = {"sample" : "bench-sample.txt"}
+benchmarks = {"incremental push/pop unknowns" : "bench-incu.txt", "incremental": "bench-inc.txt"}
+#benchmarks = {"sample" : "bench-sample.txt"}
 
 testing_offset = len("Testing ")
 
@@ -26,9 +27,9 @@ for bench_header,bench_file in benchmarks.iteritems():
     all_maps[bench_header] = m
 
 
-print(" ,"),
+print(" "),
 for header in all_headers:
-    print("%s (cpu),%s (real)" % (header, header)),
+    print(",%s (cpu),%s (real)" % (header, header)),
 print("")
 
 for name in all_names:
