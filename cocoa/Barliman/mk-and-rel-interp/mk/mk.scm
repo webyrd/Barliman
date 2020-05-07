@@ -153,6 +153,12 @@
   (lambda (c)
     (caddr c)))
 
+(define c-M
+  (lambda (c)
+    ;; TODO
+    #f
+    ))
+
 (define c-with-T
   (lambda (c T)
     (list T (c-D c) (c-A c))))
@@ -164,6 +170,11 @@
 (define c-with-A
   (lambda (c A)
     (list (c-T c) (c-D c) A)))
+
+(define c-with-M
+  (lambda (c M)
+    ;; TODO
+    c))
 
 ; Constraint store object.
 ; Mapping of representative variable to constraint record. Constraints are
@@ -205,6 +216,9 @@
 (define state-depth (lambda (st) (caddr st)))
 (define state-deferred (lambda (st) (cadddr st)))
 (define state-M (lambda (st) (car (cddddr st))))
+(define state-with-M
+  (lambda (st M)
+    (state (state-S st) (state-C st) (state-depth st) (state-deferred st) M)))
 (define state-depth-set
   (lambda (st depth)
     (state (state-S st) (state-C st) depth (state-deferred st) (state-M st))))
