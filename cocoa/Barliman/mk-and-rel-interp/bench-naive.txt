@@ -1,0 +1,66 @@
+Testing "eval 7"
+(time (run* (q) ...))
+    no collections
+    0.000043962s elapsed cpu time
+    0.000044000s elapsed real time
+    37504 bytes allocated
+Testing "eval (+ 3 4)"
+(time (run* (q) ...))
+    no collections
+    0.000227087s elapsed cpu time
+    0.006150000s elapsed real time
+    190224 bytes allocated
+Testing "eval (zero? 0)"
+(time (run* (q) ...))
+    no collections
+    0.000137041s elapsed cpu time
+    0.000433000s elapsed real time
+    124096 bytes allocated
+Testing "eval (zero? 5)"
+(time (run* (q) ...))
+    no collections
+    0.000152943s elapsed cpu time
+    0.000610000s elapsed real time
+    124976 bytes allocated
+Testing "eval ((lambda (x) x) 0)"
+(time (run* (q) ...))
+    no collections
+    0.000121233s elapsed cpu time
+    0.000120000s elapsed real time
+    275776 bytes allocated
+Testing "eval (let ((x 0)) x)"
+(time (run* (q) ...))
+    no collections
+    0.000087686s elapsed cpu time
+    0.000087000s elapsed real time
+    170704 bytes allocated
+Testing "eval (let ((x 0)) (cons x x))"
+(time (run* (q) ...))
+    no collections
+    0.000122465s elapsed cpu time
+    0.000122000s elapsed real time
+    248240 bytes allocated
+Testing "eval ((lambda (x) (+ x 1)) 0)"
+(time (run* (q) ...))
+    no collections
+    0.000714123s elapsed cpu time
+    0.001912000s elapsed real time
+    491504 bytes allocated
+Testing "eval (let ((x 5)) (+ x 3))"
+(time (run* (q) ...))
+    no collections
+    0.000463726s elapsed cpu time
+    0.001345000s elapsed real time
+    341168 bytes allocated
+Testing "eval (let ((x 5)) (sub1 x))"
+(time (run* (q) ...))
+    no collections
+    0.000332226s elapsed cpu time
+    0.001054000s elapsed real time
+    280256 bytes allocated
+Testing "eval (let ((x 5)) (sub1 (sub1 x)))"
+(time (run* (q) ...))
+    no collections
+    0.000456388s elapsed cpu time
+    0.001733000s elapsed real time
+    402944 bytes allocated
