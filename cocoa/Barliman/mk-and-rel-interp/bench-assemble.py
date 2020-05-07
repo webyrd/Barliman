@@ -1,5 +1,5 @@
-#benchmarks = {"incremental push/pop unknowns" : "bench-incu.txt", "incremental": "bench-inc.txt", "naive set":"bench-naive.txt"}
-benchmarks = {"incremental push/pop unknowns" : "bench-incu.txt", "incremental": "bench-inc.txt"}
+benchmarks = {"incremental push/pop unknowns" : "bench-incu.txt", "incremental": "bench-inc.txt", "naive set":"bench-naive.txt"}
+#benchmarks = {"incremental push/pop unknowns" : "bench-incu.txt", "incremental": "bench-inc.txt"}
 #benchmarks = {"sample" : "bench-sample.txt"}
 
 testing_offset = len("Testing ")
@@ -36,6 +36,9 @@ for name in all_names:
     res = []
     res.append(name)
     for header in all_headers:
-        res.append(all_maps[header][name])
+        if name in all_maps[header]:
+            res.append(all_maps[header][name])
+        else:
+            res.append("\"timeout\"")
     print(",".join(res))
 
