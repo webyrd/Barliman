@@ -39,6 +39,6 @@ for name in all_names:
         if name in all_maps[header]:
             res.append(all_maps[header][name])
         else:
-            res.append("\"timeout\"")
+            res.append(",")
     print(",".join(res))
 
