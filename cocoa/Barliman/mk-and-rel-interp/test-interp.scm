@@ -2,6 +2,7 @@
 (load "mk/smt.scm")
 ;;(load "clpsmt-miniKanren/z3-driver.scm")
 (load "clpsmt-miniKanren/z3-server.scm")
+;;(load "clpsmt-miniKanren/z3-server-robust.scm")
 (load "clpsmt-miniKanren/test-check.scm")
 (load "mk/test-check.scm")
 
