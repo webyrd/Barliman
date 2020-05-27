@@ -1,5 +1,0 @@
-(declare-fun x0 () Int)
-(assert (= x0 0))
-(assert (not (= x0 0)))
-(check-sat)
-(exit)

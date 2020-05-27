@@ -1,10 +1,10 @@
 (load "chez-load-interp.scm")
-(load "mk/smt.scm")
+;;(load "../../../../faster-miniKanren/smt.scm")
 ;;(load "clpsmt-miniKanren/z3-driver.scm")
-(load "clpsmt-miniKanren/z3-server.scm")
-;;(load "clpsmt-miniKanren/z3-server-robust.scm")
-(load "clpsmt-miniKanren/test-check.scm")
-(load "mk/test-check.scm")
+(load "../../../../clpsmt-miniKanren/z3-server.scm")
+;;(load "../../../../clpsmt-miniKanren/z3-server-robust.scm")
+(load "../../../../clpsmt-miniKanren/test-check.scm")
+(load "../../../../faster-miniKanren/test-check.scm")
 
 (time-test  "eval 7"
   (run* (q) (evalo '7 q))
