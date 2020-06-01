@@ -801,8 +801,8 @@
             (=/= 0 n2)]
            [(=/= prim-id '/)])
          (numbero val)
-         (eval-listo rands env `(,n1 ,n2))
-         (z/assert `(= ,val (,prim-id ,n1 ,n2))))]
+         (z/assert `(= ,val (,prim-id ,n1 ,n2)))
+         (eval-listo rands env `(,n1 ,n2)))]
       #;[(conde
          ;;[(== prim-id '=)]
          ;;[(== prim-id '>)]
