@@ -182,7 +182,8 @@ class RunSchemeOperation: Operation {
 
     func runSchemeCode() {
 
-        editorWindowController.schemeDefinitionView.needsDisplay = true
+        // WEB 13 Feb 2021 -- needsDisplay needs to be called from the main thread.
+        //editorWindowController.schemeDefinitionView.needsDisplay = true
         startSpinner()
         thinkingColorAndLabel()
 
@@ -225,7 +226,8 @@ class RunSchemeOperation: Operation {
         let exitStatus = task.terminationStatus
 
         stopSpinner()
-        editorWindowController.schemeDefinitionView.needsDisplay = true
+        // WEB 13 Feb 2021 -- needsDisplay needs to be called from the main thread.
+        //editorWindowController.schemeDefinitionView.needsDisplay = true
 
         // update the user interface, which *must* be done through the main thread
         OperationQueue.main.addOperation {
