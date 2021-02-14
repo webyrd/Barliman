@@ -286,8 +286,8 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControl
             alltests_string_part_2 = ""
         }
 
-        let eval_flags_fast = "(set! allow-incomplete-search? #t)"
-        let eval_flags_complete = "(set! allow-incomplete-search? #f)"
+        let eval_flags_fast = "(allow-incomplete-search)"
+        let eval_flags_complete = "(disallow-incomplete-search)"
         let eval_string_fast = "(begin \( eval_flags_fast ) (results))"
         let eval_string_complete = "(begin \( eval_flags_complete ) (results))"
 
@@ -366,8 +366,8 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControl
             eval_string_part_2 + "\n" +
             " (evalo `(begin \( defns ) \( body )) \( expectedOut )))))"
 
-        let eval_flags_fast = "(set! allow-incomplete-search? #t)"
-        let eval_flags_complete = "(set! allow-incomplete-search? #f)"
+        let eval_flags_fast = "(allow-incomplete-search)"
+        let eval_flags_complete = "(disallow-incomplete-search)"
 
         let eval_string_fast = "(begin \( eval_flags_fast ) \( eval_string ))"
         let eval_string_complete = "(begin \( eval_flags_complete ) \( eval_string ))"
@@ -444,9 +444,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControl
 
         let mk_vicare_path_string = mk_vicare_path! as String
         let mk_path_string = mk_path! as String
-
-        let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
-        let load_mk_string: String = "(load \"\( mk_path_string )\")"
 
         let interp_string: String = getInterpreterCode()
 
@@ -616,37 +613,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControl
         newTest5QueryString = makeNewTestNQueryString(5, actualQueryFilePath: localNewQueryActualTest5FilePath)
         newTest6QueryString = makeNewTestNQueryString(6, actualQueryFilePath: localNewQueryActualTest6FilePath)
 
-
-        let in1 = (processTest1 ? test1InputField.stringValue : "")
-        let in2 = (processTest2 ? test2InputField.stringValue : "")
-        let in3 = (processTest3 ? test3InputField.stringValue : "")
-        let in4 = (processTest4 ? test4InputField.stringValue : "")
-        let in5 = (processTest5 ? test5InputField.stringValue : "")
-        let in6 = (processTest6 ? test6InputField.stringValue : "")
-
-        let out1 = (processTest1 ? test1ExpectedOutputField.stringValue : "")
-        let out2 = (processTest2 ? test2ExpectedOutputField.stringValue : "")
-        let out3 = (processTest3 ? test3ExpectedOutputField.stringValue : "")
-        let out4 = (processTest4 ? test4ExpectedOutputField.stringValue : "")
-        let out5 = (processTest5 ? test5ExpectedOutputField.stringValue : "")
-        let out6 = (processTest6 ? test6ExpectedOutputField.stringValue : "")
-
-        let allTestInputs = in1 + " "
-                          + in2 + " "
-                          + in3 + " "
-                          + in4 + " "
-                          + in5 + " "
-                          + in6 + " "
-        let allTestOutputs = out1 + " "
-                           + out2 + " "
-                           + out3 + " "
-                           + out4 + " "
-                           + out5 + " "
-                           + out6 + " "
-
-
         var pathQuerySimpleForMondoSchemeFile: URL!
-        var pathMondoScheme: URL!
         var pathNewSimple: URL!
 
         var pathNewTest1: URL!
@@ -720,8 +687,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControl
 
 
         // paths to the Schemes file containing the miniKanren query
-        let schemeScriptPathStringQuerySimpleForMondoScheme = pathQuerySimpleForMondoSchemeFile.path
-
 
         let schemeScriptPathStringNewSimple = pathNewSimple.path
 
@@ -732,14 +697,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate, NSControl
         let schemeScriptPathStringNewTest5 = pathNewTest5.path
         let schemeScriptPathStringNewTest6 = pathNewTest6.path
         let schemeScriptPathStringNewAlltests = pathNewAlltests.path
-
-        let schemeScriptPathStringNewActualTest1 = pathNewActualTest1.path
-        let schemeScriptPathStringNewActualTest2 = pathNewActualTest2.path
-        let schemeScriptPathStringNewActualTest3 = pathNewActualTest3.path
-        let schemeScriptPathStringNewActualTest4 = pathNewActualTest4.path
-        let schemeScriptPathStringNewActualTest5 = pathNewActualTest5.path
-        let schemeScriptPathStringNewActualTest6 = pathNewActualTest6.path
-        let schemeScriptPathStringNewActualAlltests = pathNewActualAlltests.path
 
 
         // create the operations that will be placed in the operation queue

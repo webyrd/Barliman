@@ -575,7 +575,6 @@
         (eval-begino
           (cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
 
-(define empty-env '())
 
 (define (lookup-reco k renv x b* t)
     (conde
@@ -920,12 +919,12 @@
 (define boolean-conditions-only? #t)
 (define (condition v)
   (if (and allow-incomplete-search? boolean-conditions-only?)
-    (booleano v)
-    unit))
+      (booleano v)
+      unit))
 (define (condition-true v)
   (if (and allow-incomplete-search? boolean-conditions-only?)
-    (== #t v)
-    (=/= #f v)))
+      (== #t v)
+      (=/= #f v)))
 
 (define (if-primo expr env val)
   (fresh (e1 e2 e3 t)

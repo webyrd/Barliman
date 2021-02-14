@@ -6,6 +6,7 @@
          conde
          symbolo numbero
          absento
+         gensym?
          (all-defined-out))
 
 (define fold-left foldl)
@@ -73,5 +74,14 @@
            (state-depth st)
            (state-deferred st))))
 
+;; WEB 13 Feb 20201
+;;
+;; This function assumes that Racket's 'gensym' function was called
+;; without an argument, resulting in a gensym symbol of the form
+;; 'g[0-9]+'.
+(define gensym?
+  (lambda (x)
+    (and (symbol? x)
+         (regexp-match #rx"^g[0-9]+$" (symbol->string x)))))
 
 (include "mk.scm")

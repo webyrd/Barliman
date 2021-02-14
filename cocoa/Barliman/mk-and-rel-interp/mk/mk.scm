@@ -7,8 +7,21 @@
 ;; To allow use of optimizations that sacrifice completeness, set this to #t.
 (define allow-incomplete-search? #f)
 
+(define (allow-incomplete-search)
+  (set! allow-incomplete-search? #t))
+
+(define (disallow-incomplete-search)
+  (set! allow-incomplete-search? #f))
+
 ;; To allow use of experimental `conde1` optimization, set this to #t.
 (define enable-conde1? #t)
+
+(define (enable-conde1)
+  (set! enable-conde1? #t))
+
+(define (disaable-conde1)
+  (set! enable-conde1? #f))
+
 
 ; Creates a new scope that is not scope-eq? to any other scope
 (define new-scope
