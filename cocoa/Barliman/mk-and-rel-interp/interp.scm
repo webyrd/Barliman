@@ -565,25 +565,25 @@
 (define (eval-begino rec-defs begin-body env val)
   (conde
     ((fresh (e)
-        (== `(,e) begin-body)
-        (if (null? rec-defs)
-          (eval-expo e env val)
-          (eval-letreco rec-defs e env val))))
+       (== `(,e) begin-body)
+       (if (null? rec-defs)
+           (eval-expo e env val)
+           (eval-letreco rec-defs e env val))))
     ((fresh (name args body begin-rest)
-        (== `((define ,name (lambda ,args ,body)) . ,begin-rest) begin-body)
-        (symbolo name)
-        (eval-begino
-          (cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
-
+       (== `((define ,name (lambda ,args ,body)) . ,begin-rest) begin-body)
+       (symbolo name)
+       (eval-begino
+        (cons `(,name (lambda ,args ,body)) rec-defs) begin-rest env val)))))
 
 (define (lookup-reco k renv x b* t)
-    (conde
-      ((== '() b*) (k))
-      ((fresh (b*-rest p-name lam-expr)
-         (== `((,p-name . ,lam-expr) . ,b*-rest) b*)
-         (conde
-           ((== p-name x) (== `(closure ,lam-expr ,renv) t))
-           ((=/= p-name x) (lookup-reco k renv x b*-rest t)))))))
+  (conde
+    ((== '() b*) (k))
+    ((fresh (b*-rest p-name lam-expr)
+       (== `((,p-name . ,lam-expr) . ,b*-rest) b*)
+       (conde
+         ((== p-name x) (== `(closure ,lam-expr ,renv) t))
+         ((=/= p-name x) (lookup-reco k renv x b*-rest t)))))))
+
 (define (lookupo x env t)
   (conde
     ((fresh (y b rest)
