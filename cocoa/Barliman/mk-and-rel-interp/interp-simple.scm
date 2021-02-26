@@ -186,7 +186,7 @@
        (eval-qq-expo level qq-a env va)
        (eval-qq-expo level qq-d env vd)))
     ((== qq-expr val)
-     (conde$
+     (conde
        ((== '() val))
        ((symbolo val))
        ((== #f val))
