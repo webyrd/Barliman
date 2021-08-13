@@ -113,6 +113,211 @@
 
        (ans-allTests))]))
 
+(define-syntax Barliman*
+  (syntax-rules ()
+    [(_ (g ...) (A ...) (acc ...) def inputs outputs)
+     (let ()
+       (define (ans-allTests)
+         (define (results)
+           (run 1 (q)
+             (fresh (defns)
+               (let ((g (gensym (symbol->string `,g))) ...)
+                 (fresh (A ... begin-body)
+                   (== q `(,defns acc ...))
+                   (fresh (defn-list)
+                     
+                     (== defns defn-list)
+                     
+                     (absento g defn-list) ...)
+
+                   ;; skeleton
+                   (== `((define !
+                           ,`def))
+                       defns)
+		   
+                   (appendo defns
+                            `(((lambda x x)
+                               ,@(map (lambda (x) `(! ,x acc ...)) inputs)))
+                            begin-body)
+                   (evalo `(begin . ,begin-body)
+                          outputs)
+                   
+                   )))))
+         (let ((results-fast (begin (set! allow-incomplete-search? #t) (results))))
+           (if (null? results-fast)
+               (begin (set! allow-incomplete-search? #f) (results))
+               results-fast)))
+
+       (ans-allTests))]))
+
+(time-test
+ "fib-fully-ground"
+ (Barliman*
+  () () (0 1)
+  (lambda (n a1 a2) 
+    (if (zero? n)
+        a1
+        (if (zero? (sub1 n))
+            a2
+            (! (sub1 n) a2 (+ a2 a1)))))
+  '(0 1 2 3 4 5)
+  '(0 1 1 2 3 5))
+ '(((((define !
+         (lambda (n a1 a2) 
+           (if (zero? n)
+               a1
+               (if (zero? (sub1 n))
+                   a2
+                   (! (sub1 n) a2 (+ a2 a1)))))))
+     0 1))))
+
+(time-test
+ "fib-synthesis-1"
+ (Barliman*
+  () (A) (0 1)
+  (lambda (n a1 a2) 
+    (if (zero? n)
+        a1
+        (if (zero? (sub1 n))
+            a2
+            (! (sub1 n) ,A (+ a2 a1)))))
+  '(0 1 2 3 4 5)
+  '(0 1 1 2 3 5))
+  '(((((define !
+         (lambda (n a1 a2) 
+           (if (zero? n)
+               a1
+               (if (zero? (sub1 n))
+                   a2
+                   (! (sub1 n) a2 (+ a2 a1)))))))
+     0 1))))
+
+(time-test
+ "fib-synthesis-2"
+ (Barliman*
+  () (A B) (0 1)
+  (lambda (n a1 a2) 
+    (if (zero? n)
+        a1
+        (if (zero? (sub1 n))
+            a2
+            (! (sub1 n) ,A ,B))))
+  '(0 1 2 3 4 5)
+  '(0 1 1 2 3 5))
+  '(((((define !
+         (lambda (n a1 a2) 
+           (if (zero? n)
+               a1
+               (if (zero? (sub1 n))
+                   a2
+                   (! (sub1 n) a2 (+ a2 a1)))))))
+     0 1))))
+
+(time-test
+ "fib-synthesis-3"
+ (Barliman*
+  () (ACC1) (,ACC1 1)
+  (lambda (n a1 a2) 
+    (if (zero? n)
+        a1
+        (if (zero? (sub1 n))
+            a2
+            (! (sub1 n) a2 (+ a2 a1)))))
+  '(0 1 2 3 4 5)
+  '(0 1 1 2 3 5))
+  '(((((define !
+         (lambda (n a1 a2) 
+           (if (zero? n)
+               a1
+               (if (zero? (sub1 n))
+                   a2
+                   (! (sub1 n) a2 (+ a2 a1)))))))
+      0 1))))
+
+(time-test
+ "fib-synthesis-4"
+ (Barliman*
+  () (ACC1 ACC2) (,ACC1 ,ACC2)
+  (lambda (n a1 a2) 
+    (if (zero? n)
+        a1
+        (if (zero? (sub1 n))
+            a2
+            (! (sub1 n) a2 (+ a2 a1)))))
+  '(0 1 2 3 4 5)
+  '(0 1 1 2 3 5))
+  '(((((define !
+         (lambda (n a1 a2) 
+           (if (zero? n)
+               a1
+               (if (zero? (sub1 n))
+                   a2
+                   (! (sub1 n) a2 (+ a2 a1)))))))
+      0 1))))
+
+(time-test
+ "fib-synthesis-5"
+ (Barliman*
+  () (A ACC1 ACC2) (,ACC1 ,ACC2)
+  (lambda (n a1 a2) 
+    (if (zero? n)
+        a1
+        (if (zero? (sub1 n))
+            a2
+            (! (sub1 n) ,A (+ a2 a1)))))
+  '(0 1 2 3 4 5)
+  '(0 1 1 2 3 5))
+  '(((((define !
+         (lambda (n a1 a2) 
+           (if (zero? n)
+               a1
+               (if (zero? (sub1 n))
+                   a2
+                   (! (sub1 n) a2 (+ a2 a1)))))))
+      0 1))))
+
+(time-test
+ "fib-synthesis-6"
+ (Barliman*
+  () (A B ACC1 ACC2) (,ACC1 ,ACC2)
+  (lambda (n a1 a2) 
+    (if (zero? n)
+        a1
+        (if (zero? (sub1 n))
+            a2
+            (! (sub1 n) a2 ,B))))
+  '(0 1 2 3 4 5)
+  '(0 1 1 2 3 5))
+  '(((((define !
+         (lambda (n a1 a2) 
+           (if (zero? n)
+               a1
+               (if (zero? (sub1 n))
+                   a2
+                   (! (sub1 n) a2 (+ a2 a1)))))))
+      '0 '1))))
+
+(time-test
+ "fib-synthesis-7"
+ (Barliman*
+  () (A B ACC1 ACC2) (,ACC1 ,ACC2)
+  (lambda (n a1 a2) 
+    (if (zero? n)
+        a1
+        (if (zero? (sub1 n))
+            a2
+            (! (sub1 n) ,A ,B))))
+  '(0 1 2 3 4 5)
+  '(0 1 1 2 3 5))
+  '(((((define !
+         (lambda (n a1 a2) 
+           (if (zero? n)
+               a1
+               (if (zero? (sub1 n))
+                   a2
+                   (! (sub1 n) a2 (+ a2 a1)))))))
+     '0 '1))))
+
 (time-test
  "factorial-fully-ground"
  (Barliman
