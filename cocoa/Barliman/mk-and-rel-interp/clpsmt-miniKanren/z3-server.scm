@@ -63,7 +63,7 @@
                            ((and (pair? (cadddr x)) (eq? (cadr (cadddr x)) 'BitVec)) r)
                            (else (eval r))))
                        `(lambda ,(map car (caddr x)) ,(cadddr (cdr x))))))
-           (cdr m)))))
+           m))))
 
 (define get-model-inc
   (lambda ()
