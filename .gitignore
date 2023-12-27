@@ -1,3 +1,12 @@
-.DS_Store
 cocoa/Barliman.xcodeproj/project.xcworkspace/xcuserdata/
-
+.DS_Store
+*~
+\#*
+.\#*
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out

@@ -4,6 +4,17 @@
 ; and substitutions will contain a scope. When a substitution flows through a
 ; conde it is assigned a new scope.
 
+(define allow-partial-result? #f)
+(define max-partial-depth 30)
+
+
+(define (partial-success g)
+  (lambda (st)
+    (if (and allow-partial-result?
+             max-partial-depth (< max-partial-depth (state-depth st)))
+        st
+        (g st))))
+
 ;; To allow use of optimizations that sacrifice completeness, set this to #t.
 (define allow-incomplete-search? #f)
 
@@ -441,26 +452,29 @@
     ((_ (g0 g ...) (g1 g^ ...) ...)
      (lambdag@ (st)
        (inc (bind (state-depth-deepen (state-with-scope st (new-scope)))
-                  (lambdag@ (st)
-                    (mplus* (bind*-depth st g0 g ...)
-                            (bind*-depth st g1 g^ ...) ...))))))))
+                  (partial-success
+                   (lambdag@ (st)
+                      (mplus* (bind*-depth st g0 g ...)
+                              (bind*-depth st g1 g^ ...) ...)))))))))
 (define-syntax conde-dfs
   (syntax-rules ()
     ((_ (g0 g ...) (g1 g^ ...) ...)
      (lambdag@ (st)
        (inc (bind (state-depth-deepen (state-with-scope st (new-scope)))
-                  (lambdag@ (st)
-                    (mplus*-dfs (bind*-depth st g0 g ...)
-                                (bind*-depth st g1 g^ ...) ...))))))))
+                  (partial-success
+                   (lambdag@ (st)
+                      (mplus*-dfs (bind*-depth st g0 g ...)
+                                  (bind*-depth st g1 g^ ...) ...)))))))))
 (define-syntax conde-weighted
   (syntax-rules ()
     ((_ (w0 c0 g0 g ...) (w1 c1 g1 g^ ...) ...)
      (lambdag@ (st)
        (inc (bind (state-depth-deepen (state-with-scope st (new-scope)))
-                  (lambdag@ (st)
-                    (mplus*-weighted
+                  (partial-success
+                   (lambdag@ (st)
+                     (mplus*-weighted
                       (w0 c0 (bind*-depth st g0 g ...))
-                      (w1 c1 (bind*-depth st g1 g^ ...)) ...))))))))
+                      (w1 c1 (bind*-depth st g1 g^ ...)) ...)))))))))
 
 (define-syntax conde$
   (syntax-rules ()
