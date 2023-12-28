@@ -5,8 +5,8 @@
 ; conde it is assigned a new scope.
 
 (define allow-partial-result? #f)
-(define max-partial-depth 30)
-
+(define max-partial-depth #f)
+(define max-partial-unifications 1000)
 
 (define (partial-success g)
   (lambda (st)
@@ -685,12 +685,15 @@
 (define ==
   (lambda (u v)
     (lambdag@ (st)
-      (let-values (((S added) (unify u v (state-S st))))
-        (if S
-          (and-foldl
-            update-constraints
-            (state S (state-C st) (state-depth st) (state-deferred st) (state-incs st)) added)
-          (mzero))))))
+      (if (and allow-partial-result?
+               max-partial-unifications (< max-partial-unifications (state-incs st)))
+          st
+          (let-values (((S added) (unify u v (state-S st))))
+            (if S
+                (and-foldl
+                 update-constraints
+                 (state S (state-C st) (state-depth st) (state-deferred st) (+ 1 (state-incs st))) added)
+                (mzero)))))))
 
 
 ; Not fully optimized. Could do absento update with fewer hash-refs / hash-sets.
