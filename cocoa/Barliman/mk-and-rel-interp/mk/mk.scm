@@ -212,23 +212,24 @@
   100)
 
 (define state
-  (lambda (S C depth deferred)
-    (list S C depth deferred)))
+  (lambda (S C depth deferred incs)
+    (list S C depth deferred incs)))
 
 (define state-S (lambda (st) (car st)))
 (define state-C (lambda (st) (cadr st)))
 (define state-depth (lambda (st) (caddr st)))
 (define state-deferred (lambda (st) (cadddr st)))
+(define state-incs (lambda (st) (cadddr (cdr st))))
 (define state-depth-set
   (lambda (st depth)
-    (state (state-S st) (state-C st) depth (state-deferred st))))
+    (state (state-S st) (state-C st) depth (state-deferred st) (state-incs st))))
 (define state-depth-deepen
   (lambda (st)
     (let ((next-depth (+ 1 (state-depth st))))
       (if (and allow-incomplete-search?
                max-search-depth (< max-search-depth next-depth))
         (mzero)
-        (state (state-S st) (state-C st) next-depth (state-deferred st))))))
+        (state (state-S st) (state-C st) next-depth (state-deferred st) (state-incs st))))))
 (define state-deferred-defer
   (lambda (st goal)
     (let ((deferred (state-deferred st)))
@@ -236,7 +237,8 @@
         (state (state-S st)
                (state-C st)
                (state-depth st)
-               (cons goal (state-deferred st)))
+               (cons goal (state-deferred st))
+               (state-incs st))
         (goal st)))))
 (define state-deferred-defer*
   (lambda (st goals)
@@ -245,7 +247,8 @@
         (state (state-S st)
                (state-C st)
                (state-depth st)
-               (append goals (state-deferred st)))
+               (append goals (state-deferred st))
+               (state-incs st))
         ((resume goals) st)))))
 (define (resume goals)
   (if (null? goals)
@@ -264,10 +267,10 @@
                         (bind (g0 st) g1)))
                     unit
                     deferred)
-         (state (state-S st) (state-C st) (state-depth st) #f))
+         (state (state-S st) (state-C st) (state-depth st) #f(state-incs st)))
         st))))
 (define (state-deferred-set st deferred)
-  (state (state-S st) (state-C st) (state-depth st) deferred))
+  (state (state-S st) (state-C st) (state-depth st) deferred (state-incs st)))
 (define (state-deferred-clear st) (state-deferred-set st '()))
 
 (define-syntax let-deferred
@@ -283,14 +286,15 @@
 (define (defer goal) (lambda (st) (state-deferred-defer st goal)))
 (define (defer* gs) (lambda (st) (state-deferred-defer* st gs)))
 
-(define (empty-state) (state empty-subst empty-C 0 (and enable-conde1? '())))
+(define (empty-state) (state empty-subst empty-C 0 (and enable-conde1? '()) 0))
 
 (define state-with-scope
   (lambda (st new-scope)
     (state (subst-with-scope (state-S st) new-scope)
            (state-C st)
            (state-depth st)
-           (state-deferred st))))
+           (state-deferred st)
+           (state-incs st))))
 
 ; Unification
 
@@ -685,7 +689,7 @@
         (if S
           (and-foldl
             update-constraints
-            (state S (state-C st) (state-depth st) (state-deferred st)) added)
+            (state S (state-C st) (state-depth st) (state-deferred st) (state-incs st)) added)
           (mzero))))))
 
 

@@ -61,7 +61,8 @@
     (state (state-S st)
            (hash-set (state-C st) v c)
            (state-depth st)
-           (state-deferred st))))
+           (state-deferred st)
+           (state-incs st))))
 
 (define lookup-c
   (lambda (v st)
@@ -72,7 +73,8 @@
     (state (state-S st)
            (hash-remove (state-C st) v)
            (state-depth st)
-           (state-deferred st))))
+           (state-deferred st)
+           (state-incs st))))
 
 ;; WEB 13 Feb 20201
 ;;

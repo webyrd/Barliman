@@ -237,7 +237,8 @@
     (state (state-S st)
            (t:bind (var-idx v) c (state-C st))
            (state-depth st)
-           (state-deferred st))))
+           (state-deferred st)
+           (state-incs st))))
 
 (define lookup-c
   (lambda (v st)
@@ -251,7 +252,7 @@
 (define remove-c
   (lambda (v st)
     (let ((res (t:bind (var-idx v) empty-c (state-C st))))
-      (state (state-S st) res (state-depth st) (state-deferred st)))))
+      (state (state-S st) res (state-depth st) (state-deferred st) (state-incs st)))))
 
 
 ; Misc. missing functions
