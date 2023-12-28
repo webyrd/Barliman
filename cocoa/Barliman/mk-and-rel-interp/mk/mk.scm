@@ -6,7 +6,7 @@
 
 (define allow-partial-result? #f)
 (define max-partial-depth #f)
-(define max-partial-unifications 1000)
+(define max-partial-incs 200)
 
 (define (partial-success g)
   (lambda (st)
@@ -360,7 +360,7 @@
 
 (define-syntax inc
   (syntax-rules ()
-    ((_ e) (lambda () e))))
+    ((_ e) (lambda () (inc-state e)))))
 
 (define empty-f (inc (mzero)))
 (define pause (lambda (c) (inc c)))
@@ -686,13 +686,13 @@
   (lambda (u v)
     (lambdag@ (st)
       (if (and allow-partial-result?
-               max-partial-unifications (< max-partial-unifications (state-incs st)))
+               max-partial-incs (< max-partial-incs (state-incs st)))
           st
           (let-values (((S added) (unify u v (state-S st))))
             (if S
                 (and-foldl
                  update-constraints
-                 (state S (state-C st) (state-depth st) (state-deferred st) (+ 1 (state-incs st))) added)
+                 (state S (state-C st) (state-depth st) (state-deferred st) (state-incs st)) added)
                 (mzero)))))))
 
 
@@ -1425,3 +1425,17 @@
       ,move-T-to-D-b/c-t2-atom ,split-t-move-to-d-b/c-pair
       ,drop-from-D-b/c-T ,drop-t-b/c-t2-occurs-t1)))
 
+(define (state? st)
+  (and (list? st) (= (length st) 5) (number? (cadddr (cdr st)))))
+
+(define (inc-st st)
+  (if (state? st)
+      (state (state-S st) (state-C st) (state-depth st) (state-deferred st) (+ 1 (state-incs st)))
+      st))
+
+(define (inc-state c-inf)
+  (case-inf c-inf
+    (() (mzero))
+    ((f) f)
+    ((c) (inc-st c))
+    ((c f) (choice (inc-st c) f))))
