@@ -5,8 +5,8 @@
 ; conde it is assigned a new scope.
 
 (define allow-partial-result? #f)
-(define max-partial-depth #f)
-(define max-partial-incs 200)
+(define max-partial-depth 20)
+(define max-partial-incs 250)
 
 (define (partial-success g)
   (lambda (st)
