@@ -186,6 +186,7 @@
 
 (set! allow-incomplete-search? #t)
 
+;; Check that a proof of C given (A (A => B) (B => C)) is valid
 (time
   (test 'prover-1
     (run 1 (q)
@@ -219,6 +220,8 @@
         q))
     '((#t))))
 
+;; Check that a proof of C given (A (A => B) (B => C)) is valid
+;; Doing the entire thing in a letrec
 (time
   (test 'prover-2
     (run 1 (q)
@@ -251,6 +254,8 @@
         q))
     '((#t))))
 
+;; *Synthesize* a valid proof of C given (A (A => B) (B => C))
+;; Doing the entire thing in a letrec
 (time
   (test 'prover-3
     (run 1 (prf)
@@ -285,6 +290,8 @@
               (((A => B) (A (A => B) (B => C)) assumption ())
                (A (A (A => B) (B => C)) assumption ())))))))))
 
+;; *Synthesize* a proof of the hypothetical syllogism
+;; Doing the entire thing in a letrec
 (time
   (test 'prover-4
     (run 1 (prf)
