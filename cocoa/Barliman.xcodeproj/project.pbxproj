@@ -3,34 +3,40 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8911EF6E2337862A005655BF /* EditorWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8911EF6D2337862A005655BF /* EditorWindowController.xib */; };
-		8911EF722337863E005655BF /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8911EF712337863E005655BF /* MainMenu.xib */; };
-		8990E00E23377330006B96B5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E00D23377330006B96B5 /* AppDelegate.swift */; };
 		8990E01023377330006B96B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8990E00F23377330006B96B5 /* Assets.xcassets */; };
-		8990E01E23377516006B96B5 /* EditorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E01D23377516006B96B5 /* EditorWindowController.swift */; };
-		8990E02023377589006B96B5 /* SchemeEditorTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E01F23377589006B96B5 /* SchemeEditorTextView.swift */; };
-		8990E02223377706006B96B5 /* RunSchemeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E02123377706006B96B5 /* RunSchemeOperation.swift */; };
 		8990E02423377749006B96B5 /* mk-and-rel-interp in Resources */ = {isa = PBXBuildFile; fileRef = 8990E02323377748006B96B5 /* mk-and-rel-interp */; };
-		8990E026233777CF006B96B5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8990E025233777CF006B96B5 /* Extensions.swift */; };
+		899F3BDD2F52471900A1F852 /* TaskType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899F3BDC2F52471900A1F852 /* TaskType.swift */; };
+		899F3BF92F52723900A1F852 /* ProcessTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899F3BF82F52723900A1F852 /* ProcessTracker.swift */; };
+		899F3BFB2F52723A00A1F852 /* ChezSchemeFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899F3BFA2F52723A00A1F852 /* ChezSchemeFinder.swift */; };
+		899F3BFD2F52726B00A1F852 /* BarlimanModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899F3BFC2F52726B00A1F852 /* BarlimanModel.swift */; };
+		899F3BFF2F5272B300A1F852 /* SchemeEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899F3BFE2F5272B300A1F852 /* SchemeEngine.swift */; };
+		899F3C012F5272C100A1F852 /* SchemeProcessRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899F3C002F5272C100A1F852 /* SchemeProcessRunner.swift */; };
+		899F3C032F5272F000A1F852 /* SchemeTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899F3C022F5272F000A1F852 /* SchemeTextEditor.swift */; };
+		899F3C052F5272FA00A1F852 /* TestRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899F3C042F5272FA00A1F852 /* TestRowView.swift */; };
+		899F3C072F52730400A1F852 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899F3C062F52730400A1F852 /* ContentView.swift */; };
+		899F3C092F52730C00A1F852 /* BarlimanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899F3C082F52730C00A1F852 /* BarlimanApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8911EF6D2337862A005655BF /* EditorWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditorWindowController.xib; sourceTree = "<group>"; };
-		8911EF712337863E005655BF /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		8990E00A23377330006B96B5 /* Barliman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barliman.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8990E00D23377330006B96B5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8990E00F23377330006B96B5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8990E01423377330006B96B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8990E01523377330006B96B5 /* Barliman.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Barliman.entitlements; sourceTree = "<group>"; };
-		8990E01D23377516006B96B5 /* EditorWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
-		8990E01F23377589006B96B5 /* SchemeEditorTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeEditorTextView.swift; sourceTree = "<group>"; };
-		8990E02123377706006B96B5 /* RunSchemeOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunSchemeOperation.swift; sourceTree = "<group>"; };
 		8990E02323377748006B96B5 /* mk-and-rel-interp */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "mk-and-rel-interp"; sourceTree = "<group>"; };
-		8990E025233777CF006B96B5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		899F3BDC2F52471900A1F852 /* TaskType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskType.swift; sourceTree = "<group>"; };
+		899F3BF82F52723900A1F852 /* ProcessTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessTracker.swift; sourceTree = "<group>"; };
+		899F3BFA2F52723A00A1F852 /* ChezSchemeFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChezSchemeFinder.swift; sourceTree = "<group>"; };
+		899F3BFC2F52726B00A1F852 /* BarlimanModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarlimanModel.swift; sourceTree = "<group>"; };
+		899F3BFE2F5272B300A1F852 /* SchemeEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeEngine.swift; sourceTree = "<group>"; };
+		899F3C002F5272C100A1F852 /* SchemeProcessRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeProcessRunner.swift; sourceTree = "<group>"; };
+		899F3C022F5272F000A1F852 /* SchemeTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeTextEditor.swift; sourceTree = "<group>"; };
+		899F3C042F5272FA00A1F852 /* TestRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRowView.swift; sourceTree = "<group>"; };
+		899F3C062F52730400A1F852 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		899F3C082F52730C00A1F852 /* BarlimanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarlimanApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,17 +69,20 @@
 		8990E00C23377330006B96B5 /* Barliman */ = {
 			isa = PBXGroup;
 			children = (
-				8990E00D23377330006B96B5 /* AppDelegate.swift */,
 				8990E00F23377330006B96B5 /* Assets.xcassets */,
-				8911EF712337863E005655BF /* MainMenu.xib */,
 				8990E01423377330006B96B5 /* Info.plist */,
-				8990E01D23377516006B96B5 /* EditorWindowController.swift */,
-				8911EF6D2337862A005655BF /* EditorWindowController.xib */,
-				8990E01F23377589006B96B5 /* SchemeEditorTextView.swift */,
-				8990E025233777CF006B96B5 /* Extensions.swift */,
 				8990E02323377748006B96B5 /* mk-and-rel-interp */,
-				8990E02123377706006B96B5 /* RunSchemeOperation.swift */,
 				8990E01523377330006B96B5 /* Barliman.entitlements */,
+				899F3BDC2F52471900A1F852 /* TaskType.swift */,
+				899F3BF82F52723900A1F852 /* ProcessTracker.swift */,
+				899F3BFA2F52723A00A1F852 /* ChezSchemeFinder.swift */,
+				899F3BFC2F52726B00A1F852 /* BarlimanModel.swift */,
+				899F3BFE2F5272B300A1F852 /* SchemeEngine.swift */,
+				899F3C002F5272C100A1F852 /* SchemeProcessRunner.swift */,
+				899F3C022F5272F000A1F852 /* SchemeTextEditor.swift */,
+				899F3C042F5272FA00A1F852 /* TestRowView.swift */,
+				899F3C062F52730400A1F852 /* ContentView.swift */,
+				899F3C082F52730C00A1F852 /* BarlimanApp.swift */,
 			);
 			path = Barliman;
 			sourceTree = "<group>";
@@ -104,8 +113,9 @@
 		8990E00223377330006B96B5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 2630;
 				ORGANIZATIONNAME = "William Byrd";
 				TargetAttributes = {
 					8990E00923377330006B96B5 = {
@@ -137,9 +147,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8990E01023377330006B96B5 /* Assets.xcassets in Resources */,
-				8911EF722337863E005655BF /* MainMenu.xib in Resources */,
 				8990E02423377749006B96B5 /* mk-and-rel-interp in Resources */,
-				8911EF6E2337862A005655BF /* EditorWindowController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,11 +158,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8990E00E23377330006B96B5 /* AppDelegate.swift in Sources */,
-				8990E026233777CF006B96B5 /* Extensions.swift in Sources */,
-				8990E02023377589006B96B5 /* SchemeEditorTextView.swift in Sources */,
-				8990E02223377706006B96B5 /* RunSchemeOperation.swift in Sources */,
-				8990E01E23377516006B96B5 /* EditorWindowController.swift in Sources */,
+				899F3BFB2F52723A00A1F852 /* ChezSchemeFinder.swift in Sources */,
+				899F3C072F52730400A1F852 /* ContentView.swift in Sources */,
+				899F3C092F52730C00A1F852 /* BarlimanApp.swift in Sources */,
+				899F3BDD2F52471900A1F852 /* TaskType.swift in Sources */,
+				899F3C052F5272FA00A1F852 /* TestRowView.swift in Sources */,
+				899F3BF92F52723900A1F852 /* ProcessTracker.swift in Sources */,
+				899F3BFF2F5272B300A1F852 /* SchemeEngine.swift in Sources */,
+				899F3BFD2F52726B00A1F852 /* BarlimanModel.swift in Sources */,
+				899F3C012F5272C100A1F852 /* SchemeProcessRunner.swift in Sources */,
+				899F3C032F5272F000A1F852 /* SchemeTextEditor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,9 +208,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -212,11 +227,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -256,9 +272,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -267,10 +285,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
@@ -284,11 +303,15 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				INFOPLIST_FILE = Barliman/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Barliman.Barliman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -303,11 +326,15 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				INFOPLIST_FILE = Barliman/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Barliman.Barliman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
