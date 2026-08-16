@@ -9,7 +9,7 @@
 import Foundation
 import Cocoa
 
-class RunSchemeOperation: Operation {
+class RunSchemeOperation: Operation, @unchecked Sendable {
 
     var editorWindowController: EditorWindowController
     var schemeScriptPathString: String
@@ -193,7 +193,7 @@ class RunSchemeOperation: Operation {
 
         // Path to Chez Scheme
         // Perhaps this should be settable in a preferences panel.
-        task.launchPath = "/usr/local/bin/scheme"
+        task.launchPath = "~/local/bin/scheme"
 
         // Arguments to Chez Scheme
         task.arguments = ["--script", self.schemeScriptPathString]

@@ -16,6 +16,14 @@ From *The Lord of the Rings: The Fellowship of the Ring* by J.R.R. Tolkien
 
 ## Barliman News
 
+16 August 2026
+
+I (Will) tried out the LLM-integration with XCode to update the Swift-based UI to use the latest hotness.  And it kinda worked.  But I didn't really understand the code as well as I wanted, and generally felt yucky about it.  So today I reverted the LLM-assisted changes, updated the path to Chez Scheme by hand, and included an old-skool non-LLM XCode IDE suggestion to remove a Swift compiler warning.  Everything works like it used to, with the old lovely human-constructed duplicate code and barely working UI.
+
+Yes, the UI barely works.  But it's *our* barely working UI!
+
+---------------------------------------
+
 4 December 2016
 
 * The first talk on Barliman, presented by Will Byrd and Greg Rosenblatt at Clojure/conj 2016, is now online: https://www.youtube.com/watch?v=er_lLvkklsk  Here is the example code from the talk: https://github.com/webyrd/Barliman/tree/master/talk_examples_20161203
